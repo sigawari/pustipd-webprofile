@@ -11,7 +11,8 @@
                 <div class="flex items-center mb-6">
                     <img src="{{ asset('images/footer-image.png') }}" alt="PUSTIPD Logo" class="h-16 mr-4">
                     <div>
-                        <h2 class="text- font-bold tracking-wider text-white">PUSTIPD</h2>
+                        <h2 class="text-3xl tracking-wider font-bold text-white">PUSTIPD</h2>
+                        <h3 class="text-white text-l ">UIN RADEN FATAH</h3>
                     </div>
                 </div>
                 

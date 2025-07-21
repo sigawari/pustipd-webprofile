@@ -1,28 +1,24 @@
-@import "tailwindcss";
+/* All @import must be at the very top! */
 @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Nunito&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap");
 
-@push ('styles')
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-    .font-jakarta {
-    font-family: "Plus Jakarta Sans", sans-serif;
-}
-.font-nunito {
-    font-family: "Nunito", sans-serif;
-}
-</style > @endpush @layer base {
+/* Now, Tailwind imports */
+@import "tailwindcss";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* BASE LAYER - CUSTOM FONTS FOR ELEMENTS */
+@layer base {
     h1,
     h2,
     h3,
     h4,
     h5,
     h6 {
-        @apply font-heading;
+        font-family: "Plus Jakarta Sans", sans-serif;
     }
-
     body,
     p,
     span,
@@ -31,6 +27,6 @@
     label,
     input,
     textarea {
-        @apply font-body;
+        font-family: "Nunito", sans-serif;
     }
 }

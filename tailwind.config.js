@@ -4,14 +4,16 @@ module.exports = {
         "./resources/**/*.blade.php",
         "./resources/**/*.js",
         "./resources/**/*.vue",
-        "./storage/framework/views/*.php",
-        "./vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php",
     ],
+    safelist: ["font-heading", "font-body"],
     theme: {
         extend: {
             fontFamily: {
                 heading: ['"Plus Jakarta Sans"', "sans-serif"],
                 body: ["Nunito", "sans-serif"],
+            },
+            backgroundColor: {
+                darkBlue: "#001f3f",
             },
         },
     },
