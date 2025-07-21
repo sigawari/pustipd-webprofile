@@ -31,10 +31,6 @@ Route::prefix('/')->group(function () {
         return view('welcome');
     });
     
-    Route::get('/makan', function () {
-        return view('makan');
-    });
-
     // Add more public routes here
 });
 
