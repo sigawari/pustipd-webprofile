@@ -1,6 +1,16 @@
-body {
-    background-color: black;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: "Plus Jakarta Sans", sans-serif;
 }
-h1 {
-    color: white;
+
+body,
+p,
+a,
+span,
+li {
+    font-family: "Nunito", sans-serif;
 }
