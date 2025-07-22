@@ -1,7 +1,7 @@
 <footer class="relative bg-[#062749] text-white overflow-hidden">
     <!-- Background Texture -->
     <div class="absolute inset-0 opacity-50">
-        <img src="{{ asset('images/footer-texture.png') }}" alt="" class="w-full h-full object-cover">
+        <img src="{{ asset('assets/img/public/footer-texture.png') }}" alt="" class="w-full h-full object-cover">
     </div>
         
     <div class="relative z-10 container mx-auto px-6 py-12">
@@ -9,7 +9,7 @@
             <!-- Logo and Address Section -->
             <div class="lg:col-span-1">
                 <div class="flex items-center mb-6">
-                    <img src="{{ asset('images/footer-image.png') }}" alt="PUSTIPD Logo" class="h-16 mr-4">
+                    <img src="{{ asset('assets/img/logo/logo-uin-rfp.png') }}" alt="PUSTIPD Logo" class="h-16 mr-4">
                     <div>
                         <h2 class="text-3xl tracking-wider font-bold text-white">PUSTIPD</h2>
                         <h3 class="text-white text-l ">UIN RADEN FATAH</h3>

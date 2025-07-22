@@ -7,9 +7,9 @@
                 <div class="flex items-center space-x-3">
                     <!-- Logo Image -->
                     <div class="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 flex items-center justify-center">
-                        <img src="{{ asset('images/footer-image.png') }}" alt="PUSTIPD Logo"
+                        <img src="{{ asset('assets/img/logo/logo-uin-rfp.png') }}" alt="PUSTIPD Logo"
                             class="w-6 h-6 sm:w-8 sm:h-8 lg:w-10 lg:h-10 object-contain";
-                            this.nextElementSibling.style.display='block';">
+                            this.nextElementSibling.style.display='block';>
                     </div>
                     <!-- Logo Text -->
                     <div class="hidden sm:block">
