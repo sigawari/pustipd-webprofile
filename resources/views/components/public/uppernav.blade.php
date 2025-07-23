@@ -80,7 +80,7 @@
                 dayIdx >= 1 && dayIdx <= 5 && hr >= 8 && (hr < 16 || (hr === 16 && min === 0));
 
             // text pieces
-            const status = isOpen ? "BUKA," : "TUTUP,";
+            const status = isOpen ? "BUKA:" : "TUTUP:";
             const dayName = days[dayIdx];
             const day = jakarta.getDate().toString().padStart(2, "0");
             const month = months[jakarta.getMonth()];

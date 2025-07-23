@@ -99,7 +99,7 @@
         <div class="border-t border-blue-700/80 mt-12 pt-6">
             <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
                 <p class="text-blue-200 text-sm">
-                    Copyright © PPID UIN SGD 2025 All Right Reserved
+                    Copyright © PPID UIN RF 2025 All Right Reserved
                 </p>
                 <p class="text-blue-200 text-sm flex items-center">
                     Made with <span class="text-red-400 mx-1">❤</span> by PUSTIPD UIN RF Palembang

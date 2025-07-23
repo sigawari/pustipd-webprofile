@@ -4,12 +4,13 @@
 // This file is part of the Laravel framework.
 // =====================
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PublicsController;
 
 // =====================
 // Define web routes for the application.
 // =====================
 
-// Login route
+// Auth groups route
 // Route::prefix('auth')->group(function () {
 //     Route::get('/login', [LoginController::class, 'login'])->name('login')->middleware('guest');
 //     Route::post('/login', [LoginController::class, 'authenticate']);
@@ -27,14 +28,12 @@ Route::prefix('admin')->middleware(['auth', 'can:admin'])->group(function () {
 
 // Public routes
 Route::prefix('/')->group(function () {
-    Route::get('/', function () {
-        return view('welcome');
-    });
+    // PublicsController routes
+    Route::get('/', [PublicsController::class, 'index'])->name('home');
     
     // Add more public routes here
 });
 
 // Notification routes
 // Add more notification routes here
-
 
