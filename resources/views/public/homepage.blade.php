@@ -45,7 +45,6 @@
         .group:hover .underline-animate::after {
         width: 100%;
         }
-
     </style>
 
 
@@ -163,7 +162,7 @@
     </section>
 
     <!-- Layanan Section -->
-    <section id="layanan" class="py-20 bg-[#E6F6FF]">
+    <section id="layanan" class="py-20 bg-gray-100">
         <div class="container mx-auto px-6">
             <div class="text-center mb-10 group">
                 <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4 relative inline-block underline-animate">
