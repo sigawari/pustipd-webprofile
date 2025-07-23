@@ -50,40 +50,43 @@
 
 
     <!-- Hero Section -->
-    <section class="relative bg-blue-950 text-amber-50 min-h-screen flex items-center justify-center overflow-hidden">
+    <section id="beranda" class="relative bg-blue-950 text-amber-50 min-h-screen flex items-center justify-center overflow-hidden">
         <!-- Background Image -->
         <img src="{{ asset('assets/img/hero/uin-raden-fatah.jpg') }}" alt="Hero Image" class="absolute inset-0 w-full h-full object-cover opacity-40">
-        
+
         <!-- Overlay -->
         <div class="absolute inset-0 bg-gradient-to-b from-indigo-900 via-blue-900 to-sky-900 opacity-50"></div>
 
         <!-- Content -->
-        <div class="relative z-10 text-center px-6">
-            <h1 class="text-4xl md:text-6xl font-bold mb-4 leading-tight">PUSAT TEKNOLOGI INFORMASI DAN PANGKALAN DATA</h1>
+        <div class="relative z-10 text-center px-4 sm:px-6 w-full max-w-lg">
+            <h1 class="text-2xl sm:text-4xl font-bold mb-3 leading-snug sm:leading-tight">
+                PUSAT TEKNOLOGI INFORMASI DAN PANGKALAN DATA
+            </h1>
+
             <!-- h2 with logo -->
-            <h2 class="text-lg md:text-2xl font-semibold mb-8 flex items-center justify-center space-x-2">
-                <img src="{{ asset('assets/img/logo/logo-uin-rfp-white.png') }}" alt="Logo UINRF" class="h-6 md:h-8 inline-block">
+            <h2 class="text-sm sm:text-lg font-medium mb-6 flex items-center justify-center gap-2 flex-wrap text-white">
+                <img src="{{ asset('assets/img/logo/logo-uin-rfp-white.png') }}" alt="Logo UINRF" class="h-5 sm:h-6">
                 <span>UIN Raden Fatah Palembang</span>
             </h2>
 
             <!-- Search Form -->
-            <form action="#" method="GET" class="relative max-w-md mx-auto">
+            <form action="#" method="GET" class="relative w-full mb-6">
                 <input type="text" name="search" placeholder="Cari informasi di sini"
-                    class="w-full rounded-full pl-12 pr-4 py-3 text-white placeholder-white bg-transparent border border-white focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent" />
+                    class="w-full rounded-full pl-12 pr-4 py-2 sm:py-3 text-white placeholder-white bg-transparent border border-white focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent" />
                 <button type="submit" class="absolute top-1/2 left-3 transform -translate-y-1/2 text-white">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
-                        viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" stroke-width="2"
+                        viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1010.5 3a7.5 7.5 0 006.15 13.65z"></path>
                     </svg>
                 </button>
             </form>
+
             <!-- Floating Buttons BELOW Hero -->
-            <div class="flex justify-between items-center px-6 md:px-10 py-4 bg-transparent -mt-8">
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
                 <!-- Left Button -->
                 <a href="#"
-                    class="bg-white text-amber-500 font-medium px-4 py-2 rounded-full shadow-lg flex items-center space-x-2 transition transform hover:scale-105 hover:bg-amber-600 hover:text-white">
-                    <!-- Heroicon: Clipboard Document List -->
+                    class="bg-white text-amber-500 font-medium px-4 py-2 rounded-full shadow-md flex items-center justify-center gap-2 transition transform hover:scale-105 hover:bg-amber-600 hover:text-white w-full sm:w-auto">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
                         viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -94,8 +97,7 @@
 
                 <!-- Right Button -->
                 <a href="#"
-                    class="bg-white text-blue-700 font-medium px-4 py-2 rounded-full shadow-lg flex items-center space-x-2 transition transform hover:scale-105 hover:bg-blue-600 hover:text-white">
-                    <!-- Heroicon: Chat Bubble Left Right -->
+                    class="bg-white text-blue-700 font-medium px-4 py-2 rounded-full shadow-md flex items-center justify-center gap-2 transition transform hover:scale-105 hover:bg-blue-600 hover:text-white w-full sm:w-auto">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
                         viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -105,7 +107,8 @@
                 </a>
             </div>
         </div>
-    </section>    
+    </section>
+    
 
     <!-- Divisi Section -->
     <section id="divisi" class="py-20 bg-gray-100">
@@ -163,81 +166,79 @@
 
     <!-- Layanan Section -->
     <section id="layanan" class="py-20 bg-gray-100">
-        <div class="container mx-auto px-6">
+        <div class="max-w-7xl mx-auto px-6">
             <div class="text-center mb-10 group">
                 <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4 relative inline-block underline-animate">
-                   Layanan Kami
+                    Layanan Kami
                 </h2>
             </div>
 
-            <!-- Carousel Container dengan isolasi -->
-            <div class="relative max-w-7xl mx-auto isolate">
-                <div class="carousel-container overflow-hidden relative" id="servicesCarousel">
-                    <div class="carousel-wrapper flex transition-transform duration-500 ease-in-out relative z-10"
-                        id="carouselWrapper">
+            <!-- Carousel Container -->
+            <div class="relative isolate">
+            <div class="overflow-hidden relative" id="servicesCarousel">
+                <div class="flex transition-transform duration-500 ease-in-out relative z-10" id="carouselWrapper">
+                <x-service-card title="Pengembangan Web"
+                    description="Membangun website modern dengan teknologi terdepan seperti Laravel dan Tailwind CSS"
+                    link="/layanan/web-development" />
 
-                        <x-service-card title="Pengembangan Web"
-                            description="Membangun website modern dengan teknologi terdepan seperti Laravel dan Tailwind CSS"
-                            link="/layanan/web-development" />
+                <x-service-card title="Konsultasi IT"
+                    description="Memberikan saran strategis untuk transformasi digital perusahaan Anda dengan pendekatan terpersonalisasi"
+                    link="/layanan/konsultasi-it" />
 
-                        <x-service-card title="Konsultasi IT"
-                            description="Memberikan saran strategis untuk transformasi digital perusahaan Anda dengan pendekatan terpersonalisasi"
-                            link="/layanan/konsultasi-it" />
+                <x-service-card title="UI/UX Design"
+                    description="Menciptakan pengalaman pengguna yang intuitif dan menarik dengan desain yang user-centered"
+                    link="/layanan/ui-ux-design" />
 
-                        <x-service-card title="UI/UX Design"
-                            description="Menciptakan pengalaman pengguna yang intuitif dan menarik dengan desain yang user-centered"
-                            link="/layanan/ui-ux-design" />
+                <x-service-card title="Mobile Development"
+                    description="Pengembangan aplikasi mobile native dan cross-platform untuk iOS dan Android"
+                    link="/layanan/mobile-development" />
 
-                        <x-service-card title="Mobile Development"
-                            description="Pengembangan aplikasi mobile native dan cross-platform untuk iOS dan Android"
-                            link="/layanan/mobile-development" />
+                <x-service-card title="Cloud Solutions"
+                    description="Implementasi dan migrasi ke cloud infrastructure dengan keamanan dan skalabilitas tinggi"
+                    link="/layanan/cloud-solutions" />
 
-                        <x-service-card title="Cloud Solutions"
-                            description="Implementasi dan migrasi ke cloud infrastructure dengan keamanan dan skalabilitas tinggi"
-                            link="/layanan/cloud-solutions" />
+                <x-service-card title="Data Analytics"
+                    description="Analisis data mendalam untuk insight bisnis dan pengambilan keputusan yang lebih baik"
+                    link="/layanan/data-analytics" />
+                </div>
+            </div>
 
-                        <x-service-card title="Data Analytics"
-                            description="Analisis data mendalam untuk insight bisnis dan pengambilan keputusan yang lebih baik"
-                            link="/layanan/data-analytics" />
+            <!-- Navigation -->
+            <div class="flex justify-center items-center mt-8 space-x-4 relative z-20" aria-label="Carousel Navigation">
+                <button id="prevBtn"
+                class="p-2 text-custom-blue hover:text-primary transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                aria-label="Sebelumnya">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+                </button>
 
-                    </div>
+                <div class="flex space-x-2" id="indicators" aria-label="Carousel Indicators">
+                <!-- Indicators will be generated by JS -->
                 </div>
 
-                <!-- Navigation dengan z-index yang tepat -->
-                <div class="flex justify-center items-center mt-8 space-x-4 carousel-navigation relative z-6">
-                    <button id="prevBtn"
-                        class="p-2 text-custom-blue hover:text-primary transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M15 19l-7-7 7-7" />
-                        </svg>
-                    </button>
+                <button id="nextBtn"
+                class="p-2 text-custom-blue hover:text-primary transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                aria-label="Berikutnya">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+                </button>
+            </div>
 
-                    <div class="flex space-x-2" id="indicators">
-                        <!-- Indicators will be generated by JavaScript -->
-                    </div>
-
-                    <button id="nextBtn"
-                        class="p-2 text-custom-blue hover:text-primary transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                        </svg>
-                    </button>
+            <!-- Progress Bar -->
+            <div class="mt-6 relative z-0">
+                <div class="w-full bg-gray-200 rounded-full h-1">
+                <div class="bg-primary h-1 rounded-full transition-all duration-300 ease-out" id="progressBar"
+                    style="width: 16.67%"></div>
                 </div>
-
-                <!-- Progress Bar dengan containment -->
-                <div class="mt-6 progress-container relative z-0">
-                    <div class="w-full bg-gray-200 rounded-full h-1">
-                        <div class="bg-primary h-1 rounded-full transition-all duration-300 ease-out" id="progressBar"
-                            style="width: 16.67%"></div>
-                    </div>
-                </div>
+            </div>
             </div>
         </div>
     </section>
 
     <!-- Berita & Informasi Section yang Diperbaiki -->
-    <section id="berita" class="py-20 bg-gray-50">
+    <section id="informasi" class="py-20 bg-gray-100">
         <div class="container mx-auto px-6">
             <!-- Header Section -->
             <div class="text-center mb-10 group">
@@ -326,7 +327,7 @@
     </section>
 
     <!-- Tim Section dengan Infinite Carousel -->
-    <section id="tim" class="py-20 bg-white overflow-hidden">
+    <section id="tentang" class="py-20 bg-gray-100 overflow-hidden">
         <div class="container mx-auto px-6">
             <div class="text-center mb-10 group">
                 <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4 relative inline-block underline-animate">
@@ -397,75 +398,50 @@
     </section>
 
     <!-- Mitra Section dengan Carousel -->
-    <section id="mitra" class="py-20 bg-primary">
+    <section id="mitra" class="py-20 bg-gray-100">
         <div class="container mx-auto px-6">
+            <!-- Judul -->
             <div class="text-center mb-10 group">
                 <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4 relative inline-block underline-animate">
                     Mitra Kami
                 </h2>
             </div>
 
-            <!-- Carousel Container -->
+            <!-- Carousel -->
             <div class="relative max-w-7xl mx-auto">
-                <div class="carousel-container overflow-hidden" id="partnersCarousel">
-                    <div class="carousel-wrapper flex transition-transform duration-500 ease-in-out"
-                        id="partnersWrapper">
-
-                        <x-partner-card name="Universitas Indonesia" logo="{{ asset('assets/img/placeholder/dummy.png') }}"
-                            link="https://ui.ac.id" />
-
-                        <x-partner-card name="Institut Teknologi Bandung" logo="{{ asset('assets/img/placeholder/dummy.png') }}"
-                            link="https://itb.ac.id" />
-
-                        <x-partner-card name="Kementerian Komunikasi dan Informatika"
-                            logo="{{ asset('assets/img/placeholder/dummy.png') }}" link="https://kominfo.go.id" />
-
-                        <x-partner-card name="PT. Telkom Indonesia" logo="{{ asset('assets/img/placeholder/dummy.png') }}"
-                            link="https://telkom.co.id" />
-
-                        <x-partner-card name="Microsoft Indonesia" logo="{{ asset('assets/img/placeholder/dummy.png') }}"
-                            link="https://microsoft.com/id-id" />
-
-                        <x-partner-card name="Google Indonesia" logo="{{ asset('assets/img/placeholder/dummy.png') }}"
-                            link="https://google.co.id" />
-
-                        <x-partner-card name="Amazon Web Services" logo="{{ asset('assets/img/placeholder/dummy.png') }}"
-                            link="https://aws.amazon.com" />
-
-                        <x-partner-card name="Oracle Indonesia" logo="{{ asset('assets/img/placeholder/dummy.png') }}"
-                            link="https://oracle.com/id" />
-
-                        <x-partner-card name="Cisco Systems" logo="{{ asset('assets/img/placeholder/dummy.png') }}"
-                            link="https://cisco.com" />
-
-                        <x-partner-card name="IBM Indonesia" logo="{{ asset('assets/img/placeholder/dummy.png') }}"
-                            link="https://ibm.com/id" />
-
-                        <x-partner-card name="SAP Indonesia" logo="{{ asset('assets/img/placeholder/dummy.png') }}"
-                            link="https://sap.com/indonesia" />
-
-                        <x-partner-card name="VMware Indonesia" logo="{{ asset('assets/img/placeholder/dummy.png') }}"
-                            link="https://vmware.com" />
-
+                <div class="overflow-hidden" id="partnersCarousel">
+                    <div id="partnersWrapper" class="flex transition-transform duration-500 ease-in-out space-x-6">
+                        <!-- Partner Cards -->
+                        <x-partner-card name="Universitas Indonesia" logo="{{ asset('assets/img/placeholder/dummy.png') }}" link="https://ui.ac.id" />
+                        <x-partner-card name="Institut Teknologi Bandung" logo="{{ asset('assets/img/placeholder/dummy.png') }}" link="https://itb.ac.id" />
+                        <x-partner-card name="Kementerian Komunikasi dan Informatika" logo="{{ asset('assets/img/placeholder/dummy.png') }}" link="https://kominfo.go.id" />
+                        <x-partner-card name="PT. Telkom Indonesia" logo="{{ asset('assets/img/placeholder/dummy.png') }}" link="https://telkom.co.id" />
+                        <x-partner-card name="Microsoft Indonesia" logo="{{ asset('assets/img/placeholder/dummy.png') }}" link="https://microsoft.com/id-id" />
+                        <x-partner-card name="Google Indonesia" logo="{{ asset('assets/img/placeholder/dummy.png') }}" link="https://google.co.id" />
+                        <x-partner-card name="Amazon Web Services" logo="{{ asset('assets/img/placeholder/dummy.png') }}" link="https://aws.amazon.com" />
+                        <x-partner-card name="Oracle Indonesia" logo="{{ asset('assets/img/placeholder/dummy.png') }}" link="https://oracle.com/id" />
+                        <x-partner-card name="Cisco Systems" logo="{{ asset('assets/img/placeholder/dummy.png') }}" link="https://cisco.com" />
+                        <x-partner-card name="IBM Indonesia" logo="{{ asset('assets/img/placeholder/dummy.png') }}" link="https://ibm.com/id" />
+                        <x-partner-card name="SAP Indonesia" logo="{{ asset('assets/img/placeholder/dummy.png') }}" link="https://sap.com/indonesia" />
+                        <x-partner-card name="VMware Indonesia" logo="{{ asset('assets/img/placeholder/dummy.png') }}" link="https://vmware.com" />
                     </div>
                 </div>
 
-                <!-- Navigation tetap sama -->
+                <!-- Navigasi Carousel -->
                 <div class="flex justify-center items-center mt-8 space-x-4">
-                    <button id="partnersPrevBtn"
-                        class="p-2 text-custom-blue hover:text-gray-300 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M15 19l-7-7 7-7" />
+                    <button id="partnersPrevBtn" class="p-2 text-white hover:text-gray-300 transition disabled:opacity-50">
+                        <!-- Panah Kiri (Tanpa Komponen Icon) -->
+                        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M15 18l-6-6 6-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                     </button>
 
-                    <div class="flex space-x-2" id="partnersIndicators"></div>
+                    <div id="partnersIndicators" class="flex space-x-2"></div>
 
-                    <button id="partnersNextBtn"
-                        class="p-2 text-custom-blue hover:text-gray-300 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    <button id="partnersNextBtn" class="p-2 text-white hover:text-gray-300 transition disabled:opacity-50">
+                        <!-- Panah Kanan -->
+                        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M9 6l6 6-6 6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                     </button>
                 </div>
@@ -473,24 +449,21 @@
                 <!-- Progress Bar -->
                 <div class="mt-6">
                     <div class="w-full bg-gray-600 rounded-full h-1">
-                        <div class="bg-white h-1 rounded-full transition-all duration-300 ease-out"
-                            id="partnersProgressBar" style="width: 16.67%"></div>
+                        <div id="partnersProgressBar" class="bg-white h-1 rounded-full transition-all duration-300 ease-out" style="width: 16.67%"></div>
                     </div>
                 </div>
             </div>
 
-            <!-- CTA Section -->
-            <div class="text-center mt-16">
-                <h3 class="text-2xl font-bold mb-4 text-primary">Hubungi Kami</h3>
-                <p class="text-secondary mb-8 max-w-2xl mx-auto">
-                    Isi Form Survey untuk meningkatkan layanan PUSTIPD
-                </p>
-                <a href="https://www.typeform.com/"
-                    class="bg-custom-yellow hover:bg-gray-100 text-secondary px-5 py-4 rounded-lg font-semibold transition duration-300 transform hover:scale-105">
+            <!-- CTA Abang Komen dulss, aneh wkwkwk -->
+            <!-- <div class="text-center mt-16 text-gray-700">
+                <p class="mb-2 text-sm sm:text-base">Kami butuh masukan Anda untuk terus berkembang</p>
+                <a href="#"
+                    class="inline-block border border-blue-500 text-blue-600 px-4 py-2 rounded-full text-sm font-medium hover:bg-blue-50 transition">
                     Isi Survei
                 </a>
-            </div>
+            </div> -->
         </div>
     </section>
+
 
 </x-public.layouts>

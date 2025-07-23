@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 
     <head>
         <meta charset="UTF-8">
@@ -35,51 +35,39 @@
             <!-- Footer -->
             <x-public.footer></x-public.footer>
         </div>
+
         <!-- =============================== -->
         <!-- Script Section -->
         <!-- =============================== -->
+
+        <!-- Navbar Scroll Color Change + Clock -->
         <script>
-            document.addEventListener('DOMContentLoaded', function() {
+            document.addEventListener('DOMContentLoaded', function () {
                 // ===============================
-                // Script Navbar Color Change on Scroll
+                // Navbar Color Change on Scroll
                 // ===============================
                 const navbar = document.getElementById('navbar');
                 const navbarTitle = document.getElementById('navbar-title');
                 const navLinks = navbar.querySelectorAll('a');
                 const topbar = document.getElementById('topbar');
 
-                window.addEventListener('scroll', function() {
+                window.addEventListener('scroll', function () {
+                    const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
                     if (window.scrollY > 50) {
-                        // Hide Upper Navbar
                         topbar.classList.add('hidden');
 
-                        // Change Navbar Color
-                        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                            navbar.classList.remove('bg-transparent');
-                            navbar.classList.add('bg-gray-900');
+                        navbar.classList.remove('bg-transparent');
+                        navbar.classList.add(isDark ? 'bg-gray-900' : 'bg-white');
 
-                            navbarTitle.classList.remove('text-[#062749]');
-                            navbarTitle.classList.add('text-white');
+                        navbarTitle.classList.toggle('text-white', isDark);
+                        navbarTitle.classList.toggle('text-[#062749]', !isDark);
 
-                            navLinks.forEach(link => {
-                                link.classList.remove('text-[#062749]');
-                                link.classList.add('text-white');
-                            });
-
-                        } else {
-                            navbar.classList.remove('bg-transparent');
-                            navbar.classList.add('bg-white');
-
-                            navbarTitle.classList.remove('text-white');
-                            navbarTitle.classList.add('text-[#062749]');
-
-                            navLinks.forEach(link => {
-                                link.classList.remove('text-white');
-                                link.classList.add('text-[#062749]');
-                            });
-                        }
+                        navLinks.forEach(link => {
+                            link.classList.toggle('text-white', isDark);
+                            link.classList.toggle('text-[#062749]', !isDark);
+                        });
                     } else {
-                        // Show Upper Navbar
                         topbar.classList.remove('hidden');
 
                         navbar.classList.remove('bg-white', 'bg-gray-900');
@@ -96,10 +84,10 @@
                 });
 
                 // ===============================
-                // Script Update Clock & Status Open
+                // Update Clock & Open Status
                 // ===============================
-                const days = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
-                const months = ["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des"];
+                const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+                const months = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
 
                 function updateClock() {
                     const now = new Date();
@@ -108,73 +96,34 @@
                     const dayIdx = jakarta.getDay();
                     const hr = jakarta.getHours();
                     const min = jakarta.getMinutes();
-
                     const isOpen = dayIdx >= 1 && dayIdx <= 5 && hr >= 8 && (hr < 16 || (hr === 16 && min === 0));
 
-                    const status = isOpen ? "BUKA :" : "TUTUP :";
-                    const dayName = days[dayIdx];
-                    const day = jakarta.getDate().toString().padStart(2, "0");
-                    const month = months[jakarta.getMonth()];
-                    const year = jakarta.getFullYear();
-                    const time = `${hr.toString().padStart(2, "0")}.${min.toString().padStart(2, "0")} WIB`;
-
-                    document.getElementById("open-status").textContent = status;
-                    document.getElementById("clock").textContent = ` ${dayName}, ${day} ${month} ${year} (${time})`;
+                    document.getElementById("open-status").textContent = isOpen ? "BUKA :" : "TUTUP :";
+                    document.getElementById("clock").textContent =
+                        ` ${days[dayIdx]}, ${jakarta.getDate().toString().padStart(2, "0")} ${months[jakarta.getMonth()]} ${jakarta.getFullYear()} (${hr.toString().padStart(2, "0")}.${min.toString().padStart(2, "0")} WIB)`;
                 }
 
-                updateClock(); // initial
-                setInterval(updateClock, 60_000); // update every minute
+                updateClock();
+                setInterval(updateClock, 60000); // per menit
             });
-
-            // ===============================
-            // Script For
-            // ===============================
-            // ===============================
-            // Script For
-            // ===============================
-            // ===============================
-            // Script For
-            // ===============================
-            // ===============================
-            // Script For
-            // ===============================
-            // ===============================
-            // Script For
-            // ===============================
-            // ===============================
-            // Script For
-            // ===============================
-            // ===============================
-            // Script For
-            // ===============================
-            // ===============================
-            // Script For
-            // ===============================
-            // ===============================
-            // Script For
-            // ===============================
-            // ===============================
-            // Script For
-            // ===============================
-
         </script>
+
+        <!-- Universal Carousel -->
         <script>
-            document.addEventListener('DOMContentLoaded', function() {
+            document.addEventListener('DOMContentLoaded', function () {
                 class UniversalCarousel {
                     constructor(config) {
-                        // Configuration
-                        this.maxIndicators = config.maxIndicators || 5;
-                        this.carouselId = config.carouselId;
-                        this.wrapperId = config.wrapperId;
-                        this.prevBtnId = config.prevBtnId;
-                        this.nextBtnId = config.nextBtnId;
-                        this.indicatorsId = config.indicatorsId;
-                        this.progressBarId = config.progressBarId;
-                        this.indicatorActiveClass = config.indicatorActiveClass || 'bg-secondary';
-                        this.indicatorInactiveClass = config.indicatorInactiveClass || 'bg-gray-300';
-                        this.indicatorHoverClass = config.indicatorHoverClass || 'hover:bg-gray-400';
+                        // Config
+                        Object.assign(this, {
+                            maxIndicators: 5,
+                            indicatorActiveClass: 'bg-secondary',
+                            indicatorInactiveClass: 'bg-gray-300',
+                            indicatorHoverClass: 'hover:bg-gray-400',
+                            autoPlayDelay: 4000,
+                            ...config
+                        });
 
-                        // DOM Elements
+                        // DOM
                         this.carousel = document.getElementById(this.carouselId);
                         this.wrapper = document.getElementById(this.wrapperId);
                         this.prevBtn = document.getElementById(this.prevBtnId);
@@ -184,14 +133,12 @@
 
                         if (!this.carousel || !this.wrapper) return;
 
-                        // Carousel State
                         this.slides = this.wrapper.querySelectorAll('.carousel-slide');
                         this.totalSlides = this.slides.length;
                         this.currentIndex = 0;
                         this.slidesToShow = this.getSlidesToShow();
                         this.maxIndex = Math.max(0, this.totalSlides - this.slidesToShow);
                         this.autoPlayInterval = null;
-                        this.autoPlayDelay = config.autoPlayDelay || 4000;
                         this.isTransitioning = false;
 
                         this.init();
@@ -199,9 +146,9 @@
 
                     getSlidesToShow() {
                         const width = window.innerWidth;
-                        if (width >= 1024) return 3; // lg: 3 slides
-                        if (width >= 768) return 2; // md: 2 slides
-                        return 1; // mobile: 1 slide
+                        if (width >= 1024) return 3;
+                        if (width >= 768) return 2;
+                        return 1;
                     }
 
                     init() {
@@ -209,171 +156,102 @@
                         this.updateCarousel();
                         this.bindEvents();
                         this.startAutoPlay();
-
-                        // Handle window resize
-                        window.addEventListener('resize', () => {
-                            this.handleResize();
-                        });
+                        window.addEventListener('resize', () => this.handleResize());
                     }
 
                     createIndicators() {
                         this.indicatorsContainer.innerHTML = '';
+                        const totalIndicators = this.maxIndex + 1;
+                        const count = Math.min(totalIndicators, this.maxIndicators);
 
-                        // Hitung total indikator yang dibutuhkan
-                        const totalPossibleIndicators = this.maxIndex + 1;
-
-                        // Batasi indikator maksimal 5
-                        const indicatorsToShow = Math.min(totalPossibleIndicators, this.maxIndicators);
-
-                        // Buat indikator sesuai batas maksimal
-                        for (let i = 0; i < indicatorsToShow; i++) {
-                            const indicator = document.createElement('button');
-                            indicator.className = `w-3 h-3 rounded-full transition-all duration-300 ${
-                this.getIndicatorClass(i)
-            }`;
-
-                            // Event listener dengan logic mapping
-                            indicator.addEventListener('click', () => this.goToMappedSlide(i, indicatorsToShow,
-                                totalPossibleIndicators));
-                            this.indicatorsContainer.appendChild(indicator);
+                        for (let i = 0; i < count; i++) {
+                            const btn = document.createElement('button');
+                            btn.className = `w-3 h-3 rounded-full transition-all duration-300 ${this.getIndicatorClass(i)}`;
+                            btn.addEventListener('click', () => this.goToMappedSlide(i, count, totalIndicators));
+                            this.indicatorsContainer.appendChild(btn);
                         }
                     }
 
-                    // Method baru untuk mapping indikator ke slide
-                    goToMappedSlide(indicatorIndex, indicatorsToShow, totalPossibleIndicators) {
-                        let targetSlide;
-
-                        if (totalPossibleIndicators <= this.maxIndicators) {
-                            // Jika total indikator <= 5, mapping langsung
-                            targetSlide = indicatorIndex;
-                        } else {
-                            // Jika total indikator > 5, bagi secara proporsional
-                            const ratio = (totalPossibleIndicators - 1) / (indicatorsToShow - 1);
-                            targetSlide = Math.round(indicatorIndex * ratio);
-                        }
-
-                        this.goToSlide(targetSlide);
+                    goToMappedSlide(i, count, total) {
+                        const ratio = (total - 1) / (count - 1);
+                        const target = total <= this.maxIndicators ? i : Math.round(i * ratio);
+                        this.goToSlide(target);
                     }
 
-                    // Method yang diperbaiki untuk indikator aktif tunggal
-                    getIndicatorClass(indicatorIndex) {
-                        const totalPossibleIndicators = this.maxIndex + 1;
-                        const indicatorsToShow = Math.min(totalPossibleIndicators, this.maxIndicators);
-
-                        let isActive = false;
-
-                        if (totalPossibleIndicators <= this.maxIndicators) {
-                            // Mapping langsung
-                            isActive = indicatorIndex === this.currentIndex;
-                        } else {
-                            // Mapping proporsional dengan logic yang lebih ketat
-                            const ratio = (totalPossibleIndicators - 1) / (indicatorsToShow - 1);
-                            const mappedIndex = Math.round(indicatorIndex * ratio);
-
-                            // PERBAIKAN: Hanya satu indikator yang aktif
-                            isActive = Math.round(this.currentIndex / ratio) === indicatorIndex;
-                        }
-
-                        return isActive ?
-                            `${this.indicatorActiveClass} scale-110` :
-                            `${this.indicatorInactiveClass} ${this.indicatorHoverClass}`;
+                    getIndicatorClass(i) {
+                        const total = this.maxIndex + 1;
+                        const count = Math.min(total, this.maxIndicators);
+                        const ratio = (total - 1) / (count - 1);
+                        const mapped = Math.round(this.currentIndex / ratio);
+                        return (total <= this.maxIndicators ? i === this.currentIndex : i === mapped)
+                            ? `${this.indicatorActiveClass} scale-110`
+                            : `${this.indicatorInactiveClass} ${this.indicatorHoverClass}`;
                     }
 
                     updateCarousel() {
                         if (this.isTransitioning) return;
 
-                        const translateX = -(this.currentIndex * (100 / this.slidesToShow));
-                        this.wrapper.style.transform = `translateX(${translateX}%)`;
+                        this.wrapper.style.transform = `translateX(-${this.currentIndex * (100 / this.slidesToShow)}%)`;
 
-                        // Update indicators dengan logic baru
-                        const indicators = this.indicatorsContainer.querySelectorAll('button');
-                        indicators.forEach((indicator, index) => {
-                            indicator.className = `w-3 h-3 rounded-full transition-all duration-300 ${
-                this.getIndicatorClass(index)
-            }`;
+                        // Update indicators
+                        [...this.indicatorsContainer.children].forEach((btn, i) => {
+                            btn.className = `w-3 h-3 rounded-full transition-all duration-300 ${this.getIndicatorClass(i)}`;
                         });
 
-                        // Update progress bar
-                        const progress = ((this.currentIndex + 1) / (this.maxIndex + 1)) * 100;
                         if (this.progressBar) {
+                            const progress = ((this.currentIndex + 1) / (this.maxIndex + 1)) * 100;
                             this.progressBar.style.width = `${progress}%`;
                         }
 
-                        // Update navigation buttons
                         if (this.prevBtn) this.prevBtn.disabled = this.currentIndex === 0;
                         if (this.nextBtn) this.nextBtn.disabled = this.currentIndex === this.maxIndex;
 
-                        // Animation untuk cards
-                        this.slides.forEach((slide, index) => {
+                        this.slides.forEach((slide, i) => {
                             const card = slide.querySelector('.group');
                             if (card) {
-                                if (index >= this.currentIndex && index < this.currentIndex + this
-                                    .slidesToShow) {
-                                    card.style.opacity = '1';
-                                    card.style.transform = 'translateY(0)';
-                                } else {
-                                    card.style.opacity = '0.7';
-                                    card.style.transform = 'translateY(10px)';
-                                }
+                                const visible = i >= this.currentIndex && i < this.currentIndex + this.slidesToShow;
+                                card.style.opacity = visible ? '1' : '0.7';
+                                card.style.transform = visible ? 'translateY(0)' : 'translateY(10px)';
                             }
                         });
                     }
 
                     nextSlide() {
                         if (this.currentIndex < this.maxIndex && !this.isTransitioning) {
-                            this.isTransitioning = true;
-                            this.currentIndex++;
-                            this.updateCarousel();
-                            this.resetAutoPlay();
-
-                            setTimeout(() => {
-                                this.isTransitioning = false;
-                            }, 500);
+                            this.transition(() => this.currentIndex++);
                         }
                     }
 
                     prevSlide() {
                         if (this.currentIndex > 0 && !this.isTransitioning) {
-                            this.isTransitioning = true;
-                            this.currentIndex--;
-                            this.updateCarousel();
-                            this.resetAutoPlay();
-
-                            setTimeout(() => {
-                                this.isTransitioning = false;
-                            }, 500);
+                            this.transition(() => this.currentIndex--);
                         }
                     }
 
-                    goToSlide(index) {
-                        if (index !== this.currentIndex && !this.isTransitioning) {
-                            this.isTransitioning = true;
-                            this.currentIndex = index;
-                            this.updateCarousel();
-                            this.resetAutoPlay();
-
-                            setTimeout(() => {
-                                this.isTransitioning = false;
-                            }, 500);
+                    goToSlide(i) {
+                        if (i !== this.currentIndex && !this.isTransitioning) {
+                            this.transition(() => this.currentIndex = i);
                         }
+                    }
+
+                    transition(fn) {
+                        this.isTransitioning = true;
+                        fn();
+                        this.updateCarousel();
+                        this.resetAutoPlay();
+                        setTimeout(() => this.isTransitioning = false, 500);
                     }
 
                     startAutoPlay() {
                         this.autoPlayInterval = setInterval(() => {
-                            if (this.currentIndex === this.maxIndex) {
-                                this.currentIndex = 0;
-                            } else {
-                                this.currentIndex++;
-                            }
+                            this.currentIndex = (this.currentIndex === this.maxIndex) ? 0 : this.currentIndex + 1;
                             this.updateCarousel();
                         }, this.autoPlayDelay);
                     }
 
                     stopAutoPlay() {
-                        if (this.autoPlayInterval) {
-                            clearInterval(this.autoPlayInterval);
-                            this.autoPlayInterval = null;
-                        }
+                        clearInterval(this.autoPlayInterval);
+                        this.autoPlayInterval = null;
                     }
 
                     resetAutoPlay() {
@@ -382,70 +260,50 @@
                     }
 
                     handleResize() {
-                        const newSlidesToShow = this.getSlidesToShow();
-                        if (newSlidesToShow !== this.slidesToShow) {
-                            this.slidesToShow = newSlidesToShow;
-                            this.maxIndex = Math.max(0, this.totalSlides - this.slidesToShow);
-
-                            if (this.currentIndex > this.maxIndex) {
-                                this.currentIndex = this.maxIndex;
-                            }
-
+                        const newSlides = this.getSlidesToShow();
+                        if (newSlides !== this.slidesToShow) {
+                            this.slidesToShow = newSlides;
+                            this.maxIndex = Math.max(0, this.totalSlides - newSlides);
+                            this.currentIndex = Math.min(this.currentIndex, this.maxIndex);
                             this.createIndicators();
                             this.updateCarousel();
                         }
                     }
 
                     bindEvents() {
-                        // Navigation buttons
                         if (this.nextBtn) this.nextBtn.addEventListener('click', () => this.nextSlide());
                         if (this.prevBtn) this.prevBtn.addEventListener('click', () => this.prevSlide());
 
-                        // Pause autoplay on hover
                         this.carousel.addEventListener('mouseenter', () => this.stopAutoPlay());
                         this.carousel.addEventListener('mouseleave', () => this.startAutoPlay());
 
-                        // Touch/swipe support
-                        let startX = 0;
-                        let startY = 0;
-                        let distX = 0;
-                        let distY = 0;
+                        let startX = 0, startY = 0;
 
-                        this.carousel.addEventListener('touchstart', (e) => {
+                        this.carousel.addEventListener('touchstart', e => {
                             startX = e.changedTouches[0].pageX;
                             startY = e.changedTouches[0].pageY;
                         });
 
-                        this.carousel.addEventListener('touchmove', (e) => {
-                            e.preventDefault();
-                        });
+                        this.carousel.addEventListener('touchmove', e => e.preventDefault());
 
-                        this.carousel.addEventListener('touchend', (e) => {
-                            distX = e.changedTouches[0].pageX - startX;
-                            distY = e.changedTouches[0].pageY - startY;
+                        this.carousel.addEventListener('touchend', e => {
+                            const distX = e.changedTouches[0].pageX - startX;
+                            const distY = e.changedTouches[0].pageY - startY;
 
-                            if (Math.abs(distX) > Math.abs(distY) && Math.abs(distX) > 50) {
-                                if (distX > 0) {
-                                    this.prevSlide();
-                                } else {
-                                    this.nextSlide();
-                                }
+                            if (Math.abs(distX) > 50 && Math.abs(distX) > Math.abs(distY)) {
+                                distX > 0 ? this.prevSlide() : this.nextSlide();
                             }
                         });
 
-                        // Keyboard navigation
-                        document.addEventListener('keydown', (e) => {
-                            if (e.key === 'ArrowLeft') {
-                                this.prevSlide();
-                            } else if (e.key === 'ArrowRight') {
-                                this.nextSlide();
-                            }
+                        document.addEventListener('keydown', e => {
+                            if (e.key === 'ArrowLeft') this.prevSlide();
+                            if (e.key === 'ArrowRight') this.nextSlide();
                         });
                     }
                 }
 
-                // Initialize Services Carousel
-                const servicesCarousel = new UniversalCarousel({
+                // Inisialisasi carousel
+                new UniversalCarousel({
                     carouselId: 'servicesCarousel',
                     wrapperId: 'carouselWrapper',
                     prevBtnId: 'prevBtn',
@@ -458,8 +316,7 @@
                     autoPlayDelay: 4000
                 });
 
-                // Initialize Partners Carousel
-                const partnersCarousel = new UniversalCarousel({
+                new UniversalCarousel({
                     carouselId: 'partnersCarousel',
                     wrapperId: 'partnersWrapper',
                     prevBtnId: 'partnersPrevBtn',
@@ -474,80 +331,50 @@
             });
         </script>
 
+        <!-- Scroll Animation & Parallax -->
         <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                // Intersection Observer untuk animasi scroll
-                const observerOptions = {
-                    threshold: 0.1,
-                    rootMargin: '0px 0px -50px 0px'
-                };
-
-                const observer = new IntersectionObserver((entries) => {
+            document.addEventListener('DOMContentLoaded', function () {
+                const observer = new IntersectionObserver(entries => {
                     entries.forEach(entry => {
                         if (entry.isIntersecting) {
                             entry.target.classList.add('animate');
-                            // Optional: stop observing setelah animasi
                             observer.unobserve(entry.target);
                         }
                     });
-                }, observerOptions);
+                }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 
-                // Observe semua news cards
-                const newsCards = document.querySelectorAll('.news-card');
-                newsCards.forEach(card => {
-                    observer.observe(card);
-                });
+                document.querySelectorAll('.news-card').forEach(card => observer.observe(card));
 
-                // Parallax effect untuk header section
+                // Parallax effect
                 window.addEventListener('scroll', () => {
-                    const scrolled = window.pageYOffset;
-                    const beritaSection = document.getElementById('berita');
-
-                    if (beritaSection) {
-                        const rate = scrolled * -0.5;
-                        beritaSection.style.transform = `translateY(${rate}px)`;
+                    const berita = document.getElementById('berita');
+                    if (berita) {
+                        berita.style.transform = `translateY(${window.pageYOffset * -0.5}px)`;
                     }
                 });
 
-                // Stagger animation untuk cards
-                const staggerCards = () => {
-                    const cards = document.querySelectorAll('.news-card');
-                    cards.forEach((card, index) => {
-                        setTimeout(() => {
-                            card.style.animationDelay = `${index * 0.1}s`;
-                            card.classList.add('animate');
-                        }, index * 100);
+                // Stagger card animation
+                setTimeout(() => {
+                    document.querySelectorAll('.news-card').forEach((card, i) => {
+                        card.style.animationDelay = `${i * 0.1}s`;
+                        card.classList.add('animate');
                     });
-                };
-
-                // Trigger stagger animation on page load
-                setTimeout(staggerCards, 500);
+                }, 500);
             });
         </script>
+
+        <!-- Team Carousel Auto Pause -->
         <script>
-            document.addEventListener('DOMContentLoaded', function() {
+            document.addEventListener('DOMContentLoaded', function () {
                 const carousel = document.getElementById('teamCarousel');
+                if (!carousel) return;
 
-                if (carousel) {
-                    // Pause on hover
-                    carousel.addEventListener('mouseenter', function() {
-                        this.style.animationPlayState = 'paused';
-                    });
+                carousel.addEventListener('mouseenter', () => carousel.style.animationPlayState = 'paused');
+                carousel.addEventListener('mouseleave', () => carousel.style.animationPlayState = 'running');
 
-                    // Resume on mouse leave
-                    carousel.addEventListener('mouseleave', function() {
-                        this.style.animationPlayState = 'running';
-                    });
-
-                    // Pause when tab is not visible (performance optimization)
-                    document.addEventListener('visibilitychange', function() {
-                        if (document.hidden) {
-                            carousel.style.animationPlayState = 'paused';
-                        } else {
-                            carousel.style.animationPlayState = 'running';
-                        }
-                    });
-                }
+                document.addEventListener('visibilitychange', () => {
+                    carousel.style.animationPlayState = document.hidden ? 'paused' : 'running';
+                });
             });
         </script>
 
