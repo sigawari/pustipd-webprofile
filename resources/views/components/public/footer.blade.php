@@ -17,7 +17,7 @@
                 </div>
                 <div class="space-y-2">
                     <h3 class="text-sm font-semibold text-white">Alamat</h3>
-                    <p class="text-sm text-blue-100 leading-relaxed">
+                    <p class="text-xs text-blue-100 leading-relaxed">
                         Gedung Perpustakaan Lt. 4, Jl. Pangeran Ratu (Jakabaring),<br>
                         Kelurahan 5 Ulu, Kecamatan Seberang Ulu I,<br>
                         Kota Palembang, Sumatera Selatan 30267, Indonesia.
