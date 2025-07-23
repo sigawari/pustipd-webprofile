@@ -1,6 +1,55 @@
 <x-public.layouts title="{{ $title }}" description="{{ $description }}" keywords="{{ $keywords }}">
     <x-slot:title>{{ $title }}</x-slot:title>
 
+    <!-- Style for Divisi -->
+    <style>
+        .card-animated {
+        position: relative;
+        overflow: hidden;
+        z-index: 0;
+        }
+
+        .card-animated::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-color: #3b82f6; /* Tailwind blue-500 */
+        transform: translateY(100%);
+        transition: transform 0.5s ease-in-out;
+        z-index: -1;
+        }
+
+        .group:hover .card-animated::before {
+        transform: translateY(0%);
+        }
+
+        .card-text {
+        transition: color 0.3s ease;
+        }
+
+        .group:hover .card-text {
+        color: white !important;
+        }
+
+        .underline-animate::after {
+        content: '';
+        position: absolute;
+        bottom: -0.25rem; /* Jarak dari teks */
+        left: 0;
+        height: 4px;
+        width: 0;
+        background-color: #3b82f6; /* Tailwind blue-500 */
+        transition: width 0.4s ease;
+        }
+
+        .group:hover .underline-animate::after {
+        width: 100%;
+        }
+
+    </style>
+
+
+
     <!-- Hero Section -->
     <section class="relative bg-blue-950 text-amber-50 min-h-screen flex items-center justify-center overflow-hidden">
         <!-- Background Image -->
@@ -21,7 +70,7 @@
             <!-- Search Form -->
             <form action="#" method="GET" class="relative max-w-md mx-auto">
                 <input type="text" name="search" placeholder="Cari informasi di sini"
-                    class="w-full rounded-full pl-12 pr-4 py-3 text-white placeholder-white bg-transparent border border-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent" />
+                    class="w-full rounded-full pl-12 pr-4 py-3 text-white placeholder-white bg-transparent border border-white focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent" />
                 <button type="submit" class="absolute top-1/2 left-3 transform -translate-y-1/2 text-white">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
                         viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -62,61 +111,64 @@
     <!-- Divisi Section -->
     <section id="divisi" class="py-20 bg-gray-100">
         <div class="container mx-auto px-6">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Divisi PUSTIPD</h2>
-                <div class="w-16 h-1 bg-secondary mx-auto"></div>
+            <div class="text-center mb-10 group">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4 relative inline-block underline-animate">
+                    Divisi PUSTIPD
+                </h2>
             </div>
 
             <div class="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-                <!-- Divisi Jaringan -->
-                <div
-                    class="bg-white rounded-lg shadow-sm border border-gray-200 p-8 text-center hover:shadow-md transition duration-300">
-                    <div class="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                        <svg class="w-12 h-12 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <!-- Card Division -->
+                 <!-- Jaringan Division -->
+                <div class="group rounded-lg border border-gray-200 shadow-lg transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="card-animated p-8 text-center rounded-lg">
+                        <div class="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                        <svg class="w-12 h-12 text-gray-700 card-text transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2 4h.01M17 16h.01" />
+                            d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2 4h.01M17 16h.01" />
                         </svg>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-2 card-text">Divisi</p>
+                        <h3 class="text-lg font-semibold text-gray-800 card-text">Jaringan</h3>
                     </div>
-                    <p class="text-sm text-gray-600 mb-2">Divisi</p>
-                    <h3 class="text-lg font-semibold text-gray-800">Jaringan</h3>
                 </div>
-
-                <!-- Divisi Pengembangan Aplikasi -->
-                <div
-                    class="bg-white rounded-lg shadow-sm border border-gray-200 p-8 text-center hover:shadow-md transition duration-300">
-                    <div class="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                        <svg class="w-12 h-12 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                        </svg>
+                <!-- Pengembangan Aplikasi Division -->
+                <div class="group rounded-lg border border-gray-200 shadow-lg transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="card-animated p-8 text-center rounded-lg">
+                        <div class="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                            <svg class="w-12 h-12 text-gray-700 card-text  transition-colors duration-300 " fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                            </svg>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-2 card-text">Divisi</p>
+                        <h3 class="text-lg font-semibold text-gray-800 card-text">Pengembangan Aplikasi</h3>
                     </div>
-                    <p class="text-sm text-gray-600 mb-2">Divisi</p>
-                    <h3 class="text-lg font-semibold text-gray-800">Pengembangan Aplikasi</h3>
                 </div>
-
-                <!-- Divisi Pangkalan Data -->
-                <div
-                    class="bg-white rounded-lg shadow-sm border border-gray-200 p-8 text-center hover:shadow-md transition duration-300">
-                    <div class="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                        <svg class="w-12 h-12 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
-                        </svg>
+                <!-- Pangkalan Data Division -->
+                <div class="group rounded-lg border border-gray-200 shadow-lg transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="card-animated p-8 text-center rounded-lg">
+                        <div class="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                            <svg class="w-12 h-12 text-gray-700 card-text  transition-colors duration-300 " fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+                            </svg>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-2 card-text">Divisi</p>
+                        <h3 class="text-lg font-semibold text-gray-800 card-text">Pangkalan Data</h3>
                     </div>
-                    <p class="text-sm text-gray-600 mb-2">Divisi</p>
-                    <h3 class="text-lg font-semibold text-gray-800">Pangkalan Data</h3>
                 </div>
             </div>
         </div>
     </section>
 
-
     <!-- Layanan Section -->
     <section id="layanan" class="py-20 bg-[#E6F6FF]">
         <div class="container mx-auto px-6">
-            <div class="text-center mb-10">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Layanan Kami</h2>
-                <div class="w-16 h-1 bg-secondary mx-auto mb-6"></div>
+            <div class="text-center mb-10 group">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4 relative inline-block underline-animate">
+                   Layanan Kami
+                </h2>
             </div>
 
             <!-- Carousel Container dengan isolasi -->
@@ -189,9 +241,10 @@
     <section id="berita" class="py-20 bg-gray-50">
         <div class="container mx-auto px-6">
             <!-- Header Section -->
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Berita dan Informasi</h2>
-                <div class="w-16 h-1 bg-primary mx-auto mb-6"></div>
+            <div class="text-center mb-10 group">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4 relative inline-block underline-animate">
+                    Berita dan Informasi
+                </h2>
                 <p class="text-lg text-gray-600 max-w-2xl mx-auto">
                     Update terbaru seputar berita dan pengumuman penting dari kami
                 </p>
@@ -276,9 +329,10 @@
     <!-- Tim Section dengan Infinite Carousel -->
     <section id="tim" class="py-20 bg-white overflow-hidden">
         <div class="container mx-auto px-6">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl md:text-5xl font-bold mb-4 text-gray-800">Tim PUSTIPD</h2>
-                <div class="w-16 h-1 bg-primary mx-auto mb-6"></div>
+            <div class="text-center mb-10 group">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4 relative inline-block underline-animate">
+                    Tim PUSTIPD
+                </h2>
                 <p class="text-xl text-gray-600 max-w-2xl mx-auto">
                     Tim profesional yang berdedikasi untuk memberikan layanan terbaik
                 </p>
@@ -346,9 +400,10 @@
     <!-- Mitra Section dengan Carousel -->
     <section id="mitra" class="py-20 bg-primary">
         <div class="container mx-auto px-6">
-            <div class="text-center mb-10">
-                <h2 class="text-4xl md:text-5xl font-bold mb-4 text-secondary">Mitra Kami</h2>
-                <div class="w-16 h-1 bg-secondary mx-auto mb-3"></div>
+            <div class="text-center mb-10 group">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4 relative inline-block underline-animate">
+                    Mitra Kami
+                </h2>
             </div>
 
             <!-- Carousel Container -->
