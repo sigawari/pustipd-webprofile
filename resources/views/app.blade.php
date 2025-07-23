@@ -5,9 +5,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>PUSTIPD | Home Page</title>
-        <!-- Favicon -->
-        <link id="favicon" rel="shortcut icon" href="{{ asset('assets/img/logo/logo-uin-rfp.png') }}" type="image/x-icon">
+        <title>PUSTIPD</title>
 
         <!-- Styles / Scripts -->
         @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
@@ -36,15 +34,16 @@
                     border-color: var(--color-border);
                 }
 
-                /* .bg-white {
+                .bg-white {
                     background-color: var(--color-background) !important;
-                } */
+                }
 
                 .text-white {
                     color: var(--color-text) !important;
                 }
             </style>
         @endif
+        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     </head>
 
     <body class="flex flex-col min-h-screen bg-blue-950">
@@ -52,10 +51,13 @@
         <main class="flex-grow">
             {{-- @include('components.public.uppernav')
             @include('components.public.navbartransparent')
-            @include('components.public.navbar-light')
-            @include('components.public.navbar-dark') --}}
+            @include('components.public.navbar-light') --}}
+            {{-- @include('components.public.navbar-dark') --}}
+            {{-- @include('components.public.division-card') --}}
+
+            {{-- Main content --}}
         </main>
-        {{-- 
+
         {{-- Footer --}}
         {{-- @include('components.public.footer') --}}
     </body>

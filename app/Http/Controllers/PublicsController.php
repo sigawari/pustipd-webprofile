@@ -13,7 +13,7 @@ class PublicsController extends Controller
      */
     public function index()
     {
-        $title = 'Home Page';
+        $title = 'Makan Ayam di Publics';
         $description = 'Welcome to the home page of our application.';
         $keywords = 'home, welcome, application';
 
