@@ -29,41 +29,134 @@
             <x-public.navbar></x-public.navbar>
             <!-- Main -->
             <main class="flex-grow">
-                <x-public.header>{{ $title }}</x-public.header>
+                <!-- <x-public.header>{{ $title }}</x-public.header> Pindah ke tiap pages aja atau disesuaikan -->
                 {{ $slot }}
             </main>
             <!-- Footer -->
             <x-public.footer></x-public.footer>
         </div>
-
+        <!-- =============================== -->
+        <!-- Script Section -->
+        <!-- =============================== -->
         <script>
-            // ===============================
-            // Script Navbar Color Change on Scroll
-            // ===============================
-            const navbar = document.getElementById('navbar');
-            const navbarTitle = document.getElementById('navbar-title');
+            document.addEventListener('DOMContentLoaded', function() {
+                // ===============================
+                // Script Navbar Color Change on Scroll
+                // ===============================
+                const navbar = document.getElementById('navbar');
+                const navbarTitle = document.getElementById('navbar-title');
+                const navLinks = navbar.querySelectorAll('a');
+                const topbar = document.getElementById('topbar');
 
-            window.addEventListener('scroll', function() {
-                if (window.scrollY > 50) {
-                    // Check if dark mode is active
-                    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                        navbar.classList.remove('bg-transparent');
-                        navbar.classList.add('bg-gray-900');
-                        navbarTitle.classList.remove('text-white');
-                        navbarTitle.classList.add('text-white');
+                window.addEventListener('scroll', function() {
+                    if (window.scrollY > 50) {
+                        // Hide Upper Navbar
+                        topbar.classList.add('hidden');
+
+                        // Change Navbar Color
+                        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                            navbar.classList.remove('bg-transparent');
+                            navbar.classList.add('bg-gray-900');
+
+                            navbarTitle.classList.remove('text-[#062749]');
+                            navbarTitle.classList.add('text-white');
+
+                            navLinks.forEach(link => {
+                                link.classList.remove('text-[#062749]');
+                                link.classList.add('text-white');
+                            });
+
+                        } else {
+                            navbar.classList.remove('bg-transparent');
+                            navbar.classList.add('bg-white');
+
+                            navbarTitle.classList.remove('text-white');
+                            navbarTitle.classList.add('text-[#062749]');
+
+                            navLinks.forEach(link => {
+                                link.classList.remove('text-white');
+                                link.classList.add('text-[#062749]');
+                            });
+                        }
                     } else {
-                        navbar.classList.remove('bg-transparent');
-                        navbar.classList.add('bg-white');
-                        navbarTitle.classList.remove('text-white');
-                        navbarTitle.classList.add('text-[#062749]');
+                        // Show Upper Navbar
+                        topbar.classList.remove('hidden');
+
+                        navbar.classList.remove('bg-white', 'bg-gray-900');
+                        navbar.classList.add('bg-transparent');
+
+                        navbarTitle.classList.remove('text-[#062749]');
+                        navbarTitle.classList.add('text-white');
+
+                        navLinks.forEach(link => {
+                            link.classList.remove('text-[#062749]');
+                            link.classList.add('text-white');
+                        });
                     }
-                } else {
-                    navbar.classList.remove('bg-white', 'bg-gray-900');
-                    navbar.classList.add('bg-transparent');
-                    navbarTitle.classList.remove('text-[#062749]');
-                    navbarTitle.classList.add('text-white');
+                });
+
+                // ===============================
+                // Script Update Clock & Status Open
+                // ===============================
+                const days = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
+                const months = ["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des"];
+
+                function updateClock() {
+                    const now = new Date();
+                    const jakarta = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Jakarta" }));
+
+                    const dayIdx = jakarta.getDay();
+                    const hr = jakarta.getHours();
+                    const min = jakarta.getMinutes();
+
+                    const isOpen = dayIdx >= 1 && dayIdx <= 5 && hr >= 8 && (hr < 16 || (hr === 16 && min === 0));
+
+                    const status = isOpen ? "BUKA :" : "TUTUP :";
+                    const dayName = days[dayIdx];
+                    const day = jakarta.getDate().toString().padStart(2, "0");
+                    const month = months[jakarta.getMonth()];
+                    const year = jakarta.getFullYear();
+                    const time = `${hr.toString().padStart(2, "0")}.${min.toString().padStart(2, "0")} WIB`;
+
+                    document.getElementById("open-status").textContent = status;
+                    document.getElementById("clock").textContent = ` ${dayName}, ${day} ${month} ${year} (${time})`;
                 }
+
+                updateClock(); // initial
+                setInterval(updateClock, 60_000); // update every minute
             });
+
+            // ===============================
+            // Script For
+            // ===============================
+            // ===============================
+            // Script For
+            // ===============================
+            // ===============================
+            // Script For
+            // ===============================
+            // ===============================
+            // Script For
+            // ===============================
+            // ===============================
+            // Script For
+            // ===============================
+            // ===============================
+            // Script For
+            // ===============================
+            // ===============================
+            // Script For
+            // ===============================
+            // ===============================
+            // Script For
+            // ===============================
+            // ===============================
+            // Script For
+            // ===============================
+            // ===============================
+            // Script For
+            // ===============================
+
         </script>
         <script>
             document.addEventListener('DOMContentLoaded', function() {

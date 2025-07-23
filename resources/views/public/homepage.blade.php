@@ -2,33 +2,62 @@
     <x-slot:title>{{ $title }}</x-slot:title>
 
     <!-- Hero Section -->
-    <section
-        class="bg-blue-950 from-blue-900 via-purple-900 to-indigo-900 text-amber-50 min-h-screen flex
-        items-center">
-        <div class="container mx-auto px-6 py-20">
-            <div class="max-w-4xl mx-auto text-center">
-                <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-                    PUSAT TEKNOLOGI INFORMASI DAN PANGAKALAN DATA
-                </h1>
-                <h2 class="text-xl md:text-3xl font-semibold mb-6 leading-tight">UIN Raden Fatah Palembang</h2>
-            </div>
+    <section class="relative bg-blue-950 text-amber-50 min-h-screen flex items-center justify-center overflow-hidden">
+        <!-- Background Image -->
+        <img src="{{ asset('assets/img/hero/uin-raden-fatah.jpg') }}" alt="Hero Image" class="absolute inset-0 w-full h-full object-cover opacity-40">
+        
+        <!-- Overlay -->
+        <div class="absolute inset-0 bg-gradient-to-b from-indigo-900 via-blue-900 to-sky-900 opacity-50"></div>
 
-            <div class="flex justify-center mt-10">
-                <form action="#" method="GET" class="relative w-full max-w-md">
-                    <button type="submit" class="absolute top-1/2 transform -translate-y-1/2 text-white pr-2">
-                        <svg class="w-8 text-gray-800 pl-2 dark:text-white" aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                            viewBox="0 0 24 24">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-width="2"
-                                d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
-                        </svg>
-                    </button>
-                    <input type="text" name="search" placeholder="Cari informasi di sini"
-                        class="w-full border border-white rounded-lg pl-10 pr-4 py-2 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-amber-500" />
-                </form>
+        <!-- Content -->
+        <div class="relative z-10 text-center px-6">
+            <h1 class="text-4xl md:text-6xl font-bold mb-4 leading-tight">PUSAT TEKNOLOGI INFORMASI DAN PANGKALAN DATA</h1>
+            <!-- h2 with logo -->
+            <h2 class="text-lg md:text-2xl font-semibold mb-8 flex items-center justify-center space-x-2">
+                <img src="{{ asset('assets/img/logo/logo-uin-rfp-white.png') }}" alt="Logo UINRF" class="h-6 md:h-8 inline-block">
+                <span>UIN Raden Fatah Palembang</span>
+            </h2>
+
+            <!-- Search Form -->
+            <form action="#" method="GET" class="relative max-w-md mx-auto">
+                <input type="text" name="search" placeholder="Cari informasi di sini"
+                    class="w-full rounded-full pl-12 pr-4 py-3 text-white placeholder-white bg-transparent border border-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent" />
+                <button type="submit" class="absolute top-1/2 left-3 transform -translate-y-1/2 text-white">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+                        viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1010.5 3a7.5 7.5 0 006.15 13.65z"></path>
+                    </svg>
+                </button>
+            </form>
+            <!-- Floating Buttons BELOW Hero -->
+            <div class="flex justify-between items-center px-6 md:px-10 py-4 bg-transparent -mt-8">
+                <!-- Left Button -->
+                <a href="#"
+                    class="bg-white text-amber-500 font-medium px-4 py-2 rounded-full shadow-lg flex items-center space-x-2 transition transform hover:scale-105 hover:bg-amber-600 hover:text-white">
+                    <!-- Heroicon: Clipboard Document List -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12h6m-6 4h6m2 4H7a2 2 0 01-2-2V7a2 2 0 012-2h3l1-2h4l1 2h3a2 2 0 012 2v11a2 2 0 01-2 2z"/>
+                    </svg>
+                    <span>Isi Survei</span>
+                </a>
+
+                <!-- Right Button -->
+                <a href="#"
+                    class="bg-white text-blue-700 font-medium px-4 py-2 rounded-full shadow-lg flex items-center space-x-2 transition transform hover:scale-105 hover:bg-blue-600 hover:text-white">
+                    <!-- Heroicon: Chat Bubble Left Right -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M7 8h10M7 12h4m1 8h3l4-4V6a2 2 0 00-2-2H6a2 2 0 00-2 2v10a2 2 0 002 2h1v4l4-4z"/>
+                    </svg>
+                    <span>Tanya PUSTIPD</span>
+                </a>
             </div>
         </div>
-    </section>
+    </section>    
 
     <!-- Divisi Section -->
     <section id="divisi" class="py-20 bg-gray-100">
@@ -188,22 +217,20 @@
 
                     <!-- Berita Cards Grid - STRUKTUR YANG BENAR -->
                     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 news-grid">
-
                         <x-news-card title="Peluncuran Sistem Informasi Terbaru PUSTIPD"
                             excerpt="Sistem informasi baru telah diluncurkan untuk meningkatkan pelayanan digital dan efisiensi operasional. Fitur-fitur terbaru mencakup dashboard interaktif dan analytics real-time."
                             date="23 Juli 2025" category="Teknologi" link="/berita/peluncuran-sistem-informasi"
-                            image="img/news/kucing-1.jpg" />
+                            image="{{ asset('assets/img/placeholder/dummy.png') }}" />
 
                         <x-news-card title="Workshop Digital Transformation untuk UMKM"
                             excerpt="Program pelatihan komprehensif untuk meningkatkan kemampuan digital UMKM di era modern. Peserta akan mendapat sertifikat dan pendampingan berkelanjutan."
                             date="20 Juli 2025" category="Pelatihan" link="/berita/workshop-digital-transformation"
-                            image="img/news/kucing-2.jpg" />
+                            image="{{ asset('assets/img/placeholder/dummy.png') }}" />
 
                         <x-news-card title="Kerjasama Strategis dengan Universitas Terkemuka"
                             excerpt="Penandatanganan MoU dengan beberapa universitas untuk pengembangan riset teknologi informasi dan transfer knowledge kepada mahasiswa."
                             date="18 Juli 2025" category="Kerjasama" link="/berita/kerjasama-universitas"
-                            image="img/news/kucing-3.jpg" />
-
+                            image="{{ asset('assets/img/placeholder/dummy.png') }}" />
                     </div>
                 </div>
 
@@ -264,52 +291,52 @@
                     <!-- First Set of Cards -->
                     <x-team-card name="Dr. Ahmad Wijaya" position="Kepala PUSTIPD"
                         description="Visioner dengan pengalaman 15+ tahun dalam teknologi informasi"
-                        image="img/team/kepala-pustipd.jpg" />
+                        image="{{ asset('assets/img/placeholder/dummy.png') }}" />
 
                     <x-team-card name="Siti Nurhaliza, S.Kom" position="Kepala Divisi Jaringan"
                         description="Expert dalam infrastruktur jaringan dan keamanan sistem"
-                        image="img/team/kepala-jaringan.jpg" />
+                        image="{{ asset('assets/img/placeholder/dummy.png') }}" />
 
                     <x-team-card name="Budi Santoso, M.T" position="Kepala Divisi Aplikasi"
                         description="Spesialis pengembangan aplikasi dan sistem informasi"
-                        image="img/team/kepala-aplikasi.jpg" />
+                        image="{{ asset('assets/img/placeholder/dummy.png') }}" />
 
                     <x-team-card name="Diana Putri, S.T" position="Kepala Divisi Data"
                         description="Ahli dalam manajemen data dan business intelligence"
-                        image="img/team/kepala-data.jpg" />
+                        image="{{ asset('assets/img/placeholder/dummy.png') }}" />
 
                     <x-team-card name="Rizki Pratama, S.T" position="Network Administrator"
                         description="Spesialis maintenance dan monitoring infrastruktur jaringan"
-                        image="img/team/network-admin.jpg" />
+                        image="{{ asset('assets/img/placeholder/dummy.png') }}" />
 
                     <x-team-card name="Maya Sari, S.Kom" position="UI/UX Designer"
                         description="Kreator pengalaman pengguna yang intuitif dan menarik"
-                        image="img/team/ui-designer.jpg" />
+                        image="{{ asset('assets/img/placeholder/dummy.png') }}" />
 
                     <!-- Duplicate Set untuk Infinite Effect -->
                     <x-team-card name="Dr. Ahmad Wijaya" position="Kepala PUSTIPD"
                         description="Visioner dengan pengalaman 15+ tahun dalam teknologi informasi"
-                        image="img/team/kepala-pustipd.jpg" />
+                        image="{{ asset('assets/img/placeholder/dummy.png') }}" />
 
                     <x-team-card name="Siti Nurhaliza, S.Kom" position="Kepala Divisi Jaringan"
                         description="Expert dalam infrastruktur jaringan dan keamanan sistem"
-                        image="img/team/kepala-jaringan.jpg" />
+                        image="{{ asset('assets/img/placeholder/dummy.png') }}" />
 
                     <x-team-card name="Budi Santoso, M.T" position="Kepala Divisi Aplikasi"
                         description="Spesialis pengembangan aplikasi dan sistem informasi"
-                        image="img/team/kepala-aplikasi.jpg" />
+                        image="{{ asset('assets/img/placeholder/dummy.png') }}" />
 
                     <x-team-card name="Diana Putri, S.T" position="Kepala Divisi Data"
                         description="Ahli dalam manajemen data dan business intelligence"
-                        image="img/team/kepala-data.jpg" />
+                        image="{{ asset('assets/img/placeholder/dummy.png') }}" />
 
                     <x-team-card name="Rizki Pratama, S.T" position="Network Administrator"
                         description="Spesialis maintenance dan monitoring infrastruktur jaringan"
-                        image="img/team/network-admin.jpg" />
+                        image="{{ asset('assets/img/placeholder/dummy.png') }}" />
 
                     <x-team-card name="Maya Sari, S.Kom" position="UI/UX Designer"
                         description="Kreator pengalaman pengguna yang intuitif dan menarik"
-                        image="img/team/ui-designer.jpg" />
+                        image="{{ asset('assets/img/placeholder/dummy.png') }}" />
                 </div>
 
             </div>
@@ -330,40 +357,40 @@
                     <div class="carousel-wrapper flex transition-transform duration-500 ease-in-out"
                         id="partnersWrapper">
 
-                        <x-partner-card name="Universitas Indonesia" logo="assets/img/placeholder/mitra.png"
+                        <x-partner-card name="Universitas Indonesia" logo="{{ asset('assets/img/placeholder/dummy.png') }}"
                             link="https://ui.ac.id" />
 
-                        <x-partner-card name="Institut Teknologi Bandung" logo="assets/img/placeholder/mitra.png"
+                        <x-partner-card name="Institut Teknologi Bandung" logo="{{ asset('assets/img/placeholder/dummy.png') }}"
                             link="https://itb.ac.id" />
 
                         <x-partner-card name="Kementerian Komunikasi dan Informatika"
-                            logo="assets/img/placeholder/mitra.png" link="https://kominfo.go.id" />
+                            logo="{{ asset('assets/img/placeholder/dummy.png') }}" link="https://kominfo.go.id" />
 
-                        <x-partner-card name="PT. Telkom Indonesia" logo="assets/img/placeholder/mitra.png"
+                        <x-partner-card name="PT. Telkom Indonesia" logo="{{ asset('assets/img/placeholder/dummy.png') }}"
                             link="https://telkom.co.id" />
 
-                        <x-partner-card name="Microsoft Indonesia" logo="assets/img/placeholder/mitra.png"
+                        <x-partner-card name="Microsoft Indonesia" logo="{{ asset('assets/img/placeholder/dummy.png') }}"
                             link="https://microsoft.com/id-id" />
 
-                        <x-partner-card name="Google Indonesia" logo="assets/img/placeholder/mitra.png"
+                        <x-partner-card name="Google Indonesia" logo="{{ asset('assets/img/placeholder/dummy.png') }}"
                             link="https://google.co.id" />
 
-                        <x-partner-card name="Amazon Web Services" logo="img/partners/aws-logo.png"
+                        <x-partner-card name="Amazon Web Services" logo="{{ asset('assets/img/placeholder/dummy.png') }}"
                             link="https://aws.amazon.com" />
 
-                        <x-partner-card name="Oracle Indonesia" logo="img/partners/oracle-logo.png"
+                        <x-partner-card name="Oracle Indonesia" logo="{{ asset('assets/img/placeholder/dummy.png') }}"
                             link="https://oracle.com/id" />
 
-                        <x-partner-card name="Cisco Systems" logo="img/partners/cisco-logo.png"
+                        <x-partner-card name="Cisco Systems" logo="{{ asset('assets/img/placeholder/dummy.png') }}"
                             link="https://cisco.com" />
 
-                        <x-partner-card name="IBM Indonesia" logo="img/partners/ibm-logo.png"
+                        <x-partner-card name="IBM Indonesia" logo="{{ asset('assets/img/placeholder/dummy.png') }}"
                             link="https://ibm.com/id" />
 
-                        <x-partner-card name="SAP Indonesia" logo="img/partners/sap-logo.png"
+                        <x-partner-card name="SAP Indonesia" logo="{{ asset('assets/img/placeholder/dummy.png') }}"
                             link="https://sap.com/indonesia" />
 
-                        <x-partner-card name="VMware Indonesia" logo="img/partners/vmware-logo.png"
+                        <x-partner-card name="VMware Indonesia" logo="{{ asset('assets/img/placeholder/dummy.png') }}"
                             link="https://vmware.com" />
 
                     </div>
