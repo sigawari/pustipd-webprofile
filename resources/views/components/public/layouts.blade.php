@@ -50,36 +50,97 @@
                 const navbarTitle = document.getElementById('navbar-title');
                 const navLinks = navbar.querySelectorAll('a');
                 const topbar = document.getElementById('topbar');
+                const isHome = window.location.pathname === '/';
+
+                if (!isHome) {
+                    // Jika bukan home, navbar langsung putih + text biru + topbar hidden
+                    topbar.classList.add('hidden');
+
+                    navbar.classList.remove('bg-transparent');
+                    navbar.classList.add('bg-white');
+
+                    navbarTitle.classList.remove('text-white');
+                    navbarTitle.classList.add('text-[#062749]');
+
+                    navLinks.forEach(link => {
+                        link.classList.remove('text-white');
+                        link.classList.add('text-[#062749]');
+                    });
+                }
 
                 window.addEventListener('scroll', function() {
                     const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
                     if (window.scrollY > 50) {
                         topbar.classList.add('hidden');
 
-                        navbar.classList.remove('bg-transparent');
-                        navbar.classList.add(isDark ? 'bg-gray-900' : 'bg-white');
+                        if (!isHome) {
+                            // PAGE LAIN
+                            navbar.classList.remove('bg-transparent', 'bg-gray-900');
+                            navbar.classList.add('bg-white');
 
-                        navbarTitle.classList.toggle('text-white', isDark);
-                        navbarTitle.classList.toggle('text-[#062749]', !isDark);
+                            navbarTitle.classList.remove('text-white');
+                            navbarTitle.classList.add('text-[#062749]');
 
-                        navLinks.forEach(link => {
-                            link.classList.toggle('text-white', isDark);
-                            link.classList.toggle('text-[#062749]', !isDark);
-                        });
+                            navLinks.forEach(link => {
+                                link.classList.remove('text-white');
+                                link.classList.add('text-[#062749]');
+                            });
+                        } else {
+                            // HOME
+                            const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+                            navbar.classList.remove('bg-transparent');
+                            navbar.classList.add(isDark ? 'bg-gray-900' : 'bg-white');
+
+                            if (isDark) {
+                                navbarTitle.classList.add('text-white');
+                                navbarTitle.classList.remove('text-[#062749]');
+
+                                navLinks.forEach(link => {
+                                    link.classList.add('text-white');
+                                    link.classList.remove('text-[#062749]');
+                                });
+                            } else {
+                                navbarTitle.classList.remove('text-white');
+                                navbarTitle.classList.add('text-[#062749]');
+
+                                navLinks.forEach(link => {
+                                    link.classList.remove('text-white');
+                                    link.classList.add('text-[#062749]');
+                                });
+                            }
+                        }
+
                     } else {
-                        topbar.classList.remove('hidden');
+                        if (isHome) {
+                            // HOME SCROLL UP
+                            topbar.classList.remove('hidden');
 
-                        navbar.classList.remove('bg-white', 'bg-gray-900');
-                        navbar.classList.add('bg-transparent');
+                            navbar.classList.remove('bg-white', 'bg-gray-900');
+                            navbar.classList.add('bg-transparent');
 
-                        navbarTitle.classList.remove('text-[#062749]');
-                        navbarTitle.classList.add('text-white');
+                            navbarTitle.classList.add('text-white');
+                            navbarTitle.classList.remove('text-[#062749]');
 
-                        navLinks.forEach(link => {
-                            link.classList.remove('text-[#062749]');
-                            link.classList.add('text-white');
-                        });
+                            navLinks.forEach(link => {
+                                link.classList.add('text-white');
+                                link.classList.remove('text-[#062749]');
+                            });
+                        } else {
+                            // PAGE LAIN SCROLL UP → tetap putih + text biru
+                            topbar.classList.add('hidden');
+
+                            navbar.classList.remove('bg-transparent', 'bg-gray-900');
+                            navbar.classList.add('bg-white');
+
+                            navbarTitle.classList.remove('text-white');
+                            navbarTitle.classList.add('text-[#062749]');
+
+                            navLinks.forEach(link => {
+                                link.classList.remove('text-white');
+                                link.classList.add('text-[#062749]');
+                            });
+                        }
                     }
                 });
 

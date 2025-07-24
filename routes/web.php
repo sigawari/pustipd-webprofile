@@ -33,7 +33,6 @@ Route::prefix('admin')->middleware(['auth', 'admin:admin'])->group(function () {
 Route::prefix('/')->group(function () {
     // PublicsController routes
     Route::get('/', [PublicsController::class, 'index'])->name('home');
-    Route::get('/beranda', [PublicsController::class, 'index'])->name('home');
     Route::get('/about', [PublicsController::class, 'index'])->name('about');
     Route::get('/vision', [PublicsController::class, 'index'])->name('vision');
     Route::get('/structure', [PublicsController::class, 'index'])->name('structure');
