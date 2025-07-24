@@ -32,9 +32,13 @@ Route::prefix('/')->group(function () {
     Route::get('/', [PublicsController::class, 'index'])->name('home');
     Route::get('/beranda', [PublicsController::class, 'index'])->name('home');
     Route::get('/about', [PublicsController::class, 'index'])->name('about');
+    Route::get('/vision', [PublicsController::class, 'index'])->name('vision');
+    Route::get('/structure', [PublicsController::class, 'index'])->name('structure');
     // PublicsController routes
     Route::get('/berita', [PublicsController::class, 'index'])->name('news');
     Route::get('/pengumuman', [PublicsController::class, 'index'])->name('announcements');
+    Route::get('/tutorial', [PublicsController::class, 'index'])->name('tutorial');
+    Route::get('/faq', [PublicsController::class, 'index'])->name('faq');
     
     // Add more public routes here
 });

@@ -22,22 +22,53 @@ class PublicsController extends Controller
 
         return view('public.about', compact('title', 'description', 'keywords'));
     }
+    if ($request->is('vision')) {
+        $title = 'Visi Misi PUSTIPD UIN Raden Fatah Palembang';
+        $description = 'Visi dan misi PUSTIPD UIN Raden Fatah Palembang dalam mengembangkan teknologi informasi dan data.';
+        $keywords = 'visi, misi, pustipd';
+
+        return view('public.vision', compact('title', 'description', 'keywords'));
+    }
+    if ($request->is('structure')) {
+        $title = 'Struktur Organisasi PUSTIPD UIN Raden Fatah Palembang';
+        $description = 'Struktur organisasi PUSTIPD UIN Raden Fatah Palembang yang mengelola teknologi informasi dan data.';
+        $keywords = 'struktur, organisasi, pustipd';
+
+        return view('public.structure', compact('title', 'description', 'keywords'));
+    }
     if ($request->is('berita')) {
         $title = 'Berita';
         $description = 'Semua berita terbaru PUSTIPD UIN Raden Fatah Palembang';
         $keywords = 'berita, news, pustipd';
 
+        $news = Announcement::where('category', 'Berita')
+            ->orderBy('date', 'desc')
+            ->paginate(5);
         return view('public.news', compact('title', 'description', 'keywords'));
     }
-
+    
     if ($request->is('pengumuman')) {
         $title = 'Pengumuman';
         $description = 'Semua pengumuman terbaru PUSTIPD UIN Raden Fatah Palembang';
         $keywords = 'pengumuman, announcements, pustipd';
-
+        
         $announcements = Announcement::orderBy('date', 'desc')->paginate(12);
-
+        
         return view('public.announcements', compact('title', 'description', 'keywords', 'announcements'));
+    }
+    if ($request->is('faq')) {
+        $title = 'FAQ';
+        $description = 'Pertanyaan yang sering diajukan tentang PUSTIPD UIN Raden Fatah Palembang';
+        $keywords = 'faq, pertanyaan, pustipd';
+
+        return view('public.faq', compact('title', 'description', 'keywords'));
+    }
+    if ($request->is('tutorial')) {
+        $title = 'tutorial';
+        $description = 'Tutorial terkait penggunaan teknologi informasi di kawasan civitas akademika UIN Raden Fatah Palembang';
+        $keywords = 'tutorial, cara, pustipd';
+
+        return view('public.tutorial', compact('title', 'description', 'keywords'));
     }
 
     // Default untuk beranda
