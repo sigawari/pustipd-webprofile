@@ -21,6 +21,28 @@
     --color-navy-900: #062749;
 }
 
+@layer base {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-family: "Plus Jakarta Sans", sans-serif;
+    }
+
+    body,
+    p,
+    span,
+    a,
+    li,
+    label,
+    input,
+    textarea {
+        font-family: "Nunito", sans-serif;
+    }
+}
+
 @layer components {
     /* Partner card styling untuk carousel */
     .partner-carousel-card {
@@ -48,6 +70,7 @@
     .partner-logo:hover {
         transform: scale(1.1);
     }
+
     /* Team Carousel Container */
     .team-carousel-card {
         width: 288px; /* 278px card + 10px margin */
@@ -90,23 +113,21 @@
 @media (max-width: 768px) {
     .animate-infinite-scroll {
         animation-duration: 25s; /* Slightly faster on mobile */
+        width: calc(260px * 12);
     }
 
     .team-carousel-card {
         width: 260px; /* Smaller cards on mobile */
     }
-
-    .animate-infinite-scroll {
-        width: calc(260px * 12);
-    }
 }
 
 @media (max-width: 480px) {
-    .team-carousel-card {
-        width: 240px; /* Even smaller on very small screens */
+    .animate-infinite-scroll {
+        animation-duration: 20s;
+        width: calc((288px + 12px) * 12);
     }
 
-    .animate-infinite-scroll {
-        width: calc(240px * 12);
+    .team-carousel-card {
+        width: 240px; /* Even smaller on very small screens */
     }
 }

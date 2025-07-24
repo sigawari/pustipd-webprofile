@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', default: 'Laravel'),
+    'name' => env('APP_NAME', default: 'PUSTIPD UIN Raden Fatah Palembang'),
 
     /*
     |--------------------------------------------------------------------------

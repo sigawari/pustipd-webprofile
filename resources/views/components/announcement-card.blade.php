@@ -26,7 +26,7 @@
                     </span>
                     @if ($priority === 'urgent')
                         <span
-                            class="inline-block ml-2 px-2 py-1 text-xs font-bold rounded-full bg-yellow-400 text-gray-900 animate-pulse">
+                            class="inline-block ml-2 px-2 py-1 text-xs font-bold rounded-full bg-custom-yellow text-secondary animate-pulse">
                             URGENT
                         </span>
                     @endif

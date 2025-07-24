@@ -30,6 +30,11 @@ Route::prefix('admin')->middleware(['auth', 'can:admin'])->group(function () {
 Route::prefix('/')->group(function () {
     // PublicsController routes
     Route::get('/', [PublicsController::class, 'index'])->name('home');
+    Route::get('/beranda', [PublicsController::class, 'index'])->name('home');
+    Route::get('/about', [PublicsController::class, 'index'])->name('about');
+    // PublicsController routes
+    Route::get('/berita', [PublicsController::class, 'index'])->name('news');
+    Route::get('/pengumuman', [PublicsController::class, 'index'])->name('announcements');
     
     // Add more public routes here
 });

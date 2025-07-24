@@ -4,75 +4,85 @@
     <!-- Style for Divisi -->
     <style>
         .card-animated {
-        position: relative;
-        overflow: hidden;
-        z-index: 0;
+            position: relative;
+            overflow: hidden;
+            z-index: 0;
+            min-height: 200px;
+            /* Pastikan tinggi konsisten */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .card-animated::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background-color: #3b82f6; /* Tailwind blue-500 */
-        transform: translateY(100%);
-        transition: transform 0.5s ease-in-out;
-        z-index: -1;
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-color: #062749;
+            /* Tailwind blue-500 */
+            transform: translateY(100%);
+            transition: transform 0.5s ease-in-out;
+            z-index: -1;
         }
 
         .group:hover .card-animated::before {
-        transform: translateY(0%);
+            transform: translateY(0%);
         }
 
         .card-text {
-        transition: color 0.3s ease;
+            transition: color 0.3s ease;
         }
 
         .group:hover .card-text {
-        color: white !important;
+            color: white !important;
         }
 
         .underline-animate::after {
-        content: '';
-        position: absolute;
-        bottom: -0.25rem; /* Jarak dari teks */
-        left: 0;
-        height: 4px;
-        width: 0;
-        background-color: #3b82f6; /* Tailwind blue-500 */
-        transition: width 0.4s ease;
+            content: '';
+            position: absolute;
+            bottom: -1rem;
+            /* Jarak dari teks */
+            left: 0;
+            height: 4px;
+            width: 0;
+            background-color: #062749;
+            /* Tailwind blue-500 */
+            transition: width 0.4s ease;
         }
 
         .group:hover .underline-animate::after {
-        width: 100%;
+            width: 100%;
         }
     </style>
 
 
 
     <!-- Hero Section -->
-    <section id="beranda" class="relative bg-blue-950 text-amber-50 min-h-screen flex items-center justify-center overflow-hidden">
+    <section id="beranda"
+        class="relative bg-blue-950 text-amber-50 min-h-screen flex items-center justify-center overflow-hidden">
         <!-- Background Image -->
-        <img src="{{ asset('assets/img/hero/uin-raden-fatah.jpg') }}" alt="Hero Image" class="absolute inset-0 w-full h-full object-cover opacity-40">
+        <img src="{{ asset('assets/img/hero/uin-raden-fatah.jpg') }}" alt="Hero Image"
+            class="absolute inset-0 w-full h-full object-cover opacity-40">
 
         <!-- Overlay -->
-        <div class="absolute inset-0 bg-gradient-to-b from-indigo-900 via-blue-900 to-sky-900 opacity-50"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-black via-secondary to-navy-700 opacity-70"></div>
 
-        <!-- Content -->
-        <div class="relative z-10 text-center px-4 sm:px-6 w-full max-w-lg">
-            <h1 class="text-2xl sm:text-4xl font-bold mb-3 leading-snug sm:leading-tight">
+        <div class="relative z-10 text-center px-4 sm:px-6 w-full max-w-2xl">
+            <h1 class="text-2xl sm:text-6xl font-extrabold mb-3 leading-snug sm:leading-tight">
                 PUSAT TEKNOLOGI INFORMASI DAN PANGKALAN DATA
             </h1>
 
             <!-- h2 with logo -->
-            <h2 class="text-sm sm:text-lg font-medium mb-6 flex items-center justify-center gap-2 flex-wrap text-white">
-                <img src="{{ asset('assets/img/logo/logo-uin-rfp-white.png') }}" alt="Logo UINRF" class="h-5 sm:h-6">
-                <span>UIN Raden Fatah Palembang</span>
-            </h2>
+            <span
+                class="text-sm sm:text-lg font-medium mb-6 flex items-center justify-center gap-2 flex-wrap text-white">
+                <img src="{{ asset('assets/img/logo/logo-uin-rfp-white.png') }}" alt="Logo UINRF" class="h-4 sm:h-6">
+                <h2 class="text-l sm:text-xl font-bold text-white">UIN Raden Fatah Palembang</h2>
+            </span>
 
             <!-- Search Form -->
-            <form action="#" method="GET" class="relative w-full mb-6">
+            <form action="#" method="GET" class="relative w-full max-w-md mx-auto mb-6">
                 <input type="text" name="search" placeholder="Cari informasi di sini"
-                    class="w-full rounded-full pl-12 pr-4 py-2 sm:py-3 text-white placeholder-white bg-transparent border border-white focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent" />
+                    class="w-full rounded-xl pl-12 pr-4 py-2 sm:py-3 text-white placeholder-white bg-transparent border border-white focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent" />
                 <button type="submit" class="absolute top-1/2 left-3 transform -translate-y-1/2 text-white">
                     <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" stroke-width="2"
                         viewBox="0 0 24 24">
@@ -86,78 +96,84 @@
             <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
                 <!-- Left Button -->
                 <a href="#"
-                    class="bg-white text-amber-500 font-medium px-4 py-2 rounded-full shadow-md flex items-center justify-center gap-2 transition transform hover:scale-105 hover:bg-amber-600 hover:text-white w-full sm:w-auto">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor">
+                    class="bg-white text-custom-yellow font-medium px-4 py-2 rounded-full shadow-md flex items-center justify-center gap-2 transition transform hover:scale-105 hover:bg-custom-yellow hover:text-white w-full sm:w-auto">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 12h6m-6 4h6m2 4H7a2 2 0 01-2-2V7a2 2 0 012-2h3l1-2h4l1 2h3a2 2 0 012 2v11a2 2 0 01-2 2z"/>
+                            d="M9 12h6m-6 4h6m2 4H7a2 2 0 01-2-2V7a2 2 0 012-2h3l1-2h4l1 2h3a2 2 0 012 2v11a2 2 0 01-2 2z" />
                     </svg>
-                    <span>Isi Survei</span>
+                    <h4 class="font-bold">Isi Survei</h4>
                 </a>
 
                 <!-- Right Button -->
                 <a href="#"
-                    class="bg-white text-blue-700 font-medium px-4 py-2 rounded-full shadow-md flex items-center justify-center gap-2 transition transform hover:scale-105 hover:bg-blue-600 hover:text-white w-full sm:w-auto">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor">
+                    class="bg-white text-secondary font-medium px-4 py-2 rounded-full shadow-md flex items-center justify-center gap-2 transition transform hover:scale-105 hover:bg-secondary hover:text-white w-full sm:w-auto">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M7 8h10M7 12h4m1 8h3l4-4V6a2 2 0 00-2-2H6a2 2 0 00-2 2v10a2 2 0 002 2h1v4l4-4z"/>
+                            d="M7 8h10M7 12h4m1 8h3l4-4V6a2 2 0 00-2-2H6a2 2 0 00-2 2v10a2 2 0 002 2h1v4l4-4z" />
                     </svg>
-                    <span>Tanya PUSTIPD</span>
+                    <h4 class="font-bold">Tanya PUSTIPD</h4>
                 </a>
             </div>
         </div>
     </section>
-    
+
 
     <!-- Divisi Section -->
     <section id="divisi" class="py-20 bg-gray-100">
         <div class="container mx-auto px-6">
             <div class="text-center mb-10 group">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4 relative inline-block underline-animate">
+                <h2 class="text-3xl md:text-4xl font-bold text-secondary mb-4 relative inline-block underline-animate">
                     Divisi PUSTIPD
                 </h2>
             </div>
 
             <div class="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
                 <!-- Card Division -->
-                 <!-- Jaringan Division -->
-                <div class="group rounded-lg border border-gray-200 shadow-lg transition-all duration-300 transform hover:-translate-y-2">
+                <!-- Jaringan Division -->
+                <div
+                    class="group rounded-lg border border-gray-200 shadow-lg transition-all duration-300 transform hover:-translate-y-2">
                     <div class="card-animated p-8 text-center rounded-lg">
                         <div class="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                        <svg class="w-12 h-12 text-gray-700 card-text transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                            d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2 4h.01M17 16h.01" />
-                        </svg>
+                            <svg class="w-15 h-15 text-secondary card-text transition-colors duration-300"
+                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2 4h.01M17 16h.01" />
+                            </svg>
                         </div>
-                        <p class="text-sm text-gray-600 mb-2 card-text">Divisi</p>
-                        <h3 class="text-lg font-semibold text-gray-800 card-text">Jaringan</h3>
+                        <h4 class="text-sm text-secondary mb-2 card-text">Divisi</h4>
+                        <h3 class="text-lg font-bold text-secondary card-text">Jaringan</h3>
                     </div>
                 </div>
                 <!-- Pengembangan Aplikasi Division -->
-                <div class="group rounded-lg border border-gray-200 shadow-lg transition-all duration-300 transform hover:-translate-y-2">
+                <div
+                    class="group rounded-lg border border-gray-200 shadow-lg transition-all duration-300 transform hover:-translate-y-2">
                     <div class="card-animated p-8 text-center rounded-lg">
                         <div class="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                            <svg class="w-12 h-12 text-gray-700 card-text  transition-colors duration-300 " fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-15 h-15 text-secondary card-text  transition-colors duration-300 "
+                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                     d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
                             </svg>
                         </div>
-                        <p class="text-sm text-gray-600 mb-2 card-text">Divisi</p>
-                        <h3 class="text-lg font-semibold text-gray-800 card-text">Pengembangan Aplikasi</h3>
+                        <h4 class="text-sm text-secondary mb-2 card-text">Divisi</h4>
+                        <h3 class="text-lg font-bold text-secondary card-text">Pengembangan Aplikasi</h3>
                     </div>
                 </div>
                 <!-- Pangkalan Data Division -->
-                <div class="group rounded-lg border border-gray-200 shadow-lg transition-all duration-300 transform hover:-translate-y-2">
+                <div
+                    class="group rounded-lg border border-gray-200 shadow-lg transition-all duration-300 transform hover:-translate-y-2">
                     <div class="card-animated p-8 text-center rounded-lg">
                         <div class="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                            <svg class="w-12 h-12 text-gray-700 card-text  transition-colors duration-300 " fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-12 h-12 text-secondary card-text  transition-colors duration-300 "
+                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                     d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
                             </svg>
                         </div>
-                        <p class="text-sm text-gray-600 mb-2 card-text">Divisi</p>
-                        <h3 class="text-lg font-semibold text-gray-800 card-text">Pangkalan Data</h3>
+                        <h4 class="text-sm text-secondary mb-2 card-text">Divisi</h4>
+                        <h3 class="text-lg font-bold text-secondary card-text">Pangkalan Data</h3>
                     </div>
                 </div>
             </div>
@@ -165,89 +181,92 @@
     </section>
 
     <!-- Layanan Section -->
-    <section id="layanan" class="py-20 bg-gray-100">
+    <section id="layanan" class="py-20 bg-[#E6F6FF]">
         <div class="max-w-7xl mx-auto px-6">
             <div class="text-center mb-10 group">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4 relative inline-block underline-animate">
+                <h2 class="text-3xl md:text-4xl font-bold text-secondary mb-4 relative inline-block underline-animate">
                     Layanan Kami
                 </h2>
             </div>
 
             <!-- Carousel Container -->
             <div class="relative isolate">
-            <div class="overflow-hidden relative" id="servicesCarousel">
-                <div class="flex transition-transform duration-500 ease-in-out relative z-10" id="carouselWrapper">
-                <x-service-card title="Pengembangan Web"
-                    description="Membangun website modern dengan teknologi terdepan seperti Laravel dan Tailwind CSS"
-                    link="/layanan/web-development" />
+                <div class="overflow-hidden relative" id="servicesCarousel">
+                    <div class="flex transition-transform duration-200 ease-in-out relative z-10"
+                        id="carouselWrapper">
+                        <x-service-card title="Pengembangan Web"
+                            description="Membangun website modern dengan teknologi terdepan seperti Laravel dan Tailwind CSS"
+                            link="/layanan/web-development" />
 
-                <x-service-card title="Konsultasi IT"
-                    description="Memberikan saran strategis untuk transformasi digital perusahaan Anda dengan pendekatan terpersonalisasi"
-                    link="/layanan/konsultasi-it" />
+                        <x-service-card title="Konsultasi IT"
+                            description="Memberikan saran strategis untuk transformasi digital perusahaan Anda dengan pendekatan terpersonalisasi"
+                            link="/layanan/konsultasi-it" />
 
-                <x-service-card title="UI/UX Design"
-                    description="Menciptakan pengalaman pengguna yang intuitif dan menarik dengan desain yang user-centered"
-                    link="/layanan/ui-ux-design" />
+                        <x-service-card title="UI/UX Design"
+                            description="Menciptakan pengalaman pengguna yang intuitif dan menarik dengan desain yang user-centered"
+                            link="/layanan/ui-ux-design" />
 
-                <x-service-card title="Mobile Development"
-                    description="Pengembangan aplikasi mobile native dan cross-platform untuk iOS dan Android"
-                    link="/layanan/mobile-development" />
+                        <x-service-card title="Mobile Development"
+                            description="Pengembangan aplikasi mobile native dan cross-platform untuk iOS dan Android"
+                            link="/layanan/mobile-development" />
 
-                <x-service-card title="Cloud Solutions"
-                    description="Implementasi dan migrasi ke cloud infrastructure dengan keamanan dan skalabilitas tinggi"
-                    link="/layanan/cloud-solutions" />
+                        <x-service-card title="Cloud Solutions"
+                            description="Implementasi dan migrasi ke cloud infrastructure dengan keamanan dan skalabilitas tinggi"
+                            link="/layanan/cloud-solutions" />
 
-                <x-service-card title="Data Analytics"
-                    description="Analisis data mendalam untuk insight bisnis dan pengambilan keputusan yang lebih baik"
-                    link="/layanan/data-analytics" />
-                </div>
-            </div>
-
-            <!-- Navigation -->
-            <div class="flex justify-center items-center mt-8 space-x-4 relative z-20" aria-label="Carousel Navigation">
-                <button id="prevBtn"
-                class="p-2 text-custom-blue hover:text-primary transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                aria-label="Sebelumnya">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                </svg>
-                </button>
-
-                <div class="flex space-x-2" id="indicators" aria-label="Carousel Indicators">
-                <!-- Indicators will be generated by JS -->
+                        <x-service-card title="Data Analytics"
+                            description="Analisis data mendalam untuk insight bisnis dan pengambilan keputusan yang lebih baik"
+                            link="/layanan/data-analytics" />
+                    </div>
                 </div>
 
-                <button id="nextBtn"
-                class="p-2 text-custom-blue hover:text-primary transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                aria-label="Berikutnya">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                </svg>
-                </button>
-            </div>
+                <!-- Navigation -->
+                <div class="flex justify-center items-center mt-8 space-x-4 relative z-20"
+                    aria-label="Carousel Navigation">
+                    <button id="prevBtn"
+                        class="p-2 text-custom-blue hover:text-primary transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                        aria-label="Sebelumnya">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 19l-7-7 7-7" />
+                        </svg>
+                    </button>
 
-            <!-- Progress Bar -->
-            <div class="mt-6 relative z-0">
-                <div class="w-full bg-gray-200 rounded-full h-1">
-                <div class="bg-primary h-1 rounded-full transition-all duration-300 ease-out" id="progressBar"
-                    style="width: 16.67%"></div>
+                    <div class="flex space-x-2" id="indicators" aria-label="Carousel Indicators">
+                        <!-- Indicators will be generated by JS -->
+                    </div>
+
+                    <button id="nextBtn"
+                        class="p-2 text-custom-blue hover:text-primary transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                        aria-label="Berikutnya">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </button>
                 </div>
-            </div>
+
+                <!-- Progress Bar -->
+                <div class="mt-6 relative z-0">
+                    <div class="w-full bg-gray-200 rounded-full h-1">
+                        <div class="bg-primary h-1 rounded-full transition-all duration-300 ease-out" id="progressBar"
+                            style="width: 16.67%"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- Berita & Informasi Section yang Diperbaiki -->
-    <section id="informasi" class="py-20 bg-gray-100">
+    <section id="informasi" class="py-20 bg-primary">
         <div class="container mx-auto px-6">
             <!-- Header Section -->
             <div class="text-center mb-10 group">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4 relative inline-block underline-animate">
+                <h2 class="text-3xl md:text-4xl font-bold text-secondary mb-4 relative inline-block underline-animate">
                     Berita dan Informasi
                 </h2>
-                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                <h3 class="text-lg text-secondary max-w-2xl mx-auto pt-2">
                     Update terbaru seputar berita dan pengumuman penting dari kami
-                </p>
+                </h3>
             </div>
 
             <!-- Content Container -->
@@ -256,9 +275,9 @@
                 <!-- Berita Section dengan Gambar -->
                 <div class="mb-16">
                     <div class="flex items-center justify-between mb-8">
-                        <h3 class="text-2xl font-bold text-gray-800">Berita Terbaru</h3>
+                        <h3 class="text-2xl font-bold text-secondary">Berita Terbaru</h3>
                         <a href="/berita"
-                            class="text-secondary hover:text-primary/80 font-medium flex items-center group">
+                            class="text-secondary hover:text-custom-blue font-medium flex items-center group">
                             Lihat Semua Berita
                             <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform duration-300"
                                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -290,9 +309,9 @@
                 <!-- Pengumuman Section -->
                 <div>
                     <div class="flex items-center justify-between mb-8">
-                        <h3 class="text-2xl font-bold text-gray-800">Pengumuman Penting</h3>
+                        <h3 class="text-2xl font-bold text-secondary">Pengumuman Penting</h3>
                         <a href="/pengumuman"
-                            class="text-red-500 hover:text-red-600 font-medium flex items-center group">
+                            class="text-secondary hover:text-custom-blue font-medium flex items-center group">
                             Lihat Semua Pengumuman
                             <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform duration-300"
                                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -327,21 +346,21 @@
     </section>
 
     <!-- Tim Section dengan Infinite Carousel -->
-    <section id="tentang" class="py-20 bg-gray-100 overflow-hidden">
-        <div class="container mx-auto px-6">
+    <section id="tentang" class="py-20 bg-white overflow-hidden">
+        <div class="container mx-auto px-4 sm:px-6">
             <div class="text-center mb-10 group">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4 relative inline-block underline-animate">
+                <h2 class="text-3xl md:text-4xl font-bold text-secondary mb-4 relative inline-block underline-animate">
                     Tim PUSTIPD
                 </h2>
-                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                <h3 class="text-xl text-secondary max-w-2xl mx-auto pt-2">
                     Tim profesional yang berdedikasi untuk memberikan layanan terbaik
-                </p>
+                </h3>
             </div>
 
             <!-- Infinite Carousel Container -->
-            <div class="relative">
+            <div class="relative overflow-hidden">
                 <!-- Carousel Track -->
-                <div class="flex animate-infinite-scroll" id="teamCarousel">
+                <div class="flex animate-infinite-scroll gap-2 sm:gap-4 md:gap-5" id="teamCarousel">
                     <!-- First Set of Cards -->
                     <x-team-card name="Dr. Ahmad Wijaya" position="Kepala PUSTIPD"
                         description="Visioner dengan pengalaman 15+ tahun dalam teknologi informasi"
@@ -392,7 +411,6 @@
                         description="Kreator pengalaman pengguna yang intuitif dan menarik"
                         image="{{ asset('assets/img/placeholder/dummy.png') }}" />
                 </div>
-
             </div>
         </div>
     </section>
@@ -402,7 +420,7 @@
         <div class="container mx-auto px-6">
             <!-- Judul -->
             <div class="text-center mb-10 group">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4 relative inline-block underline-animate">
+                <h2 class="text-3xl md:text-4xl font-bold text-secondary mb-4 relative inline-block underline-animate">
                     Mitra Kami
                 </h2>
             </div>
@@ -410,35 +428,51 @@
             <!-- Carousel -->
             <div class="relative max-w-7xl mx-auto">
                 <div class="overflow-hidden" id="partnersCarousel">
-                    <div id="partnersWrapper" class="flex transition-transform duration-500 ease-in-out space-x-6">
+                    <div id="partnersWrapper" class="flex transition-transform duration-300 ease-in-out space-x-6">
                         <!-- Partner Cards -->
-                        <x-partner-card name="Universitas Indonesia" logo="{{ asset('assets/img/placeholder/dummy.png') }}" link="https://ui.ac.id" />
-                        <x-partner-card name="Institut Teknologi Bandung" logo="{{ asset('assets/img/placeholder/dummy.png') }}" link="https://itb.ac.id" />
-                        <x-partner-card name="Kementerian Komunikasi dan Informatika" logo="{{ asset('assets/img/placeholder/dummy.png') }}" link="https://kominfo.go.id" />
-                        <x-partner-card name="PT. Telkom Indonesia" logo="{{ asset('assets/img/placeholder/dummy.png') }}" link="https://telkom.co.id" />
-                        <x-partner-card name="Microsoft Indonesia" logo="{{ asset('assets/img/placeholder/dummy.png') }}" link="https://microsoft.com/id-id" />
-                        <x-partner-card name="Google Indonesia" logo="{{ asset('assets/img/placeholder/dummy.png') }}" link="https://google.co.id" />
-                        <x-partner-card name="Amazon Web Services" logo="{{ asset('assets/img/placeholder/dummy.png') }}" link="https://aws.amazon.com" />
-                        <x-partner-card name="Oracle Indonesia" logo="{{ asset('assets/img/placeholder/dummy.png') }}" link="https://oracle.com/id" />
-                        <x-partner-card name="Cisco Systems" logo="{{ asset('assets/img/placeholder/dummy.png') }}" link="https://cisco.com" />
-                        <x-partner-card name="IBM Indonesia" logo="{{ asset('assets/img/placeholder/dummy.png') }}" link="https://ibm.com/id" />
-                        <x-partner-card name="SAP Indonesia" logo="{{ asset('assets/img/placeholder/dummy.png') }}" link="https://sap.com/indonesia" />
-                        <x-partner-card name="VMware Indonesia" logo="{{ asset('assets/img/placeholder/dummy.png') }}" link="https://vmware.com" />
+                        <x-partner-card name="Universitas Indonesia"
+                            logo="{{ asset('assets/img/placeholder/dummy.png') }}" link="https://ui.ac.id" />
+                        <x-partner-card name="Institut Teknologi Bandung"
+                            logo="{{ asset('assets/img/placeholder/dummy.png') }}" link="https://itb.ac.id" />
+                        <x-partner-card name="Kementerian Komunikasi dan Informatika"
+                            logo="{{ asset('assets/img/placeholder/dummy.png') }}" link="https://kominfo.go.id" />
+                        <x-partner-card name="PT. Telkom Indonesia"
+                            logo="{{ asset('assets/img/placeholder/dummy.png') }}" link="https://telkom.co.id" />
+                        <x-partner-card name="Microsoft Indonesia"
+                            logo="{{ asset('assets/img/placeholder/dummy.png') }}"
+                            link="https://microsoft.com/id-id" />
+                        <x-partner-card name="Google Indonesia"
+                            logo="{{ asset('assets/img/placeholder/dummy.png') }}" link="https://google.co.id" />
+                        <x-partner-card name="Amazon Web Services"
+                            logo="{{ asset('assets/img/placeholder/dummy.png') }}" link="https://aws.amazon.com" />
+                        <x-partner-card name="Oracle Indonesia"
+                            logo="{{ asset('assets/img/placeholder/dummy.png') }}" link="https://oracle.com/id" />
+                        <x-partner-card name="Cisco Systems" logo="{{ asset('assets/img/placeholder/dummy.png') }}"
+                            link="https://cisco.com" />
+                        <x-partner-card name="IBM Indonesia" logo="{{ asset('assets/img/placeholder/dummy.png') }}"
+                            link="https://ibm.com/id" />
+                        <x-partner-card name="SAP Indonesia" logo="{{ asset('assets/img/placeholder/dummy.png') }}"
+                            link="https://sap.com/indonesia" />
+                        <x-partner-card name="VMware Indonesia"
+                            logo="{{ asset('assets/img/placeholder/dummy.png') }}" link="https://vmware.com" />
                     </div>
                 </div>
 
                 <!-- Navigasi Carousel -->
                 <div class="flex justify-center items-center mt-8 space-x-4">
-                    <button id="partnersPrevBtn" class="p-2 text-white hover:text-gray-300 transition disabled:opacity-50">
+                    <button id="partnersPrevBtn"
+                        class="p-2 text-custom-blue hover:text-white transition disabled:opacity-50">
                         <!-- Panah Kiri (Tanpa Komponen Icon) -->
                         <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                            <path d="M15 18l-6-6 6-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M15 18l-6-6 6-6" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" />
                         </svg>
                     </button>
 
                     <div id="partnersIndicators" class="flex space-x-2"></div>
 
-                    <button id="partnersNextBtn" class="p-2 text-white hover:text-gray-300 transition disabled:opacity-50">
+                    <button id="partnersNextBtn"
+                        class="p-2 text-custom-blue hover:text-white transition disabled:opacity-50">
                         <!-- Panah Kanan -->
                         <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                             <path d="M9 6l6 6-6 6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -449,19 +483,13 @@
                 <!-- Progress Bar -->
                 <div class="mt-6">
                     <div class="w-full bg-gray-600 rounded-full h-1">
-                        <div id="partnersProgressBar" class="bg-white h-1 rounded-full transition-all duration-300 ease-out" style="width: 16.67%"></div>
+                        <div id="partnersProgressBar"
+                            class="bg-white h-1 rounded-full transition-all duration-300 ease-out"
+                            style="width: 16.67%"></div>
                     </div>
                 </div>
             </div>
 
-            <!-- CTA Abang Komen dulss, aneh wkwkwk -->
-            <!-- <div class="text-center mt-16 text-gray-700">
-                <p class="mb-2 text-sm sm:text-base">Kami butuh masukan Anda untuk terus berkembang</p>
-                <a href="#"
-                    class="inline-block border border-blue-500 text-blue-600 px-4 py-2 rounded-full text-sm font-medium hover:bg-blue-50 transition">
-                    Isi Survei
-                </a>
-            </div> -->
         </div>
     </section>
 

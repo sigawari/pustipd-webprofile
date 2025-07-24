@@ -59,19 +59,31 @@
 
                 <!-- Desktop Nav -->
                 <div class="hidden lg:flex lg:items-center lg:space-x-4">
-                    <a href="#beranda" class="text-white">Beranda</a>
-                    <a href="#tentang" class="text-white">Tentang Kami</a>
-                    <a href="#layanan" class="text-white">Layanan</a>
-                    <a href="#informasi" class="text-white">Informasi Terkini</a>
-                    <a href="#sop" class="text-white">SOP</a>
-                    <a href="#faq" class="text-white">FAQ</a>
+                    <a href="#beranda" class="text-white">
+                        <h3>Beranda</h3>
+                    </a>
+                    <a href="#tentang" class="text-white">
+                        <h3>Tentang Kami</h3>
+                    </a>
+                    <a href="#layanan" class="text-white">
+                        <h3>Layanan</h3>
+                    </a>
+                    <a href="#informasi" class="text-white">
+                        <h3>Informasi</h3>
+                    </a>
+                    <a href="#sop" class="text-white">
+                        <h3>SOP</h3>
+                    </a>
+                    <a href="#faq" class="text-white">
+                        <h3>FAQ</h3>
+                    </a>
                 </div>
 
                 <!-- Mobile Toggle -->
                 <div class="lg:hidden">
                     <button id="mobile-menu-toggle" class="text-white focus:outline-none">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
-                            viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                            stroke-linecap="round" stroke-linejoin="round">
                             <path d="M4 6h16M4 12h16M4 18h16"></path>
                         </svg>
                     </button>
@@ -81,7 +93,7 @@
     </nav>
 
     <!-- Mobile Menu -->
-     <div id="mobile-menu"
+    <div id="mobile-menu"
         class="lg:hidden hidden bg-transparent backdrop-blur-xs text-white px-4 py-4 space-y-2 shadow-md rounded-b-lg transition-all duration-300">
         <a href="#beranda" class="block">Beranda</a>
         <a href="#tentang" class="block">Tentang Kami</a>

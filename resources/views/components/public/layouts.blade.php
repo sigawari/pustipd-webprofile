@@ -29,7 +29,7 @@
             <x-public.navbar></x-public.navbar>
             <!-- Main -->
             <main class="flex-grow">
-                <!-- <x-public.header>{{ $title }}</x-public.header> Pindah ke tiap pages aja atau disesuaikan -->
+                {{-- <x-public.header>{{ $title }}</x-public.header> --}}
                 {{ $slot }}
             </main>
             <!-- Footer -->
@@ -42,7 +42,7 @@
 
         <!-- Navbar Scroll Color Change + Clock -->
         <script>
-            document.addEventListener('DOMContentLoaded', function () {
+            document.addEventListener('DOMContentLoaded', function() {
                 // ===============================
                 // Navbar Color Change on Scroll
                 // ===============================
@@ -51,7 +51,7 @@
                 const navLinks = navbar.querySelectorAll('a');
                 const topbar = document.getElementById('topbar');
 
-                window.addEventListener('scroll', function () {
+                window.addEventListener('scroll', function() {
                     const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
                     if (window.scrollY > 50) {
@@ -91,7 +91,9 @@
 
                 function updateClock() {
                     const now = new Date();
-                    const jakarta = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Jakarta" }));
+                    const jakarta = new Date(now.toLocaleString("en-US", {
+                        timeZone: "Asia/Jakarta"
+                    }));
 
                     const dayIdx = jakarta.getDay();
                     const hr = jakarta.getHours();
@@ -110,7 +112,7 @@
 
         <!-- Universal Carousel -->
         <script>
-            document.addEventListener('DOMContentLoaded', function () {
+            document.addEventListener('DOMContentLoaded', function() {
                 class UniversalCarousel {
                     constructor(config) {
                         // Config
@@ -166,7 +168,8 @@
 
                         for (let i = 0; i < count; i++) {
                             const btn = document.createElement('button');
-                            btn.className = `w-3 h-3 rounded-full transition-all duration-300 ${this.getIndicatorClass(i)}`;
+                            btn.className =
+                                `w-3 h-3 rounded-full transition-all duration-300 ${this.getIndicatorClass(i)}`;
                             btn.addEventListener('click', () => this.goToMappedSlide(i, count, totalIndicators));
                             this.indicatorsContainer.appendChild(btn);
                         }
@@ -183,19 +186,21 @@
                         const count = Math.min(total, this.maxIndicators);
                         const ratio = (total - 1) / (count - 1);
                         const mapped = Math.round(this.currentIndex / ratio);
-                        return (total <= this.maxIndicators ? i === this.currentIndex : i === mapped)
-                            ? `${this.indicatorActiveClass} scale-110`
-                            : `${this.indicatorInactiveClass} ${this.indicatorHoverClass}`;
+                        return (total <= this.maxIndicators ? i === this.currentIndex : i === mapped) ?
+                            `${this.indicatorActiveClass} scale-110` :
+                            `${this.indicatorInactiveClass} ${this.indicatorHoverClass}`;
                     }
 
                     updateCarousel() {
                         if (this.isTransitioning) return;
 
-                        this.wrapper.style.transform = `translateX(-${this.currentIndex * (100 / this.slidesToShow)}%)`;
+                        this.wrapper.style.transform =
+                            `translateX(-${this.currentIndex * (100 / this.slidesToShow)}%)`;
 
                         // Update indicators
                         [...this.indicatorsContainer.children].forEach((btn, i) => {
-                            btn.className = `w-3 h-3 rounded-full transition-all duration-300 ${this.getIndicatorClass(i)}`;
+                            btn.className =
+                                `w-3 h-3 rounded-full transition-all duration-300 ${this.getIndicatorClass(i)}`;
                         });
 
                         if (this.progressBar) {
@@ -209,7 +214,8 @@
                         this.slides.forEach((slide, i) => {
                             const card = slide.querySelector('.group');
                             if (card) {
-                                const visible = i >= this.currentIndex && i < this.currentIndex + this.slidesToShow;
+                                const visible = i >= this.currentIndex && i < this.currentIndex + this
+                                    .slidesToShow;
                                 card.style.opacity = visible ? '1' : '0.7';
                                 card.style.transform = visible ? 'translateY(0)' : 'translateY(10px)';
                             }
@@ -244,7 +250,8 @@
 
                     startAutoPlay() {
                         this.autoPlayInterval = setInterval(() => {
-                            this.currentIndex = (this.currentIndex === this.maxIndex) ? 0 : this.currentIndex + 1;
+                            this.currentIndex = (this.currentIndex === this.maxIndex) ? 0 : this
+                                .currentIndex + 1;
                             this.updateCarousel();
                         }, this.autoPlayDelay);
                     }
@@ -277,7 +284,8 @@
                         this.carousel.addEventListener('mouseenter', () => this.stopAutoPlay());
                         this.carousel.addEventListener('mouseleave', () => this.startAutoPlay());
 
-                        let startX = 0, startY = 0;
+                        let startX = 0,
+                            startY = 0;
 
                         this.carousel.addEventListener('touchstart', e => {
                             startX = e.changedTouches[0].pageX;
@@ -333,7 +341,7 @@
 
         <!-- Scroll Animation & Parallax -->
         <script>
-            document.addEventListener('DOMContentLoaded', function () {
+            document.addEventListener('DOMContentLoaded', function() {
                 const observer = new IntersectionObserver(entries => {
                     entries.forEach(entry => {
                         if (entry.isIntersecting) {
@@ -341,7 +349,10 @@
                             observer.unobserve(entry.target);
                         }
                     });
-                }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+                }, {
+                    threshold: 0.1,
+                    rootMargin: '0px 0px -50px 0px'
+                });
 
                 document.querySelectorAll('.news-card').forEach(card => observer.observe(card));
 
@@ -365,7 +376,7 @@
 
         <!-- Team Carousel Auto Pause -->
         <script>
-            document.addEventListener('DOMContentLoaded', function () {
+            document.addEventListener('DOMContentLoaded', function() {
                 const carousel = document.getElementById('teamCarousel');
                 if (!carousel) return;
 
