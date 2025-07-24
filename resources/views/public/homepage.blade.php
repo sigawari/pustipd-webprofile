@@ -1,62 +1,6 @@
 <x-public.layouts title="{{ $title }}" description="{{ $description }}" keywords="{{ $keywords }}">
     <x-slot:title>{{ $title }}</x-slot:title>
 
-    <!-- Style for Divisi -->
-    <style>
-        .card-animated {
-            position: relative;
-            overflow: hidden;
-            z-index: 0;
-            min-height: 200px;
-            /* Pastikan tinggi konsisten */
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .card-animated::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background-color: #062749;
-            /* Tailwind blue-500 */
-            transform: translateY(100%);
-            transition: transform 0.5s ease-in-out;
-            z-index: -1;
-        }
-
-        .group:hover .card-animated::before {
-            transform: translateY(0%);
-        }
-
-        .card-text {
-            transition: color 0.3s ease;
-        }
-
-        .group:hover .card-text {
-            color: white !important;
-        }
-
-        .underline-animate::after {
-            content: '';
-            position: absolute;
-            bottom: -1rem;
-            /* Jarak dari teks */
-            left: 0;
-            height: 4px;
-            width: 0;
-            background-color: #062749;
-            /* Tailwind blue-500 */
-            transition: width 0.4s ease;
-        }
-
-        .group:hover .underline-animate::after {
-            width: 100%;
-        }
-    </style>
-
-
-
     <!-- Hero Section -->
     <section id="beranda"
         class="relative bg-blue-950 text-amber-50 min-h-screen flex items-center justify-center overflow-hidden">

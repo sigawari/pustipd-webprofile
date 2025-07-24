@@ -112,30 +112,6 @@
     <x-slot:title>{{ $title }}</x-slot:title>
 
     <!-- Berita & Informasi Section -->
-    <style>
-        .underline-animate::after {
-            content: '';
-            position: absolute;
-            bottom: -1rem;
-            left: 0;
-            height: 4px;
-            width: 0;
-            background-color: #062749;
-            transition: width 0.4s ease;
-        }
-
-        .group:hover .underline-animate::after {
-            width: 100%;
-        }
-
-        /* Supaya card tidak terlalu tinggi dan proporsional */
-        .news-grid>* {
-            min-height: 250px;
-            display: flex;
-            flex-direction: column;
-        }
-    </style>
-
     <section id="berita" class="py-20 mt-8 bg-primary">
         <div class="container mx-auto px-12">
             <!-- Header Section -->

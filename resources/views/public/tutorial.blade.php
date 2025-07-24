@@ -57,76 +57,6 @@
 <x-public.layouts title="{{ $title }}" description="{{ $description }}" keywords="{{ $keywords }}">
     <x-slot:title>{{ $title }}</x-slot:title>
 
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <style>
-        .underline-animate::after {
-            content: '';
-            position: absolute;
-            bottom: -1rem;
-            left: 0;
-            height: 4px;
-            width: 0;
-            background-color: #062749;
-            transition: width 0.4s ease;
-        }
-
-        .group:hover .underline-animate::after {
-            width: 100%;
-        }
-
-        .tutorial-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 2rem;
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-
-        .tutorial-card {
-            background: white;
-            border-radius: 0.6rem;
-            box-shadow: 0 4px 16px rgba(6, 39, 73, 0.08);
-            padding: 1.2rem 1.05rem 1.4rem 1.05rem;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            transition: box-shadow 0.23s, transform 0.23s;
-            cursor: pointer;
-        }
-
-        .tutorial-card:hover {
-            box-shadow: 0 8px 32px rgba(6, 39, 73, 0.14);
-            transform: translateY(-4px) scale(1.035);
-        }
-
-        .tutorial-title {
-            font-size: 1.08rem;
-            font-weight: 700;
-            color: #062749;
-            margin-bottom: .45rem;
-        }
-
-        .tutorial-excerpt {
-            color: #506176;
-            font-size: 0.97rem;
-            line-height: 1.5;
-            min-height: 38px;
-        }
-
-        @media (max-width: 640px) {
-            .tutorial-grid {
-                grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-                gap: 1.3rem;
-            }
-
-            .tutorial-card img {
-                width: 56px;
-                height: 56px;
-            }
-        }
-    </style>
-
     <section id="tutorial" class="py-20 bg-primary">
         <div class="container mx-auto px-6 md:px-12">
             <!-- Heading -->
@@ -146,7 +76,7 @@
                     class="w-full rounded-xl pl-12 pr-4 py-2 sm:py-3 
                            text-secondary placeholder-gray-400
                            bg-white border border-white shadow-sm focus:ring-2 focus:ring-secondary focus:border-transparent
-                           focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" />
+                           focus:outline-none " />
                 <button type="submit" class="absolute top-1/2 left-3 transform -translate-y-1/2 text-secondary">
                     <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" stroke-width="2"
                         viewBox="0 0 24 24">

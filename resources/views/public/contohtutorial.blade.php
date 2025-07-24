@@ -1,24 +1,6 @@
 <x-public.layouts title="{{ $title }}" description="{{ $description }}" keywords="{{ $keywords }}">
     <x-slot:title>{{ $title }}</x-slot:title>
 
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <style>
-        .underline-animate::after {
-            content: '';
-            position: absolute;
-            bottom: -1rem;
-            left: 0;
-            height: 4px;
-            width: 0;
-            background-color: #062749;
-            transition: width 0.4s ease;
-        }
-
-        .group:hover .underline-animate::after {
-            width: 100%;
-        }
-    </style>
-
     <section id="visi-misi" class="py-20 bg-primary">
         <div class="container mx-auto px-6 md:px-12">
             <!-- Heading -->

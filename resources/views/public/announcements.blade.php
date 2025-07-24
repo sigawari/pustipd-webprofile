@@ -158,30 +158,7 @@
 
 <x-public.layouts title="{{ $title }}" description="{{ $description }}" keywords="{{ $keywords }}">
     <x-slot:title>{{ $title }}</x-slot:title>
-    <style>
-        .underline-animate::after {
-            content: '';
-            position: absolute;
-            bottom: -1rem;
-            left: 0;
-            height: 4px;
-            width: 0;
-            background-color: #062749;
-            transition: width 0.4s ease;
-        }
 
-        .group:hover .underline-animate::after {
-            width: 100%;
-        }
-
-        /* Supaya card tidak terlalu tinggi dan proporsional */
-        .announcement-grid>* {
-            /* Contoh kontrol tinggi card, sesuaikan jika perlu */
-            min-height: 250px;
-            display: flex;
-            flex-direction: column;
-        }
-    </style>
     <section class="py-20 bg-primary">
         <!-- Pengumuman Section -->
         <div class="container mx-auto px-10 sm:px-20 m-4">

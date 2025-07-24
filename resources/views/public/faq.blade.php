@@ -125,7 +125,7 @@
                     class="w-full rounded-xl pl-12 pr-4 py-2 sm:py-3 
                text-secondary placeholder-gray-400
                bg-white border border-white shadow-sm focus:ring-2 focus:ring-secondary focus:border-transparent
-               focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" />
+               focus:outline-none" />
                 <button type="submit" class="absolute top-1/2 left-3 transform -translate-y-1/2 text-secondary">
                     <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" stroke-width="2"
                         viewBox="0 0 24 24">

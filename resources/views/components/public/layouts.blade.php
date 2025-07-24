@@ -4,8 +4,8 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
         <title>PUSTIPD | {{ $title }}</title>
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
         <link id="favicon" rel="shortcut icon" href="{{ asset('assets/img/logo/logo-uin-rfp.png') }}" type="image/x-icon">
 
         <!-- SEO Meta Tags -->
@@ -15,15 +15,15 @@
         <!-- Font -->
 
         <!-- CSS -->
-
+        <link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
 
         <!-- JS -->
-
+        <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     </head>
 
     <body>
-        <div class="flex flex-col min-h-screen bg-blue-950">
+        <div class="flex flex-col min-h-screen">
             {{-- Isi Halaman --}}
             <!-- Navbar -->
             <x-public.navbar></x-public.navbar>
@@ -107,6 +107,39 @@
 
                 updateClock();
                 setInterval(updateClock, 60000); // per menit
+
+                // ===============================
+                // klik on Gallery Cards
+                // ===============================
+                const galleryCards = document.querySelectorAll('.gallery-card');
+                const popup = document.getElementById('gallery-popup');
+                const popupImg = document.getElementById('popup-img');
+                const popupCaption = document.getElementById('popup-caption');
+                const closeBtn = document.getElementById('popup-close');
+
+                galleryCards.forEach(card => {
+                    card.addEventListener('click', function() {
+                        const idx = Number(card.dataset.idx);
+                        popupImg.src = gallery[idx].image;
+                        popupCaption.textContent = gallery[idx].caption;
+                        popup.classList.add('active');
+                        popup.focus();
+                    });
+                });
+
+                closeBtn.addEventListener('click', function() {
+                    popup.classList.remove('active');
+                });
+
+                popup.addEventListener('click', function(e) {
+                    if (e.target === popup) popup.classList.remove('active');
+                });
+
+                window.addEventListener('keydown', function(e) {
+                    if (popup.classList.contains('active') && e.key === 'Escape') {
+                        popup.classList.remove('active');
+                    }
+                });
             });
         </script>
 

@@ -1,0 +1,334 @@
+/* ============================
+   CUSTOM CSS PUSTIPD
+   Sudah diperbaiki dan dirapikan
+   ============================ */
+
+/* Home Page */
+/* Card Animation For Division */
+.card-animated {
+    position: relative;
+    overflow: hidden;
+    z-index: 0;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.card-animated::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: #062749; /* Tailwind blue-500 */
+    transform: translateY(100%);
+    transition: transform 0.5s ease-in-out;
+    z-index: -1;
+}
+
+.group:hover .card-animated::before {
+    transform: translateY(0%);
+}
+
+.card-text {
+    transition: color 0.3s ease;
+}
+
+.group:hover .card-text {
+    color: white !important;
+}
+
+/* Underline Animate (Global, satu deklarasi saja) */
+.underline-animate::after {
+    content: "";
+    position: absolute;
+    bottom: -1rem;
+    left: 0;
+    height: 4px;
+    width: 0;
+    background-color: #062749; /* Tailwind blue-500 */
+    transition: width 0.4s ease;
+}
+
+.group:hover .underline-animate::after {
+    width: 100%;
+}
+
+/* Gallery */
+.gallery-card {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    cursor: pointer;
+}
+
+.gallery-img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 0.75rem;
+    box-shadow: 0 2px 8px 0 rgb(0 0 0 / 5%);
+    background: #f3f4f6;
+    display: block;
+}
+
+.caption-hover {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    background: rgba(6, 39, 73, 0.6);
+    color: #fff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    font-size: 0.93rem;
+    font-weight: 600;
+    border-radius: 0.75rem;
+    text-align: center;
+    transition: opacity 0.25s;
+    pointer-events: none;
+    padding: 0 8px;
+}
+
+.gallery-card:hover .caption-hover {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.gallery-popup-bg {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+
+.gallery-popup-bg.active {
+    display: flex;
+}
+
+.gallery-popup-box {
+    background: #fff;
+    border-radius: 0.75rem;
+    max-width: 92vw;
+    max-height: 88vh;
+    box-shadow: 0 6px 32px 0 rgb(0 0 0 / 20%);
+    padding: 18px 18px 24px 18px;
+    text-align: center;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.gallery-popup-img {
+    max-width: 80vw;
+    max-height: 60vh;
+    border-radius: 0.5rem;
+    margin-top: 8px;
+}
+
+.popup-caption {
+    color: #314061;
+    font-size: 1.05rem;
+    margin-bottom: 8px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.popup-close {
+    position: static;
+    margin-top: 16px;
+    background: #062749;
+    color: #fff;
+    border-radius: 10px;
+    border: none;
+    padding: 0.4rem 1.2rem;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    z-index: 10;
+}
+
+/* Content About (dulu nested di popup-close) */
+.content-about {
+    max-width: 600px;
+}
+
+/* Announcements */
+.announcement-grid > * {
+    min-height: 250px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* News */
+.news-grid > * {
+    min-height: 250px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Struktur */
+.struktur-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2rem;
+    max-width: 100px;
+    margin: 0 auto 3rem;
+}
+
+.struktur-card {
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 0 4px 12px rgb(6 39 73 / 0.1);
+    padding: 1.5rem 1rem 2rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    cursor: default;
+}
+
+.struktur-card:hover {
+    box-shadow: 0 8px 24px rgb(6 39 73 / 0.15);
+    transform: translateY(-6px);
+}
+
+.struktur-card img {
+    width: 180px;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 15px;
+    margin-bottom: 1rem;
+}
+
+.struktur-nama {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #062749;
+    margin-bottom: 0.4rem;
+    text-align: center;
+}
+
+.struktur-jabatan {
+    font-size: 0.9rem;
+    color: #506176;
+    text-align: center;
+}
+
+.divisi-title {
+    text-align: center;
+    font-weight: 700;
+    font-size: 1.8rem;
+    color: #062749;
+    margin: 3rem auto 1rem;
+    padding-bottom: 0.3rem;
+    position: relative;
+}
+
+/* Tutorial */
+.tutorial-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.tutorial-card {
+    background: white;
+    border-radius: 0.6rem;
+    box-shadow: 0 4px 16px rgba(6, 39, 73, 0.08);
+    padding: 1.2rem 1.05rem 1.4rem 1.05rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: box-shadow 0.23s, transform 0.23s;
+    cursor: pointer;
+}
+
+.tutorial-card:hover {
+    box-shadow: 0 8px 32px rgba(6, 39, 73, 0.14);
+    transform: translateY(-4px) scale(1.035);
+}
+
+.tutorial-title {
+    font-size: 1.08rem;
+    font-weight: 700;
+    color: #062749;
+    margin-bottom: 0.45rem;
+}
+
+.tutorial-excerpt {
+    color: #506176;
+    font-size: 0.97rem;
+    line-height: 1.5;
+    min-height: 38px;
+}
+
+/* Card Visi Misi */
+.card-visi-misi {
+    background: #fff;
+    border-radius: 0.75rem;
+    box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.08);
+    padding: 3rem;
+    margin-bottom: 2rem;
+    border: 1px solid #e0e6f0;
+    transition: box-shadow 0.2s;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.card-visi-misi:hover {
+    box-shadow: 0 4px 24px 0 rgba(6, 39, 73, 0.08);
+}
+
+.card-title {
+    font-size: 1.18rem;
+    font-weight: 700;
+    color: #062749;
+    margin-bottom: 1rem;
+    text-align: center;
+    letter-spacing: 0.01em;
+}
+
+.card-body {
+    color: #313451;
+    font-size: 1.05rem;
+    text-align: center;
+    line-height: 1.6;
+}
+
+.card-body ol {
+    text-align: left;
+    margin-left: 1rem;
+}
+
+/* ============== RESPONSIVE ============== */
+@media (max-width: 640px) {
+    .struktur-grid {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .struktur-card img {
+        width: 160px;
+        height: 200px;
+    }
+
+    .tutorial-grid {
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 1.3rem;
+    }
+
+    .tutorial-card img {
+        width: 56px;
+        height: 56px;
+    }
+}
