@@ -104,7 +104,7 @@
 
         <!-- Footer Bottom -->
         <div class="mt-6 pt-4 text-sm text-blue-200 flex flex-col sm:flex-row justify-between items-center gap-2">
-            <p>© PPID UIN RF 2025 All Rights Reserved</p>
+            <p>© PPID UIN RF Palembang 2025. All Rights Reserved</p>
             <p>Made with <span class="text-red-400">❤</span> by PUSTIPD UIN RF Palembang</p>
         </div>
     </div>
