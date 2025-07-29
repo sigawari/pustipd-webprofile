@@ -1,6 +1,26 @@
 <x-public.layouts title="{{ $title }}" description="{{ $description }}" keywords="{{ $keywords }}">
     <x-slot:title>{{ $title }}</x-slot:title>
 
+    <!-- Style for Divisi -->
+    <style>
+        .underline-animate::after {
+            content: '';
+            position: absolute;
+            bottom: -1rem;
+            /* Jarak dari teks */
+            left: 0;
+            height: 4px;
+            width: 0;
+            background-color: #062749;
+            /* Tailwind blue-500 */
+            transition: width 0.4s ease;
+        }
+
+        .group:hover .underline-animate::after {
+            width: 100%;
+        }
+    </style>
+
     <!-- Hero Section -->
     <section id="beranda"
         class="relative bg-blue-950 text-amber-50 min-h-screen flex items-center justify-center overflow-hidden">
@@ -63,8 +83,7 @@
         </div>
     </section>
 
-
-    <!-- Divisi Section -->
+    {{-- <!-- Divisi Section -->
     <section id="divisi" class="py-20 bg-gray-100">
         <div class="container mx-auto px-6">
             <div class="text-center mb-10 group">
@@ -122,7 +141,111 @@
                 </div>
             </div>
         </div>
+    </section> --}}
+
+    <!-- Pencapaian Section -->
+    <section id="pencapaian" class="py-20 bg-gray-100">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-10 group">
+                <h2 class="text-3xl md:text-4xl font-bold text-secondary mb-4 relative inline-block underline-animate">
+                    Pencapaian PUSTIPD
+                </h2>
+            </div>
+
+            @php
+                $achievements = [
+                    ['subtitle' => 'Juara 1', 'title' => 'Jaringan'],
+                    ['subtitle' => 'Juara 1', 'title' => 'Pengembangan Aplikasi'],
+                    ['subtitle' => 'Juara 1', 'title' => 'Pangkalan Data'],
+                    ['subtitle' => 'Juara 1', 'title' => 'Keamanan'],
+                    ['subtitle' => 'Juara 1', 'title' => 'Pengujian'],
+                    ['subtitle' => 'Juara 1', 'title' => 'Infrastruktur'],
+                    ['subtitle' => 'Juara 1', 'title' => 'Analitik'],
+                    ['subtitle' => 'Juara 1', 'title' => 'Desain'],
+                    ['subtitle' => 'Juara 1', 'title' => 'Manajemen'],
+                    ['subtitle' => 'Juara 1', 'title' => 'Support'],
+                ];
+
+                $slidesDesktop = array_chunk($achievements, 5);
+                $slidesMobile = array_chunk($achievements, 1);
+            @endphp
+
+            <!-- Achievement Carousel Container -->
+            <div class="achievement-carousel max-w-6xl mx-auto" data-total-slides-desktop="{{ count($slidesDesktop) }}"
+                data-total-slides-mobile="{{ count($slidesMobile) }}" data-duration="4000">
+
+                <div class="relative overflow-hidden">
+                    <!-- Desktop Carousel Track -->
+                    <div
+                        class="achievement-carousel-track-desktop hidden lg:flex transition-transform duration-500 ease-in-out">
+                        @foreach ($slidesDesktop as $slideIndex => $slideCards)
+                            <div class="w-full flex-shrink-0">
+                                <div class="grid grid-cols-5 gap-6">
+                                    @foreach ($slideCards as $achievement)
+                                        <div class="achievement-card-wrapper">
+                                            <x-achievement-card :subtitle="$achievement['subtitle']" :title="$achievement['title']" />
+                                        </div>
+                                    @endforeach
+
+                                    {{-- Fill empty slots --}}
+                                    @if (count($slideCards) < 5)
+                                        @for ($i = count($slideCards); $i < 5; $i++)
+                                            <div class="achievement-card-wrapper opacity-0 pointer-events-none">
+                                                <div class="invisible">
+                                                    <x-achievement-card subtitle="Placeholder" title="Placeholder" />
+                                                </div>
+                                            </div>
+                                        @endfor
+                                    @endif
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+
+                    <!-- Mobile Carousel Track - 1 card per slide -->
+                    <div
+                        class="achievement-carousel-track-mobile flex lg:hidden transition-transform duration-500 ease-in-out">
+                        @foreach ($slidesMobile as $slideIndex => $slideCards)
+                            <div class="w-full flex-shrink-0">
+                                <div class="flex justify-center">
+                                    @foreach ($slideCards as $achievement)
+                                        <div class="achievement-card-wrapper w-full max-w-xs">
+                                            <x-achievement-card :subtitle="$achievement['subtitle']" :title="$achievement['title']" />
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+
+                <!-- Desktop Indicators -->
+                <div class="hidden lg:flex justify-center mt-8 space-x-3">
+                    @foreach ($slidesDesktop as $index => $slide)
+                        <button
+                            class="achievement-indicator-desktop w-3 h-3 rounded-full transition-all duration-300 bg-secondary hover:bg-custom-blue hover:scale-110">
+                        </button>
+                    @endforeach
+                </div>
+
+                <!-- Mobile Indicators -->
+                <div class="flex lg:hidden justify-center mt-8 space-x-3">
+                    @foreach ($slidesMobile as $index => $slide)
+                        <button
+                            class="achievement-indicator-mobile w-3 h-3 rounded-full transition-all duration-300 bg-secondary hover:bg-custom-blue hover:scale-110">
+                        </button>
+                    @endforeach
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="w-full bg-gray-200 rounded-full h-1 mt-4 overflow-hidden">
+                    <div class="achievement-progress-bar bg-secondary h-1 rounded-full transition-all duration-100 ease-linear"
+                        style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
     </section>
+
 
     <!-- Layanan Section -->
     <section id="layanan" class="py-20 bg-[#E6F6FF]">
@@ -136,8 +259,7 @@
             <!-- Carousel Container -->
             <div class="relative isolate">
                 <div class="overflow-hidden relative" id="servicesCarousel">
-                    <div class="flex transition-transform duration-200 ease-in-out relative z-10"
-                        id="carouselWrapper">
+                    <div class="flex transition-transform duration-200 ease-in-out relative z-10" id="carouselWrapper">
                         <x-service-card title="Pengembangan Web"
                             description="Membangun website modern dengan teknologi terdepan seperti Laravel dan Tailwind CSS"
                             link="/layanan/web-development" />

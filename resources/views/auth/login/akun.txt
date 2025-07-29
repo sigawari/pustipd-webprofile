@@ -1,4 +1,4 @@
 'name' => 'admin',
-'email' => 'admin.admin@pustipd.radenfatah.ac.id',
+'email' => 'admin@pustipd.radenfatah.ac.id',
 'password' => Hash::make('pustipd12345'),
 'role' => 'admin',

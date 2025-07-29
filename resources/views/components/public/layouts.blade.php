@@ -15,7 +15,7 @@
         <!-- Font -->
 
         <!-- CSS -->
-        <link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
+        <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 
         <!-- JS -->
         <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -51,6 +51,7 @@
                 const navLinks = navbar.querySelectorAll('a');
                 const topbar = document.getElementById('topbar');
                 const isHome = window.location.pathname === '/';
+                const navbarMenus = document.querySelectorAll('.navbar-menu');
 
                 if (!isHome) {
                     // Jika bukan home, navbar langsung putih + text biru + topbar hidden
@@ -61,6 +62,11 @@
 
                     navbarTitle.classList.remove('text-white');
                     navbarTitle.classList.add('text-[#062749]');
+
+                    navbarMenus.forEach(item => {
+                        item.classList.remove('text-white', 'text-[#062749]');
+                        item.classList.add('text-secondary');
+                    });
 
                     navLinks.forEach(link => {
                         link.classList.remove('text-white');
@@ -79,34 +85,49 @@
                             navbar.classList.add('bg-white');
 
                             navbarTitle.classList.remove('text-white');
-                            navbarTitle.classList.add('text-[#062749]');
+                            navbarTitle.classList.add('text-secondary');
+
+                            navbarMenus.forEach(item => {
+                                item.classList.remove('text-white', 'text-[#062749]');
+                                item.classList.add('text-secondary');
+                            });
 
                             navLinks.forEach(link => {
                                 link.classList.remove('text-white');
-                                link.classList.add('text-[#062749]');
+                                link.classList.add('text-secondary');
                             });
                         } else {
                             // HOME
-                            const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
                             navbar.classList.remove('bg-transparent');
                             navbar.classList.add(isDark ? 'bg-gray-900' : 'bg-white');
 
                             if (isDark) {
+                                // Navbar gelap: semua teks putih
+                                navbarTitle.classList.remove('text-[#062749]', 'text-secondary');
                                 navbarTitle.classList.add('text-white');
-                                navbarTitle.classList.remove('text-[#062749]');
+
+                                navbarMenus.forEach(item => {
+                                    item.classList.remove('text-[#062749]', 'text-secondary');
+                                    item.classList.add('text-white');
+                                });
 
                                 navLinks.forEach(link => {
+                                    link.classList.remove('text-[#062749]', 'text-secondary');
                                     link.classList.add('text-white');
-                                    link.classList.remove('text-[#062749]');
                                 });
                             } else {
+                                // Navbar putih: semua teks secondary/biru
                                 navbarTitle.classList.remove('text-white');
-                                navbarTitle.classList.add('text-[#062749]');
+                                navbarTitle.classList.add('text-secondary');
+
+                                navbarMenus.forEach(item => {
+                                    item.classList.remove('text-white');
+                                    item.classList.add('text-secondary');
+                                });
 
                                 navLinks.forEach(link => {
                                     link.classList.remove('text-white');
-                                    link.classList.add('text-[#062749]');
+                                    link.classList.add('text-secondary');
                                 });
                             }
                         }
@@ -119,26 +140,37 @@
                             navbar.classList.remove('bg-white', 'bg-gray-900');
                             navbar.classList.add('bg-transparent');
 
+                            // Saat transparan: selalu teks putih
+                            navbarTitle.classList.remove('text-[#062749]', 'text-secondary');
                             navbarTitle.classList.add('text-white');
-                            navbarTitle.classList.remove('text-[#062749]');
+
+                            navbarMenus.forEach(item => {
+                                item.classList.remove('text-[#062749]', 'text-secondary');
+                                item.classList.add('text-white');
+                            });
 
                             navLinks.forEach(link => {
+                                link.classList.remove('text-[#062749]', 'text-secondary');
                                 link.classList.add('text-white');
-                                link.classList.remove('text-[#062749]');
                             });
                         } else {
-                            // PAGE LAIN SCROLL UP → tetap putih + text biru
+                            // PAGE LAIN SCROLL UP → tetap putih + text secondary
                             topbar.classList.add('hidden');
 
                             navbar.classList.remove('bg-transparent', 'bg-gray-900');
                             navbar.classList.add('bg-white');
 
                             navbarTitle.classList.remove('text-white');
-                            navbarTitle.classList.add('text-[#062749]');
+                            navbarTitle.classList.add('text-secondary');
+
+                            navbarMenus.forEach(item => {
+                                item.classList.remove('text-white');
+                                item.classList.add('text-secondary');
+                            });
 
                             navLinks.forEach(link => {
                                 link.classList.remove('text-white');
-                                link.classList.add('text-[#062749]');
+                                link.classList.add('text-secondary');
                             });
                         }
                     }
@@ -480,6 +512,237 @@
                 document.addEventListener('visibilitychange', () => {
                     carousel.style.animationPlayState = document.hidden ? 'paused' : 'running';
                 });
+            });
+        </script>
+
+        <!-- #achievement-carousel -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                class AchievementCarousel {
+                    constructor(element) {
+                        this.element = element;
+                        this.currentSlide = 0;
+                        this.autoPlayDuration = parseInt(element.getAttribute('data-duration')) || 4000;
+                        this.autoPlayInterval = null;
+                        this.progressInterval = null;
+                        this.progressWidth = 0;
+                        this.isMobile = window.innerWidth < 1024;
+
+                        // Set elements berdasarkan screen size
+                        this.updateResponsiveElements();
+
+                        this.progressBar = element.querySelector('.achievement-progress-bar');
+
+                        this.init();
+
+                        // Listen for resize events
+                        window.addEventListener('resize', () => {
+                            this.handleResize();
+                        });
+                    }
+
+                    updateResponsiveElements() {
+                        this.isMobile = window.innerWidth < 1024; // lg breakpoint
+
+                        if (this.isMobile) {
+                            // Mobile: 1 card per slide
+                            this.totalSlides = parseInt(this.element.getAttribute('data-total-slides-mobile')) || 1;
+                            this.carouselTrack = this.element.querySelector('.achievement-carousel-track-mobile');
+                            this.indicators = this.element.querySelectorAll('.achievement-indicator-mobile');
+                        } else {
+                            // Desktop: 5 cards per slide
+                            this.totalSlides = parseInt(this.element.getAttribute('data-total-slides-desktop')) ||
+                                1;
+                            this.carouselTrack = this.element.querySelector('.achievement-carousel-track-desktop');
+                            this.indicators = this.element.querySelectorAll('.achievement-indicator-desktop');
+                        }
+                    }
+
+                    handleResize() {
+                        const wasMobile = this.isMobile;
+                        const isMobile = window.innerWidth < 1024;
+
+                        // Jika ada perubahan dari mobile ke desktop atau sebaliknya
+                        if (wasMobile !== isMobile) {
+                            this.stopAutoPlay();
+                            this.currentSlide = 0;
+                            this.updateResponsiveElements();
+                            this.updateCarousel();
+                            this.bindEvents(); // Re-bind events untuk indicators baru
+                            this.startAutoPlay();
+                        }
+                    }
+
+                    init() {
+                        this.bindEvents();
+                        this.startAutoPlay();
+                        this.updateCarousel();
+                    }
+
+                    bindEvents() {
+                        // Remove previous event listeners jika ada
+                        this.indicators.forEach(indicator => {
+                            indicator.replaceWith(indicator.cloneNode(true));
+                        });
+
+                        // Update indicators reference setelah clone
+                        if (this.isMobile) {
+                            this.indicators = this.element.querySelectorAll('.achievement-indicator-mobile');
+                        } else {
+                            this.indicators = this.element.querySelectorAll('.achievement-indicator-desktop');
+                        }
+
+                        // Bind new event listeners
+                        this.indicators.forEach((indicator, index) => {
+                            indicator.addEventListener('click', () => {
+                                this.goToSlide(index);
+                            });
+                        });
+
+                        // Pause on hover
+                        this.element.addEventListener('mouseenter', () => {
+                            this.stopAutoPlay();
+                        });
+
+                        this.element.addEventListener('mouseleave', () => {
+                            this.startAutoPlay();
+                        });
+
+                        // Touch/Swipe support
+                        let startX = 0;
+                        let startY = 0;
+
+                        this.element.addEventListener('touchstart', (e) => {
+                            startX = e.changedTouches[0].pageX;
+                            startY = e.changedTouches[0].pageY;
+                        });
+
+                        this.element.addEventListener('touchmove', (e) => {
+                            e.preventDefault();
+                        });
+
+                        this.element.addEventListener('touchend', (e) => {
+                            const distX = e.changedTouches[0].pageX - startX;
+                            const distY = e.changedTouches[0].pageY - startY;
+
+                            if (Math.abs(distX) > 50 && Math.abs(distX) > Math.abs(distY)) {
+                                if (distX > 0) {
+                                    this.prevSlide();
+                                } else {
+                                    this.nextSlide();
+                                }
+                            }
+                        });
+                    }
+
+                    startAutoPlay() {
+                        this.progressWidth = 0;
+
+                        // Progress bar animation
+                        if (this.progressBar) {
+                            this.progressInterval = setInterval(() => {
+                                this.progressWidth += (100 / (this.autoPlayDuration / 100));
+                                if (this.progressWidth >= 100) {
+                                    this.progressWidth = 0;
+                                }
+                                this.progressBar.style.width = `${this.progressWidth}%`;
+                            }, 100);
+                        }
+
+                        // Auto slide change
+                        this.autoPlayInterval = setInterval(() => {
+                            this.nextSlide();
+                        }, this.autoPlayDuration);
+                    }
+
+                    stopAutoPlay() {
+                        if (this.autoPlayInterval) {
+                            clearInterval(this.autoPlayInterval);
+                            this.autoPlayInterval = null;
+                        }
+                        if (this.progressInterval) {
+                            clearInterval(this.progressInterval);
+                            this.progressInterval = null;
+                        }
+                    }
+
+                    nextSlide() {
+                        this.currentSlide = (this.currentSlide + 1) % this.totalSlides;
+                        this.progressWidth = 0;
+                        this.updateCarousel();
+                    }
+
+                    prevSlide() {
+                        this.currentSlide = this.currentSlide === 0 ? this.totalSlides - 1 : this.currentSlide - 1;
+                        this.progressWidth = 0;
+                        this.updateCarousel();
+                    }
+
+                    goToSlide(index) {
+                        this.currentSlide = index;
+                        this.stopAutoPlay();
+                        this.progressWidth = 0;
+                        this.updateCarousel();
+
+                        // Restart autoplay after 3 seconds
+                        setTimeout(() => {
+                            this.startAutoPlay();
+                        }, 3000);
+                    }
+
+                    updateCarousel() {
+                        // Update carousel track position
+                        if (this.carouselTrack) {
+                            this.carouselTrack.style.transform = `translateX(-${this.currentSlide * 100}%)`;
+                        }
+
+                        // Update indicators (hanya yang aktif)
+                        this.indicators.forEach((indicator, index) => {
+                            if (index === this.currentSlide) {
+                                indicator.classList.remove('bg-gray-300', 'hover:bg-gray-400');
+                                indicator.classList.add('bg-secondary', 'shadow-md', 'scale-110');
+                            } else {
+                                indicator.classList.remove('bg-secondary', 'shadow-md', 'scale-110');
+                                indicator.classList.add('bg-gray-300', 'hover:bg-gray-400');
+                            }
+                        });
+
+                        // Update progress bar
+                        if (this.progressBar) {
+                            this.progressBar.style.width = `${this.progressWidth}%`;
+                        }
+                    }
+
+                    // Public methods for external control
+                    pause() {
+                        this.stopAutoPlay();
+                    }
+
+                    resume() {
+                        this.startAutoPlay();
+                    }
+
+                    destroy() {
+                        this.stopAutoPlay();
+                        // Remove event listeners if needed
+                        window.removeEventListener('resize', this.handleResize);
+                    }
+                }
+
+                // Initialize all achievement carousels
+                function initAchievementCarousels() {
+                    const carousels = document.querySelectorAll('.achievement-carousel');
+                    carousels.forEach(carousel => {
+                        new AchievementCarousel(carousel);
+                    });
+                }
+
+                // Initialize on DOM ready
+                initAchievementCarousels();
+
+                // Make it available globally if needed
+                window.AchievementCarousel = AchievementCarousel;
+                window.initAchievementCarousels = initAchievementCarousels;
             });
         </script>
 

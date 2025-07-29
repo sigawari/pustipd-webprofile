@@ -59,15 +59,15 @@
 
     <section id="tutorial" class="py-20 bg-primary">
         <div class="container mx-auto px-6 md:px-12">
-            <!-- Heading -->
-            <div class="text-center mb-10 group max-w-3xl mx-auto">
-                <h2 class="text-3xl md:text-4xl font-bold text-secondary relative inline-block underline-animate mb-3">
+            <!-- Header Section -->
+            <div class="text-center mb-10 group">
+                <h2 class="text-3xl md:text-4xl font-bold text-secondary m-6 relative inline-block underline-animate">
                     Tutorial
                 </h2>
-                <p class="text-center text-secondary mb-8 pt-3 max-w-x">
+                <h3 class="text-lg text-secondary max-w-2xl mx-auto pt-2">
                     Beberapa tutorial terkait penggunaan teknologi informasi di kawasan civitas akademika UIN Raden
                     Fatah Palembang
-                </p>
+                </h3>
             </div>
 
             <!-- Search Form -->

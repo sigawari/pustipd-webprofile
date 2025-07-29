@@ -3,38 +3,213 @@
    Sudah diperbaiki dan dirapikan
    ============================ */
 
-/* Home Page */
-/* Card Animation For Division */
+/* Home Page - Card Animation (tetap sama) */
 .card-animated {
     position: relative;
-    overflow: hidden;
     z-index: 0;
     min-height: 200px;
+    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    border-radius: 0.5rem;
 }
 
 .card-animated::before {
     content: "";
     position: absolute;
-    inset: 0;
-    background-color: #062749; /* Tailwind blue-500 */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
     transform: translateY(100%);
     transition: transform 0.5s ease-in-out;
     z-index: -1;
+    background-color: #f3ba00 !important;
+    border-radius: inherit;
 }
 
+.group {
+    border-radius: 0.5rem !important;
+    position: relative;
+    isolation: isolate;
+}
 .group:hover .card-animated::before {
     transform: translateY(0%);
+    background-color: #f3ba00;
 }
 
 .card-text {
+    position: relative;
+    z-index: 1;
     transition: color 0.3s ease;
+    color: #062749;
 }
 
-.group:hover .card-text {
-    color: white !important;
+/* Achievement Carousel - Container */
+.achievement-carousel {
+    width: 100%;
+    max-width: 100vw;
+    position: relative;
+}
+
+.achievement-carousel-track-desktop,
+.achievement-carousel-track-mobile {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    width: 100%;
+}
+
+.achievement-carousel-track-desktop > *,
+.achievement-carousel-track-mobile > * {
+    width: 100%;
+    flex-shrink: 0;
+    box-sizing: border-box;
+}
+
+/* Card Wrapper */
+.achievement-card-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.achievement-card-wrapper .group {
+    height: 100%;
+    border-radius: 0.5rem !important;
+    overflow: hidden !important;
+    position: relative;
+}
+
+/* Mobile Styles (default) - 1 card */
+@media (max-width: 1023px) {
+    .achievement-card-wrapper {
+        min-height: 200px;
+        max-width: 320px;
+        margin: 0 auto;
+    }
+
+    .achievement-carousel {
+        padding: 0 1rem;
+    }
+
+    .card-animated {
+        min-height: 180px;
+        padding: 1.5rem;
+    }
+
+    /* Mobile track specific */
+    .achievement-carousel-track-mobile {
+        display: flex !important;
+    }
+
+    .achievement-carousel-track-desktop {
+        display: none !important;
+    }
+}
+
+/* Desktop Styles - 5 cards */
+@media (min-width: 1024px) {
+    .achievement-card-wrapper {
+        min-height: 250px;
+        flex-shrink: 0;
+    }
+
+    /* Desktop track specific */
+    .achievement-carousel-track-desktop {
+        display: flex !important;
+    }
+
+    .achievement-carousel-track-mobile {
+        display: none !important;
+    }
+
+    /* Desktop grid - 5 columns */
+    .achievement-carousel-track-desktop .grid {
+        display: grid !important;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 1.5rem;
+        width: 100%;
+    }
+
+    .achievement-carousel-track-desktop .achievement-card-wrapper {
+        width: 100%;
+        min-width: 200px;
+        max-width: 250px;
+    }
+}
+
+/* Fix untuk rounded corner pada semua ukuran */
+.achievement-card-wrapper .group,
+.achievement-card-wrapper .card-animated,
+.achievement-card-wrapper .card-animated::before {
+    border-radius: 0.5rem !important;
+}
+
+/* Prevent horizontal scroll */
+.achievement-carousel-track-desktop,
+.achievement-carousel-track-mobile {
+    padding: 0;
+    margin: 0;
+}
+
+/* Indicators styling */
+.achievement-indicator-desktop,
+.achievement-indicator-mobile {
+    cursor: pointer;
+    border: none;
+    color: white;
+}
+
+.achievement-indicator-desktop:focus,
+.achievement-indicator-mobile:focus {
+    outline: none;
+}
+
+/* Progress bar container */
+.achievement-progress-bar {
+    transition: width 0.1s ease-linear;
+    height: 100%;
+    border-radius: inherit;
+}
+
+/* Ensure proper positioning */
+.achievement-carousel .relative {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+
+/* Fix untuk mobile center alignment */
+@media (max-width: 1023px) {
+    .achievement-carousel-track-mobile .flex {
+        justify-content: center;
+        align-items: center;
+        padding: 1rem 0;
+    }
+}
+
+/* Additional fixes untuk smooth transition */
+.achievement-carousel-track-desktop *,
+.achievement-carousel-track-mobile * {
+    box-sizing: border-box;
+}
+
+/* Hover effects */
+.achievement-card-wrapper:hover .group {
+    transform: translateY(-8px);
+    transition: transform 0.3s ease;
+}
+
+.achievement-card-wrapper .group {
+    transition: transform 0.3s ease;
+}
+
+.group {
+    height: 100%;
 }
 
 /* Underline Animate (Global, satu deklarasi saja) */
@@ -98,15 +273,16 @@
 .gallery-popup-bg {
     position: fixed;
     inset: 0;
+}
+
+.gallery-popup-bg {
+    position: fixed;
+    inset: 0;
     background: rgba(0, 0, 0, 0.75);
     display: none;
     justify-content: center;
     align-items: center;
-    z-index: 100;
-}
-
-.gallery-popup-bg.active {
-    display: flex;
+    z-index: 1050; /* Ensure it is above other elements */
 }
 
 .gallery-popup-box {

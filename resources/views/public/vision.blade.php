@@ -1,9 +1,9 @@
 <x-public.layouts title="{{ $title }}" description="{{ $description }}" keywords="{{ $keywords }}">
     <x-slot:title>{{ $title }}</x-slot:title>
     <section id="visi-misi" class="py-20 bg-primary">
-        <div class="container mx-auto px-6 md:px-12">
+        <div class="container mx-auto px-12 md:px-12">
             <!-- Heading -->
-            <div class="text-center mb-10 group max-w-3xl mx-auto">
+            <div class="text-center mb-10 pt-14 pb-2 group max-w-3xl mx-auto">
                 <h2 class="text-3xl md:text-4xl font-bold text-secondary relative inline-block underline-animate mb-3">
                     Visi Misi
                 </h2>
