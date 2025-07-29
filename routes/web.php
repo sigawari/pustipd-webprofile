@@ -45,6 +45,7 @@ Route::prefix('/')->group(function () {
     Route::get('/pengumuman', [PublicsController::class, 'index'])->name('announcements');
     Route::get('/info-publik', [PublicsController::class, 'index'])->name('info-publik');
     Route::get('/tutorial', [PublicsController::class, 'index'])->name('tutorial');
+    Route::get('/sop', [PublicsController::class, 'index'])->name('sop');
     Route::get('/faq', [PublicsController::class, 'index'])->name('faq');
     
     // Add more public routes here
