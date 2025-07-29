@@ -15,7 +15,7 @@
         <!-- Font -->
 
         <!-- CSS -->
-        <!-- <link rel="stylesheet" href="{{asset('assets/css/style.css')}}"> -->
+        <!-- <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}"> -->
 
         <!-- JS -->
         <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -33,6 +33,7 @@
             <main class="flex-grow">
                 <x-admin.header></x-admin.header>
                 {{ $slot }}
+                <x-admin.sidebar></x-admin.sidebar>
             </main>
             <!-- Footer -->
             <x-admin.footer></x-admin.footer>

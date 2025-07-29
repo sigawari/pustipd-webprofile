@@ -148,8 +148,11 @@
         <div class="container mx-auto px-6">
             <div class="text-center mb-10 group">
                 <h2 class="text-3xl md:text-4xl font-bold text-secondary mb-4 relative inline-block underline-animate">
-                    Pencapaian PUSTIPD
+                    Pencapaian
                 </h2>
+                <h3 class="text-lg text-secondary max-w-2xl mx-auto pt-2">
+                    Beberapa pencapaian UIN Raden Fatah Palembang dan PUSTIPD UIN Raden Fatah Palembang
+                </h3>
             </div>
 
             @php

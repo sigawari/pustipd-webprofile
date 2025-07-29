@@ -236,6 +236,276 @@
             });
         </script>
 
+        <!-- Navbar Scroll Color Change + Clock + Mobile Topbar Hide -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // ===============================
+                // Mobile Detection Function
+                // ===============================
+                function isMobile() {
+                    return window.innerWidth <= 768; // Tailwind md breakpoint
+                }
+
+                // Alternative mobile detection (lebih comprehensive)
+                function isMobileDevice() {
+                    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+                        window.innerWidth <= 768;
+                }
+
+                // ===============================
+                // Topbar Mobile Hide Function
+                // ===============================
+                function handleTopbarVisibility() {
+                    const topbar = document.getElementById('topbar');
+                    const navbar = document.getElementById('navbar');
+
+                    if (isMobile() || isMobileDevice()) {
+                        // Di mobile: selalu sembunyikan topbar
+                        topbar.classList.add('hidden');
+
+                        // Adjust navbar position jika diperlukan
+                        navbar.style.top = '0px';
+                    } else {
+                        // Di desktop: tampilkan topbar sesuai logika scroll
+                        const isHome = window.location.pathname === '/';
+
+                        if (isHome && window.scrollY <= 50) {
+                            topbar.classList.remove('hidden');
+                            navbar.style.top = ''; // Reset ke default
+                        } else if (!isHome) {
+                            topbar.classList.add('hidden');
+                            navbar.style.top = '0px';
+                        }
+                    }
+                }
+
+                // ===============================
+                // Navbar Color Change on Scroll (Modified)
+                // ===============================
+                const navbar = document.getElementById('navbar');
+                const navbarTitle = document.getElementById('navbar-title');
+                const navLinks = navbar.querySelectorAll('a');
+                const topbar = document.getElementById('topbar');
+                const isHome = window.location.pathname === '/';
+                const navbarMenus = document.querySelectorAll('.navbar-menu');
+
+                // Initial setup
+                handleTopbarVisibility();
+
+                if (!isHome) {
+                    // Jika bukan home, navbar langsung putih + text biru
+                    navbar.classList.remove('bg-transparent');
+                    navbar.classList.add('bg-white');
+
+                    navbarTitle.classList.remove('text-white');
+                    navbarTitle.classList.add('text-[#062749]');
+
+                    navbarMenus.forEach(item => {
+                        item.classList.remove('text-white', 'text-[#062749]');
+                        item.classList.add('text-secondary');
+                    });
+
+                    navLinks.forEach(link => {
+                        link.classList.remove('text-white');
+                        link.classList.add('text-[#062749]');
+                    });
+                }
+
+                // Scroll event listener (modified)
+                window.addEventListener('scroll', function() {
+                    const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+                    if (window.scrollY > 50) {
+                        // Desktop: sembunyikan topbar saat scroll
+                        if (!isMobile() && !isMobileDevice()) {
+                            topbar.classList.add('hidden');
+                        }
+
+                        if (!isHome) {
+                            // PAGE LAIN
+                            navbar.classList.remove('bg-transparent', 'bg-gray-900');
+                            navbar.classList.add('bg-white');
+
+                            navbarTitle.classList.remove('text-white');
+                            navbarTitle.classList.add('text-secondary');
+
+                            navbarMenus.forEach(item => {
+                                item.classList.remove('text-white', 'text-[#062749]');
+                                item.classList.add('text-secondary');
+                            });
+
+                            navLinks.forEach(link => {
+                                link.classList.remove('text-white');
+                                link.classList.add('text-secondary');
+                            });
+                        } else {
+                            // HOME
+                            navbar.classList.remove('bg-transparent');
+                            navbar.classList.add(isDark ? 'bg-gray-900' : 'bg-white');
+
+                            if (isDark) {
+                                navbarTitle.classList.remove('text-[#062749]', 'text-secondary');
+                                navbarTitle.classList.add('text-white');
+
+                                navbarMenus.forEach(item => {
+                                    item.classList.remove('text-[#062749]', 'text-secondary');
+                                    item.classList.add('text-white');
+                                });
+
+                                navLinks.forEach(link => {
+                                    link.classList.remove('text-[#062749]', 'text-secondary');
+                                    link.classList.add('text-white');
+                                });
+                            } else {
+                                navbarTitle.classList.remove('text-white');
+                                navbarTitle.classList.add('text-secondary');
+
+                                navbarMenus.forEach(item => {
+                                    item.classList.remove('text-white');
+                                    item.classList.add('text-secondary');
+                                });
+
+                                navLinks.forEach(link => {
+                                    link.classList.remove('text-white');
+                                    link.classList.add('text-secondary');
+                                });
+                            }
+                        }
+                    } else {
+                        if (isHome) {
+                            // HOME SCROLL UP - hanya tampilkan topbar di desktop
+                            if (!isMobile() && !isMobileDevice()) {
+                                topbar.classList.remove('hidden');
+                            }
+
+                            navbar.classList.remove('bg-white', 'bg-gray-900');
+                            navbar.classList.add('bg-transparent');
+
+                            navbarTitle.classList.remove('text-[#062749]', 'text-secondary');
+                            navbarTitle.classList.add('text-white');
+
+                            navbarMenus.forEach(item => {
+                                item.classList.remove('text-[#062749]', 'text-secondary');
+                                item.classList.add('text-white');
+                            });
+
+                            navLinks.forEach(link => {
+                                link.classList.remove('text-[#062749]', 'text-secondary');
+                                link.classList.add('text-white');
+                            });
+                        } else {
+                            // PAGE LAIN SCROLL UP → tetap putih + text secondary
+                            // Topbar tetap hidden di mobile, handle di desktop
+                            handleTopbarVisibility();
+
+                            navbar.classList.remove('bg-transparent', 'bg-gray-900');
+                            navbar.classList.add('bg-white');
+
+                            navbarTitle.classList.remove('text-white');
+                            navbarTitle.classList.add('text-secondary');
+
+                            navbarMenus.forEach(item => {
+                                item.classList.remove('text-white');
+                                item.classList.add('text-secondary');
+                            });
+
+                            navLinks.forEach(link => {
+                                link.classList.remove('text-white');
+                                link.classList.add('text-secondary');
+                            });
+                        }
+                    }
+                });
+
+                // ===============================
+                // Window Resize Handler
+                // ===============================
+                window.addEventListener('resize', function() {
+                    // Re-evaluate topbar visibility saat window resize
+                    handleTopbarVisibility();
+                });
+
+                // ===============================
+                // Orientation Change Handler (Mobile)
+                // ===============================
+                window.addEventListener('orientationchange', function() {
+                    setTimeout(function() {
+                        handleTopbarVisibility();
+                    }, 100); // Small delay untuk memastikan layout sudah update
+                });
+
+                // ===============================
+                // Update Clock & Open Status
+                // ===============================
+                const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+                const months = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
+
+                function updateClock() {
+                    const now = new Date();
+                    const jakarta = new Date(now.toLocaleString("en-US", {
+                        timeZone: "Asia/Jakarta"
+                    }));
+
+                    const dayIdx = jakarta.getDay();
+                    const hr = jakarta.getHours();
+                    const min = jakarta.getMinutes();
+                    const isOpen = dayIdx >= 1 && dayIdx <= 5 && hr >= 8 && (hr < 16 || (hr === 16 && min === 0));
+
+                    // Update clock hanya jika elemen ada dan topbar visible
+                    const openStatusEl = document.getElementById("open-status");
+                    const clockEl = document.getElementById("clock");
+
+                    if (openStatusEl && clockEl) {
+                        openStatusEl.textContent = isOpen ? "BUKA :" : "TUTUP :";
+                        clockEl.textContent =
+                            ` ${days[dayIdx]}, ${jakarta.getDate().toString().padStart(2, "0")} ${months[jakarta.getMonth()]} ${jakarta.getFullYear()} (${hr.toString().padStart(2, "0")}.${min.toString().padStart(2, "0")} WIB)`;
+                    }
+                }
+
+                updateClock();
+                setInterval(updateClock, 60000);
+
+                // ===============================
+                // Gallery Cards Click Handler
+                // ===============================
+                const galleryCards = document.querySelectorAll('.gallery-card');
+                const popup = document.getElementById('gallery-popup');
+                const popupImg = document.getElementById('popup-img');
+                const popupCaption = document.getElementById('popup-caption');
+                const closeBtn = document.getElementById('popup-close');
+
+                if (galleryCards.length > 0 && popup) {
+                    galleryCards.forEach(card => {
+                        card.addEventListener('click', function() {
+                            const idx = Number(card.dataset.idx);
+                            if (typeof gallery !== 'undefined' && gallery[idx]) {
+                                popupImg.src = gallery[idx].image;
+                                popupCaption.textContent = gallery[idx].caption;
+                                popup.classList.add('active');
+                                popup.focus();
+                            }
+                        });
+                    });
+
+                    if (closeBtn) {
+                        closeBtn.addEventListener('click', function() {
+                            popup.classList.remove('active');
+                        });
+                    }
+
+                    popup.addEventListener('click', function(e) {
+                        if (e.target === popup) popup.classList.remove('active');
+                    });
+
+                    window.addEventListener('keydown', function(e) {
+                        if (popup.classList.contains('active') && e.key === 'Escape') {
+                            popup.classList.remove('active');
+                        }
+                    });
+                }
+            });
+        </script>
+
         <!-- Universal Carousel -->
         <script>
             document.addEventListener('DOMContentLoaded', function() {

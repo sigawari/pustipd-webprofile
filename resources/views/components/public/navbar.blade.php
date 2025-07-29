@@ -139,12 +139,6 @@
                                         Pengumuman
                                     </button>
                                 </a>
-                                <a href="/info-publik">
-                                    <button
-                                        class="block w-full px-5 py-2 text-white text-justify hover:bg-gray-700 transition">
-                                        Informasi Publik
-                                    </button>
-                                </a>
                                 <a href="/tutorial">
                                     <button
                                         class="block w-full px-5 py-2 text-white text-justify hover:bg-gray-700 transition">
@@ -155,12 +149,21 @@
                         </div>
 
                         <div>
+                            <a href="/info-publik">
+                                <button class="text-white  transition focus:outline-none">
+                                    <h3 class="navbar-menu hover:text-custom-blue">Dokumen</h3>
+                                </button>
+                            </a>
+                        </div>
+
+                        {{-- Di komen dulu kita fokus sama yang sudah ada --}}
+                        {{-- <div>
                             <a href="/pendaftaran">
                                 <button class="text-white  transition focus:outline-none">
                                     <h3 class="navbar-menu hover:text-custom-blue">Pendaftaran</h3>
                                 </button>
                             </a>
-                        </div>
+                        </div> --}}
 
                         <div>
                             <a href="/faq">
@@ -206,9 +209,9 @@
                 </svg>
             </button>
             <div id="dropdownTentangMenu" class="hidden flex-col space-y-1 mt-1 pl-4">
-                <a href="/berita" class="block text-secondary hover:text-custom-blue">Berita</a>
-                <a href="/pengumuman" class="block text-secondary hover:text-custom-blue">Pengumuman</a>
-                <a href="/info-publik" class="block text-secondary hover:text-custom-blue">Informasi Publik</a>
+                <a href="/tentang" class="block text-secondary hover:text-custom-blue">Tentang PUSTIPD</a>
+                <a href="/visi" class="block text-secondary hover:text-custom-blue">Visi Misi</a>
+                <a href="/struktur" class="block text-secondary hover:text-custom-blue">Struktur Organisasi</a>
             </div>
         </div>
 
@@ -231,17 +234,22 @@
             <div id="dropdownInformasiMenu" class="hidden flex-col space-y-1 mt-1 pl-4">
                 <a href="/berita" class="block text-secondary hover:text-custom-blue">Berita</a>
                 <a href="/pengumuman" class="block text-secondary hover:text-custom-blue">Pengumuman</a>
-                <a href="/info-publik" class="block text-secondary hover:text-custom-blue">Informasi Publik</a>
                 <a href="/tutorial" class="block text-secondary hover:text-custom-blue">Tutorial</a>
             </div>
         </div>
 
         <div class="relative">
+            <a href="/info-publik"
+                class="block px-0 py-2 text-left focus:outline-none hover:text-custom-blue transition">
+                <span>Dokumen</span>
+            </a>
+        </div>
+        {{-- <div class="relative">
             <a href="/pendaftaran"
                 class="block px-0 py-2 text-left focus:outline-none hover:text-custom-blue transition">
                 <span>Pendaftaran</span>
             </a>
-        </div>
+        </div> --}}
 
         <div class="relative">
             <a href="/faq" class="block px-0 py-2 text-left focus:outline-none hover:text-custom-blue transition">

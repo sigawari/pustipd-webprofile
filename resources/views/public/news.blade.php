@@ -1,5 +1,5 @@
 @php
-    // Dummy data berita
+    // Dummy data berita - dikurangi menjadi 6 item untuk tampilan yang lebih rapi
     $newsList = [
         [
             'title' => 'Peluncuran Sistem Informasi Terbaru PUSTIPD',
@@ -53,58 +53,6 @@
             'link' => '/berita/pendampingan-umkm-digital',
             'image' => asset('assets/img/placeholder/dummy.png'),
         ],
-        [
-            'title' => 'Peluncuran Sistem Informasi Terbaru PUSTIPD',
-            'excerpt' =>
-                'Sistem informasi baru telah diluncurkan untuk meningkatkan pelayanan digital dan efisiensi operasional. Fitur-fitur terbaru mencakup dashboard interaktif dan analytics real-time.',
-            'date' => '23 Juli 2025',
-            'category' => 'Teknologi',
-            'link' => '/berita/peluncuran-sistem-informasi',
-            'image' => asset('assets/img/placeholder/dummy.png'),
-        ],
-        [
-            'title' => 'Workshop Digital Transformation untuk UMKM',
-            'excerpt' =>
-                'Program pelatihan komprehensif untuk meningkatkan kemampuan digital UMKM di era modern. Peserta akan mendapat sertifikat dan pendampingan berkelanjutan.',
-            'date' => '20 Juli 2025',
-            'category' => 'Pelatihan',
-            'link' => '/berita/workshop-digital-transformation',
-            'image' => asset('assets/img/placeholder/dummy.png'),
-        ],
-        [
-            'title' => 'Kerjasama Strategis dengan Universitas Terkemuka',
-            'excerpt' =>
-                'Penandatanganan MoU dengan beberapa universitas untuk pengembangan riset teknologi informasi dan transfer knowledge kepada mahasiswa.',
-            'date' => '18 Juli 2025',
-            'category' => 'Kerjasama',
-            'link' => '/berita/kerjasama-universitas',
-            'image' => asset('assets/img/placeholder/dummy.png'),
-        ],
-        [
-            'title' => 'Pengembangan Aplikasi Mobile PUSTIPD',
-            'excerpt' =>
-                'Tim developer kami sedang mengerjakan aplikasi mobile terbaru untuk kemudahan akses layanan online.',
-            'date' => '17 Juli 2025',
-            'category' => 'Teknologi',
-            'link' => '/berita/pengembangan-aplikasi-mobile',
-            'image' => asset('assets/img/placeholder/dummy.png'),
-        ],
-        [
-            'title' => 'Seminar Nasional Teknologi Informasi',
-            'excerpt' => 'Rangkaian seminar nasional menghadirkan pembicara inspiratif dari industri IT dan akademisi.',
-            'date' => '15 Juli 2025',
-            'category' => 'Seminar',
-            'link' => '/berita/seminar-nasional-teknologi',
-            'image' => asset('assets/img/placeholder/dummy.png'),
-        ],
-        [
-            'title' => 'Pendampingan UMKM Digital',
-            'excerpt' => 'Program pendampingan intensif untuk membantu UMKM bertransformasi digital.',
-            'date' => '10 Juli 2025',
-            'category' => 'Pelatihan',
-            'link' => '/berita/pendampingan-umkm-digital',
-            'image' => asset('assets/img/placeholder/dummy.png'),
-        ],
     ];
 @endphp
 
@@ -112,22 +60,23 @@
     <x-slot:title>{{ $title }}</x-slot:title>
 
     <!-- Berita & Informasi Section -->
-    <section id="berita" class="py-20 mt-8 bg-primary">
-        <div class="container mx-auto px-12">
+    <section id="berita" class="py-24 bg-primary h-full">
+        <div class="container mx-auto px-4 md:px-12">
             <!-- Header Section -->
-            <div class="text-center mb-10 group">
-                <h2 class="text-3xl md:text-4xl font-bold text-secondary mb-4 relative inline-block underline-animate">
+            <div class="text-center mb-8 md:mb-10 group">
+                <h2
+                    class="text-2xl md:text-3xl lg:text-4xl font-bold text-secondary mb-4 relative inline-block underline-animate">
                     Berita PUSTIPD
                 </h2>
-                <h3 class="text-lg text-secondary max-w-2xl mx-auto pt-2">
+                <h3 class="text-base md:text-lg text-secondary max-w-2xl mx-auto pt-2">
                     Berita terbaru dari kami
                 </h3>
             </div>
 
             <!-- Content Container -->
-            <div class="max-w-8xl mx-auto">
+            <div class="max-w-6xl mx-auto">
                 <!-- Search Form -->
-                <form action="#" method="GET" class="relative w-full max-w-md mx-auto mb-6">
+                <form action="#" method="GET" class="relative w-full max-w-md mx-auto mb-8">
                     <input type="text" name="search" placeholder="Cari Berita di sini...."
                         class="w-full rounded-xl pl-12 pr-4 py-2 sm:py-3 
                            text-secondary placeholder-gray-400
@@ -141,8 +90,9 @@
                         </svg>
                     </button>
                 </form>
-                <!-- Berita Cards Grid -->
-                <div class="grid grid-cols-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 news-grid">
+
+                <!-- Berita Cards Grid - Responsif: 1 kolom mobile, 2 kolom tablet, 3 kolom desktop -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 news-grid">
                     @foreach ($newsList as $news)
                         <x-newspage-card title="{{ $news['title'] }}" excerpt="{{ $news['excerpt'] }}"
                             date="{{ $news['date'] }}" category="{{ $news['category'] }}" link="{{ $news['link'] }}"
@@ -151,7 +101,7 @@
                 </div>
 
                 <!-- Pagination -->
-                <div class="flex justify-center items-center gap-2 mt-7 select-none">
+                <div class="flex justify-center items-center gap-2 mt-8 md:mt-12 select-none">
                     <!-- Tombol Previous -->
                     <button
                         class="flex items-center justify-center w-9 h-9 rounded bg-white text-custom-blue hover:bg-custom-blue hover:text-white transition focus:outline-none"

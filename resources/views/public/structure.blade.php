@@ -119,10 +119,11 @@
     <style>
         .struktur-grid {
             display: grid;
+            align-items: center;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 2rem;
             margin-bottom: 3rem;
-            max-width: 800px;
+            max-width: 200px;
             margin-left: auto;
             margin-right: auto;
         }
@@ -130,7 +131,7 @@
         .struktur-card {
             background: white;
             border-radius: 10px;
-            padding: 2rem;
+            padding: 1rem;
             text-align: center;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             transition: all 0.3s ease;

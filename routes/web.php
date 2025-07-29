@@ -38,12 +38,13 @@ Route::prefix('/')->group(function () {
     Route::get('/struktur', [PublicsController::class, 'index'])->name('structure');
     Route::get('/layanan', [PublicsController::class, 'index'])->name('services');
     Route::get('/berita/contohberita', [PublicsController::class, 'index'])->name('contohberita');
+    Route::get('/pengumuman/contohpengumuman', [PublicsController::class, 'index'])->name('contohpengumuman');
+    Route::get('/tutorial/contohtutorial', [PublicsController::class, 'index'])->name('contohtutorial');
     // PublicsController routes
     Route::get('/berita', [PublicsController::class, 'index'])->name('news');
     Route::get('/pengumuman', [PublicsController::class, 'index'])->name('announcements');
     Route::get('/info-publik', [PublicsController::class, 'index'])->name('info-publik');
     Route::get('/tutorial', [PublicsController::class, 'index'])->name('tutorial');
-    Route::get('/sop', [PublicsController::class, 'index'])->name('sop');
     Route::get('/faq', [PublicsController::class, 'index'])->name('faq');
     
     // Add more public routes here

@@ -144,7 +144,7 @@
     use Illuminate\Support\Collection;
     use Illuminate\Pagination\Paginator;
 
-    $perPage = 12;
+    $perPage = 8;
     $currentPage = Paginator::resolveCurrentPage() ?: 1;
     $currentPageItems = $announcements->slice(($currentPage - 1) * $perPage, $perPage)->values();
     $paginatedAnnouncements = new LengthAwarePaginator(
@@ -188,7 +188,7 @@
                 </button>
             </form>
             <!-- Pengumuman Cards Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 announcement-grid">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 announcement-grid">
                 @foreach ($paginatedAnnouncements as $announcement)
                     <x-announcement-card title="{{ $announcement->title }}" excerpt="{{ $announcement->excerpt }}"
                         date="{{ $announcement->date->format('d F Y') }}" category="{{ $announcement->category }}"

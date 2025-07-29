@@ -61,7 +61,7 @@ class PublicsController extends Controller
             $description = 'Semua pengumuman terbaru PUSTIPD UIN Raden Fatah Palembang';
             $keywords = 'pengumuman, announcements, pustipd';
             
-            $announcements = Announcement::orderBy('date', 'desc')->paginate(12);
+            $announcements = Announcement::orderBy('date', 'desc')->paginate(8);
             
             return view('public.announcements', compact('title', 'description', 'keywords', 'announcements'));
         }
@@ -71,13 +71,6 @@ class PublicsController extends Controller
             $keywords = 'faq, pertanyaan, pustipd';
 
             return view('public.faq', compact('title', 'description', 'keywords'));
-        }
-        if ($request->is('sop')) {
-            $title = 'SOP';
-            $description = 'SOP';
-            $keywords = 'faq, pertanyaan, pustipd';
-
-            return view('public.sop', compact('title', 'description', 'keywords'));
         }
         if ($request->is('tutorial')) {
             $title = 'tutorial';
@@ -92,6 +85,20 @@ class PublicsController extends Controller
             $keywords = 'berita, cara, pustipd';
 
             return view('public.contohberita', compact('title', 'description', 'keywords'));
+        }
+        if ($request->is('pengumuman/contohpengumuman')) {
+            $title = 'contohpengumuman';
+            $description = 'Pengumuman terbaru terkait PUSTIPD UIN Raden Fatah Palembang';
+            $keywords = 'pengumuman, terkait, pustipd';
+
+            return view('public.contohpengumuman', compact('title', 'description', 'keywords'));
+        }
+        if ($request->is('tutorial/contohtutorial')) {
+            $title = 'contohtutorial';
+            $description = 'Tutorial teknologi dari PUSTIPD UIN Raden Fatah Palembang';
+            $keywords = 'tutorial, teknik, pustipd';
+
+            return view('public.contohtutorial', compact('title', 'description', 'keywords'));
         }
         if ($request->is('info-publik')) {
             $title = 'info-publik';
