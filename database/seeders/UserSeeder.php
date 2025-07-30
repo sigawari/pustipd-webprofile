@@ -14,12 +14,13 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        User::updateOrCreate([
-            'name' => 'admin',
-            'email' => 'admin.admin@pustipd.radenfatah.ac.id',
-            'password' => Hash::make('pustipd12345'), // Ganti dengan password yang diinginkan
-            'role' => 'admin', // Ganti dengan role yang diinginkan
-            ]
-        );
+        if (!User::where('email', 'admin.admin@pustipd.radenfatah.ac.id')->exists()) {
+            User::create([
+                'name' => 'admin',
+                'email' => 'admin.admin@pustipd.radenfatah.ac.id',
+                'password' => bcrypt('password'),
+                'role' => 'admin',
+            ]);
+        }
     }
 }

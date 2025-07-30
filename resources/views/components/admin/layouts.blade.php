@@ -4,46 +4,72 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>PUSTIPD | Admin</title>
+        <title>@yield('title', 'PUSTIPD | Admin')</title>
+
+        <!-- Vite Assets -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+
         <link id="favicon" rel="shortcut icon" href="{{ asset('assets/img/logo/logo-uin-rfp.png') }}" type="image/x-icon">
 
         <!-- SEO Meta Tags -->
-        <meta name="description" content="deskripsi halaman ini">
-        <meta name="keywords" content="keywords, for, this, page">
+        <meta name="description" content="@yield('description', 'Sistem Manajemen Konten PUSTIPD UIN Raden Fatah Palembang')">
+        <meta name="keywords" content="@yield('keywords', 'PUSTIPD, UIN Raden Fatah, CMS, Admin')">
 
-        <!-- Font -->
-
-        <!-- CSS -->
-        <!-- <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}"> -->
-
-        <!-- JS -->
+        <!-- Alpine.js - Load di head dengan defer -->
         <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
-
+        @stack('styles')
     </head>
 
-    <body>
-        <div class="flex flex-col min-h-screen">
-            {{-- Isi Halaman --}}
-            <x-admin.navbar></x-admin.navbar>
+    <body class="bg-gray-50">
+        <div x-data="{
+            sidebarToggle: localStorage.getItem('sidebarToggle') === 'true' || false,
+            darkMode: localStorage.getItem('darkMode') === 'true' || false
+        }"
+            @toggle-sidebar.window="sidebarToggle = !sidebarToggle; localStorage.setItem('sidebarToggle', sidebarToggle)"
+            x-init="$watch('sidebarToggle', value => {
+                localStorage.setItem('sidebarToggle', value);
+                console.log('Sidebar state:', value ? 'COLLAPSED (Mini)' : 'EXPANDED (Full)');
+            });
+            $watch('darkMode', value => localStorage.setItem('darkMode', value));
+            console.log('Initial sidebar state:', sidebarToggle ? 'COLLAPSED' : 'EXPANDED');" class="flex flex-col min-h-screen">
+
             <!-- Navbar -->
-            <!-- Main -->
-            <main class="flex-grow">
-                <x-admin.header></x-admin.header>
-                {{ $slot }}
-                <x-admin.sidebar></x-admin.sidebar>
-            </main>
-            <!-- Footer -->
-            <x-admin.footer></x-admin.footer>
+            <x-admin.navbar />
+
+            <!-- Sidebar -->
+            <x-admin.sidebar />
+
+            <!-- Main Content Area - PERBAIKAN DI SINI -->
+            <div class="transition-all duration-300 ease-in-out"
+                :class="{
+                    'ml-0 lg:ml-[90px]': sidebarToggle, // Sidebar COLLAPSED (mini) - margin kecil
+                    'ml-0 lg:ml-[290px]': !sidebarToggle // Sidebar EXPANDED (full) - margin besar
+                }">
+
+                <!-- Header -->
+                <x-admin.header />
+
+                <!-- Page Content -->
+                <main class="min-h-screen">
+                    {{ $slot }}
+                </main>
+
+                <!-- Footer -->
+                <x-admin.footer />
+            </div>
+
+            <!-- Mobile Overlay -->
+            <div x-show="sidebarToggle && window.innerWidth < 1024" @click="sidebarToggle = false"
+                class="fixed inset-0 z-25 lg:hidden" style="background-color: rgba(0, 0, 0, 0.15);"
+                x-transition:enter="transition-opacity ease-linear duration-300" x-transition:enter-start="opacity-0"
+                x-transition:enter-end="opacity-100" x-transition:leave="transition-opacity ease-linear duration-300"
+                x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
+            </div>
         </div>
 
-        <!-- =============================== -->
-        <!-- Script Section -->
-        <!-- =============================== -->
-
-
+        <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        @stack('scripts')
     </body>
 
 </html>

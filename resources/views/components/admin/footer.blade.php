@@ -1,5 +1,4 @@
-<footer class="bg-white border-t border-gray-200 mt-auto ml-0 lg:ml-[290px] transition-all duration-300"
-    :class="sidebarToggle ? 'lg:ml-[90px]' : 'lg:ml-[290px]'">
+<footer class="bg-white border-t border-gray-200 mt-auto">
     <div class="px-4 py-4 lg:px-6">
         <!-- Main Footer Content -->
         <div class="flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4">

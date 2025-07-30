@@ -1,32 +1,70 @@
 <?php
 
-// =====================
-// This file is part of the Laravel framework.
-// =====================
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PublicsController;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Middleware\RoleMiddleware;
+use App\Http\Controllers\ManageContentController;
+use App\Http\Controllers\PublicsController;
 
-// =====================
-// Define web routes for the application.
-// =====================
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+*/
 
-// Auth groups route
+// Public Routes
+Route::get('/', function () {
+    return view('welcome');
+});
+
+// Auth Routes
 Route::prefix('auth')->group(function () {
     Route::get('/login', [LoginController::class, 'login'])->name('login')->middleware('guest');
     Route::post('/login', [LoginController::class, 'authenticate'])->name('login.authenticate');
     Route::post('/logout', [LoginController::class, 'logout'])->name('login.logout');
-
 });
 
-// Admin routes
-Route::prefix('admin')->middleware(['auth', 'admin:admin'])->group(function () {
+// Admin Routes - Menggunakan controller yang ada
+Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
+    
+    // Dashboard - sementara menggunakan closure
     Route::get('/', function () {
         return view('admin.dashboard');
-    })->name('admin.dashboard');
+    })->name('dashboard');
 
-    // Add more admin routes here
+    Route::get('/dashboard', function () {
+        return view('admin.dashboard');
+    })->name('dashboard');
+
+    // Content Management Routes menggunakan ManageContentController
+    Route::prefix('manage-content')->as('manage-content.')->group(function () {
+        // Resource route untuk manage content
+        Route::resource('/', ManageContentController::class)->except(['show']);
+        
+        // About Section Routes
+        Route::prefix('about')->as('about.')->group(function () {
+            Route::get('/profile', [ManageContentController::class, 'aboutProfile'])->name('profile');
+            Route::get('/vision-mission', [ManageContentController::class, 'aboutVisionMission'])->name('vision-mission');
+            Route::get('/organization', [ManageContentController::class, 'aboutOrganization'])->name('organization');
+        });
+        
+        // Other content routes
+        Route::get('/hero', [ManageContentController::class, 'hero'])->name('hero');
+        Route::get('/news', [ManageContentController::class, 'news'])->name('news');
+        Route::get('/announcements', [ManageContentController::class, 'announcements'])->name('announcements');
+        Route::get('/tutorials', [ManageContentController::class, 'tutorials'])->name('tutorials');
+        Route::get('/faq', [ManageContentController::class, 'faq'])->name('faq');
+    });
+    
+    // Profile Routes - sementara menggunakan closure
+    Route::prefix('profile')->as('profile.')->group(function () {
+        Route::get('/', function() {
+            return view('admin.profile.index');
+        })->name('index');
+        
+        Route::get('/edit', function() {
+            return view('admin.profile.edit');
+        })->name('edit');
+    });
 });
 
 // Public routes
@@ -50,7 +88,3 @@ Route::prefix('/')->group(function () {
     
     // Add more public routes here
 });
-
-// Notification routes
-// Add more notification routes here
-
