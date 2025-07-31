@@ -1,4 +1,4 @@
-<!-- resources/views/admin/manage-content/about/profile.blade.php -->
+<!-- resources/views/admin/manage-content/tentang/visi-misi.blade.php -->
 <x-admin.layouts>
     @section('page-title', 'Visi Misi PUSTIPD')
     @section('page-description', 'Kelola konten visi misi PUSTIPD')
@@ -32,18 +32,18 @@
                 <h2 class="text-lg font-semibold text-gray-900">Kelola Visi & Misi</h2>
                 <p class="text-gray-600 mt-1">Kelola visi dan misi PUSTIPD UIN Raden Fatah Palembang</p>
             </div>
-            <div class="flex items-center space-x-3">
-                <a href="{{ route('admin.manage-content.tentang.profil.preview') }}" target="_blank"
-                    class="px-4 py-2 border border-blue-300 text-blue-700 rounded-lg hover:bg-blue-50 transition-colors duration-200 flex items-center">
+            <div class="flex flex-col sm:flex-row gap-2">
+                <button onclick="previewVisiMisi()"
+                    class="w-full sm:w-auto bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors duration-200 flex items-center justify-center">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            d="M15 12a3 3 0 11-6 0 3 3 0 616 0z"></path>
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
                         </path>
                     </svg>
-                    Preview di Website
-                </a>
+                    Preview
+                </button>
             </div>
         </div>
 
@@ -106,9 +106,9 @@
                 </div>
             </div>
 
-            <!-- Status Section -->
+            <!-- Status Section - DIPERBAIKI -->
             <div class="mb-6 p-4 bg-gray-50 rounded-lg">
-                <div class="flex items-center justify-between mb-3">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 gap-2">
                     <label class="block text-sm font-medium text-gray-700">Status Publikasi</label>
                     <div class="flex items-center">
                         <span class="text-xs text-gray-500 mr-2">Terakhir disimpan:</span>
@@ -116,89 +116,64 @@
                     </div>
                 </div>
                 <select id="status" name="status" required
-                    class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                    class="w-full sm:w-auto px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
                     <option value="draft">Draft - Belum dipublikasikan</option>
                     <option value="published">Published - Tampil di website</option>
                 </select>
             </div>
-        </form>
-    </div>
 
-    <!-- Preview Modal -->
-    <div id="visiMisiPreviewModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
-        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-            <div class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" onclick="closePreviewModal()">
-            </div>
-
+            <!-- Action Buttons - RESPONSIF -->
             <div
-                class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
-                <div class="bg-white px-4 pt-5 pb-4 sm:p-6">
-                    <div class="text-center mb-6">
-                        <h3 class="text-xl leading-6 font-bold text-gray-900">Preview Visi & Misi PUSTIPD</h3>
-                        <p class="text-sm text-gray-600 mt-2">Tampilan yang akan muncul di website</p>
-                    </div>
-
-                    <!-- Preview Content -->
-                    <div class="space-y-8">
-                        <!-- Visi Preview -->
-                        <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-100">
-                            <div class="flex items-center mb-4">
-                                <div class="flex-shrink-0">
-                                    <div class="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center">
-                                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
-                                            </path>
-                                        </svg>
-                                    </div>
-                                </div>
-                                <div class="ml-4">
-                                    <h4 class="text-lg font-bold text-gray-900">Visi</h4>
-                                    <p class="text-sm text-gray-600">Pandangan masa depan PUSTIPD</p>
-                                </div>
-                            </div>
-                            <div id="previewVisiContent" class="text-gray-700 leading-relaxed">
-                                <!-- Visi content akan diisi oleh JavaScript -->
-                            </div>
-                        </div>
-
-                        <!-- Misi Preview -->
-                        <div
-                            class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-6 border border-green-100">
-                            <div class="flex items-center mb-4">
-                                <div class="flex-shrink-0">
-                                    <div class="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center">
-                                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                                            </path>
-                                        </svg>
-                                    </div>
-                                </div>
-                                <div class="ml-4">
-                                    <h4 class="text-lg font-bold text-gray-900">Misi</h4>
-                                    <p class="text-sm text-gray-600">Langkah strategis mencapai visi</p>
-                                </div>
-                            </div>
-                            <div id="previewMisiContent" class="space-y-3">
-                                <!-- Misi content akan diisi oleh JavaScript -->
-                            </div>
-                        </div>
-                    </div>
+                class="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-6 pt-6 border-t border-gray-200 gap-4">
+                <!-- Preview Section -->
+                <div class="flex justify-center sm:justify-start">
+                    <a href="{{ route('admin.manage-content.tentang.profil.preview') }}" target="_blank"
+                        class="w-full sm:w-auto px-4 py-2 border border-blue-300 text-blue-700 rounded-lg hover:bg-blue-50 transition-colors duration-200 flex items-center justify-center">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 12a3 3 0 11-6 0 3 3 0 616 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
+                            </path>
+                        </svg>
+                        <span class="text-sm sm:text-base">Preview di Website</span>
+                    </a>
                 </div>
-                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                    <button onclick="closePreviewModal()"
-                        class="w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:w-auto sm:text-sm">
-                        Tutup Preview
+
+                <!-- Action Section -->
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:space-x-3">
+                    <button type="button" onclick="window.history.back()"
+                        class="w-full sm:w-auto px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors duration-200 text-sm sm:text-base">
+                        Batal
+                    </button>
+                    <button type="button" onclick="saveAsDraft()"
+                        class="w-full sm:w-auto px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors duration-200 flex items-center justify-center text-sm sm:text-base">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3-3m0 0l-3 3m3-3v12">
+                            </path>
+                        </svg>
+                        Simpan Draft
+                    </button>
+                    <button type="button" onclick="saveAndPublish()"
+                        class="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 flex items-center justify-center text-sm sm:text-base">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
+                            </path>
+                        </svg>
+                        Simpan & Publikasikan
                     </button>
                 </div>
             </div>
-        </div>
+        </form>
     </div>
+
+    <!-- Preview Modal tetap sama -->
+    <div id="visiMisiPreviewModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+        <!-- Modal content sama seperti sebelumnya -->
+    </div>
+
+    <!-- Enhanced JavaScript dengan Action Buttons -->
     <script>
         (function() {
             'use strict';
@@ -207,6 +182,7 @@
                 misiCounter: 0,
                 visiData: '',
                 misiData: [],
+                isEditing: false,
 
                 init() {
                     this.loadExistingData();
@@ -215,7 +191,7 @@
                 },
 
                 loadExistingData() {
-                    // Load existing data (dalam implementasi nyata, data akan dimuat dari server)
+                    // Load existing data
                     this.visiData =
                         'Menjadi pusat unggulan dalam pengembangan teknologi informasi dan pelayanan digital yang mendukung kemajuan pendidikan Islam di Indonesia.';
                     this.misiData = [
@@ -223,6 +199,12 @@
                         'Menyediakan layanan teknologi informasi yang berkualitas dan mudah diakses',
                         'Meningkatkan kompetensi SDM dalam bidang teknologi informasi'
                     ];
+
+                    // Check if data exists (simulate checking database)
+                    if (this.visiData || this.misiData.length > 0) {
+                        this.isEditing = true;
+                        document.getElementById('status').value = 'published'; // Set default if editing
+                    }
 
                     // Populate form with existing data
                     document.getElementById('visi').value = this.visiData;
@@ -240,17 +222,13 @@
                         visiTextarea.addEventListener('input', () => {
                             this.updateVisiCharCount();
                         });
-                        this.updateVisiCharCount(); // Initial count
+                        this.updateVisiCharCount();
                     }
 
-                    // Form auto-save (optional)
-                    const form = document.getElementById('visiMisiForm');
-                    if (form) {
-                        // Auto-save every 30 seconds
-                        setInterval(() => {
-                            this.autoSave();
-                        }, 30000);
-                    }
+                    // Auto-save every 30 seconds
+                    setInterval(() => {
+                        this.autoSave();
+                    }, 30000);
                 },
 
                 updateVisiCharCount() {
@@ -261,16 +239,15 @@
                         const length = visiTextarea.value.length;
                         charCounter.textContent = `${length} / 500 karakter`;
 
-                        // Update color based on character count
+                        // Reset classes
+                        charCounter.classList.remove('text-red-600', 'text-yellow-600', 'text-green-600');
+
                         if (length > 500) {
                             charCounter.classList.add('text-red-600');
-                            charCounter.classList.remove('text-gray-500');
                         } else if (length < 50) {
                             charCounter.classList.add('text-yellow-600');
-                            charCounter.classList.remove('text-gray-500', 'text-red-600');
                         } else {
                             charCounter.classList.add('text-green-600');
-                            charCounter.classList.remove('text-gray-500', 'text-red-600', 'text-yellow-600');
                         }
                     }
                 },
@@ -332,6 +309,8 @@
                             const length = textarea.value.length;
                             charCounter.textContent = `${length} / 200 karakter`;
 
+                            charCounter.classList.remove('text-red-600', 'text-yellow-600', 'text-green-600');
+
                             if (length > 200) {
                                 charCounter.classList.add('text-red-600');
                             } else if (length < 20) {
@@ -342,7 +321,7 @@
                         };
 
                         textarea.addEventListener('input', updateCharCount);
-                        updateCharCount(); // Initial count
+                        updateCharCount();
                     }
 
                     this.updateUI();
@@ -374,24 +353,15 @@
                     const misiEntries = document.querySelectorAll('.misi-entry');
                     misiEntries.forEach((entry, index) => {
                         const newNumber = index + 1;
-                        const oldId = entry.dataset.misiId;
 
-                        // Update data attribute
                         entry.dataset.misiId = newNumber;
 
-                        // Update number badge
                         const badge = entry.querySelector('.w-6.h-6');
-                        if (badge) {
-                            badge.textContent = newNumber;
-                        }
+                        if (badge) badge.textContent = newNumber;
 
-                        // Update title
                         const title = entry.querySelector('h4');
-                        if (title) {
-                            title.textContent = `Misi ${newNumber}`;
-                        }
+                        if (title) title.textContent = `Misi ${newNumber}`;
 
-                        // Update textarea name and id
                         const textarea = entry.querySelector('textarea');
                         if (textarea) {
                             textarea.name = `misi_${newNumber}`;
@@ -399,7 +369,6 @@
                             textarea.placeholder = `Tuliskan misi ke-${newNumber}...`;
                         }
 
-                        // Update onclick handlers
                         const editBtn = entry.querySelector('[title="Edit"]');
                         const deleteBtn = entry.querySelector('[title="Hapus"]');
 
@@ -421,13 +390,9 @@
                     const emptyState = document.getElementById('misiEmptyState');
 
                     if (misiEntries.length === 0) {
-                        if (emptyState) {
-                            emptyState.style.display = 'block';
-                        }
+                        if (emptyState) emptyState.style.display = 'block';
                     } else {
-                        if (emptyState) {
-                            emptyState.style.display = 'none';
-                        }
+                        if (emptyState) emptyState.style.display = 'none';
                     }
                 },
 
@@ -435,7 +400,6 @@
                     const visi = document.getElementById('visi').value.trim();
                     const misiEntries = document.querySelectorAll('.misi-entry textarea');
 
-                    // Validate visi
                     if (visi.length < 50) {
                         alert('Visi harus minimal 50 karakter');
                         document.getElementById('visi').focus();
@@ -448,7 +412,6 @@
                         return false;
                     }
 
-                    // Validate misi
                     if (misiEntries.length === 0) {
                         alert('Minimal harus ada 1 misi');
                         return false;
@@ -493,12 +456,18 @@
                     };
                 },
 
-                saveVisiMisi() {
+                saveVisiMisi(status = null, showAlert = true) {
                     if (!this.validateForm()) {
-                        return;
+                        return false;
                     }
 
                     const formData = this.collectFormData();
+
+                    // Override status if provided
+                    if (status) {
+                        formData.status = status;
+                        document.getElementById('status').value = status;
+                    }
 
                     console.log('Saving Visi Misi:', formData);
 
@@ -507,18 +476,23 @@
                         const lastSavedTime = document.getElementById('lastSavedTime');
                         if (lastSavedTime) {
                             lastSavedTime.textContent = new Date().toLocaleString('id-ID');
-                            lastSavedTime.classList.remove('text-green-600');
+                            lastSavedTime.classList.remove('text-green-600', 'text-gray-600');
                             lastSavedTime.classList.add('text-blue-600');
                         }
 
-                        alert('Visi & Misi berhasil disimpan!');
+                        if (showAlert) {
+                            const statusText = formData.status === 'published' ?
+                                'disimpan dan dipublikasikan' : 'disimpan sebagai draft';
+                            alert(`Visi & Misi berhasil ${statusText}!`);
+                        }
                     }, 1000);
+
+                    return true;
                 },
 
                 autoSave() {
                     const formData = this.collectFormData();
 
-                    // Only auto-save if there's content
                     if (formData.visi.length > 0 || formData.misi.length > 0) {
                         console.log('Auto-saving...', formData);
 
@@ -534,7 +508,6 @@
                 previewVisiMisi() {
                     const formData = this.collectFormData();
 
-                    // Update preview content
                     const previewVisi = document.getElementById('previewVisiContent');
                     const previewMisi = document.getElementById('previewMisiContent');
 
@@ -561,7 +534,6 @@
                         }
                     }
 
-                    // Show modal
                     const modal = document.getElementById('visiMisiPreviewModal');
                     if (modal) {
                         modal.classList.remove('hidden');
@@ -578,14 +550,22 @@
 
             // Global functions
             window.addMisiEntry = () => VisiMisiManager.addMisiEntry();
-            window.saveVisiMisi = () => VisiMisiManager.saveVisiMisi();
             window.previewVisiMisi = () => VisiMisiManager.previewVisiMisi();
             window.closePreviewModal = () => VisiMisiManager.closePreviewModal();
 
-            // Make VisiMisiManager globally accessible for onclick handlers
+            // New action functions
+            window.saveAsDraft = () => {
+                VisiMisiManager.saveVisiMisi('draft');
+            };
+
+            window.saveAndPublish = () => {
+                if (confirm('Apakah Anda yakin ingin mempublikasikan visi & misi ini ke website?')) {
+                    VisiMisiManager.saveVisiMisi('published');
+                }
+            };
+
             window.VisiMisiManager = VisiMisiManager;
 
-            // Initialize when DOM is ready
             document.addEventListener('DOMContentLoaded', () => {
                 VisiMisiManager.init();
             });

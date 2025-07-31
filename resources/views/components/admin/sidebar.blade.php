@@ -158,7 +158,7 @@
                 </ul>
             </div>
 
-            <!-- APP LAYANAN SECTION  -->
+            <!-- APP LAYANAN SECTION - DIPERBAIKI -->
             <div class="py-4">
                 <h3 class="mb-4 text-xs uppercase leading-[20px] text-gray-400 font-semibold tracking-wider">
                     <span class="menu-group-title" :class="sidebarToggle ? 'lg:hidden' : ''">APLIKASI DAN
@@ -173,7 +173,12 @@
                             :class="(selected === 'Services') ? 'bg-orange-50 text-orange-600' : ''"
                             style="pointer-events: auto;">
 
-                            <svg :class="(selected === 'Services') ? 'fill-orange-600' : 'fill-gray-500 group-hover:fill-orange-600'"
+                            <!-- Logo dengan kondisi visibility yang sama dengan text -->
+                            <svg :class="[
+                                (selected === 'Services') ? 'fill-orange-600' :
+                                'fill-gray-500 group-hover:fill-orange-600',
+                                sidebarToggle ? 'lg:hidden' : ''
+                            ]"
                                 class="transition-colors duration-200 pointer-events-none flex-shrink-0"
                                 width="20" height="20" viewBox="0 0 24 24">
                                 <path
@@ -188,6 +193,7 @@
                     </li>
                 </ul>
             </div>
+
 
 
             <!-- INFORMASI TERKINI SECTION -->
