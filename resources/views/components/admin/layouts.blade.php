@@ -51,7 +51,7 @@
                 <x-admin.header />
 
                 <!-- Page Content -->
-                <main class="min-h-screen">
+                <main class="min-h-screen mb">
                     {{ $slot }}
                 </main>
 

@@ -26,7 +26,7 @@
 
                 <ul class="flex flex-col gap-2 mb-2">
                     <li>
-                        <a href="" @click="selected = 'Dashboard'"
+                        <a href="{{ route('admin.dashboard') }}" @click="selected = 'Dashboard'"
                             class="group relative flex items-center gap-3 rounded-xl px-4 py-3 font-medium text-gray-600 duration-300 ease-in-out hover:bg-blue-50 hover:text-blue-600"
                             :class="(selected === 'Dashboard') ? 'bg-blue-50 text-blue-600' : ''">
                             <svg :class="(selected === 'Dashboard') ? 'fill-blue-600' : 'fill-gray-500 group-hover:fill-blue-600'"
@@ -40,7 +40,6 @@
                 </ul>
             </div>
 
-
             <!-- BERANDA SECTION -->
             <div class="py-2 border-t border-gray-100">
                 <h3 class="mb-4 text-xs uppercase leading-[20px] text-gray-400 font-semibold tracking-wider">
@@ -49,11 +48,10 @@
 
                 <ul class="flex flex-col gap-2 mb-2">
                     <li>
-                        <a href="{{ route('admin.dashboard') }}"
-                            @click.prevent="selected = (selected === 'About' ? '':'About')"
-                            class="group relative flex items-center gap-3 rounded-xl px-4 py-3 font-medium text-gray-600 duration-300 ease-in-out hover:bg-indigo-50 hover:text-indigo-600"
-                            :class="(selected === 'About') ? 'bg-indigo-50 text-secondary' : ''">
-                            <svg :class="(selected === 'About') ? 'fill-secondary' : 'fill-gray-500 group-hover:fill-secondary'"
+                        <a href="#" @click.prevent="selected = (selected === 'Beranda' ? '':'Beranda')"
+                            class="group relative flex items-center gap-3 rounded-xl px-4 py-3 font-medium text-gray-600 duration-300 ease-in-out hover:bg-indigo-50 hover:text-secondary"
+                            :class="(selected === 'Beranda') ? 'bg-indigo-50 text-secondary' : ''">
+                            <svg :class="(selected === 'Beranda') ? 'fill-secondary' : 'fill-gray-500 group-hover:fill-secondary'"
                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                                 class="transition-colors duration-200" width="20" height="20"
                                 viewBox="0 0 24 24">
@@ -65,7 +63,7 @@
                             </svg>
                             <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">Beranda</span>
                             <svg class="absolute right-4 stroke-current transition-transform duration-200"
-                                :class="[(selected === 'About') ? 'rotate-180' : '', sidebarToggle ? 'lg:hidden' : '']"
+                                :class="[(selected === 'Beranda') ? 'rotate-180' : '', sidebarToggle ? 'lg:hidden' : '']"
                                 width="16" height="16" viewBox="0 0 20 20">
                                 <path d="M4.79175 7.39584L10.0001 12.6042L15.2084 7.39585" stroke-width="1.5"
                                     stroke-linecap="round" stroke-linejoin="round" />
@@ -74,22 +72,22 @@
 
                         <!-- Dropdown Menu -->
                         <div class="overflow-hidden transition-all duration-300 ease-in-out"
-                            :class="(selected === 'About') ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'">
+                            :class="(selected === 'Beranda') ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'">
                             <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'" class="flex flex-col gap-1 mt-2 pl-12">
                                 <li>
-                                    <a href="{{ route('admin.manage-content.about.profile') }}"
+                                    <a href="{{ route('admin.manage-content.beranda.pencapaian') }}"
                                         class="block py-2 px-4 text-sm text-gray-500 hover:text-secondary hover:bg-indigo-25 rounded-lg transition-colors duration-200">
                                         Pencapaian
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#"
+                                    <a href="{{ route('admin.manage-content.beranda.mitra') }}"
                                         class="block py-2 px-4 text-sm text-gray-500 hover:text-secondary hover:bg-indigo-25 rounded-lg transition-colors duration-200">
                                         Mitra
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#"
+                                    <a href="{{ route('admin.manage-content.beranda.layanan') }}"
                                         class="block py-2 px-4 text-sm text-gray-500 hover:text-secondary hover:bg-indigo-25 rounded-lg transition-colors duration-200">
                                         Layanan
                                     </a>
@@ -100,7 +98,7 @@
                 </ul>
             </div>
 
-            <!-- TENTANG KAMI SECTION -->
+            <!-- TENTANG KAMI SECTION - DIPERBAIKI -->
             <div class="py-2 border-t border-gray-100">
                 <h3 class="mb-4 text-xs uppercase leading-[20px] text-gray-400 font-semibold tracking-wider">
                     <span class="menu-group-title" :class="sidebarToggle ? 'lg:hidden' : ''">TENTANG KAMI</span>
@@ -108,11 +106,10 @@
 
                 <ul class="flex flex-col gap-2 mb-2">
                     <li>
-                        <a href="{{ route('admin.dashboard') }}"
-                            @click.prevent="selected = (selected === 'About' ? '':'About')"
+                        <a href="#" @click.prevent="selected = (selected === 'Tentang' ? '' : 'Tentang')"
                             class="group relative flex items-center gap-3 rounded-xl px-4 py-3 font-medium text-gray-600 duration-300 ease-in-out hover:bg-indigo-50 hover:text-indigo-600"
-                            :class="(selected === 'About') ? 'bg-indigo-50 text-indigo-600' : ''">
-                            <svg :class="(selected === 'About') ? 'fill-indigo-600' : 'fill-gray-500 group-hover:fill-indigo-600'"
+                            :class="(selected === 'Tentang') ? 'bg-indigo-50 text-indigo-600' : ''">
+                            <svg :class="(selected === 'Tentang') ? 'fill-indigo-600' : 'fill-gray-500 group-hover:fill-indigo-600'"
                                 class="transition-colors duration-200" width="20" height="20"
                                 viewBox="0 0 24 24">
                                 <path
@@ -120,37 +117,37 @@
                             </svg>
                             <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">Tentang Kami</span>
                             <svg class="absolute right-4 stroke-current transition-transform duration-200"
-                                :class="[(selected === 'About') ? 'rotate-180' : '', sidebarToggle ? 'lg:hidden' : '']"
+                                :class="[(selected === 'Tentang') ? 'rotate-180' : '', sidebarToggle ? 'lg:hidden' : '']"
                                 width="16" height="16" viewBox="0 0 20 20">
                                 <path d="M4.79175 7.39584L10.0001 12.6042L15.2084 7.39585" stroke-width="1.5"
                                     stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
                         </a>
 
-                        <!-- Dropdown Menu -->
+                        <!-- Dropdown Menu - PERBAIKAN UTAMA DI SINI! -->
                         <div class="overflow-hidden transition-all duration-300 ease-in-out"
-                            :class="(selected === 'About') ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'">
+                            :class="(selected === 'Tentang') ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'">
                             <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'" class="flex flex-col gap-1 mt-2 pl-12">
                                 <li>
-                                    <a href="{{ route('admin.manage-content.about.profile') }}"
+                                    <a href="{{ route('admin.manage-content.tentang.profil') }}"
                                         class="block py-2 px-4 text-sm text-gray-500 hover:text-indigo-600 hover:bg-indigo-25 rounded-lg transition-colors duration-200">
                                         Profil
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('admin.manage-content.about.profile') }}"
+                                    <a href="{{ route('admin.manage-content.tentang.galeri') }}"
                                         class="block py-2 px-4 text-sm text-gray-500 hover:text-indigo-600 hover:bg-indigo-25 rounded-lg transition-colors duration-200">
                                         Galeri
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#"
+                                    <a href="{{ route('admin.manage-content.tentang.visi-misi') }}"
                                         class="block py-2 px-4 text-sm text-gray-500 hover:text-indigo-600 hover:bg-indigo-25 rounded-lg transition-colors duration-200">
                                         Visi & Misi
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#"
+                                    <a href="{{ route('admin.manage-content.tentang.organisasi') }}"
                                         class="block py-2 px-4 text-sm text-gray-500 hover:text-indigo-600 hover:bg-indigo-25 rounded-lg transition-colors duration-200">
                                         Struktur Organisasi
                                     </a>
@@ -161,54 +158,37 @@
                 </ul>
             </div>
 
-            <!-- LAYANAN SECTION -->
-            <div class="py-2 border-t border-gray-100">
+            <!-- APP LAYANAN SECTION  -->
+            <div class="py-4">
                 <h3 class="mb-4 text-xs uppercase leading-[20px] text-gray-400 font-semibold tracking-wider">
-                    <span class="menu-group-title" :class="sidebarToggle ? 'lg:hidden' : ''">LAYANAN</span>
+                    <span class="menu-group-title" :class="sidebarToggle ? 'lg:hidden' : ''">APLIKASI DAN
+                        LAYANAN</span>
                 </h3>
 
                 <ul class="flex flex-col gap-2 mb-2">
                     <li>
-                        <a href="#" @click.prevent="selected = (selected === 'Services' ? '':'Services')"
-                            class="group relative flex items-center gap-3 rounded-xl px-4 py-3 font-medium text-gray-600 duration-300 ease-in-out hover:bg-orange-50 hover:text-orange-600"
-                            :class="(selected === 'Services') ? 'bg-orange-50 text-orange-600' : ''">
+                        <a href="{{ route('admin.manage-content.layanan.applayanan') }}"
+                            @click.stop="selected = (selected === 'Services' ? '' : 'Services')"
+                            class="group relative flex items-center gap-3 rounded-xl px-4 py-3 font-medium text-gray-600 duration-300 ease-in-out hover:bg-orange-50 hover:text-orange-600 cursor-pointer"
+                            :class="(selected === 'Services') ? 'bg-orange-50 text-orange-600' : ''"
+                            style="pointer-events: auto;">
+
                             <svg :class="(selected === 'Services') ? 'fill-orange-600' : 'fill-gray-500 group-hover:fill-orange-600'"
-                                class="transition-colors duration-200" width="20" height="20"
-                                viewBox="0 0 24 24">
+                                class="transition-colors duration-200 pointer-events-none flex-shrink-0"
+                                width="20" height="20" viewBox="0 0 24 24">
                                 <path
                                     d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" />
                             </svg>
-                            <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">Kelola
-                                Layanan</span>
-                            <svg class="absolute right-4 stroke-current transition-transform duration-200"
-                                :class="[(selected === 'Services') ? 'rotate-180' : '', sidebarToggle ? 'lg:hidden' : '']"
-                                width="16" height="16" viewBox="0 0 20 20">
-                                <path d="M4.79175 7.39584L10.0001 12.6042L15.2084 7.39585" stroke-width="1.5"
-                                    stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                        </a>
 
-                        <!-- Dropdown Menu -->
-                        <div class="overflow-hidden transition-all duration-300 ease-in-out"
-                            :class="(selected === 'Services') ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'">
-                            <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'" class="flex flex-col gap-1 mt-2 pl-12">
-                                <li>
-                                    <a href="#"
-                                        class="block py-2 px-4 text-sm text-gray-500 hover:text-orange-600 hover:bg-orange-25 rounded-lg transition-colors duration-200">
-                                        Daftar Layanan
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#"
-                                        class="block py-2 px-4 text-sm text-gray-500 hover:text-orange-600 hover:bg-orange-25 rounded-lg transition-colors duration-200">
-                                        Kategori Layanan
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
+                            <span class="menu-item-text pointer-events-none"
+                                :class="sidebarToggle ? 'lg:hidden' : ''">
+                                App dan Layanan
+                            </span>
+                        </a>
                     </li>
                 </ul>
             </div>
+
 
             <!-- INFORMASI TERKINI SECTION -->
             <div class="py-2 border-t border-gray-100">

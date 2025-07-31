@@ -23,46 +23,70 @@ Route::prefix('auth')->group(function () {
     Route::post('/logout', [LoginController::class, 'logout'])->name('login.logout');
 });
 
-// Admin Routes - Menggunakan controller yang ada
+// Admin Routes - Protected by authentication
 Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
     
-    // Dashboard - sementara menggunakan closure
+    // Dashboard
     Route::get('/', function () {
-        return view('admin.dashboard');
-    })->name('dashboard');
+        return redirect()->route('admin.dashboard');
+    });
 
     Route::get('/dashboard', function () {
         return view('admin.dashboard');
     })->name('dashboard');
 
-    // Content Management Routes menggunakan ManageContentController
+    // Content Management Routes
     Route::prefix('manage-content')->as('manage-content.')->group(function () {
-        // Resource route untuk manage content
-        Route::resource('/', ManageContentController::class)->except(['show']);
         
-        // About Section Routes
-        Route::prefix('about')->as('about.')->group(function () {
-            Route::get('/profile', [ManageContentController::class, 'aboutProfile'])->name('profile');
-            Route::get('/vision-mission', [ManageContentController::class, 'aboutVisionMission'])->name('vision-mission');
-            Route::get('/organization', [ManageContentController::class, 'aboutOrganization'])->name('organization');
+        // tentang Section Routes - PERBAIKAN DI SINI
+        Route::prefix('tentang')->as('tentang.')->group(function () {
+            Route::get('/profil', [ManageContentController::class, 'tentangProfil'])->name('profil');
+            Route::put('/profil', [ManageContentController::class, 'tentangProfilUpdate'])->name('profil.update');
+            Route::get('/profil/preview', [ManageContentController::class, 'tentangProfilPreview'])->name('profil.preview');
+           
+            Route::get('/galeri', [ManageContentController::class, 'tentangGaleri'])->name('galeri');
+            
+            Route::get('/visi-misi', [ManageContentController::class, 'tentangVisiMisi'])->name('visi-misi');
+            Route::put('/visi-misi', [ManageContentController::class, 'tentangVisiMisiUpdate'])->name('visi-misi.update');
+            
+            Route::get('/organisasi', [ManageContentController::class, 'tentangOrganisasi'])->name('organisasi');
+            Route::put('/organisasi', [ManageContentController::class, 'tentangOrganisasiUpdate'])->name('organisasi.update');
+
+            Route::get('/galeri', [ManageContentController::class, 'tentangGaleri'])->name('galeri');
+
         });
+
+        Route::prefix('beranda')->as('beranda.')->group(function () {
+           // TAMBAHAN BARU - Beranda Routes
+            Route::get('/pencapaian', [ManageContentController::class, 'berandaPencapaian'])->name('pencapaian');
+            Route::get('/mitra', [ManageContentController::class, 'berandaMitra'])->name('mitra');
+            Route::get('/layanan', [ManageContentController::class, 'berandaLayanan'])->name('layanan');
+        });
+
+        Route::prefix('layanan')->as('layanan.')->group(function () {
+           // TAMBAHAN BARU - Beranda Routes
+            Route::get('/applayanan', [ManageContentController::class, 'appLayanan'])->name('applayanan');
+        });
+
         
         // Other content routes
         Route::get('/hero', [ManageContentController::class, 'hero'])->name('hero');
+        Route::put('/hero', [ManageContentController::class, 'heroUpdate'])->name('hero.update');
+        
         Route::get('/news', [ManageContentController::class, 'news'])->name('news');
         Route::get('/announcements', [ManageContentController::class, 'announcements'])->name('announcements');
         Route::get('/tutorials', [ManageContentController::class, 'tutorials'])->name('tutorials');
         Route::get('/faq', [ManageContentController::class, 'faq'])->name('faq');
     });
     
-    // Profile Routes - sementara menggunakan closure
-    Route::prefix('profile')->as('profile.')->group(function () {
+    // profil Routes (untuk admin profil, bukan profil organisasi)
+    Route::prefix('profil')->as('profil.')->group(function () {
         Route::get('/', function() {
-            return view('admin.profile.index');
+            return view('admin.profil.index');
         })->name('index');
         
         Route::get('/edit', function() {
-            return view('admin.profile.edit');
+            return view('admin.profil.edit');
         })->name('edit');
     });
 });
