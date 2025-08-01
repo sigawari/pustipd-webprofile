@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>@yield('title', 'PUSTIPD | Admin')</title>
+        <title>PUSTIPD | {{ $title }}</title>
 
         <!-- Vite Assets -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -15,10 +15,12 @@
         <meta name="description" content="@yield('description', 'Sistem Manajemen Konten PUSTIPD UIN Raden Fatah Palembang')">
         <meta name="keywords" content="@yield('keywords', 'PUSTIPD, UIN Raden Fatah, CMS, Admin')">
 
-        <!-- Alpine.js - Load di head dengan defer -->
+        <!-- Script -->
+        <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
         <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
-        @stack('styles')
+        <!-- CSS -->
+
     </head>
 
     <body class="bg-gray-50">
@@ -48,7 +50,7 @@
                 }">
 
                 <!-- Header -->
-                <x-admin.header />
+                <x-admin.header>{{ $title }}</x-admin.header>
 
                 <!-- Page Content -->
                 <main class="min-h-screen mb">
@@ -67,9 +69,5 @@
                 x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
             </div>
         </div>
-
-        <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-        @stack('scripts')
     </body>
-
 </html>

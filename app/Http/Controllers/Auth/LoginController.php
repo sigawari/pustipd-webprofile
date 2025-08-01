@@ -24,7 +24,7 @@ class LoginController extends Controller
             ]);
             if (Auth::attempt(array_merge($credentials, ['role' => 'admin']))){
                 $request->session()->regenerate();
-                return redirect()->route('admin.dashboard');
+                return redirect()->route('admin.dashboard.index');
             }
             return back()->with('loginError', 'Login failed, please check your credentials');
         }

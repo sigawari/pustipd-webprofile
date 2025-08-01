@@ -1,11 +1,13 @@
 <x-admin.layouts>
-    @section('title', 'Dashboard - PUSTIPD Admin')
+    <!-- @section('title', 'Dashboard - PUSTIPD Admin')
     @section('description', 'Dashboard admin untuk sistem manajemen konten PUSTIPD UIN Raden Fatah Palembang')
-    @section('keywords', 'dashboard, admin, PUSTIPD, CMS, UIN Raden Fatah')
+    @section('keywords', 'dashboard, admin, PUSTIPD, CMS, UIN Raden Fatah') -->
+
+    <x-slot:title>{{$title}}</x-slot:title>
 
     <div class="p-6 space-y-6">
         <!-- Welcome Section -->
-        <div class="bg-gradient-to-r from-blue-900 to-secondary rounded-xl p-6 text-white">
+        <!-- <div class="bg-gradient-to-r from-blue-900 to-secondary rounded-xl p-6 text-white">
             <div class="flex items-center justify-between">
                 <div>
                     <h2 class="text-2xl font-bold mb-2">Selamat Datang, Administrator!</h2>
@@ -31,7 +33,7 @@
                         class="w-20 h-16 opacity-80">
                 </div>
             </div>
-        </div>
+        </div> -->
         <!-- Statistics Cards -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <!-- Statistik Card 1 -->

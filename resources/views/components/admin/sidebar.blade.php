@@ -26,7 +26,7 @@
 
                 <ul class="flex flex-col gap-2 mb-2">
                     <li>
-                        <a href="{{ route('admin.dashboard') }}" @click="selected = 'Dashboard'"
+                        <a href="{{ route('admin.dashboard.index') }}" @click="selected = 'Dashboard'"
                             class="group relative flex items-center gap-3 rounded-xl px-4 py-3 font-medium text-gray-600 duration-300 ease-in-out hover:bg-blue-50 hover:text-blue-600"
                             :class="(selected === 'Dashboard') ? 'bg-blue-50 text-blue-600' : ''">
                             <svg :class="(selected === 'Dashboard') ? 'fill-blue-600' : 'fill-gray-500 group-hover:fill-blue-600'"

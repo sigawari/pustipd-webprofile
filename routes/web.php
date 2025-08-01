@@ -1,9 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PublicsController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ManageContentController;
-use App\Http\Controllers\PublicsController;
+use App\Http\Controllers\admin\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,13 +28,7 @@ Route::prefix('auth')->group(function () {
 Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
     
     // Dashboard
-    Route::get('/', function () {
-        return redirect()->route('admin.dashboard');
-    });
-
-    Route::get('/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
     // Content Management Routes
     Route::prefix('manage-content')->as('manage-content.')->group(function () {
