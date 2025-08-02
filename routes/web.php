@@ -5,6 +5,7 @@ use App\Http\Controllers\PublicsController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ManageContentController;
 use App\Http\Controllers\admin\DashboardController;
+use App\Http\Controllers\admin\ManageContent\Beranda\MitraController;
 use App\Http\Controllers\admin\ManageUserController;
 use App\Http\Controllers\admin\ManageContent\Beranda\PencapaianController;
 
@@ -50,12 +51,21 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
             });
 
             // Mitra Routes
+            Route::controller(MitraController::class)->group(function(){
+                Route::get('/mitra', 'index')->name('mitra');
+                Route::get('/mitra/create', 'create')->name('mitra.create');
+                Route::post('/mitra', 'store')->name('mitra.store');
+                Route::get('/mitra/{mitra}/edit', 'edit')->name('mitra.edit');
+                Route::put('/mitra/{mitra}', 'update')->name('mitra.update');
+                Route::delete('/mitra/{mitra}', 'destroy')->name('mitra.destroy');
+                Route::get('/mitra/export', 'export')->name('mitra.export');
+            });
 
             // Layanan
 
            
             
-            Route::get('/mitra', [ManageContentController::class, 'berandaMitra'])->name('mitra');
+            
             Route::get('/layanan', [ManageContentController::class, 'berandaLayanan'])->name('layanan');
         });
 

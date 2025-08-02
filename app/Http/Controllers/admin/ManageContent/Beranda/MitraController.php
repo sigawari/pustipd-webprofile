@@ -14,7 +14,9 @@ class MitraController extends Controller
      */
     public function index()
     {
-        //
+        $title = "Kelola Mitra";
+
+        return view('admin.manage-content.beranda.mitra.mitra', compact('title'));
     }
 
     /**

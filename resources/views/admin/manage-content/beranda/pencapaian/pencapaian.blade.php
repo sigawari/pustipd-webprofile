@@ -1,4 +1,3 @@
-<!-- resources/views/admin/manage-content/beranda/pencapaian.blade.php -->
 <x-admin.layouts>
     <x-slot:title>{{ $title }}</x-slot:title>
     <!-- @section('page-title', 'Beranda PUSTIPD')

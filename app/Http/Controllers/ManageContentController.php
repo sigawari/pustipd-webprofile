@@ -148,37 +148,6 @@ class ManageContentController extends Controller
     /**
      * Preview organization profile
      */
-    // public function berandaPencapaian()
-    // {
-    //     $pageData = [
-    //         'title' => 'Kelola Pencapaian',
-    //         'pageName' => 'Beranda', // Untuk breadcrumb
-    //         'description' => 'Kelola konten pencapaian yang ditampilkan di beranda website',
-    //         'breadcrumbs' => [
-    //             ['name' => 'Kelola Konten', 'url' => '#'],
-    //             ['name' => 'Beranda', 'url' => '#'],
-    //             ['name' => 'Pencapaian', 'url' => null]
-    //         ]
-    //     ];
-        
-    //     return view('admin.manage-content.beranda.pencapaian', compact('pageData'));
-    // }
-
-    public function berandaMitra()
-    {
-        $pageData = [
-            'title' => 'Kelola Mitra',
-            'pageName' => 'Beranda', // Untuk breadcrumb
-            'description' => 'Kelola konten mitra yang ditampilkan di beranda website',
-            'breadcrumbs' => [
-                ['name' => 'Kelola Konten', 'url' => '#'],
-                ['name' => 'Beranda', 'url' => '#'],
-                ['name' => 'Mitra', 'url' => null]
-            ]
-        ];
-        
-        return view('admin.manage-content.beranda.mitra', compact('pageData'));
-    }
 
     public function berandaLayanan()
     {
