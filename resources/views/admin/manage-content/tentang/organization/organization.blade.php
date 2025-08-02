@@ -1,6 +1,7 @@
 <!-- resources/views/admin/manage-content/about/profile.blade.php -->
 <x-admin.layouts>
-    @section('page-title', 'Struktur Organisasi PUSTIPD')
+    <x-slot:title>{{ $title }}</x-slot:title>
+    <!-- @section('page-title', 'Struktur Organisasi PUSTIPD')
     @section('page-description', 'Kelola Struktur Organisasi PUSTIPD')
     @section('breadcrumb')
         <li>
@@ -23,13 +24,13 @@
                 <span class="ml-1 text-sm font-medium text-gray-700 md:ml-2">Struktur Organisasi PUSTIPD</span>
             </div>
         </li>
-    @endsection
+    @endsection -->
 
     <!-- Content Form -->
     <div class="bg-white rounded-xl border border-gray-200 p-6 m-6 shadow-sm">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
             <div>
-                <h2 class="text-lg font-semibold text-gray-900">Kelola Struktur Organisasi</h2>
+                <h2 class="text-lg font-semibold text-gray-900">Kelola Struktur {{ $title }}</h2>
                 <p class="text-gray-600 mt-1">Kelola struktur kepemimpinan dan divisi PUSTIPD</p>
             </div>
             <div class="flex flex-col sm:flex-row gap-2">
@@ -64,22 +65,24 @@
             <!-- Deskripsi Utama -->
             <div class="mb-8">
                 <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-base font-semibold text-gray-900">Deskripsi Organisasi</h3>
+                    <h3 class="text-base font-semibold text-gray-900">Deskripsi {{ $title }}</h3>
                     <span class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">General Info</span>
                 </div>
 
                 <div class="space-y-4">
                     <div>
-                        <label for="orgName" class="block text-sm font-medium text-gray-700 mb-2">Nama
-                            Organisasi</label>
+                        <label for="orgName" class="block text-sm font-medium text-gray-700 mb-2">
+                            Nama {{ $title }}
+                        </label>
                         <input type="text" id="orgName" name="orgName" required
                             class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                             placeholder="PUSTIPD UIN Raden Fatah Palembang">
                     </div>
 
                     <div>
-                        <label for="orgDescription" class="block text-sm font-medium text-gray-700 mb-2">Deskripsi
-                            Organisasi</label>
+                        <label for="orgDescription" class="block text-sm font-medium text-gray-700 mb-2">
+                            Deskripsi {{ $title }}
+                        </label>
                         <textarea id="orgDescription" name="orgDescription" rows="3" required
                             class="w-full px-3 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm resize-none"
                             placeholder="Deskripsi singkat tentang PUSTIPD dan perannya..."></textarea>
@@ -91,7 +94,7 @@
             <div class="mb-8">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="text-base font-semibold text-gray-900">Kepala PUSTIPD</h3>
-                    <span class="text-xs text-gray-500 bg-red-100 text-red-700 px-2 py-1 rounded">Single Entry</span>
+                    <span class="text-xs text-gray-500 bg-red-100 px-2 py-1 rounded">Single Entry</span>
                 </div>
 
                 <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-100">
@@ -163,7 +166,7 @@
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="text-base font-semibold text-gray-900">Divisi & Staff</h3>
                     <div class="flex items-center gap-2">
-                        <span class="text-xs text-gray-500 bg-green-100 text-green-700 px-2 py-1 rounded">Multiple
+                        <span class="text-xs text-gray-500 bg-green-100 px-2 py-1 rounded">Multiple
                             Entries</span>
                         <button type="button" onclick="addDivisionEntry()"
                             class="bg-blue-600 text-white px-3 py-1.5 rounded-lg hover:bg-blue-700 transition-colors duration-200 flex items-center text-sm">
@@ -227,7 +230,7 @@
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6">
                     <div class="text-center mb-6">
                         <h3 class="text-xl leading-6 font-bold text-gray-900">Preview Carousel - Beranda</h3>
-                        <p class="text-sm text-gray-600 mt-2">Tampilan carousel struktur organisasi di beranda website
+                        <p class="text-sm text-gray-600 mt-2">Tampilan carousel struktur {{ $title }} di beranda website
                         </p>
                     </div>
 
@@ -276,8 +279,8 @@
                 class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-7xl sm:w-full">
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6">
                     <div class="text-center mb-6">
-                        <h3 class="text-xl leading-6 font-bold text-gray-900">Preview Organization Chart</h3>
-                        <p class="text-sm text-gray-600 mt-2">Tampilan tree struktur organisasi di halaman khusus</p>
+                        <h3 class="text-xl leading-6 font-bold text-gray-900">Preview {{ $title }} Chart</h3>
+                        <p class="text-sm text-gray-600 mt-2">Tampilan tree struktur {{ $title }} di halaman khusus</p>
                     </div>
 
                     <!-- Organization Chart Container -->

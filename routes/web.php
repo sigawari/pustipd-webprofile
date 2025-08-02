@@ -11,11 +11,12 @@ use App\Http\Controllers\admin\ManageUserController;
 
 use App\Http\Controllers\admin\ManageContent\Beranda\MitraController;
 use App\Http\Controllers\admin\ManageContent\Beranda\LayananController;
-use App\Http\Controllers\admin\ManageContent\Beranda\PencapaianController;
+use App\Http\Controllers\admin\ManageContent\Tentang\GalleryController;
 
 use App\Http\Controllers\admin\ManageContent\Tentang\ProfileController;
-use App\Http\Controllers\admin\ManageContent\Tentang\GalleryController;
 use App\Http\Controllers\admin\ManageContent\Tentang\VisiMisiController;
+use App\Http\Controllers\admin\ManageContent\Beranda\PencapaianController;
+use App\Http\Controllers\admin\ManageContent\Tentang\OranizationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -118,13 +119,24 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
 
 
             // Oranization Routes
+            Route::controller(OranizationController::class)->group(function(){
+                Route::get('/organisasi', 'index')->name('organisasi');
+                Route::get('/organisasi/create', 'create')->name('organisasi.create');
+                Route::post('/organisasi', 'store')->name('organisasi.store');
+                Route::get('/organisasi/{organisasi}/edit', 'edit')->name('organisasi.store');
+                Route::put('/organisasi/{organisasi}', 'update')->name('organisasi.update');
+                Route::delete('/organisasi/{organisasi}', 'destroy')->name('organisasi.destroy');
+                Route::get('/organisasi/export', 'export')->name('organisasi.export');
+            });
+            
+
 
             
             // Route::get('/visi-misi', [ManageContentController::class, 'tentangVisiMisi'])->name('visi-misi');
             // Route::put('/visi-misi', [ManageContentController::class, 'tentangVisiMisiUpdate'])->name('visi-misi.update');
             
-            Route::get('/organisasi', [ManageContentController::class, 'tentangOrganisasi'])->name('organisasi');
-            Route::put('/organisasi', [ManageContentController::class, 'tentangOrganisasiUpdate'])->name('organisasi.update');
+            // Route::get('/organisasi', [ManageContentController::class, 'tentangOrganisasi'])->name('organisasi');
+            // Route::put('/organisasi', [ManageContentController::class, 'tentangOrganisasiUpdate'])->name('organisasi.update');
 
 
         });
