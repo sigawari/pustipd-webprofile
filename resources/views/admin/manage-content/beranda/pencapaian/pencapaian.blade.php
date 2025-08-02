@@ -1,8 +1,9 @@
 <!-- resources/views/admin/manage-content/beranda/pencapaian.blade.php -->
 <x-admin.layouts>
-    @section('page-title', 'Beranda PUSTIPD')
+    <x-slot:title>{{ $title }}</x-slot:title>
+    <!-- @section('page-title', 'Beranda PUSTIPD')
     @section('page-description', 'Kelola konten pencapaian UIN Raden Fatah Palembang')
-    @section('breadcrumb')
+    @section('breadcrumb') -->
         <li>
             <div class="flex items-center">
                 <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">

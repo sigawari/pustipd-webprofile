@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ManageContentController;
 use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\admin\ManageUserController;
+use App\Http\Controllers\admin\ManageContent\Beranda\PencapaianController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,6 +35,30 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
     // Content Management Routes
     Route::prefix('manage-content')->as('manage-content.')->group(function () {
         
+        // Beranda Section Routes
+        Route::prefix('beranda')->as('beranda.')->group(function () {
+
+            // Pencapaian Routes
+            Route::controller(PencapaianController::class)->group(function () {
+                Route::get('/pencapaian', 'index')->name('pencapaian');
+                Route::get('/pencapaian/create', 'create')->name('pencapaian.create');
+                Route::post('/pencapaian', 'store')->name('pencapaian.store');
+                Route::get('/pencapaian/{pencapaian}/edit', 'edit')->name('pencapaian.edit');
+                Route::put('/pencapaian/{pencapaian}', 'update')->name('pencapaian.update');
+                Route::delete('/pencapaian/{pencapaian}', 'destroy')->name('pencapaian.destroy');
+                Route::get('/pencapaian/export', 'export')->name('pencapaian.export');
+            });
+
+            // Mitra Routes
+
+            // Layanan
+
+           
+            
+            Route::get('/mitra', [ManageContentController::class, 'berandaMitra'])->name('mitra');
+            Route::get('/layanan', [ManageContentController::class, 'berandaLayanan'])->name('layanan');
+        });
+
         // tentang Section Routes - PERBAIKAN DI SINI
         Route::prefix('tentang')->as('tentang.')->group(function () {
             Route::get('/profil', [ManageContentController::class, 'tentangProfil'])->name('profil');
@@ -50,13 +75,6 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
 
             Route::get('/galeri', [ManageContentController::class, 'tentangGaleri'])->name('galeri');
 
-        });
-
-        Route::prefix('beranda')->as('beranda.')->group(function () {
-           // TAMBAHAN BARU - Beranda Routes
-            Route::get('/pencapaian', [ManageContentController::class, 'berandaPencapaian'])->name('pencapaian');
-            Route::get('/mitra', [ManageContentController::class, 'berandaMitra'])->name('mitra');
-            Route::get('/layanan', [ManageContentController::class, 'berandaLayanan'])->name('layanan');
         });
 
         Route::prefix('layanan')->as('layanan.')->group(function () {

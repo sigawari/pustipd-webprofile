@@ -194,8 +194,6 @@
                 </ul>
             </div>
 
-
-
             <!-- INFORMASI TERKINI SECTION -->
             <div class="py-2 border-t border-gray-100">
                 <h3 class="mb-4 text-xs uppercase leading-[20px] text-gray-400 font-semibold tracking-wider">
