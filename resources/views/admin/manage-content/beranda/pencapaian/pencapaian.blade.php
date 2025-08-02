@@ -2,7 +2,7 @@
     <x-slot:title>{{ $title }}</x-slot:title>
     <!-- @section('page-title', 'Beranda PUSTIPD')
     @section('page-description', 'Kelola konten pencapaian UIN Raden Fatah Palembang')
-    @section('breadcrumb') -->
+    @section('breadcrumb')
         <li>
             <div class="flex items-center">
                 <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
@@ -23,7 +23,7 @@
                 <span class="ml-1 text-sm font-medium text-gray-700 md:ml-2">Beranda {{ $title }}</span>
             </div>
         </li>
-    @endsection
+    @endsection -->
     <!-- Content Management Area - PERBAIKAN MOBILE -->
     <div class="bg-white rounded-xl border border-gray-200 p-3 sm:p-6 m-3 sm:m-6 shadow-sm">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6 gap-4">
