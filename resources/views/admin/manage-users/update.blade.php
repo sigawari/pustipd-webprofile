@@ -11,31 +11,28 @@
             <!-- Nama -->
             <div class="mb-4">
                 <label for="name-{{ $user->id }}" class="block text-sm font-medium text-gray-700 mb-2">Nama</label>
-                <input type="text" name="name" id="name-{{ $user->id }}"
+                <input type="text" name="name" id="name-update-{{ $user->id }}"
                     class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     value="{{ $user->name }}" required>
             </div>
-
-            <!-- Email -->
-            <div class="mb-4">
-                <label for="email-{{ $user->id }}" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                <input type="email" name="email" id="email-{{ $user->id }}"
-                    class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    value="{{ $user->email }}" required>
-            </div>
-
             <!-- Role -->
             <div class="mb-4">
                 <label for="role-{{ $user->id }}" class="block text-sm font-medium text-gray-700 mb-2">Role</label>
-                <select name="role" id="role-{{ $user->id }}"
+                <select name="role" id="role-update-{{ $user->id }}"
                     class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                     required>
+                    <option value="">-- Pilih Role --</option>
                     <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Admin</option>
-                    <option value="operator" {{ $user->role == 'operator' ? 'selected' : '' }}>Operator</option>
-                    <option value="tim-dev" {{ $user->role == 'tim-dev' ? 'selected' : '' }}>Tim Dev</option>
+                    <option value="user" {{ $user->role == 'user' ? 'selected' : '' }}>User Public</option>
                 </select>
             </div>
-
+            <!-- Email -->
+            <div class="mb-4">
+                <label for="email-{{ $user->id }}" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                <input type="email" name="email" id="email-update-{{ $user->id }}"
+                    class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    value="{{ $user->email }}" required>
+            </div>
             <!-- Password (Optional / Kosongkan jika tidak diubah) -->
             <div class="mb-4">
                 <label for="password-{{ $user->id }}" class="block text-sm font-medium text-gray-700 mb-2">Password (kosongkan jika tidak diubah)</label>
@@ -55,6 +52,40 @@
                     Simpan
                 </button>
             </div>
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    const nameUpdate = document.getElementById('name-update-{{ $user->id }}');
+                    const roleUpdate = document.getElementById('role-update-{{ $user->id }}');
+                    const emailUpdate = document.getElementById('email-update-{{ $user->id }}');
+
+                    function generateEmailUpdate() {
+                        const nameValue = nameUpdate.value.trim().split(" ")[0].toLowerCase();
+                        const roleValue = roleUpdate.value;
+                        if (nameValue && roleValue) {
+                            emailUpdate.value = `${nameValue}.${roleValue}@pustipd.radenfatah.ac.id`;
+                        } else {
+                            emailUpdate.value = '';
+                        }
+                    }
+
+                    // Event ketika modal dibuka → trigger update email
+                    const observer = new MutationObserver(() => {
+                        if (!nameUpdate || !roleUpdate) return;
+                        generateEmailUpdate();
+                    });
+
+                    const modal = document.getElementById('UpdateModal-{{ $user->id }}');
+                    if (modal) {
+                        observer.observe(modal, {
+                            attributes: true,
+                            attributeFilter: ['class']
+                        });
+                    }
+
+                    nameUpdate.addEventListener('input', generateEmailUpdate);
+                    roleUpdate.addEventListener('change', generateEmailUpdate);
+                });
+            </script>
         </form>
 
         <!-- Tombol X di pojok -->

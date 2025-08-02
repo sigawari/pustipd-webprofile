@@ -18,9 +18,9 @@
                 <select name="role" id="role"
                     class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                     required>
+                    <option value="">-- Pilih Role --</option>
                     <option value="admin">Admin</option>
-                    <option value="operator">Operator</option>
-                    <option value="tim-dev">Tim Dev</option>
+                    <option value="user">User Public</option>
                 </select>
             </div>
             <!-- Email -->
