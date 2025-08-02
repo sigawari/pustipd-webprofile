@@ -14,7 +14,7 @@ class PencapaianController extends Controller
      */
     public function index()
     {
-        $title = 'Kelola Pencapaian';
+        $title = 'Pencapaian';
         // $pageData = [
         //     'title' => 'Kelola Pencapaian',
         //     'pageName' => 'Beranda', // Untuk breadcrumb

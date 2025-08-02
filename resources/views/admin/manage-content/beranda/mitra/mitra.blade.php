@@ -1,5 +1,4 @@
-<x-admin.layouts>
-    
+<x-admin.layouts>    
     <x-slot:title>{{ $title }}</x-slot:title>
     <!-- @section('page-title', 'Beranda PUSTIPD')
     @section('page-description', 'Kelola konten mitra UIN Raden Fatah Palembang')
@@ -21,7 +20,7 @@
                         d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 111.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
                         clip-rule="evenodd"></path>
                 </svg>
-                <span class="ml-1 text-sm font-medium text-gray-700 md:ml-2">Beranda Mitra</span>
+                <span class="ml-1 text-sm font-medium text-gray-700 md:ml-2">Beranda {{ $title }}</span>
             </div>
         </li>
     @endsection
@@ -30,8 +29,8 @@
     <div class="bg-white rounded-xl border border-gray-200 p-3 sm:p-6 m-3 sm:m-6 shadow-sm">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6 gap-4">
             <div>
-                <h2 class="text-lg font-semibold text-gray-900">Kelola Mitra</h2>
-                <p class="text-gray-600 mt-1 text-sm">Kelola kartu mitra yang akan ditampilkan di beranda website</p>
+                <h2 class="text-lg font-semibold text-gray-900">Kelola {{ $title }}</h2>
+                <p class="text-gray-600 mt-1 text-sm">Kelola kartu {{ $title }} yang akan ditampilkan di beranda website</p>
             </div>
             <button onclick="openAddModal()"
                 class="w-full sm:w-auto bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200 flex items-center justify-center">
@@ -39,7 +38,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                 </svg>
-                Tambah Mitra
+                Tambah {{ $title }}
             </button>
         </div>
 
@@ -52,7 +51,7 @@
                             d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                     </svg>
                 </div>
-                <input type="search" placeholder="Cari mitra..."
+                <input type="search" placeholder="Cari {{ $title }}..."
                     class="block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
             </div>
             <div class="flex flex-col sm:flex-row gap-2">
@@ -425,4 +424,5 @@
                 </div>
             </div>
         </div>
+    </div>
 </x-admin.layouts>
