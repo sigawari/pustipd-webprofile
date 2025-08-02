@@ -12,13 +12,6 @@
                     class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="Masukan Nama" required>
             </div>
-            <!-- Email -->
-            <div class="mb-4">
-                <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                <input type="email" name="email" id="email"
-                    class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="email@example.com" required>
-            </div>
             <!-- Role -->
             <div class="mb-4">
                 <label for="role" class="block text-sm font-medium text-gray-700 mb-2">Role</label>
@@ -30,7 +23,13 @@
                     <option value="tim-dev">Tim Dev</option>
                 </select>
             </div>
-
+            <!-- Email -->
+            <div class="mb-4">
+                <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                <input type="email" name="email" id="email" readonly
+                    class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Email akan terisi otomatis" required>
+            </div>
             <!-- Password -->
             <div class="mb-4">
                 <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
@@ -50,8 +49,24 @@
                     Simpan
                 </button>
             </div>
+            <!-- Script untuk mengisi email otomatis berdasarkan nama dan role -->
+            <script>
+                const nameInput = document.getElementById('name');
+                const roleSelect = document.getElementById('role');
+                const emailInput = document.getElementById('email');
+                function generateEmail() {
+                    const nameValue = nameInput.value.trim().split(" ")[0].toLowerCase(); // ambil nama depan
+                    const roleValue = roleSelect.value;
+                    if (nameValue && roleValue) {
+                        emailInput.value = `${nameValue}.${roleValue}@pustipd.radenfatah.ac.id`;
+                    } else {
+                        emailInput.value = '';
+                    }
+                }
+                nameInput.addEventListener('input', generateEmail);
+                roleSelect.addEventListener('change', generateEmail);
+            </script>
         </form>
-
         <!-- Tombol X di pojok -->
         <button onclick="closeAddModal()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
