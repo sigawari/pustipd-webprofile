@@ -167,40 +167,69 @@
             </div>
         </div>
 
-        <!-- Pagination  -->
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6 gap-4 pt-4">
+        <!-- Pagination -->
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4 pt-4">
+            <!-- Info jumlah data -->
             <div class="text-sm text-gray-500 text-center sm:text-left">
-                Menampilkan <span class="font-medium">1</span> sampai <span class="font-medium">3</span> dari
-                <span class="font-medium">15</span> galeri foto
+                Menampilkan {{ $users->firstItem() }} sampai {{ $users->lastItem() }} dari {{ $users->total() }} {{ strtolower($title) }}
             </div>
 
-            <!-- Responsive Pagination -->
-            <div class="flex justify-center">
-                <div class="flex items-center space-x-1 sm:space-x-2">
-                    <button
-                        class="px-2 py-1 sm:px-3 sm:py-2 text-xs sm:text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                        disabled>
-                        ‹
-                        <span class="hidden sm:inline">Sebelumnya</span>
-                    </button>
-                    <button
-                        class="px-2 py-1 sm:px-3 sm:py-2 text-xs sm:text-sm font-medium text-white bg-blue-600 border border-transparent rounded-lg hover:bg-blue-700">
-                        1
-                    </button>
-                    <button
-                        class="px-2 py-1 sm:px-3 sm:py-2 text-xs sm:text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
-                        2
-                    </button>
-                    <button
-                        class="px-2 py-1 sm:px-3 sm:py-2 text-xs sm:text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
-                        3
-                    </button>
-                    <button
-                        class="px-2 py-1 sm:px-3 sm:py-2 text-xs sm:text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
-                        <span class="hidden sm:inline">Selanjutnya</span>
-                        ›
-                    </button>
-                </div>
+            <!-- Tombol Pagination -->
+            <div class="flex justify-center sm:justify-end">
+                <nav class="inline-flex space-x-1 sm:space-x-2" aria-label="Pagination">
+                    <!-- Tombol Sebelumnya -->
+                    @if ($users->onFirstPage())
+                        <span class="px-3 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-300 rounded-lg cursor-not-allowed flex items-center gap-1">
+                            <!-- Icon: panah kiri -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                            </svg>
+                            <!-- Teks hanya di desktop -->
+                            <span class="hidden sm:inline">Sebelumnya</span>
+                        </span>
+                    @else
+                        <a href="{{ $users->previousPageUrl() }}"
+                        class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                            </svg>
+                            <span class="hidden sm:inline">Sebelumnya</span>
+                        </a>
+                    @endif
+
+                    {{-- Tombol Angka Halaman --}}
+                    @foreach ($users->getUrlRange(1, $users->lastPage()) as $page => $url)
+                        @if ($page == $users->currentPage())
+                            <span
+                                class="px-3 py-2 text-sm font-semibold text-white bg-blue-600 border border-blue-600 rounded-lg">
+                                {{ $page }}
+                            </span>
+                        @else
+                            <a href="{{ $url }}"
+                            class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                                {{ $page }}
+                            </a>
+                        @endif
+                    @endforeach
+
+                    <!-- Tombol Selanjutnya -->
+                    @if ($users->hasMorePages())
+                        <a href="{{ $users->nextPageUrl() }}"
+                        class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center gap-1">
+                            <span class="hidden sm:inline">Selanjutnya</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </a>
+                    @else
+                        <span class="px-3 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-300 rounded-lg cursor-not-allowed flex items-center gap-1">
+                            <span class="hidden sm:inline">Selanjutnya</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </span>
+                    @endif
+                </nav>
             </div>
         </div>
     </div>
