@@ -64,7 +64,6 @@
                     ])
                 @endif
 
-
                 <!-- Page Content -->
                 <main class="min-h-screen mb">
                     {{ $slot }}
@@ -83,7 +82,109 @@
             </div>
         </div>
 
-        <!-- JavaScript - LENGKAP dengan SEMUA FITUR -->
+        <!-- =============================== -->
+        <!-- Script Section -->
+        <!-- =============================== -->
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                // ===============================
+                // ADD MODAL HANDLER
+                // ===============================
+                const addModal = document.getElementById("achievementModal");
+                const addForm = addModal?.querySelector("#achievementForm");
+
+                window.openAddModal = function () {
+                    if (addModal) {
+                        addModal.classList.remove("hidden");
+                        addModal.classList.add("flex");
+                        document.body.classList.add("overflow-hidden");
+                    }
+                };
+
+                window.closeAddModal = function () {
+                    if (addModal) {
+                        addModal.classList.add("hidden");
+                        addModal.classList.remove("flex");
+                        document.body.classList.remove("overflow-hidden");
+                        if (addForm) addForm.reset();
+                    }
+                };
+
+                // Klik di luar untuk tutup add modal
+                addModal?.addEventListener("click", function (e) {
+                    if (e.target === addModal) closeAddModal();
+                });
+
+                // ===============================
+                // UPDATE MODAL HANDLER
+                // ===============================
+                const updateModal = document.getElementById("UpdateModal-${id}");
+
+                window.openUpdateModal = function (id) {
+                    const modal = document.getElementById(`UpdateModal-${id}`);
+                    if (modal) {
+                        modal.classList.remove("hidden");
+                        modal.classList.add("flex");
+                        document.body.classList.add("overflow-hidden");
+                    }
+                };
+
+                window.closeUpdateModal = function (id) {
+                    const modal = document.getElementById(`UpdateModal-${id}`);
+                    if (modal) {
+                        modal.classList.add("hidden");
+                        modal.classList.remove("flex");
+                        document.body.classList.remove("overflow-hidden");
+                    }
+                };
+
+                // Klik di luar modal
+                updateModal?.addEventListener("click", function (e) {
+                    if (e.target === updateModal) closeUpdateModal();
+                });
+
+
+                // ===============================
+                // DELETE MODAL HANDLER
+                // ===============================
+                const deleteModal = document.getElementById("deleteModal");
+                const deleteForm = document.getElementById("deleteForm");
+
+                window.openDeleteModal = function (id) {
+                    if (deleteModal && deleteForm) {
+                        deleteModal.classList.remove("hidden");
+                        deleteModal.classList.add("flex");
+                        document.body.classList.add("overflow-hidden");
+                    }
+                };
+
+                window.closeDeleteModal = function () {
+                    if (deleteModal && deleteForm) {
+                        deleteModal.classList.add("hidden");
+                        deleteModal.classList.remove("flex");
+                        deleteForm.action = "#";
+                        document.body.classList.remove("overflow-hidden");
+                    }
+                };
+
+                // Klik di luar untuk tutup delete modal
+                deleteModal?.addEventListener("click", function (e) {
+                    if (e.target === deleteModal) closeDeleteModal();
+                });
+
+                // ===============================
+                // GLOBAL ESC KEY HANDLER
+                // ===============================
+                document.addEventListener("keydown", function (e) {
+                    if (e.key === "Escape") {
+                        closeAddModal?.();
+                        closeDeleteModal?.();
+                    }
+                });
+            });
+        </script>
+
+        <!-- JavaScript - LENGKAP dengan SEMUA FITUR KYKNYA YAAA REFACTOR SEMUA SCRIPT INI wkwkwk -->
         <script>
             console.log('Achievement management script loaded');
 

@@ -129,19 +129,9 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                         <div class="flex items-center space-x-2">
-                                            <button onclick="previewAchievement(1)"
-                                                class="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50"
-                                                title="Preview">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor"
-                                                    viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
-                                                    </path>
-                                                </svg>
-                                            </button>
-                                            <button onclick="editAchievement(1)"
+                                            <button
+                                                onclick="openUpdateModal('{{ $user->id }}')"
+                                                data-name="{{ $user->name }}"
                                                 class="text-indigo-600 hover:text-indigo-900 p-1 rounded hover:bg-indigo-50"
                                                 title="Edit">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor"
@@ -151,17 +141,9 @@
                                                     </path>
                                                 </svg>
                                             </button>
-                                            <!-- <button onclick="duplicateAchievement(1)"
-                                                    class="text-gray-600 hover:text-gray-900 p-1 rounded hover:bg-gray-50"
-                                                    title="Duplicate">
-                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor"
-                                                        viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                            d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z">
-                                                        </path>
-                                                    </svg>
-                                                </button> -->
-                                            <button onclick="deleteAchievement(1)"
+                                            <button
+                                                onclick="openDeleteModal(this)"
+                                                data-url="{{ route('admin.sistem.users.destroy', $user->id) }}"
                                                 class="text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-50"
                                                 title="Hapus">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor"
@@ -176,7 +158,7 @@
                                 </tr>
                                 @empty
                                 <tr class="hover:bg-gray-50">
-                                    <td colspan="4" class="px-6 py-4 whitespace-nowrap">
+                                    <td colspan="6" class="px-6 py-4 whitespace-nowrap">
                                         Data ngga ada Y
                                     </td>
                                 </tr>
@@ -187,52 +169,44 @@
             </div>
         </div>
 
-        <!-- Pagination - DIPERBAIKI UNTUK MOBILE -->
+        <!-- Pagination  -->
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6 gap-4 pt-4">
             <div class="text-sm text-gray-500 text-center sm:text-left">
                 Menampilkan <span class="font-medium">1</span> sampai <span class="font-medium">3</span> dari
                 <span class="font-medium">15</span> galeri foto
             </div>
 
-            <!-- Mobile Pagination -->
-            <div class="flex justify-center sm:hidden">
-                <div class="flex items-center space-x-1">
+            <!-- Responsive Pagination -->
+            <div class="flex justify-center">
+                <div class="flex items-center space-x-1 sm:space-x-2">
                     <button
-                        class="px-2 py-1 text-xs font-medium text-gray-500 bg-white border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                        class="px-2 py-1 sm:px-3 sm:py-2 text-xs sm:text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                         disabled>
                         ‹
+                        <span class="hidden sm:inline">Sebelumnya</span>
                     </button>
                     <button
-                        class="px-2 py-1 text-xs font-medium text-white bg-blue-600 border border-transparent rounded">1</button>
+                        class="px-2 py-1 sm:px-3 sm:py-2 text-xs sm:text-sm font-medium text-white bg-blue-600 border border-transparent rounded-lg hover:bg-blue-700">
+                        1
+                    </button>
                     <button
-                        class="px-2 py-1 text-xs font-medium text-gray-500 bg-white border border-gray-300 rounded hover:bg-gray-50">2</button>
+                        class="px-2 py-1 sm:px-3 sm:py-2 text-xs sm:text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                        2
+                    </button>
                     <button
-                        class="px-2 py-1 text-xs font-medium text-gray-500 bg-white border border-gray-300 rounded hover:bg-gray-50">3</button>
+                        class="px-2 py-1 sm:px-3 sm:py-2 text-xs sm:text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                        3
+                    </button>
                     <button
-                        class="px-2 py-1 text-xs font-medium text-gray-500 bg-white border border-gray-300 rounded hover:bg-gray-50">
+                        class="px-2 py-1 sm:px-3 sm:py-2 text-xs sm:text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                        <span class="hidden sm:inline">Selanjutnya</span>
                         ›
                     </button>
                 </div>
             </div>
-
-            <!-- Desktop Pagination -->
-            <div class="hidden sm:flex items-center space-x-2">
-                <button
-                    class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
-                    disabled>
-                    Sebelumnya
-                </button>
-                <button
-                    class="px-3 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-lg hover:bg-blue-700">1</button>
-                <button
-                    class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:text-gray-700">2</button>
-                <button
-                    class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:text-gray-700">3</button>
-                <button
-                    class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:text-gray-700">
-                    Selanjutnya
-                </button>
-            </div>
         </div>
     </div>
+    @include('admin.manage-users.create')
+    @include('admin.manage-users.update')
+    @include('admin.manage-users.delete')
 </x-admin.layouts>
