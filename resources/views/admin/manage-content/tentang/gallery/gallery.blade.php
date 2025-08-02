@@ -1,6 +1,7 @@
 <!-- resources/views/admin/manage-content/about/profile.blade.php -->
 <x-admin.layouts>
-    @section('page-title', 'Galeri PUSTIPD')
+    <x-slot:title>{{$title}}</x-slot:title>
+    <!-- @section('page-title', 'Galeri PUSTIPD')
     @section('page-description', 'Kelola konten galeri PUSTIPD')
     @section('breadcrumb')
         <li>
@@ -20,17 +21,17 @@
                         d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 111.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
                         clip-rule="evenodd"></path>
                 </svg>
-                <span class="ml-1 text-sm font-medium text-gray-700 md:ml-2">Gambar Galeri PUSTIPD</span>
+                <span class="ml-1 text-sm font-medium text-gray-700 md:ml-2">Gambar {{$title}} PUSTIPD</span>
             </div>
         </li>
-    @endsection
+    @endsection -->
 
     <!-- Content Form -->
     <div class="bg-white rounded-xl border border-gray-200 p-6 m-6 shadow-sm">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
             <div>
-                <h2 class="text-lg font-semibold text-gray-900">Kelola Galeri</h2>
-                <p class="text-gray-600 mt-1">Kelola foto dan deskripsi kegiatan untuk galeri PUSTIPD</p>
+                <h2 class="text-lg font-semibold text-gray-900">Kelola {{$title}}</h2>
+                <p class="text-gray-600 mt-1">Kelola foto dan deskripsi kegiatan untuk {{$title}} PUSTIPD</p>
             </div>
             <button onclick="openGalleryModal()"
                 class="w-full sm:w-auto bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200 flex items-center justify-center">
@@ -112,7 +113,7 @@
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6 gap-4 pt-4">
             <div class="text-sm text-gray-500 text-center sm:text-left">
                 Menampilkan <span class="font-medium">1</span> sampai <span class="font-medium">3</span> dari
-                <span class="font-medium">15</span> galeri foto
+                <span class="font-medium">15</span> {{$title}} foto
             </div>
 
             <!-- Mobile Pagination -->
@@ -216,7 +217,7 @@
                                 <div class="w-full">
                                     <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4"
                                         id="galleryModalTitle">
-                                        Tambah Foto Galeri
+                                        Tambah Foto {{$title}}
                                     </h3>
 
                                     <!-- Photo Upload -->
@@ -302,7 +303,7 @@
                     class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
                     <div class="bg-white px-4 pt-5 pb-4 sm:p-6">
                         <div class="text-center">
-                            <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Preview Foto Galeri
+                            <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Preview Foto {{$title}}
                             </h3>
 
                             <div class="bg-gray-50 rounded-xl p-6">
@@ -488,7 +489,7 @@
                                         <svg class="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                                         </svg>
-                                        Tidak ada foto galeri
+                                        Tidak ada foto {{$title}}
                                     </td>
                                 </tr>
                             `;
@@ -844,7 +845,7 @@
                     });
 
                     this.closeGalleryModal();
-                    alert('Foto galeri berhasil disimpan! (Demo)');
+                    alert('Foto {{$title}} berhasil disimpan! (Demo)');
                 },
 
                 closeAllModals() {
@@ -884,7 +885,7 @@
                     const modal = document.getElementById('galleryModal');
                     if (modal) {
                         modal.classList.remove('hidden');
-                        document.getElementById('galleryModalTitle').textContent = 'Tambah Foto Galeri';
+                        document.getElementById('galleryModalTitle').textContent = 'Tambah Foto {{$title}}';
                     }
                 },
 
@@ -907,7 +908,7 @@
                 editGallery(id) {
                     console.log('Edit gallery:', id);
                     this.openGalleryModal();
-                    document.getElementById('galleryModalTitle').textContent = 'Edit Foto Galeri';
+                    document.getElementById('galleryModalTitle').textContent = 'Edit Foto {{$title}}';
                     // TODO: Load existing data for editing
                 },
 

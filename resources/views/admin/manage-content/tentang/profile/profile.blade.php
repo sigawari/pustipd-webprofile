@@ -52,11 +52,11 @@
                     <!-- Description -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">
-                            Deskripsi untuk Halaman Profil
+                            Deskripsi untuk Halaman {{$title}}
                         </label>
                         <textarea name="description" rows="4"
                             class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            placeholder="Deskripsi organisasi yang akan ditampilkan di halaman profil website...">{{ old('description', $profileData->description ?? '') }}</textarea>
+                            placeholder="Deskripsi organisasi yang akan ditampilkan di halaman {{$title}} website...">{{ old('description', $profileData->description ?? '') }}</textarea>
                     </div>
 
                     <!-- Address -->
@@ -115,7 +115,7 @@
                     <!-- Profile Photo Upload -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">
-                            Foto Profil untuk Beranda
+                            Foto {{$title}} untuk Beranda
                         </label>
 
                         <!-- Current Photo Preview -->
@@ -142,7 +142,7 @@
                             <div class="mt-4">
                                 <label for="profile-photo-upload" class="cursor-pointer">
                                     <span class="mt-2 block text-sm font-medium text-gray-900">
-                                        {{ isset($profileData->profile_photo) ? 'Ganti foto profil' : 'Upload foto profil' }}
+                                        {{ isset($profileData->profile_photo) ? 'Ganti foto profile' : 'Upload foto profile' }}
                                     </span>
                                     <span class="mt-1 block text-xs text-gray-500">
                                         PNG, JPG up to 5MB (disarankan 1200x800px)

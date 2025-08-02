@@ -14,6 +14,7 @@ use App\Http\Controllers\admin\ManageContent\Beranda\LayananController;
 use App\Http\Controllers\admin\ManageContent\Beranda\PencapaianController;
 
 use App\Http\Controllers\admin\ManageContent\Tentang\ProfileController;
+use App\Http\Controllers\admin\ManageContent\Tentang\GalleryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -93,7 +94,16 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
             });
 
             // Gallery Routes
+            Route::controller(GalleryController::class)->group(function(){
+                Route::get('/gallery', 'index')->name('gallery');
+                Route::get('/gallery/create', 'create')->name('gallery.create');
+                Route::post('/gallery', 'store')->name('gallery.store');
+                Route::get('/gallery/{gallery}/edit', 'edit')->name('gallery.edit');
+                Route::put('/gallery/{gallery}', 'update')->name('gallery.update');
+                Route::delete('/gallery/{gallery}', 'destroy')->name('gallery.destroy');
+                Route::get('/gallery/export', 'export')->name('gallery.export');
 
+            });
 
             // Visi-Misi Routes
 
