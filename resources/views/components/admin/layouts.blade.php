@@ -118,8 +118,6 @@
                 // ===============================
                 // UPDATE MODAL HANDLER
                 // ===============================
-                const updateModal = document.getElementById("UpdateModal-${id}");
-
                 window.openUpdateModal = function (id) {
                     const modal = document.getElementById(`UpdateModal-${id}`);
                     if (modal) {
@@ -138,38 +136,47 @@
                     }
                 };
 
-                // Klik di luar modal
-                updateModal?.addEventListener("click", function (e) {
-                    if (e.target === updateModal) closeUpdateModal();
+                // Klik di luar modal untuk close
+                document.querySelectorAll('[id^="UpdateModal-"]').forEach((modal) => {
+                    modal.addEventListener('click', function (e) {
+                        if (e.target === modal) {
+                            modal.classList.add("hidden");
+                            modal.classList.remove("flex");
+                            document.body.classList.remove("overflow-hidden");
+                        }
+                    });
                 });
-
 
                 // ===============================
                 // DELETE MODAL HANDLER
                 // ===============================
-                const deleteModal = document.getElementById("deleteModal");
-                const deleteForm = document.getElementById("deleteForm");
-
                 window.openDeleteModal = function (id) {
-                    if (deleteModal && deleteForm) {
-                        deleteModal.classList.remove("hidden");
-                        deleteModal.classList.add("flex");
+                    const modal = document.getElementById(`DeleteModal-${id}`);
+                    if (modal) {
+                        modal.classList.remove("hidden");
+                        modal.classList.add("flex");
                         document.body.classList.add("overflow-hidden");
                     }
                 };
 
-                window.closeDeleteModal = function () {
-                    if (deleteModal && deleteForm) {
-                        deleteModal.classList.add("hidden");
-                        deleteModal.classList.remove("flex");
-                        deleteForm.action = "#";
+                window.closeDeleteModal = function (id) {
+                    const modal = document.getElementById(`DeleteModal-${id}`);
+                    if (modal) {
+                        modal.classList.add("hidden");
+                        modal.classList.remove("flex");
                         document.body.classList.remove("overflow-hidden");
                     }
                 };
 
-                // Klik di luar untuk tutup delete modal
-                deleteModal?.addEventListener("click", function (e) {
-                    if (e.target === deleteModal) closeDeleteModal();
+                // Klik di luar modal untuk close
+                document.querySelectorAll('[id^="DeleteModal-"]').forEach((modal) => {
+                    modal.addEventListener('click', function (e) {
+                        if (e.target === modal) {
+                            modal.classList.add("hidden");
+                            modal.classList.remove("flex");
+                            document.body.classList.remove("overflow-hidden");
+                        }
+                    });
                 });
 
                 // ===============================
@@ -177,8 +184,26 @@
                 // ===============================
                 document.addEventListener("keydown", function (e) {
                     if (e.key === "Escape") {
+                        // Tutup add modal
                         closeAddModal?.();
-                        closeDeleteModal?.();
+
+                        // Tutup semua update modal yang sedang terbuka
+                        document.querySelectorAll('[id^="UpdateModal-"]').forEach((modal) => {
+                            if (!modal.classList.contains("hidden")) {
+                                modal.classList.add("hidden");
+                                modal.classList.remove("flex");
+                                document.body.classList.remove("overflow-hidden");
+                            }
+                        });
+
+                        // Tutup semua delete modal yang sedang terbuka
+                        document.querySelectorAll('[id^="DeleteModal-"]').forEach((modal) => {
+                            if (!modal.classList.contains("hidden")) {
+                                modal.classList.add("hidden");
+                                modal.classList.remove("flex");
+                                document.body.classList.remove("overflow-hidden");
+                            }
+                        });
                     }
                 });
             });

@@ -131,7 +131,6 @@
                                         <div class="flex items-center space-x-2">
                                             <button
                                                 onclick="openUpdateModal('{{ $user->id }}')"
-                                                data-name="{{ $user->name }}"
                                                 class="text-indigo-600 hover:text-indigo-900 p-1 rounded hover:bg-indigo-50"
                                                 title="Edit">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor"
@@ -142,8 +141,7 @@
                                                 </svg>
                                             </button>
                                             <button
-                                                onclick="openDeleteModal(this)"
-                                                data-url="{{ route('admin.sistem.users.destroy', $user->id) }}"
+                                                onclick="openDeleteModal('{{ $user->id }}')"
                                                 class="text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-50"
                                                 title="Hapus">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor"

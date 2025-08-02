@@ -19,14 +19,6 @@ class ManageUserController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
@@ -43,14 +35,6 @@ class ManageUserController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(User $user)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, User $user)
@@ -61,8 +45,18 @@ class ManageUserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function destroy($id)
     {
-        //
+        dd($id);
+        // Cari data berdasarkan ID
+        $user = User::findOrFail($id);
+        // Jika data tidak ditemukan, kembalikan dengan pesan error
+        if (!$user) {
+            return redirect()->route('admin.manage-users.index')->with('error', 'Data tidak ditemukan.');
+        }
+        // Hapus data Pengguna
+        $user->delete();
+        // Redirect kembali dengan pesan sukses
+        return redirect()->route('admin.manage-users.index')->with('success', 'Data berhasil dihapus.');
     }
 }
