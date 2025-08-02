@@ -147,23 +147,7 @@ class ManageContentController extends Controller
     
     /**
      * Preview organization profile
-     */
-
-    public function berandaLayanan()
-    {
-        $pageData = [
-            'title' => 'Kelola Layanan',
-            'pageName' => 'Beranda', // Untuk breadcrumb
-            'description' => 'Kelola konten Layanan yang ditampilkan di beranda website',
-            'breadcrumbs' => [
-                ['name' => 'Kelola Konten', 'url' => '#'],
-                ['name' => 'Beranda', 'url' => '#'],
-                ['name' => 'Layanan', 'url' => null]
-            ]
-        ];
-        
-        return view('admin.manage-content.beranda.layanan', compact('pageData'));
-    }
+     */    
     
     public function tentangProfilPreview()
     {

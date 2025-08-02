@@ -5,8 +5,9 @@ use App\Http\Controllers\PublicsController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ManageContentController;
 use App\Http\Controllers\admin\DashboardController;
-use App\Http\Controllers\admin\ManageContent\Beranda\MitraController;
 use App\Http\Controllers\admin\ManageUserController;
+use App\Http\Controllers\admin\ManageContent\Beranda\MitraController;
+use App\Http\Controllers\admin\ManageContent\Beranda\LayananController;
 use App\Http\Controllers\admin\ManageContent\Beranda\PencapaianController;
 
 /*
@@ -62,11 +63,15 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
             });
 
             // Layanan
-
-           
-            
-            
-            Route::get('/layanan', [ManageContentController::class, 'berandaLayanan'])->name('layanan');
+            Route::controller(LayananController::class)->group(function(){
+                Route::get('/layanan', 'index')->name('layanan');
+                Route::get('/layanan/create', 'create')->name('layanan.create');
+                Route::post('/layanan', 'store')->name('layanan.store');
+                Route::get('/layanan/{layanan}/edit', 'edit')->name('layanan.edit');
+                Route::put('/layanan/{layanan}', 'update')->name('layanan.update');
+                Route::delete('/layanan/{layanan}', 'destroy')->name('layanan.destroy');
+                Route::get('/layanan/export', 'export')->name('layanan.export');
+            });
         });
 
         // tentang Section Routes - PERBAIKAN DI SINI

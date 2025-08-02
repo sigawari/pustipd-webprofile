@@ -14,7 +14,9 @@ class LayananController extends Controller
      */
     public function index()
     {
-        //
+        $title = "Kelola Layanan";
+
+        return view('admin.manage-content.beranda.layanan.layanan', compact('title'));
     }
 
     /**
