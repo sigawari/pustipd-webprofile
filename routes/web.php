@@ -15,6 +15,7 @@ use App\Http\Controllers\admin\ManageContent\Beranda\PencapaianController;
 
 use App\Http\Controllers\admin\ManageContent\Tentang\ProfileController;
 use App\Http\Controllers\admin\ManageContent\Tentang\GalleryController;
+use App\Http\Controllers\admin\ManageContent\Tentang\VisiMisiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -102,30 +103,29 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
                 Route::put('/gallery/{gallery}', 'update')->name('gallery.update');
                 Route::delete('/gallery/{gallery}', 'destroy')->name('gallery.destroy');
                 Route::get('/gallery/export', 'export')->name('gallery.export');
-
             });
 
             // Visi-Misi Routes
+            Route::controller(VisiMisiController::class)->group(function(){
+                Route::get('/visi-misi', 'index')->name('visi-misi');
+                Route::get('/visi-misi/create', 'create')->name('visi-misi.create');
+                Route::post('/visi-misi', 'store')->name('visi-misi.store');
+                Route::get('/visi-misi/{visi-misi}/edit', 'edit')->name('visi-misi.edit');
+                Route::put('/visi-misi/{visi-misi}', 'update')->name('visi-misi.update');
+                Route::delete('/visi-misi/{visi-misi}', 'destroy')->name('visi-misi.destroy');
+                Route::get('/visi-misi/export', 'export')->name('visi-misi.export');
+            });
 
 
             // Oranization Routes
 
-
-
-
-            // Route::get('/profil', [ManageContentController::class, 'tentangProfil'])->name('profil');
-            // Route::put('/profil', [ManageContentController::class, 'tentangProfilUpdate'])->name('profil.update');
-            // Route::get('/profil/preview', [ManageContentController::class, 'tentangProfilPreview'])->name('profil.preview');
-           
-            Route::get('/galeri', [ManageContentController::class, 'tentangGaleri'])->name('galeri');
             
-            Route::get('/visi-misi', [ManageContentController::class, 'tentangVisiMisi'])->name('visi-misi');
-            Route::put('/visi-misi', [ManageContentController::class, 'tentangVisiMisiUpdate'])->name('visi-misi.update');
+            // Route::get('/visi-misi', [ManageContentController::class, 'tentangVisiMisi'])->name('visi-misi');
+            // Route::put('/visi-misi', [ManageContentController::class, 'tentangVisiMisiUpdate'])->name('visi-misi.update');
             
             Route::get('/organisasi', [ManageContentController::class, 'tentangOrganisasi'])->name('organisasi');
             Route::put('/organisasi', [ManageContentController::class, 'tentangOrganisasiUpdate'])->name('organisasi.update');
 
-            Route::get('/galeri', [ManageContentController::class, 'tentangGaleri'])->name('galeri');
 
         });
 

@@ -2,21 +2,21 @@
 
 namespace App\Http\Controllers\admin\ManageContent\Tentang;
 
-use App\Models\ManageContent\AboutUs\Gallery;
+use App\Models\ManageContent\AboutUs\VisiMisi;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreGalleryRequest;
-use App\Http\Requests\UpdateGalleryRequest;
+use App\Http\Requests\StoreVisiMisiRequest;
+use App\Http\Requests\UpdateVisiMisiRequest;
 
-class GalleryController extends Controller
+class VisiMisiController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $title = 'Gallery';
+        $title = 'Visi Misi';
 
-        return view('admin.manage-content.tentang.gallery.gallery', compact('title'));
+        return view('admin.manage-content.tentang.visi-misi.visi-misi', compact('title'));
     }
 
     /**
@@ -30,7 +30,7 @@ class GalleryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreGalleryRequest $request)
+    public function store(StoreVisiMisiRequest $request)
     {
         //
     }
@@ -38,7 +38,7 @@ class GalleryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Gallery $gallery)
+    public function show(VisiMisi $visiMisi)
     {
         //
     }
@@ -46,7 +46,7 @@ class GalleryController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Gallery $gallery)
+    public function edit(VisiMisi $visiMisi)
     {
         //
     }
@@ -54,7 +54,7 @@ class GalleryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateGalleryRequest $request, Gallery $gallery)
+    public function update(UpdateVisiMisiRequest $request, VisiMisi $visiMisi)
     {
         //
     }
@@ -62,7 +62,7 @@ class GalleryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Gallery $gallery)
+    public function destroy(VisiMisi $visiMisi)
     {
         //
     }

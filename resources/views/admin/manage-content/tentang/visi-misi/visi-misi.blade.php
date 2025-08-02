@@ -1,6 +1,7 @@
 <!-- resources/views/admin/manage-content/tentang/visi-misi.blade.php -->
 <x-admin.layouts>
-    @section('page-title', 'Visi Misi PUSTIPD')
+    <x-slot:title>{{$title}}</x-slot:title>
+    <!-- @section('page-title', 'Visi Misi PUSTIPD')
     @section('page-description', 'Kelola konten visi misi PUSTIPD')
     @section('breadcrumb')
         <li>
@@ -23,13 +24,13 @@
                 <span class="ml-1 text-sm font-medium text-gray-700 md:ml-2">Visi Misi PUSTIPD</span>
             </div>
         </li>
-    @endsection
+    @endsection -->
 
     <!-- Content Form -->
     <div class="bg-white rounded-xl border border-gray-200 p-6 m-6 shadow-sm">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
             <div>
-                <h2 class="text-lg font-semibold text-gray-900">Kelola Visi & Misi</h2>
+                <h2 class="text-lg font-semibold text-gray-900">Kelola {{$title}}</h2>
                 <p class="text-gray-600 mt-1">Kelola visi dan misi PUSTIPD UIN Raden Fatah Palembang</p>
             </div>
             <div class="flex flex-col sm:flex-row gap-2">
@@ -127,7 +128,7 @@
                 class="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-6 pt-6 border-t border-gray-200 gap-4">
                 <!-- Preview Section -->
                 <div class="flex justify-center sm:justify-start">
-                    <a href="{{ route('admin.manage-content.tentang.profil.preview') }}" target="_blank"
+                    <a href="#" target="_blank"
                         class="w-full sm:w-auto px-4 py-2 border border-blue-300 text-blue-700 rounded-lg hover:bg-blue-50 transition-colors duration-200 flex items-center justify-center">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

@@ -142,28 +142,6 @@ class ManageContentController extends Controller
     /**
      * Preview organization profile
      */    
-    
-    public function tentangProfilPreview()
-    {
-        $profileData = ManageContent::where('type', 'organization_profile')->first();
-        
-        // Return view untuk preview (bisa redirect ke halaman publik website)
-        return view('admin.manage-content.tentang.profil-preview', compact('profileData'));
-    }
-    
-    public function tentangGaleri()
-    {
-        return view('admin.manage-content.tentang.galeri');
-    }
-    public function tentangVisiMisi()
-    {
-        return view('admin.manage-content.tentang.visi-misi');
-    }
-    
-    public function tentangOrganisasi()
-    {
-        return view('admin.manage-content.tentang.organisasi');
-    }
 
     // === CUSTOM METHODS UNTUK CONTENT LAINNYA ===
     
