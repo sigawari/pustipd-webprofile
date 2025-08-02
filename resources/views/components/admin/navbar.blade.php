@@ -127,7 +127,7 @@
                         <div class="px-4 py-3 border-b border-gray-100 bg-gray-50">
                             <div class="flex items-center justify-between">
                                 <h3 class="text-sm font-semibold text-gray-900">Notifikasi</h3>
-                                <span class="text-xs text-gray-500 bg-blue-100 text-blue-800 px-2 py-1 rounded-full">3
+                                <span class="text-xs text-gray-500 bg-blue-100 px-2 py-1 rounded-full">3
                                     baru</span>
                             </div>
                         </div>
