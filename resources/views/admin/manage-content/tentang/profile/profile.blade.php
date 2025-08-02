@@ -1,6 +1,7 @@
 <!-- resources/views/admin/manage-content/about/profile.blade.php -->
 <x-admin.layouts>
-    @section('page-title', 'Profil PUSTIPD')
+    <x-slot:title>{{ $title }}</x-slot:title>
+    <!-- @section('page-title', 'Profil PUSTIPD')
     @section('page-description', 'Kelola konten profil organisasi PUSTIPD')
     @section('breadcrumb')
         <li>
@@ -23,11 +24,11 @@
                 <span class="ml-1 text-sm font-medium text-gray-700 md:ml-2">Profil PUSTIPD</span>
             </div>
         </li>
-    @endsection
+    @endsection -->
 
     <!-- Content Form -->
     <div class="bg-white rounded-xl border border-gray-200 p-6 m-6 shadow-sm">
-        <form action="{{ route('admin.manage-content.tentang.profil.update') }}" method="POST"
+        <form action="#" method="POST"
             enctype="multipart/form-data">
             @csrf
             @if (isset($profileData))
@@ -295,7 +296,7 @@
                 class="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-6 pt-6 border-t border-gray-200 gap-4">
                 <!-- Preview Section -->
                 <div class="flex justify-center sm:justify-start">
-                    <a href="{{ route('admin.manage-content.tentang.profil.preview') }}" target="_blank"
+                    <a href="#" target="_blank"
                         class="w-full sm:w-auto px-4 py-2 border border-blue-300 text-blue-700 rounded-lg hover:bg-blue-50 transition-colors duration-200 flex items-center justify-center">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

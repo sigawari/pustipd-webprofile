@@ -70,80 +70,74 @@ class ManageContentController extends Controller
     }
 
     // === CUSTOM METHODS UNTUK tentang SECTION ===
-    public function tentangProfil()
-    {
-        // Ambil data existing jika ada
-        $profileData = ManageContent::where('type', 'organization_profile')->first();
-        
-        return view('admin.manage-content.tentang.profil', compact('profileData'));
-    }
+    
     
     /**
      * Update organization profile data
      */
-    public function tentangProfilUpdate(Request $request)
-    {
-        $request->validate([
-            'organization_name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'address' => 'nullable|string',
-            'email' => 'nullable|email',
-            'instagram_url' => 'nullable|url',
-            'facebook_url' => 'nullable|url',
-            'youtube_url' => 'nullable|url',
-            'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg|max:5120', // 5MB max
-            'applications' => 'nullable|array',
-            'applications.*.name' => 'required_with:applications|string',
-            'applications.*.url' => 'required_with:applications|url',
-            'institutions' => 'nullable|array',
-            'institutions.*.name' => 'required_with:institutions|string',
-            'institutions.*.url' => 'required_with:institutions|url',
-            'universities' => 'nullable|array',
-            'universities.*.faculty' => 'required_with:universities|string',
-            'universities.*.url' => 'required_with:universities|url',
-        ]);
+    // public function tentangProfilUpdate(Request $request)
+    // {
+    //     $request->validate([
+    //         'organization_name' => 'required|string|max:255',
+    //         'description' => 'nullable|string',
+    //         'address' => 'nullable|string',
+    //         'email' => 'nullable|email',
+    //         'instagram_url' => 'nullable|url',
+    //         'facebook_url' => 'nullable|url',
+    //         'youtube_url' => 'nullable|url',
+    //         'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg|max:5120', // 5MB max
+    //         'applications' => 'nullable|array',
+    //         'applications.*.name' => 'required_with:applications|string',
+    //         'applications.*.url' => 'required_with:applications|url',
+    //         'institutions' => 'nullable|array',
+    //         'institutions.*.name' => 'required_with:institutions|string',
+    //         'institutions.*.url' => 'required_with:institutions|url',
+    //         'universities' => 'nullable|array',
+    //         'universities.*.faculty' => 'required_with:universities|string',
+    //         'universities.*.url' => 'required_with:universities|url',
+    //     ]);
 
-        // Find or create organization profile
-        $profileData = ManageContent::firstOrNew(['type' => 'organization_profile']);
+    //     // Find or create organization profile
+    //     $profileData = ManageContent::firstOrNew(['type' => 'organization_profile']);
         
-        // Handle file upload
-        if ($request->hasFile('profile_photo')) {
-            // Delete old photo if exists
-            if ($profileData->profile_photo && Storage::exists($profileData->profile_photo)) {
-                Storage::delete($profileData->profile_photo);
-            }
+    //     // Handle file upload
+    //     if ($request->hasFile('profile_photo')) {
+    //         // Delete old photo if exists
+    //         if ($profileData->profile_photo && Storage::exists($profileData->profile_photo)) {
+    //             Storage::delete($profileData->profile_photo);
+    //         }
             
-            // Store new photo
-            $profileData->profile_photo = $request->file('profile_photo')->store('profile-photos', 'public');
-        }
+    //         // Store new photo
+    //         $profileData->profile_photo = $request->file('profile_photo')->store('profile-photos', 'public');
+    //     }
         
-        // Update basic fields
-        $profileData->organization_name = $request->organization_name;
-        $profileData->description = $request->description;
-        $profileData->address = $request->address;
-        $profileData->email = $request->email;
-        $profileData->instagram_url = $request->instagram_url;
-        $profileData->facebook_url = $request->facebook_url;
-        $profileData->youtube_url = $request->youtube_url;
+    //     // Update basic fields
+    //     $profileData->organization_name = $request->organization_name;
+    //     $profileData->description = $request->description;
+    //     $profileData->address = $request->address;
+    //     $profileData->email = $request->email;
+    //     $profileData->instagram_url = $request->instagram_url;
+    //     $profileData->facebook_url = $request->facebook_url;
+    //     $profileData->youtube_url = $request->youtube_url;
         
-        // Handle dynamic lists (store as JSON)
-        $profileData->applications = $request->applications ? array_filter($request->applications, function($app) {
-            return !empty($app['name']) && !empty($app['url']);
-        }) : [];
+    //     // Handle dynamic lists (store as JSON)
+    //     $profileData->applications = $request->applications ? array_filter($request->applications, function($app) {
+    //         return !empty($app['name']) && !empty($app['url']);
+    //     }) : [];
         
-        $profileData->institutions = $request->institutions ? array_filter($request->institutions, function($inst) {
-            return !empty($inst['name']) && !empty($inst['url']);
-        }) : [];
+    //     $profileData->institutions = $request->institutions ? array_filter($request->institutions, function($inst) {
+    //         return !empty($inst['name']) && !empty($inst['url']);
+    //     }) : [];
         
-        $profileData->universities = $request->universities ? array_filter($request->universities, function($univ) {
-            return !empty($univ['faculty']) && !empty($univ['url']);
-        }) : [];
+    //     $profileData->universities = $request->universities ? array_filter($request->universities, function($univ) {
+    //         return !empty($univ['faculty']) && !empty($univ['url']);
+    //     }) : [];
         
-        $profileData->save();
+    //     $profileData->save();
         
-        return redirect()->route('admin.manage-content.tentang.profil')
-                        ->with('success', 'Profil organisasi berhasil diperbarui!');
-    }
+    //     return redirect()->route('admin.manage-content.tentang.profil')
+    //                     ->with('success', 'Profil organisasi berhasil diperbarui!');
+    // }
     
     /**
      * Preview organization profile

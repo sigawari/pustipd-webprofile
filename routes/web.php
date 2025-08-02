@@ -2,13 +2,18 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PublicsController;
+
 use App\Http\Controllers\Auth\LoginController;
+
 use App\Http\Controllers\ManageContentController;
 use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\admin\ManageUserController;
+
 use App\Http\Controllers\admin\ManageContent\Beranda\MitraController;
 use App\Http\Controllers\admin\ManageContent\Beranda\LayananController;
 use App\Http\Controllers\admin\ManageContent\Beranda\PencapaianController;
+
+use App\Http\Controllers\admin\ManageContent\Tentang\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -76,9 +81,31 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
 
         // tentang Section Routes - PERBAIKAN DI SINI
         Route::prefix('tentang')->as('tentang.')->group(function () {
-            Route::get('/profil', [ManageContentController::class, 'tentangProfil'])->name('profil');
-            Route::put('/profil', [ManageContentController::class, 'tentangProfilUpdate'])->name('profil.update');
-            Route::get('/profil/preview', [ManageContentController::class, 'tentangProfilPreview'])->name('profil.preview');
+            // Profile Routes
+            Route::controller(ProfileController::class)->group(function(){
+                Route::get('/profile', 'index')->name('profile');
+                Route::get('/profile/create', 'create')->name('profile.create');
+                Route::post('/profile', 'store')->name('profile.store');
+                Route::get('/profile/{profile}/edit', 'edit')->name('profile.edit');
+                Route::put('/profile/{profile}', 'update')->name('profile.update');
+                Route::delete('/profile/{profile}', 'destroy')->name('profile.destroy');
+                Route::get('/profile/export', 'export')->name('profile.export');
+            });
+
+            // Gallery Routes
+
+
+            // Visi-Misi Routes
+
+
+            // Oranization Routes
+
+
+
+
+            // Route::get('/profil', [ManageContentController::class, 'tentangProfil'])->name('profil');
+            // Route::put('/profil', [ManageContentController::class, 'tentangProfilUpdate'])->name('profil.update');
+            // Route::get('/profil/preview', [ManageContentController::class, 'tentangProfilPreview'])->name('profil.preview');
            
             Route::get('/galeri', [ManageContentController::class, 'tentangGaleri'])->name('galeri');
             

@@ -129,7 +129,7 @@
                             :class="(selected === 'Tentang') ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'">
                             <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'" class="flex flex-col gap-1 mt-2 pl-12">
                                 <li>
-                                    <a href="{{ route('admin.manage-content.tentang.profil') }}"
+                                    <a href="{{ route('admin.manage-content.tentang.profile') }}"
                                         class="block py-2 px-4 text-sm text-gray-500 hover:text-indigo-600 hover:bg-indigo-25 rounded-lg transition-colors duration-200">
                                         Profil
                                     </a>
