@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers\admin\Sistem;
 
-use App\Models\User;
+use App\Models\Sistem\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -14,7 +14,8 @@ class ManageUserController extends Controller
     public function index()
     {
         $title = 'Pengguna';
-        return view('admin.manage-users.index', compact('title'));
+        $users = User::paginate(10);
+        return view('admin.manage-users.index', compact('title', 'users'));
     }
 
     /**

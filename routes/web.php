@@ -7,7 +7,7 @@ use App\Http\Controllers\Auth\LoginController;
 
 use App\Http\Controllers\ManageContentController;
 use App\Http\Controllers\admin\DashboardController;
-use App\Http\Controllers\admin\ManageUserController;
+use App\Http\Controllers\admin\Sistem\ManageUserController;
 
 use App\Http\Controllers\admin\ManageContent\Beranda\MitraController;
 use App\Http\Controllers\admin\ManageContent\Beranda\LayananController;
