@@ -13,7 +13,8 @@ class ManageUserController extends Controller
      */
     public function index()
     {
-        //
+        $title = 'Kelola Pengguna';
+        return view('admin.manage-users.index', compact('title'));
     }
 
     /**

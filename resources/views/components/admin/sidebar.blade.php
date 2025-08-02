@@ -339,7 +339,7 @@
 
                 <ul class="flex flex-col gap-2 mb-2">
                     <li>
-                        <a href="#" @click="selected = 'Users'"
+                        <a href="{{route('admin.sistem.users.index')}}" @click="selected = 'Users'"
                             class="group relative flex items-center gap-3 rounded-xl px-4 py-3 font-medium text-gray-600 duration-300 ease-in-out hover:bg-violet-50 hover:text-violet-600"
                             :class="(selected === 'Users') ? 'bg-violet-50 text-violet-600' : ''">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"

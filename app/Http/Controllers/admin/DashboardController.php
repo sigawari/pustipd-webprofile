@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Models\Dashboard;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {

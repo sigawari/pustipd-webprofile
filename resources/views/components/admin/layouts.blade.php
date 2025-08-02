@@ -50,7 +50,20 @@
                 }">
 
                 <!-- Header -->
-                <x-admin.header>{{ $title }}</x-admin.header>
+                @if (Route::currentRouteName() === 'admin.dashboard.index')
+                    {{-- Tampilkan welcome header hanya di dashboard --}}
+                    @include('components.admin.header-welcome')
+                @else
+                    {{-- Tampilkan header biasa di halaman lain --}}
+                    @include('components.admin.header-default', [
+                        'pageData' => [
+                            'pageName' => $title ?? 'Halaman',
+                            'title' => $title ?? 'Judul Halaman',
+                            'description' => 'Kelola konten sesuai kebutuhan Anda.'
+                        ]
+                    ])
+                @endif
+
 
                 <!-- Page Content -->
                 <main class="min-h-screen mb">

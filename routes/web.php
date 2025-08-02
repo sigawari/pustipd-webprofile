@@ -5,6 +5,7 @@ use App\Http\Controllers\PublicsController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ManageContentController;
 use App\Http\Controllers\admin\DashboardController;
+use App\Http\Controllers\admin\ManageUserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -83,6 +84,20 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
         Route::get('/edit', function() {
             return view('admin.profil.edit');
         })->name('edit');
+    });
+
+    // Sistem Routes
+    Route::prefix('sistem')->as('sistem.')->group(function () {
+        // Manage Users
+        Route::controller(ManageUserController::class)->name('users.')->group(function () {
+            Route::get('/users', 'index')->name('index');
+            Route::get('/users/create', 'create')->name('create');
+            Route::post('/users', 'store')->name('store');
+            Route::get('/users/{user}/edit', 'edit')->name('edit');
+            Route::put('/users/{user}', 'update')->name('update');
+            Route::delete('/users/{user}', 'destroy')->name('destroy');
+            Route::get('/users/export', 'export')->name('export');
+        });
     });
 });
 
