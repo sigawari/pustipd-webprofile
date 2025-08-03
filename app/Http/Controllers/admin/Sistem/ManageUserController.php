@@ -6,16 +6,75 @@ use App\Models\Sistem\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ManageUserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $title = 'Pengguna';
-        $users = User::paginate(10);
+        $search = $request->input('search', '');
+        $filter = $request->query('filter', 'all');
+        $perPage = $request->input('perPage', 10);
+
+        // Pisahkan multi keyword
+        $keywords = !empty($search) ? preg_split('/\s+/', (string) $search) : [];
+
+        // Query builder awal
+        $adminQuery = User::where('role', 'admin');
+        $user_publicQuery = User::where('role', 'user_public');
+        
+        // Apply search jika ada
+        if ($search){
+            $adminQuery->where(function ($q) use ($keywords) {
+                foreach ($keywords as $word){
+                    $q->where(function ($q) use ($word){
+                        $q->where('name', 'Like', "%{$word}%")
+                        ->orWhere('email', 'Like', "%{$word}%");
+                    });
+                }
+            });
+            $user_publicQuery->where(function ($q) use ($keywords) {
+                foreach ($keywords as $word){
+                    $q->where(function ($q) use ($word){
+                        $q->where('name', 'Like', "%{$word}%")
+                        ->orWhere('email', 'Like', "%{$word}%");
+                    });
+                }
+            });
+        }
+
+        // Ambil data sesuai filter
+        if ($filter == 'admin'){
+            $admins = $adminQuery->get();
+            $user_publics = collect(); // Kosong
+        } elseif ($filter == 'user_public'){
+            $admins = collect(); // Kosong
+            $user_publics = $user_publicQuery->get();
+        } else { // All
+            $admins = $adminQuery->get();
+            $user_publics = $user_publicQuery->get();
+        }
+
+        // Merge + Pagination
+        $merged = $admins->concat($user_publics);
+        $perPage = 10;
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        $currentItems = $merged->slice(($currentPage - 1) * $perPage, $perPage)->values();
+        $users = new LengthAwarePaginator($currentItems, $merged->count(), $perPage, $currentPage, [
+            'path' => request()->url(),
+            'query' => request()->query(),
+        ]);
+
+        // AJAX response
+        if ($request->ajax()){
+            return view('admin.manage-users.partials.table_body', compact('title', 'admins', 'user_publics', 'users', 'keywords', 'filter'))->render();
+        }
+
+        // View Utama
         return view('admin.manage-users.index', compact('title', 'users'));
     }
 
@@ -30,7 +89,7 @@ class ManageUserController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'role' => 'required|string|in:admin,user',
+            'role' => 'required|string|in:admin,user-public',
             'password' => 'required|string|min:8',
         ]);
 
@@ -83,7 +142,7 @@ class ManageUserController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,'.$user->id,
-            'role' => 'required|string|in:admin,user',
+            'role' => 'required|string|in:admin,user-public',
             'password' => 'nullable|string|min:8',
         ]);
         

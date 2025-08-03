@@ -23,7 +23,7 @@
                     required>
                     <option value="">-- Pilih Role --</option>
                     <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Admin</option>
-                    <option value="user" {{ $user->role == 'user' ? 'selected' : '' }}>User Public</option>
+                    <option value="user_public" {{ $user->role == 'user' ? 'selected' : '' }}>User Public</option>
                 </select>
             </div>
             <!-- Email -->

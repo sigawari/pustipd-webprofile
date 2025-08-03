@@ -51,23 +51,37 @@
                             d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                     </svg>
                 </div>
-                <input type="search" placeholder="Cari {{$title}}..."
+                <input 
+                    type="search" 
+                    id="search-input"
+                    value="{{ request('search') }}" 
+                    data-url="{{ route('admin.sistem.users.index') }}" 
+                    data-target="usersTableBody" 
+                    placeholder="Cari {{$title}}..."
                     class="block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
             </div>
             <div class="flex flex-col sm:flex-row gap-2">
                 <select
+                    id="filter-select"
+                    name="filter"
+                    data-url="{{ route('admin.sistem.users.index') }}"
+                    data-target="usersTableBody"
                     class="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
-                    <option value="">Semua Role</option>
-                    <option value="draft">Admin</option>
-                    <option value="published">Operator</option>
-                    <option value="scheduled">Tim Dev</option>
-                    <option value="archived">[CIKUTT]</option>
+                    <option value="all" {{ request('filter') == 'all' ? 'selected' : '' }}>-- Semua Role --</option>
+                    <option value="admin" {{ request('filter') == 'admin' ? 'selected' : '' }}>Admin</option>
+                    <option value="user_public" {{ request('filter') == 'user_public' ? 'selected' : '' }}>User</option>
                 </select>
+
                 <select
+                    id="perpage-select"
+                    name="perPage"
+                    data-url="{{ route('admin.sistem.users.index') }}"
+                    data-target="usersTableBody"
                     class="flex-1 sm:flex-none px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
-                    <option value="10">10 per halaman</option>
-                    <option value="25">25 per halaman</option>
-                    <option value="50">50 per halaman</option>
+                    <option value="all" {{ request('perPage') == 'all' ? 'selected' : '' }}>-- Semua {{ $title }} --</option>
+                    <option value="10" {{ request('perPage') == 10 ? 'selected' : '' }}>10 {{ $title }} per halaman</option>
+                    <option value="25" {{ request('perPage') == 25 ? 'selected' : '' }}>25 {{ $title }} per halaman</option>
+                    <option value="50" {{ request('perPage') == 50 ? 'selected' : '' }}>50 {{ $title }} per halaman</option>
                 </select>
             </div>
         </div>
@@ -105,62 +119,8 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            @forelse ($users as $key => $user)
-                                <tr class="hover:bg-gray-50">
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        {{ $users->firstItem() + $key }}
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <img src="{{ asset('assets/img/placeholder/dummy.png') }}" alt="Gambar" class="w-8 h-8 lg:w-10 lg:h-10 rounded-full object-cover border-2 border-gray-200" />
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <div class="text-sm text-gray-600 max-w-xs">{{ $user->name }}</div>
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <div class="text-sm text-gray-600 max-w-xs">{{ $user->email }}</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span
-                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                            <div class="w-1.5 h-1.5 bg-green-400 rounded-full mr-1.5"></div>
-                                            {{ $user->role }}
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        <div class="flex items-center space-x-2">
-                                            <button
-                                                onclick="openUpdateModal('{{ $user->id }}')"
-                                                class="text-indigo-600 hover:text-indigo-900 p-1 rounded hover:bg-indigo-50"
-                                                title="Edit">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor"
-                                                    viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
-                                                    </path>
-                                                </svg>
-                                            </button>
-                                            <button
-                                                onclick="openDeleteModal('{{ $user->id }}')"
-                                                class="text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-50"
-                                                title="Hapus">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor"
-                                                    viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
-                                                    </path>
-                                                </svg>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                @empty
-                                <tr class="hover:bg-gray-50">
-                                    <td colspan="6" class="px-6 py-4 whitespace-nowrap">
-                                        Data ngga ada Y
-                                    </td>
-                                </tr>
-                                @endforelse
+                        <tbody id="usersTableBody" class="bg-white divide-y divide-gray-200">
+                            @include('admin.manage-users.partials.table_body')
                         </tbody>
                     </table>
                 </div>

@@ -20,7 +20,7 @@
                     required>
                     <option value="">-- Pilih Role --</option>
                     <option value="admin">Admin</option>
-                    <option value="user">User Public</option>
+                    <option value="user_public">User Public</option>
                 </select>
             </div>
             <!-- Email -->

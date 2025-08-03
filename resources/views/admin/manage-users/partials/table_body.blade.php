@@ -21,19 +21,8 @@
     </td>
     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
         <div class="flex items-center space-x-2">
-            <button onclick="previewAchievement(1)"
-                class="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50"
-                title="Preview">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor"
-                    viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
-                    </path>
-                </svg>
-            </button>
-            <button onclick="editAchievement(1)"
+            <button
+                onclick="openUpdateModal('{{ $user->id }}')"
                 class="text-indigo-600 hover:text-indigo-900 p-1 rounded hover:bg-indigo-50"
                 title="Edit">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor"
@@ -43,17 +32,8 @@
                     </path>
                 </svg>
             </button>
-            <!-- <button onclick="duplicateAchievement(1)"
-                    class="text-gray-600 hover:text-gray-900 p-1 rounded hover:bg-gray-50"
-                    title="Duplicate">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor"
-                        viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z">
-                        </path>
-                    </svg>
-                </button> -->
-            <button onclick="deleteAchievement(1)"
+            <button
+                onclick="openDeleteModal('{{ $user->id }}')"
                 class="text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-50"
                 title="Hapus">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor"
@@ -67,5 +47,32 @@
     </td>
 </tr>
 @empty
+<tr class="hover:bg-gray-50">
+    <td colspan="6" class="px-6 py-4 text-center text-gray-500 italic">
+        <div class="flex flex-col items-center justify-center text-sm text-gray-500 space-y-1">
+            @if ($users->isEmpty() && !request()->filled('search') && !request()->filled('filter'))
+                <!-- Icon Data Kosong -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-400 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.75 9.75h4.5v4.5h-4.5v-4.5z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3h18v18H3V3z" />
+                </svg>
+                <span class="text-blue-500 font-medium">Belum ada data yang tersedia di sini.</span>
 
+            @elseif ($users->isEmpty() && request()->filled('search'))
+                <!-- Icon Pencarian -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-400 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-4.35-4.35M10.5 17a6.5 6.5 0 100-13 6.5 6.5 0 000 13z" />
+                </svg>
+                <span class="text-yellow-600 font-medium">Tidak ditemukan hasil pencarian yang cocok.</span>
+
+            @elseif ($users->isEmpty() && request()->filled('filter'))
+                <!-- Icon Filter -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-400 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2l-7 8v5a1 1 0 01-2 0v-5l-7-8V4z" />
+                </svg>
+                <span class="text-red-500 font-medium">Data tidak tersedia untuk filter yang dipilih.</span>
+            @endif
+        </div>
+    </td>
+</tr>
 @endforelse
