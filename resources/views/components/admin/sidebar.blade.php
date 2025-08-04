@@ -359,7 +359,7 @@
                     </li>
 
                     <li>
-                        <a href="#" @click="selected = 'Reports'"
+                        <a href="{{ route('admin.sistem.reports.index') }}" @click="selected = 'Reports'"
                             class="group relative flex items-center gap-3 rounded-xl px-4 py-3 font-medium text-gray-600 duration-300 ease-in-out hover:bg-emerald-50 hover:text-emerald-600"
                             :class="(selected === 'Reports') ? 'bg-emerald-50 text-emerald-600' : ''">
                             <svg :class="(selected === 'Reports') ? 'fill-emerald-600' :
@@ -374,7 +374,7 @@
                         </a>
                     </li>
 
-                    <li>
+                    {{-- <li>
                         <a href="#" @click.prevent="selected = (selected === 'Settings' ? '':'Settings')"
                             class="group relative flex items-center gap-3 rounded-xl px-4 py-3 font-medium text-gray-600 duration-300 ease-in-out hover:bg-gray-50 hover:text-gray-600"
                             :class="(selected === 'Settings') ? 'bg-gray-50 text-gray-600' : ''">
@@ -423,7 +423,7 @@
                                 </li>
                             </ul>
                         </div>
-                    </li>
+                    </li> --}}
                 </ul>
             </div>
         </nav>

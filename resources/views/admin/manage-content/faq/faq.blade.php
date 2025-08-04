@@ -1,4 +1,4 @@
-<!-- resources/views/admin/manage-content/beranda/mitra.blade.php -->
+<!-- resources/views/admin/manage-content/faq/faq.blade.php -->
 <x-admin.layouts>
     <x-slot:title>{{ $title }}</x-slot:title>
     @section('page-title', 'FAQ PUSTIPD')

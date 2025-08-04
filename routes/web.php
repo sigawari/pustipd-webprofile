@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ManageContentController;
 use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\admin\Sistem\ManageUserController;
+use App\Http\Controllers\admin\Sistem\ReportsController;
 
 use App\Http\Controllers\admin\ManageContent\Beranda\MitraController;
 use App\Http\Controllers\admin\ManageContent\Beranda\LayananController;
@@ -265,6 +266,16 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
             Route::put('/users/{user}', 'update')->name('update');
             Route::delete('/users/{user}', 'destroy')->name('destroy');
             Route::get('/users/export', 'export')->name('export');
+        });
+        
+        Route::controller(ReportsController::class)->name('reports.')->group(function () {
+            Route::get('/reports', 'index')->name('index');
+            Route::get('/reports/create', 'create')->name('create');
+            Route::post('/reports', 'store')->name('store');
+            Route::get('/reports/{user}/edit', 'edit')->name('edit');
+            Route::put('/reports/{user}', 'update')->name('update');
+            Route::delete('/reports/{user}', 'destroy')->name('destroy');
+            Route::get('/reports/export', 'export')->name('export');
         });
     });
 });

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\admin\ManageContent\Faq;
 
-use App\Models\Faq;
 use App\Http\Controllers\Controller;
+use App\Models\ManageContent\Faq;
 use App\Http\Requests\StoreFaqRequest;
-use App\Http\Requests\UpdateKetetapanRequest;
+use App\Http\Requests\UpdateFaqRequest;
 
 class FaqController extends Controller
 {
@@ -30,9 +30,18 @@ class FaqController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreFaqRequest $request)
+    public function store(Faq $faq)
     {
-        //
+        $validated = $faq->validate([
+            'question' => 'required|string',
+            'answer' => 'required|string',
+            'sort_order' => 'nullable|integer|min:0',
+            'status' => 'required|in:draft,published,archived'
+        ]);
+
+        Faq::create($validated);
+
+        return redirect()->back()->with('success', 'FAQ berhasil ditambahkan!');
     }
 
     /**
@@ -54,16 +63,24 @@ class FaqController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateFaqRequest $request, Faq $faq)
+    public function update(Faq $faq, Faq $faq)
     {
-        //
+        $validated = $faq->validate([
+            'question' => 'required|string',
+            'answer' => 'required|string',
+            'sort_order' => 'nullable|integer|min:0',
+            'status' => 'required|in:draft,published,archived'
+        ]);
+
+        $faq->update($validated);
+
+        return redirect()->back()->with('success', 'FAQ berhasil diperbarui!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Faq $faq)
     {
-        //
+        $faq->delete();
+
+        return redirect()->back()->with('success', 'FAQ berhasil dihapus!');
     }
 }
