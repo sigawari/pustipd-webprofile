@@ -316,7 +316,7 @@
 
                 <ul class="flex flex-col gap-2 mb-2">
                     <li>
-                        <a href="{{ route('admin.manage-content.faq.faq') }}" @click="selected = 'FAQ'"
+                        <a href="{{ route('admin.manage-content.faq.index') }}" @click="selected = 'FAQ'"
                             class="group relative flex items-center gap-3 rounded-xl px-4 py-3 font-medium text-gray-600 duration-300 ease-in-out hover:bg-amber-50 hover:text-amber-600"
                             :class="(selected === 'FAQ') ? 'bg-amber-50 text-amber-600' : ''">
                             <svg :class="(selected === 'FAQ') ? 'fill-amber-600' : 'fill-gray-500 group-hover:fill-amber-600'"

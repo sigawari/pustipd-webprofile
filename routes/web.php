@@ -226,12 +226,19 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
             });
         });
 
-        Route::prefix('faq')->as('faq.')->group(function () {
-            //pengumuman
-             Route::controller(FaqController::class)->group(function(){
-                 Route::get('/faq', 'index')->name('faq'); 
-         });       
-         });
+        Route::controller(FaqController::class)
+              ->prefix('faq')              // /admin/manage-content/faq
+              ->name('faq.')              // admin.manage-content.faq.*
+              ->group(function () {
+
+                Route::get    ('/',               'index' )->name('index');
+                Route::get    ('/create',         'create')->name('create');
+                Route::post   ('/',               'store' )->name('store');
+                Route::get    ('/{faq}/edit',     'edit'  )->name('edit');
+                Route::put    ('/{faq}',          'update')->name('update');
+                Route::delete ('/{faq}',          'destroy')->name('destroy');
+                Route::post   ('/bulk-action',    'bulk'  )->name('bulk');
+        });
         
         // Other content routes
         Route::get('/hero', [ManageContentController::class, 'hero'])->name('hero');
@@ -240,7 +247,6 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
         Route::get('/news', [ManageContentController::class, 'news'])->name('news');
         Route::get('/announcements', [ManageContentController::class, 'announcements'])->name('announcements');
         Route::get('/tutorials', [ManageContentController::class, 'tutorials'])->name('tutorials');
-        Route::get('/faq', [ManageContentController::class, 'faq'])->name('faq');
     
     // profil Routes (untuk admin profil, bukan profil organisasi)
     Route::prefix('profil')->as('profil.')->group(function () {
