@@ -11,12 +11,25 @@ use App\Http\Controllers\admin\Sistem\ManageUserController;
 
 use App\Http\Controllers\admin\ManageContent\Beranda\MitraController;
 use App\Http\Controllers\admin\ManageContent\Beranda\LayananController;
-use App\Http\Controllers\admin\ManageContent\Tentang\GalleryController;
+use App\Http\Controllers\admin\ManageContent\Beranda\PencapaianController;
+
+use App\Http\Controllers\admin\ManageContent\Berita\BeritaController;
+use App\Http\Controllers\admin\ManageContent\Pengumuman\PengumumanController;
+use App\Http\Controllers\admin\ManageContent\Tutorial\TutorialController;
+
+use App\Http\Controllers\admin\ManageContent\AppLayanan\AppLayananController;
+
+use App\Http\Controllers\admin\ManageContent\Dokumen\KetetapanController;
+use App\Http\Controllers\admin\ManageContent\Dokumen\RegulasiController;
+use App\Http\Controllers\admin\ManageContent\Dokumen\PanduanController;
+use App\Http\Controllers\admin\ManageContent\Dokumen\SopController;
+
+use App\Http\Controllers\admin\ManageContent\Faq\FaqController;
 
 use App\Http\Controllers\admin\ManageContent\Tentang\ProfileController;
 use App\Http\Controllers\admin\ManageContent\Tentang\VisiMisiController;
-use App\Http\Controllers\admin\ManageContent\Beranda\PencapaianController;
 use App\Http\Controllers\admin\ManageContent\Tentang\OranizationController;
+use App\Http\Controllers\admin\ManageContent\Tentang\GalleryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -128,9 +141,7 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
                 Route::delete('/organisasi/{organisasi}', 'destroy')->name('organisasi.destroy');
                 Route::get('/organisasi/export', 'export')->name('organisasi.export');
             });
-            
-
-
+        });
             
             // Route::get('/visi-misi', [ManageContentController::class, 'tentangVisiMisi'])->name('visi-misi');
             // Route::put('/visi-misi', [ManageContentController::class, 'tentangVisiMisiUpdate'])->name('visi-misi.update');
@@ -138,14 +149,88 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
             // Route::get('/organisasi', [ManageContentController::class, 'tentangOrganisasi'])->name('organisasi');
             // Route::put('/organisasi', [ManageContentController::class, 'tentangOrganisasiUpdate'])->name('organisasi.update');
 
-
-        });
-
         Route::prefix('layanan')->as('layanan.')->group(function () {
-           // TAMBAHAN BARU - Beranda Routes
-            Route::get('/applayanan', [ManageContentController::class, 'appLayanan'])->name('applayanan');
+           //Layanan App Layanan
+            Route::controller(AppLayananController::class)->group(function(){
+                Route::get('/applayanan', 'index')->name('applayanan'); 
+        });       
         });
 
+        Route::prefix('berita')->as('berita.')->group(function () {
+           //Berita
+            Route::controller(BeritaController::class)->group(function(){
+                Route::get('/kelolaberita', 'index')->name('kelolaberita'); 
+        });       
+        });
+
+        Route::prefix('pengumuman')->as('pengumuman.')->group(function () {
+           //pengumuman
+            Route::controller(PengumumanController::class)->group(function(){
+                Route::get('/kelolapengumuman', 'index')->name('kelolapengumuman'); 
+        });       
+        });
+
+        Route::prefix('tutorial')->as('tutorial.')->group(function () {
+           //pengumuman
+            Route::controller(TutorialController::class)->group(function(){
+                Route::get('/kelolatutorial', 'index')->name('kelolatutorial'); 
+        });       
+        });
+
+        // Beranda Section Routes
+        Route::prefix('dokumen')->as('dokumen.')->group(function () {
+
+            // Pencapaian Routes
+            Route::controller(KetetapanController::class)->group(function () {
+                Route::get('/ketetapan', 'index')->name('ketetapan');
+                Route::get('/ketetapan/create', 'create')->name('ketetapan.create');
+                Route::post('/ketetapan', 'store')->name('ketetapan.store');
+                Route::get('/ketetapan/{ketetapan}/edit', 'edit')->name('ketetapan.edit');
+                Route::put('/ketetapan/{ketetapan}', 'update')->name('ketetapan.update');
+                Route::delete('/ketetapan/{ketetapan}', 'destroy')->name('ketetapan.destroy');
+                Route::get('/ketetapan/export', 'export')->name('ketetapan.export');
+            });
+
+            // SOP Routes
+            Route::controller(SopController::class)->group(function(){
+                Route::get('/sop', 'index')->name('sop');
+                Route::get('/sop/create', 'create')->name('sop.create');
+                Route::post('/sop', 'store')->name('sop.store');
+                Route::get('/sop/{sop}/edit', 'edit')->name('sop.edit');
+                Route::put('/sop/{sop}', 'update')->name('sop.update');
+                Route::delete('/sop/{sop}', 'destroy')->name('sop.destroy');
+                Route::get('/sop/export', 'export')->name('sop.export');
+            });
+
+            // Panduan
+            Route::controller(PanduanController::class)->group(function(){
+                Route::get('/panduan', 'index')->name('panduan');
+                Route::get('/panduan/create', 'create')->name('panduan.create');
+                Route::post('/panduan', 'store')->name('panduan.store');
+                Route::get('/panduan/{panduan}/edit', 'edit')->name('panduan.edit');
+                Route::put('/panduan/{panduan}', 'update')->name('panduan.update');
+                Route::delete('/panduan/{panduan}', 'destroy')->name('panduan.destroy');
+                Route::get('/panduan/export', 'export')->name('panduan.export');
+            });
+
+            // Regulasi
+            Route::controller(RegulasiController::class)->group(function(){
+                Route::get('/regulasi', 'index')->name('regulasi');
+                Route::get('/regulasi/create', 'create')->name('regulasi.create');
+                Route::post('/regulasi', 'store')->name('regulasi.store');
+                Route::get('/regulasi/{regulasi}/edit', 'edit')->name('regulasi.edit');
+                Route::put('/regulasi/{regulasi}', 'update')->name('regulasi.update');
+                Route::delete('/regulasi/{regulasi}', 'destroy')->name('regulasi.destroy');
+                Route::get('/regulasi/export', 'export')->name('regulasi.export');
+            });
+        });
+
+        Route::prefix('faq')->as('faq.')->group(function () {
+            //pengumuman
+             Route::controller(FaqController::class)->group(function(){
+                 Route::get('/faq', 'index')->name('faq'); 
+         });       
+         });
         
         // Other content routes
         Route::get('/hero', [ManageContentController::class, 'hero'])->name('hero');
@@ -155,7 +240,6 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
         Route::get('/announcements', [ManageContentController::class, 'announcements'])->name('announcements');
         Route::get('/tutorials', [ManageContentController::class, 'tutorials'])->name('tutorials');
         Route::get('/faq', [ManageContentController::class, 'faq'])->name('faq');
-    });
     
     // profil Routes (untuk admin profil, bukan profil organisasi)
     Route::prefix('profil')->as('profil.')->group(function () {
@@ -166,6 +250,8 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
         Route::get('/edit', function() {
             return view('admin.profil.edit');
         })->name('edit');
+    });
+    
     });
 
     // Sistem Routes
@@ -182,6 +268,7 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
         });
     });
 });
+
 
 // Public routes
 Route::prefix('/')->group(function () {

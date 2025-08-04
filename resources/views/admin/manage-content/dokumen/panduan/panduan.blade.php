@@ -1,8 +1,8 @@
 <!-- resources/views/admin/manage-content/beranda/mitra.blade.php -->
 <x-admin.layouts>
     <x-slot:title>{{ $title }}</x-slot:title>
-    @section('page-title', 'Aplikasi dan Layanan PUSTIPD')
-    @section('page-description', content: 'Kelola konten aplikasi dan layanan')
+    @section('page-title', 'FAQ PUSTIPD')
+    @section('page-description', content: 'Kelola konten FAQ')
     @section('breadcrumb')
         <li>
             <div class="flex items-center">
@@ -21,7 +21,7 @@
                         d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 111.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
                         clip-rule="evenodd"></path>
                 </svg>
-                <span class="ml-1 text-sm font-medium text-gray-700 md:ml-2">Aplikasi dan Layanan</span>
+                <span class="ml-1 text-sm font-medium text-gray-700 md:ml-2">{{ $title }}</span>
             </div>
         </li>
     @endsection
@@ -30,9 +30,9 @@
     <div class="bg-white rounded-xl border border-gray-200 p-3 sm:p-6 m-3 sm:m-6 shadow-sm">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6 gap-4">
             <div>
-                <h2 class="text-lg font-semibold text-gray-900">Kelola Aplikasi dan Layanan</h2>
-                <p class="text-gray-600 mt-1 text-sm">Kelola aplikasi berdasarkan kategori yang akan ditampilkan di
-                    halaman layanan</p>
+                <h2 class="text-lg font-semibold text-gray-900">Kelola {{ $title }}</h2>
+                <p class="text-gray-600 mt-1 text-sm">Kelola panduan yang akan ditampilkan di halaman panduan
+                </p>
             </div>
             <button onclick="openAppModal()"
                 class="w-full sm:w-auto bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200 flex items-center justify-center">
@@ -40,7 +40,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                 </svg>
-                Tambah Aplikasi
+                Tambah FAQ
             </button>
         </div>
 
@@ -53,7 +53,7 @@
                             d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                     </svg>
                 </div>
-                <input type="search" id="searchInput" placeholder="Cari aplikasi..."
+                <input type="search" id="searchInput" placeholder="Cari {{ $title }}...."
                     class="block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
             </div>
             <div class="flex flex-col sm:flex-row gap-2">
@@ -101,7 +101,7 @@
                                     Kategori</th>
                                 <th
                                     class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Nama Aplikasi</th>
+                                    Nama {{ $title }}</th>
                                 <th
                                     class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Deskripsi</th>
@@ -180,7 +180,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
-                    <span id="selectedCount">0 aplikasi dipilih</span>
+                    <span id="selectedCount">0 {{ $title }} dipilih</span>
                 </div>
             </div>
         </div>
@@ -198,13 +198,14 @@
                         <div class="sm:flex sm:items-start">
                             <div class="w-full">
                                 <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4" id="appModalTitle">
-                                    Tambah Aplikasi Baru
+                                    Tambah {{ $title }} Baru
                                 </h3>
 
                                 <!-- Kategori -->
                                 <div class="mb-4">
                                     <label for="appCategory"
-                                        class="block text-sm font-medium text-gray-700 mb-2">Kategori Aplikasi</label>
+                                        class="block text-sm font-medium text-gray-700 mb-2">Kategori
+                                        {{ $title }}</label>
                                     <select id="appCategory" name="category" required
                                         class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                                         <option value="">Pilih Kategori</option>
@@ -221,7 +222,7 @@
                                 <!-- Nama Aplikasi -->
                                 <div class="mb-4">
                                     <label for="appName" class="block text-sm font-medium text-gray-700 mb-2">Nama
-                                        Aplikasi</label>
+                                        {{ $title }}</label>
                                     <input type="text" id="appName" name="name" required
                                         class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                         placeholder="Contoh: SIAKAD, Perpustakaan Digital, dll">
@@ -239,7 +240,7 @@
                                 <!-- Hyperlink -->
                                 <div class="mb-4">
                                     <label for="appLink" class="block text-sm font-medium text-gray-700 mb-2">Link
-                                        Akses Aplikasi</label>
+                                        Akses {{ $title }}</label>
                                     <input type="url" id="appLink" name="link" required
                                         class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                         placeholder="https://example.com">
@@ -284,7 +285,7 @@
                 class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md sm:w-full">
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6">
                     <div class="text-center">
-                        <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Preview Aplikasi</h3>
+                        <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Preview {{ $title }}</h3>
 
                         <div
                             class="bg-gradient-to-br from-white to-gray-50 rounded-xl p-6 border border-gray-200 shadow-sm">
@@ -299,7 +300,8 @@
                             </div>
                             <span id="previewCategory"
                                 class="inline-block px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full mb-2">Kategori</span>
-                            <h4 id="previewName" class="text-lg font-semibold text-gray-900 mb-2">Nama Aplikasi</h4>
+                            <h4 id="previewName" class="text-lg font-semibold text-gray-900 mb-2">Nama
+                                {{ $title }}</h4>
                             <p id="previewDescription" class="text-sm text-gray-600 mb-3">Deskripsi aplikasi</p>
                             <a id="previewLink" href="#" target="_blank"
                                 class="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors">
@@ -308,7 +310,7 @@
                                         d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14">
                                     </path>
                                 </svg>
-                                Akses Aplikasi
+                                Akses {{ $title }}
                             </a>
                         </div>
                     </div>
@@ -596,7 +598,7 @@
                     const paginationInfo = document.getElementById('paginationInfo');
                     if (paginationInfo) {
                         paginationInfo.textContent =
-                            `Menampilkan ${start} sampai ${end} dari ${this.filteredData.length} aplikasi`;
+                            `Menampilkan ${start} sampai ${end} dari ${this.filteredData.length} {{ $title }}`;
                     }
 
                     // Desktop pagination
@@ -720,7 +722,7 @@
                     const bulkBtn = document.getElementById('bulkActionBtn');
 
                     if (countElement) {
-                        countElement.textContent = `${count} aplikasi dipilih`;
+                        countElement.textContent = `${count} panduan dipilih`;
                     }
 
                     if (bulkBtn) {
@@ -756,7 +758,7 @@
 
                     console.log('App data:', appData);
                     this.closeAppModal();
-                    alert('Aplikasi berhasil disimpan! (Demo)');
+                    alert('{{ $title }} berhasil disimpan! (Demo)');
                 },
 
                 closeAllModals() {
@@ -787,7 +789,7 @@
                         modal.classList.remove('hidden');
 
                         if (appData) {
-                            title.textContent = 'Edit Aplikasi';
+                            title.textContent = 'Edit {{ $title }}';
                             // Populate form with existing data
                             document.getElementById('appCategory').value = appData.category;
                             document.getElementById('appName').value = appData.name;
@@ -795,7 +797,7 @@
                             document.getElementById('appLink').value = appData.link;
                             document.getElementById('appStatus').value = appData.status;
                         } else {
-                            title.textContent = 'Tambah Aplikasi Baru';
+                            title.textContent = 'Tambah {{ $title }} Baru';
                             document.getElementById('appForm').reset();
                         }
                     }
@@ -824,9 +826,9 @@
                 },
 
                 deleteApp(id) {
-                    if (confirm('Apakah Anda yakin ingin menghapus aplikasi ini?')) {
+                    if (confirm('Apakah Anda yakin ingin menghapus {{ $title }} ini?')) {
                         console.log('Delete app:', id);
-                        alert('Aplikasi berhasil dihapus! (Demo)');
+                        alert('{{ $title }} berhasil dihapus! (Demo)');
                     }
                 }
             };
@@ -844,7 +846,7 @@
                 const action = document.getElementById('bulkAction')?.value;
 
                 if (selectedIds.length === 0) {
-                    alert('Pilih minimal 1 aplikasi untuk melakukan aksi bulk');
+                    alert('Pilih minimal 1 {{ $title }} untuk melakukan aksi bulk');
                     return;
                 }
 
@@ -862,9 +864,11 @@
 
                 const actionText = actionTexts[action] || action;
 
-                if (confirm(`Apakah Anda yakin ingin ${actionText} ${selectedIds.length} aplikasi yang dipilih?`)) {
+                if (confirm(
+                        `Apakah Anda yakin ingin ${actionText} ${selectedIds.length} {{ $title }} yang dipilih?`
+                    )) {
                     console.log('Bulk action:', action, 'IDs:', selectedIds);
-                    alert(`${selectedIds.length} aplikasi berhasil ${actionText}! (Demo)`);
+                    alert(`${selectedIds.length} {{ $title }} berhasil ${actionText}! (Demo)`);
 
                     // Reset selections
                     AppManager.selectedIds.clear();

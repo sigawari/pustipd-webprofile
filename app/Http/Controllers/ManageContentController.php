@@ -170,8 +170,8 @@ class ManageContentController extends Controller
         return view('admin.manage-content.faq');
     }
 
-    public function applayanan()
-    {
-        return view('admin.manage-content.layanan.applayanan');
-    }
+    // public function applayanan()
+    // {
+    //     return view('admin.manage-content.layanan.applayanan');
+    // }
 }

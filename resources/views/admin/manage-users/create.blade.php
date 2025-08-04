@@ -3,7 +3,8 @@
     <div class="bg-white rounded-xl shadow-lg w-full max-w-lg p-6 relative">
         <h2 id="modalTitle" class="text-lg font-semibold text-gray-800 mb-4">Tambah {{ $title }}</h2>
 
-        <form id="achievementForm" method="POST" action="{{ route('admin.sistem.users.store') }}" enctype="multipart/form-data">
+        <form id="achievementForm" method="POST" action="{{ route('admin.sistem.users.store') }}"
+            enctype="multipart/form-data">
             @csrf
             <!-- Nama -->
             <div class="mb-4">
@@ -44,8 +45,7 @@
                     class="px-4 py-2 text-sm text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200">
                     Batal
                 </button>
-                <button type="submit"
-                    class="px-4 py-2 text-sm text-white bg-blue-600 rounded-lg hover:bg-blue-700">
+                <button type="submit" class="px-4 py-2 text-sm text-white bg-blue-600 rounded-lg hover:bg-blue-700">
                     Simpan
                 </button>
             </div>
@@ -54,6 +54,7 @@
                 const nameInput = document.getElementById('name');
                 const roleSelect = document.getElementById('role');
                 const emailInput = document.getElementById('email');
+
                 function generateEmail() {
                     const nameValue = nameInput.value.trim().split(" ")[0].toLowerCase(); // ambil nama depan
                     const roleValue = roleSelect.value;
@@ -70,8 +71,7 @@
         <!-- Tombol X di pojok -->
         <button onclick="closeAddModal()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M6 18L18 6M6 6l12 12" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
         </button>
     </div>

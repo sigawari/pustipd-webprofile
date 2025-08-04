@@ -1,6 +1,6 @@
-<x-admin.layouts>    
+<x-admin.layouts>
     <x-slot:title>{{ $title }}</x-slot:title>
-    <!-- @section('page-title', 'Beranda PUSTIPD')
+    @section('page-title', 'Beranda PUSTIPD')
     @section('page-description', 'Kelola konten mitra UIN Raden Fatah Palembang')
     @section('breadcrumb')
         <li>
@@ -23,14 +23,15 @@
                 <span class="ml-1 text-sm font-medium text-gray-700 md:ml-2">Beranda {{ $title }}</span>
             </div>
         </li>
-    @endsection -->
+    @endsection
 
     <!-- Content Management Area - PERBAIKAN MOBILE -->
     <div class="bg-white rounded-xl border border-gray-200 p-3 sm:p-6 m-3 sm:m-6 shadow-sm">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6 gap-4">
             <div>
                 <h2 class="text-lg font-semibold text-gray-900">Kelola {{ $title }}</h2>
-                <p class="text-gray-600 mt-1 text-sm">Kelola kartu {{ $title }} yang akan ditampilkan di beranda website</p>
+                <p class="text-gray-600 mt-1 text-sm">Kelola kartu {{ $title }} yang akan ditampilkan di beranda
+                    website</p>
             </div>
             <button onclick="openAddModal()"
                 class="w-full sm:w-auto bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200 flex items-center justify-center">
@@ -51,19 +52,29 @@
                             d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                     </svg>
                 </div>
-                <input type="search" placeholder="Cari {{ $title }}..."
+                <input type="search" id="searchInput" placeholder="Cari mitra..."
                     class="block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
             </div>
             <div class="flex flex-col sm:flex-row gap-2">
-                <select
+                <select id="categoryFilter"
+                    class="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                    <option value="">Semua Kategori</option>
+                    <option value="Academic Services">Layanan Akademik</option>
+                    <option value="Library & Resources">Perpustakaan & Sumber Daya</option>
+                    <option value="Student Information System">Sistem Informasi Mahasiswa</option>
+                    <option value="Administration">Administrasi</option>
+                    <option value="Communication">Komunikasi</option>
+                    <option value="Research & Development">Penelitian & Pengembangan</option>
+                    <option value="Other">Lainnya</option>
+                </select>
+                <select id="statusFilter"
                     class="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
                     <option value="">Semua Status</option>
-                    <option value="draft">Draft</option>
                     <option value="published">Published</option>
-                    <option value="scheduled">Scheduled</option>
+                    <option value="draft">Draft</option>
                     <option value="archived">Archived</option>
                 </select>
-                <select
+                <select id="perPage"
                     class="flex-1 sm:flex-none px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
                     <option value="10">10 per halaman</option>
                     <option value="25">25 per halaman</option>
@@ -71,6 +82,7 @@
                 </select>
             </div>
         </div>
+
 
         <!-- Table dengan scroll horizontal untuk mobile -->
         <div class="overflow-x-auto -mx-3 sm:mx-0">
@@ -425,4 +437,79 @@
             </div>
         </div>
     </div>
+
+    <script>
+        bindEvents() {
+                // Search functionality
+                const searchInput = document.getElementById('searchInput');
+                if (searchInput) {
+                    searchInput.addEventListener('input', () => this.applyFilters());
+                }
+
+                // Category filter
+                const categoryFilter = document.getElementById('categoryFilter');
+                if (categoryFilter) {
+                    categoryFilter.addEventListener('change', () => this.applyFilters());
+                }
+
+                // Status filter
+                const statusFilter = document.getElementById('statusFilter');
+                if (statusFilter) {
+                    statusFilter.addEventListener('change', () => this.applyFilters());
+                }
+
+                // Per page selector
+                const perPageSelect = document.getElementById('perPage');
+                if (perPageSelect) {
+                    perPageSelect.addEventListener('change', (e) => {
+                        this.perPage = parseInt(e.target.value);
+                        this.currentPage = 1;
+                        this.render();
+                    });
+                }
+
+                // Select all checkbox
+                const selectAllCheckbox = document.getElementById('selectAll');
+                if (selectAllCheckbox) {
+                    selectAllCheckbox.addEventListener('change', () => {
+                        this.toggleSelectAll(selectAllCheckbox.checked);
+                    });
+                }
+
+                // Form submission
+                const form = document.getElementById('appForm');
+                if (form) {
+                    form.addEventListener('submit', (e) => {
+                        this.handleFormSubmit(e);
+                    });
+                }
+
+                // Keyboard shortcuts
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape') {
+                        this.closeAllModals();
+                    }
+                });
+            },
+
+            applyFilters() {
+                const searchTerm = document.getElementById('searchInput')?.value.toLowerCase() || '';
+                const categoryFilter = document.getElementById('categoryFilter')?.value || '';
+                const statusFilter = document.getElementById('statusFilter')?.value || '';
+
+                this.filteredData = this.data.filter(item => {
+                    const matchesSearch = item.name.toLowerCase().includes(searchTerm) ||
+                        item.description.toLowerCase().includes(searchTerm);
+                    const matchesCategory = categoryFilter ? item.category === categoryFilter : true;
+                    const matchesStatus = statusFilter ? item.status === statusFilter : true;
+
+                    return matchesSearch && matchesCategory && matchesStatus;
+                });
+
+                this.currentPage = 1;
+                this.selectedIds.clear();
+                this.updateSelectAllState();
+                this.render();
+            },
+    </script>
 </x-admin.layouts>

@@ -202,7 +202,7 @@
 
                 <ul class="flex flex-col gap-2 mb-2">
                     <li>
-                        <a href="#" @click="selected = 'News'"
+                        <a href="{{ route('admin.manage-content.berita.kelolaberita') }}" @click="selected = 'News'"
                             class="group relative flex items-center gap-3 rounded-xl px-4 py-3 font-medium text-gray-600 duration-300 ease-in-out hover:bg-green-50 hover:text-green-600"
                             :class="(selected === 'News') ? 'bg-green-50 text-green-600' : ''">
                             <svg :class="(selected === 'News') ? 'fill-green-600' : 'fill-gray-500 group-hover:fill-green-600'"
@@ -216,7 +216,8 @@
                     </li>
 
                     <li>
-                        <a href="#" @click="selected = 'Announcements'"
+                        <a href="{{ route('admin.manage-content.pengumuman.kelolapengumuman') }}"
+                            @click="selected = 'Announcements'"
                             class="group relative flex items-center gap-3 rounded-xl px-4 py-3 font-medium text-gray-600 duration-300 ease-in-out hover:bg-red-50 hover:text-red-600"
                             :class="(selected === 'Announcements') ? 'bg-red-50 text-red-600' : ''">
                             <svg :class="(selected === 'Announcements') ? 'fill-red-600' : 'fill-gray-500 group-hover:fill-red-600'"
@@ -230,7 +231,8 @@
                     </li>
 
                     <li>
-                        <a href="#" @click="selected = 'Tutorials'"
+                        <a href="{{ route('admin.manage-content.tutorial.kelolatutorial') }}"
+                            @click="selected = 'Tutorials'"
                             class="group relative flex items-center gap-3 rounded-xl px-4 py-3 font-medium text-gray-600 duration-300 ease-in-out hover:bg-blue-50 hover:text-blue-600"
                             :class="(selected === 'Tutorials') ? 'bg-blue-50 text-blue-600' : ''">
                             <svg :class="(selected === 'Tutorials') ? 'fill-blue-600' : 'fill-gray-500 group-hover:fill-blue-600'"
@@ -277,25 +279,25 @@
                             :class="(selected === 'Documents') ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'">
                             <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'" class="flex flex-col gap-1 mt-2 pl-12">
                                 <li>
-                                    <a href="#"
+                                    <a href="{{ route('admin.manage-content.dokumen.ketetapan') }}"
                                         class="block py-2 px-4 text-sm text-gray-500 hover:text-teal-600 hover:bg-teal-25 rounded-lg transition-colors duration-200">
                                         Ketetapan
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#"
+                                    <a href="{{ route('admin.manage-content.dokumen.panduan') }}"
                                         class="block py-2 px-4 text-sm text-gray-500 hover:text-teal-600 hover:bg-teal-25 rounded-lg transition-colors duration-200">
                                         Panduan
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#"
+                                    <a href="{{ route('admin.manage-content.dokumen.regulasi') }}"
                                         class="block py-2 px-4 text-sm text-gray-500 hover:text-teal-600 hover:bg-teal-25 rounded-lg transition-colors duration-200">
                                         Regulasi
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#"
+                                    <a href="{{ route('admin.manage-content.dokumen.sop') }}"
                                         class="block py-2 px-4 text-sm text-gray-500 hover:text-teal-600 hover:bg-teal-25 rounded-lg transition-colors duration-200">
                                         SOP
                                     </a>
@@ -314,7 +316,7 @@
 
                 <ul class="flex flex-col gap-2 mb-2">
                     <li>
-                        <a href="#" @click="selected = 'FAQ'"
+                        <a href="{{ route('admin.manage-content.faq.faq') }}" @click="selected = 'FAQ'"
                             class="group relative flex items-center gap-3 rounded-xl px-4 py-3 font-medium text-gray-600 duration-300 ease-in-out hover:bg-amber-50 hover:text-amber-600"
                             :class="(selected === 'FAQ') ? 'bg-amber-50 text-amber-600' : ''">
                             <svg :class="(selected === 'FAQ') ? 'fill-amber-600' : 'fill-gray-500 group-hover:fill-amber-600'"
@@ -337,7 +339,7 @@
 
                 <ul class="flex flex-col gap-2 mb-2">
                     <li>
-                        <a href="{{route('admin.sistem.users.index')}}" @click="selected = 'Users'"
+                        <a href="{{ route('admin.sistem.users.index') }}" @click="selected = 'Users'"
                             class="group relative flex items-center gap-3 rounded-xl px-4 py-3 font-medium text-gray-600 duration-300 ease-in-out hover:bg-violet-50 hover:text-violet-600"
                             :class="(selected === 'Users') ? 'bg-violet-50 text-violet-600' : ''">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
