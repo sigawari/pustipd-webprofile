@@ -1,45 +1,72 @@
-@extends('layouts.app')
+<!-- Modal Edit FAQ -->
+@foreach ($faqs as $faq)
+    <div id="UpdateModal-{{ $faq->id }}"
+        class="hidden fixed inset-0 z-50 bg-black/50 items-center justify-center px-4">
+        <div class="bg-white rounded-xl shadow-lg w-full max-w-lg p-6 relative">
+            <h2 class="text-lg font-semibold text-gray-800 mb-4">Edit {{ $title }}</h2>
 
-@section('content')
-    @include('admin.manage-content.faq.partials.toast')
+            <form method="POST" action="{{ route('admin.manage-content.faq.update', $faq->id) }}">
+                @csrf
+                @method('PUT')
 
-    <div class="bg-white p-6 rounded-xl border shadow-sm max-w-xl mx-auto">
-        <h2 class="text-lg font-semibold mb-6">Edit FAQ</h2>
-
-        <form action="{{ route('admin.faq.update', $faq) }}" method="post" class="space-y-4">
-            @csrf @method('PUT')
-
-            {{-- isian sama persis dengan create --}}
-            <div>
-                <label class="block text-sm font-medium mb-1">Pertanyaan</label>
-                <textarea name="question" rows="2" required class="w-full border rounded-lg px-3 py-2">{{ old('question', $faq->question) }}</textarea>
-            </div>
-
-            <div>
-                <label class="block text-sm font-medium mb-1">Jawaban</label>
-                <textarea name="answer" rows="5" required class="w-full border rounded-lg px-3 py-2">{{ old('answer', $faq->answer) }}</textarea>
-            </div>
-
-            <div class="flex gap-4">
-                <div class="flex-1">
-                    <label class="block text-sm font-medium mb-1">Urutan</label>
-                    <input type="number" name="sort_order" min="0" value="{{ old('sort_order', $faq->sort_order) }}"
-                        class="w-full border rounded-lg px-3 py-2">
+                <!-- Pertanyaan -->
+                <div class="mb-4">
+                    <label for="question-{{ $faq->id }}"
+                        class="block text-sm font-medium text-gray-700 mb-2">Pertanyaan</label>
+                    <textarea name="question" id="question-{{ $faq->id }}" rows="2" required
+                        class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">{{ $faq->question }}</textarea>
                 </div>
-                <div class="flex-1">
-                    <label class="block text-sm font-medium mb-1">Status</label>
-                    <select name="status" class="w-full border rounded-lg px-3 py-2">
-                        @foreach (['draft', 'published', 'archived'] as $st)
-                            <option value="{{ $st }}" @selected(old('status', $faq->status) === $st)>{{ ucfirst($st) }}</option>
-                        @endforeach
+
+                <!-- Jawaban -->
+                <div class="mb-4">
+                    <label for="answer-{{ $faq->id }}"
+                        class="block text-sm font-medium text-gray-700 mb-2">Jawaban</label>
+                    <textarea name="answer" id="answer-{{ $faq->id }}" rows="4" required
+                        class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">{{ $faq->answer }}</textarea>
+                </div>
+
+                <!-- Urutan -->
+                <div class="mb-4">
+                    <label for="sort_order-{{ $faq->id }}"
+                        class="block text-sm font-medium text-gray-700 mb-2">Urutan Tampil</label>
+                    <input type="number" name="sort_order" id="sort_order-{{ $faq->id }}" min="0"
+                        value="{{ $faq->sort_order }}"
+                        class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                </div>
+
+                <!-- Status -->
+                <div class="mb-4">
+                    <label for="status-{{ $faq->id }}"
+                        class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                    <select name="status" id="status-{{ $faq->id }}" required
+                        class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                        <option value="draft" {{ $faq->status == 'draft' ? 'selected' : '' }}>Draft</option>
+                        <option value="published" {{ $faq->status == 'published' ? 'selected' : '' }}>Published
+                        </option>
+                        <option value="archived" {{ $faq->status == 'archived' ? 'selected' : '' }}>Archived</option>
                     </select>
                 </div>
-            </div>
 
-            <div class="flex justify-end gap-3">
-                <a href="{{ route('admin.faq.faq') }}" class="px-4 py-2 border rounded-lg">Batal</a>
-                <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Perbarui</button>
-            </div>
-        </form>
+                <!-- Tombol -->
+                <div class="flex justify-end space-x-2 mt-6">
+                    <button type="button" onclick="closeUpdateModal('{{ $faq->id }}')"
+                        class="px-4 py-2 text-sm text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200">
+                        Batal
+                    </button>
+                    <button type="submit"
+                        class="px-4 py-2 text-sm text-white bg-blue-600 rounded-lg hover:bg-blue-700">
+                        Simpan
+                    </button>
+                </div>
+            </form>
+
+            <!-- Tombol X di pojok -->
+            <button onclick="closeUpdateModal('{{ $faq->id }}')"
+                class="absolute top-3 right-3 text-gray-400 hover:text-gray-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
     </div>
-@endsection
+@endforeach

@@ -226,19 +226,36 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
             });
         });
 
-        Route::controller(FaqController::class)
-              ->prefix('faq')              // /admin/manage-content/faq
-              ->name('faq.')              // admin.manage-content.faq.*
-              ->group(function () {
-
-                Route::get    ('/',               'index' )->name('index');
-                Route::get    ('/create',         'create')->name('create');
-                Route::post   ('/',               'store' )->name('store');
-                Route::get    ('/{faq}/edit',     'edit'  )->name('edit');
-                Route::put    ('/{faq}',          'update')->name('update');
-                Route::delete ('/{faq}',          'destroy')->name('destroy');
-                Route::post   ('/bulk-action',    'bulk'  )->name('bulk');
+        Route::prefix('faq')->as('faq.')->group(function () {
+            Route::controller(FaqController::class)->group(function () {
+        
+                // LIST & AJAX search/filter
+                Route::get   ('/',                'index' )->name('index');
+                
+                // CREATE form (opsional jika pakai modal)
+                Route::get   ('/create',          'create')->name('create');
+                
+                // STORE data baru
+                Route::post  ('/',                'store' )->name('store');
+                
+                // EDIT form (opsional jika pakai modal)
+                Route::get   ('/{faq}/edit',      'edit'  )->name('edit');
+                
+                // UPDATE data existing
+                Route::put   ('/{faq}',           'update')->name('update');
+                
+                // DELETE single
+                Route::delete('/{faq}',           'destroy')->name('destroy');
+                
+                // BULK actions (publish/draft/archived/delete)
+                Route::post  ('/bulk-action',     'bulk'  )->name('bulk');
+                
+                // DELETE confirmation page (opsional)
+                Route::get   ('/{faq}/delete',    'delete')->name('delete');
+            });
         });
+        
+
         
         // Other content routes
         Route::get('/hero', [ManageContentController::class, 'hero'])->name('hero');

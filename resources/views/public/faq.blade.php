@@ -1,26 +1,10 @@
-@php
-    $faq = [
-        [
-            'question' => 'Apa itu PUSTIPD?',
-            'answer' =>
-                'PUSTIPD adalah Pusat Teknologi Informasi dan Pangkalan Data yang berfokus pada pengembangan dan pengelolaan sistem informasi di UIN Raden Fatah.',
-        ],
-        [
-            'question' => 'Apa saja layanan yang disediakan oleh PUSTIPD?',
-            'answer' =>
-                'PUSTIPD menyediakan berbagai layanan seperti pengembangan aplikasi, manajemen data, pelatihan teknologi informasi, dan dukungan teknis.',
-        ],
-        [
-            'question' => 'Bagaimana cara menghubungi PUSTIPD?',
-            'answer' => 'Anda dapat menghubungi PUSTIPD melalui email di...',
-        ],
-    ];
-@endphp
+{{-- Hapus bagian @php $faq = [...] @endphp --}}
 
 <x-public.layouts title="{{ $title }}" description="{{ $description }}" keywords="{{ $keywords }}">
     <x-slot:title>{{ $title }}</x-slot:title>
 
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    {{-- Style tetap sama --}}
     <style>
         .underline-animate::after {
             content: '';
@@ -71,7 +55,6 @@
             font-size: 1.11rem;
         }
 
-
         .faq-answer {
             padding: 0 1.35rem 1.2rem 1.35rem;
             color: #343c55;
@@ -89,7 +72,6 @@
             transform: rotate(-180deg);
         }
 
-        /* Slide down animation */
         .faq-answer-content {
             overflow: hidden;
             max-height: 0;
@@ -98,8 +80,8 @@
         }
 
         .faq-card.active .faq-answer-content {
-            max-height: 120px;
-            /* adjust for longer answer */
+            max-height: 500px;
+            /* Diperbesar untuk jawaban yang lebih panjang */
             opacity: 1;
         }
     </style>
@@ -123,9 +105,9 @@
             <form action="#" method="GET" class="relative w-full max-w-md mx-auto mb-6">
                 <input type="text" name="search" placeholder="Cari pertanyaan di sini...."
                     class="w-full rounded-xl pl-12 pr-4 py-2 sm:py-3 
-               text-secondary placeholder-gray-400
-               bg-white border border-white shadow-sm focus:ring-2 focus:ring-secondary focus:border-transparent
-               focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" />
+                   text-secondary placeholder-gray-400
+                   bg-white border border-white shadow-sm focus:ring-2 focus:ring-secondary focus:border-transparent
+                   focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" />
                 <button type="submit" class="absolute top-1/2 left-3 transform -translate-y-1/2 text-secondary">
                     <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" stroke-width="2"
                         viewBox="0 0 24 24">
@@ -136,39 +118,60 @@
             </form>
 
             <!-- FAQ Cards -->
-            <div x-data="{
-                items: @js($faq),
-                open: null,
-                keyword: '',
-                get filtered() {
-                    if (!this.keyword.trim()) return this.items;
-                    return this.items.filter(item =>
-                        item.question.toLowerCase().includes(this.keyword.toLowerCase()) ||
-                        item.answer.toLowerCase().includes(this.keyword.toLowerCase())
-                    );
-                }
-            }" x-init="$el.addEventListener('faq-search', e => { keyword = e.detail.keyword });">
-                <template x-if="filtered.length">
-                    <template x-for="(item, idx) in filtered" :key="idx">
-                        <div class="faq-card" :class="{ 'active': open === idx }" :id="'faq-card-' + idx">
-                            <button class="faq-question w-full text-left focus:outline-none"
-                                @click="open === idx ? open = null : open = idx" type="button">
-                                <span x-text="item.question"></span>
-                                <svg class="chevron ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M19 9l-7 7-7-7" />
-                                </svg>
-                            </button>
-                            <div class="faq-answer-content" x-ref="'faqA' + idx" x-show="open === idx" x-transition>
-                                <div class="faq-answer" x-text="item.answer"></div>
+            @if (count($faqs) > 0)
+                <div x-data="{
+                    items: @js($faqs),
+                    open: null,
+                    keyword: '',
+                    get filtered() {
+                        if (!this.keyword.trim()) return this.items;
+                        return this.items.filter(item =>
+                            item.question.toLowerCase().includes(this.keyword.toLowerCase()) ||
+                            item.answer.toLowerCase().includes(this.keyword.toLowerCase())
+                        );
+                    }
+                }" x-init="$el.addEventListener('faq-search', e => { keyword = e.detail.keyword });">
+
+                    <template x-if="filtered.length">
+                        <template x-for="(item, idx) in filtered" :key="idx">
+                            <div class="faq-card" :class="{ 'active': open === idx }" :id="'faq-card-' + idx">
+                                <button class="faq-question w-full text-left focus:outline-none"
+                                    @click="open === idx ? open = null : open = idx" type="button">
+                                    <span x-text="item.question"></span>
+                                    <svg class="chevron ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </button>
+                                <div class="faq-answer-content" x-ref="'faqA' + idx" x-show="open === idx" x-transition>
+                                    <div class="faq-answer" x-html="item.answer"></div>
+                                </div>
                             </div>
+                        </template>
+                    </template>
+
+                    <template x-if="!filtered.length">
+                        <div class="text-center text-gray-500 pt-8">
+                            <svg class="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
+                                    d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Pertanyaan tidak ditemukan.
                         </div>
                     </template>
-                </template>
-                <template x-if="!filtered.length">
-                    <div class="text-center text-gray-500 pt-8">Pertanyaan tidak ditemukan.</div>
-                </template>
-            </div>
+                </div>
+            @else
+                <div class="text-center text-gray-500 pt-8">
+                    <svg class="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
+                            d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <h3 class="text-lg font-medium">Belum ada FAQ tersedia</h3>
+                    <p class="text-sm">FAQ sedang dalam tahap persiapan</p>
+                </div>
+            @endif
         </div>
     </section>
 </x-public.layouts>

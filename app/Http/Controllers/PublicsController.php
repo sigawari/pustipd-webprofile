@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Announcement;
+use App\Models\ManageContent\Faq; 
 
 // Uncomment the following lines if you need to use Publics model or requests
 // use App\Models\Publics;
@@ -65,13 +66,28 @@ class PublicsController extends Controller
             
             return view('public.announcements', compact('title', 'description', 'keywords', 'announcements'));
         }
+        
+        // FAQ Page
         if ($request->is('faq')) {
             $title = 'FAQ';
             $description = 'Pertanyaan yang sering diajukan tentang PUSTIPD UIN Raden Fatah Palembang';
             $keywords = 'faq, pertanyaan, pustipd';
 
-            return view('public.faq', compact('title', 'description', 'keywords'));
+            // Ambil FAQ yang published, urut berdasarkan sort_order
+            $faqs = Faq::where('status', 'published')
+                       ->orderBy('sort_order')
+                       ->get()
+                       ->map(function ($faq) {
+                           return [
+                               'question' => $faq->question,
+                               'answer' => $faq->answer
+                           ];
+                       })
+                       ->toArray();
+
+            return view('public.faq', compact('title', 'description', 'keywords', 'faqs'));
         }
+
         if ($request->is('tutorial')) {
             $title = 'tutorial';
             $description = 'Tutorial terkait penggunaan teknologi informasi di kawasan civitas akademika UIN Raden Fatah Palembang';

@@ -122,8 +122,10 @@
                         x-transition:leave="transition ease-in duration-75"
                         x-transition:leave-start="transform opacity-100 scale-100"
                         x-transition:leave-end="transform opacity-0 scale-95"
-                        class="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden z-[1000]">
-
+                        class="fixed left-1/2 top-17 -translate-x-1/2 w-11/12 max-w-sm       
+                               md:absolute  md:translate-x-0  md:left-auto  md:right-0         
+                               md:top-auto md:mt-2 md:w-80
+                               bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden z-[1000]">
                         <div class="px-4 py-3 border-b border-gray-100 bg-gray-50">
                             <div class="flex items-center justify-between">
                                 <h3 class="text-sm font-semibold text-gray-900">Notifikasi</h3>
@@ -277,27 +279,44 @@
                     </div>
                 </div>
 
-                <!-- Mobile Search Bar -->
-                <div x-show="isMobileSearchOpen" x-transition:enter="transition ease-out duration-200"
-                    x-transition:enter-start="transform opacity-0 -translate-y-2"
-                    x-transition:enter-end="transform opacity-100 translate-y-0"
+                <!-- ==== MOBILE SEARCH (beberapa px di bawah navbar) ==== -->
+                <div x-show="isMobileSearchOpen" @click.away="isMobileSearchOpen = false"
+                    x-transition:enter="transition ease-out duration-200"
+                    x-transition:enter-start="opacity-0 -translate-y-2"
+                    x-transition:enter-end="opacity-100 translate-y-0"
                     x-transition:leave="transition ease-in duration-150"
-                    x-transition:leave-start="transform opacity-100 translate-y-0"
-                    x-transition:leave-end="transform opacity-0 -translate-y-2"
-                    class="absolute top-full left-0 right-0 md:hidden px-4 pb-3 bg-white border-t border-gray-100 shadow-lg z-[999]">
-                    <div class="relative mt-3">
+                    x-transition:leave-start="opacity-100 translate-y-0"
+                    x-transition:leave-end="opacity-0 -translate-y-2"
+                    class="fixed inset-x-0 top-20 px-6 md:hidden z-[999]">
+
+                    <div class="relative w-full max-w-md mx-auto">
+                        <!-- ikon search -->
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor"
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                             </svg>
                         </div>
-                        <input type="search"
-                            class="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-lg text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50"
-                            placeholder="Cari menu, halaman, atau data...">
+
+                        <!-- input -->
+                        <input type="search" x-ref="mobileSearchInput"
+                            class="block w-full pl-10 pr-12 py-3 rounded-lg border border-gray-300
+                 text-base placeholder-gray-500 text-center bg-gray-50
+                 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            placeholder="Cari menu, halaman, atau data…" />
+
+                        <!-- tombol X -->
+                        <button @click="isMobileSearchOpen = false"
+                            class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>

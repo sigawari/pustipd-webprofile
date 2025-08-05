@@ -59,8 +59,8 @@
                         'pageData' => [
                             'pageName' => $title ?? 'Halaman',
                             'title' => $title ?? 'Judul Halaman',
-                            'description' => 'Kelola konten sesuai kebutuhan Anda.'
-                        ]
+                            'description' => 'Kelola konten sesuai kebutuhan Anda.',
+                        ],
                     ])
                 @endif
 
@@ -69,7 +69,7 @@
                     {{ $slot }}
                 </main>
 
-                <!-- Footer -->
+                <x-admin.toast />
                 <x-admin.footer />
             </div>
 
@@ -86,14 +86,14 @@
         <!-- Script Section -->
         <!-- =============================== -->
         <script>
-            document.addEventListener("DOMContentLoaded", function () {
+            document.addEventListener("DOMContentLoaded", function() {
                 // ===============================
                 // ADD MODAL HANDLER
                 // ===============================
                 const addModal = document.getElementById("achievementModal");
                 const addForm = addModal?.querySelector("#achievementForm");
 
-                window.openAddModal = function () {
+                window.openAddModal = function() {
                     if (addModal) {
                         addModal.classList.remove("hidden");
                         addModal.classList.add("flex");
@@ -101,7 +101,7 @@
                     }
                 };
 
-                window.closeAddModal = function () {
+                window.closeAddModal = function() {
                     if (addModal) {
                         addModal.classList.add("hidden");
                         addModal.classList.remove("flex");
@@ -111,14 +111,14 @@
                 };
 
                 // Klik di luar untuk tutup add modal
-                addModal?.addEventListener("click", function (e) {
+                addModal?.addEventListener("click", function(e) {
                     if (e.target === addModal) closeAddModal();
                 });
 
                 // ===============================
                 // UPDATE MODAL HANDLER
                 // ===============================
-                window.openUpdateModal = function (id) {
+                window.openUpdateModal = function(id) {
                     const modal = document.getElementById(`UpdateModal-${id}`);
                     if (modal) {
                         modal.classList.remove("hidden");
@@ -127,7 +127,7 @@
                     }
                 };
 
-                window.closeUpdateModal = function (id) {
+                window.closeUpdateModal = function(id) {
                     const modal = document.getElementById(`UpdateModal-${id}`);
                     if (modal) {
                         modal.classList.add("hidden");
@@ -136,21 +136,10 @@
                     }
                 };
 
-                // Klik di luar modal untuk close
-                document.querySelectorAll('[id^="UpdateModal-"]').forEach((modal) => {
-                    modal.addEventListener('click', function (e) {
-                        if (e.target === modal) {
-                            modal.classList.add("hidden");
-                            modal.classList.remove("flex");
-                            document.body.classList.remove("overflow-hidden");
-                        }
-                    });
-                });
-
                 // ===============================
                 // DELETE MODAL HANDLER
                 // ===============================
-                window.openDeleteModal = function (id) {
+                window.openDeleteModal = function(id) {
                     const modal = document.getElementById(`DeleteModal-${id}`);
                     if (modal) {
                         modal.classList.remove("hidden");
@@ -159,7 +148,7 @@
                     }
                 };
 
-                window.closeDeleteModal = function (id) {
+                window.closeDeleteModal = function(id) {
                     const modal = document.getElementById(`DeleteModal-${id}`);
                     if (modal) {
                         modal.classList.add("hidden");
@@ -170,7 +159,7 @@
 
                 // Klik di luar modal untuk close
                 document.querySelectorAll('[id^="DeleteModal-"]').forEach((modal) => {
-                    modal.addEventListener('click', function (e) {
+                    modal.addEventListener('click', function(e) {
                         if (e.target === modal) {
                             modal.classList.add("hidden");
                             modal.classList.remove("flex");
@@ -182,7 +171,7 @@
                 // ===============================
                 // GLOBAL ESC KEY HANDLER
                 // ===============================
-                document.addEventListener("keydown", function (e) {
+                document.addEventListener("keydown", function(e) {
                     if (e.key === "Escape") {
                         // Tutup add modal
                         closeAddModal?.();
@@ -217,17 +206,17 @@
 
                     const queryString = new URLSearchParams(data).toString();
                     fetch(`${url}?${queryString}`, {
-                        headers: {
-                            'X-Requested-With': 'XMLHttpRequest',
-                        },
-                    })
-                    .then(response => response.text())
-                    .then(html => {
-                        targetElement.innerHTML = html;
-                    })
-                    .catch(error => {
-                        console.error('AJAX load failed:', error);
-                    });
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest',
+                            },
+                        })
+                        .then(response => response.text())
+                        .then(html => {
+                            targetElement.innerHTML = html;
+                        })
+                        .catch(error => {
+                            console.error('AJAX load failed:', error);
+                        });
                 };
 
                 const attachAjaxHandlers = () => {
@@ -254,7 +243,11 @@
                     // Search
                     if (searchInput) {
                         searchInput.addEventListener('input', debounce(() => {
-                            const { url, target, ...data } = gatherParams();
+                            const {
+                                url,
+                                target,
+                                ...data
+                            } = gatherParams();
                             handleAjaxTable(url, target, data);
                         }, 400));
                     }
@@ -262,7 +255,11 @@
                     // Filter / PerPage
                     filterSelects.forEach(select => {
                         select.addEventListener('change', () => {
-                            const { url, target, ...data } = gatherParams();
+                            const {
+                                url,
+                                target,
+                                ...data
+                            } = gatherParams();
                             handleAjaxTable(url, target, data);
                         });
                     });
@@ -273,7 +270,9 @@
                             if (e.target.tagName === 'A') {
                                 e.preventDefault();
                                 const pageUrl = new URL(e.target.href);
-                                const { target } = gatherParams();
+                                const {
+                                    target
+                                } = gatherParams();
                                 const data = Object.fromEntries(pageUrl.searchParams.entries());
                                 handleAjaxTable(pageUrl.pathname, target, data);
                             }
@@ -566,4 +565,5 @@
             console.log('Debug helper available: window.debugAchievement.testModal()');
         </script>
     </body>
+
 </html>
