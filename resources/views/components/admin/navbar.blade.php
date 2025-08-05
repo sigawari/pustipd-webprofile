@@ -227,7 +227,9 @@
                         <!-- Header di dropdown -->
                         <div class="px-4 py-4 border-b border-gray-100 bg-gray-50">
                             <div class="flex items-center space-x-3">
-                                <img src="{{ $user?->avatar ?? asset('assets/img/placeholder/dummy.png') }}" …>
+                                <img src="{{ $user?->avatar ?? asset('assets/img/placeholder/dummy.png') }}"
+                                    alt="User Avatar"
+                                    class="w-12 h-12 rounded-full object-cover border-2 border-gray-200 flex-shrink-0">
                                 <div class="min-w-0">
                                     <p class="font-semibold text-gray-900 truncate">
                                         {{ $user?->name ?? 'Guest' }}
@@ -238,6 +240,7 @@
                                 </div>
                             </div>
                         </div>
+
 
                         <div class="py-2">
                             <a href="#"
