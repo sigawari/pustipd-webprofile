@@ -1,3 +1,7 @@
+@php
+    use Illuminate\Support\Facades\Auth;
+    $user = Auth::user(); // null jika belum login
+@endphp
 <!-- resources/views/components/admin/navbar.blade.php -->
 <nav class="sticky top-0 z-50 w-full bg-white border-b border-gray-200 shadow-sm transition-all duration-300">
     <div class="flex items-center justify-between px-4 py-3 lg:px-6">
@@ -195,8 +199,12 @@
                         <img src="{{ asset('assets/img/placeholder/dummy.png') }}" alt="User"
                             class="w-8 h-8 lg:w-10 lg:h-10 rounded-full object-cover border-2 border-gray-200 flex-shrink-0">
                         <div class="hidden lg:block text-left min-w-0">
-                            <p class="text-sm font-medium text-gray-900 truncate">Administrator</p>
-                            <p class="text-xs text-gray-500 truncate">Super Admin</p>
+                            <p class="text-sm font-medium text-gray-900 truncate">
+                                {{ $user?->name ?? 'Guest' }}
+                            </p>
+                            <p class="text-xs text-gray-500 truncate">
+                                {{ $user?->role ?? '—' }}
+                            </p>
                         </div>
                         <svg class="hidden lg:block w-4 h-4 text-gray-400 flex-shrink-0 transition-transform duration-200"
                             :class="isProfileMenuOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor"
@@ -216,13 +224,17 @@
                         x-transition:leave-end="transform opacity-0 scale-95"
                         class="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden z-[1000]">
 
+                        <!-- Header di dropdown -->
                         <div class="px-4 py-4 border-b border-gray-100 bg-gray-50">
                             <div class="flex items-center space-x-3">
-                                <img src="{{ asset('assets/img/placeholder/dummy.png') }}" alt="User"
-                                    class="w-12 h-12 rounded-full object-cover border-2 border-gray-200 flex-shrink-0">
+                                <img src="{{ $user?->avatar ?? asset('assets/img/placeholder/dummy.png') }}" …>
                                 <div class="min-w-0">
-                                    <p class="font-semibold text-gray-900 truncate">Administrator</p>
-                                    <p class="text-sm text-gray-500 truncate">admin@pustipd.uin-suka.ac.id</p>
+                                    <p class="font-semibold text-gray-900 truncate">
+                                        {{ $user?->name ?? 'Guest' }}
+                                    </p>
+                                    <p class="text-sm text-gray-500 truncate">
+                                        {{ $user?->email ?? 'no-email' }}
+                                    </p>
                                 </div>
                             </div>
                         </div>

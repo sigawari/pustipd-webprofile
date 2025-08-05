@@ -8,7 +8,7 @@
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6 gap-4">
             <div>
                 <h2 class="text-lg font-semibold text-gray-900">Kelola {{ $title }}</h2>
-                <p class="text-gray-600 mt-1 text-sm">Kelola {{ $title }} yang [APA YAAA KUTT WKWKWK]</p>
+                <p class="text-gray-600 mt-1 text-sm">Kelola {{ $title }} yang akan memiliki akses ke website</p>
             </div>
             <button onclick="openAddModal()"
                 class="w-full sm:w-auto bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200 flex items-center justify-center">
