@@ -11,12 +11,9 @@ use Illuminate\Support\Facades\Storage;
 
 class GalleryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request)
     {
-        $title = 'Kelola Galeri';
+        $title = 'Gallery';
         $query = Gallery::query();
 
         // Search
@@ -72,9 +69,6 @@ class GalleryController extends Controller
         return view('admin.manage-content.tentang.gallery.index', compact('title', 'galleries'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreGalleryRequest $request)
     {
         $data = $request->validated();
@@ -87,7 +81,7 @@ class GalleryController extends Controller
             $data['image'] = $imagePath;
         }
         
-        // Jika sort_order kosong, buat otomatis (nomor paling akhir + 1)
+        // Auto sort order
         if (!isset($data['sort_order']) || $data['sort_order'] === null) {
             $data['sort_order'] = (Gallery::max('sort_order') ?? 0) + 1;
         }
@@ -99,18 +93,6 @@ class GalleryController extends Controller
                ->with('success', 'Gallery berhasil ditambahkan!');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Gallery $gallery)
-    {
-        $title = 'Edit Gallery';
-        return view('admin.manage-content.tentang.gallery.update', compact('title', 'gallery'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(UpdateGalleryRequest $request, Gallery $gallery)
     {
         $data = $request->validated();
@@ -128,7 +110,6 @@ class GalleryController extends Controller
             $data['image'] = $imagePath;
         }
         
-        // Jika sort_order kosong, pertahankan yang lama atau buat baru
         if (!isset($data['sort_order']) || $data['sort_order'] === null) {
             $data['sort_order'] = $gallery->sort_order ?: ((Gallery::max('sort_order') ?? 0) + 1);
         }
@@ -140,9 +121,6 @@ class GalleryController extends Controller
                ->with('success', 'Gallery berhasil diperbarui!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Gallery $gallery)
     {
         $gallery->update(['status' => 'archived']);
@@ -152,30 +130,33 @@ class GalleryController extends Controller
                ->with('success', 'Gallery berhasil diarsipkan!');
     }
 
-    /**
-     * Bulk action handler
-     */
     public function bulk(Request $request)
     {
         $request->validate([
-            'action' => 'required|in:publish,draft,archived,delete',
-            'items' => 'required|array',
-            'items.*' => 'exists:galleries,id'
+            'action' => 'required|in:published,draft,archived,permanent_delete',
+            'ids' => 'required|array',
+            'ids.*' => 'exists:galleries,id'
         ]);
 
         $action = $request->action;
-        $items = $request->items;
+        $ids = $request->ids;
 
         switch ($action) {
-            case 'publish':
+            case 'published':
             case 'draft':
             case 'archived':
-                Gallery::whereIn('id', $items)->update(['status' => $action]);
+                Gallery::whereIn('id', $ids)->update(['status' => $action]);
                 $message = 'Gallery berhasil diubah ke status ' . $action;
                 break;
                 
-            case 'delete':
-                Gallery::whereIn('id', $items)->delete();
+            case 'permanent_delete':
+                $galleries = Gallery::whereIn('id', $ids)->get();
+                foreach ($galleries as $gallery) {
+                    if ($gallery->image && Storage::disk('public')->exists($gallery->image)) {
+                        Storage::disk('public')->delete($gallery->image);
+                    }
+                    $gallery->delete();
+                }
                 $message = 'Gallery berhasil dihapus permanen';
                 break;
         }

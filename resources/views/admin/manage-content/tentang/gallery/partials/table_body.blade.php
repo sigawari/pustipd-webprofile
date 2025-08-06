@@ -1,15 +1,34 @@
 {{-- partials/table_body.blade.php --}}
-@forelse ($gallery as $key => $gallery)
+@forelse ($galleries as $key => $gallery)
     <tr class="hover:bg-gray-50">
         <td class="px-6 py-4 whitespace-nowrap">
             <input type="checkbox" class="item-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                 value="{{ $gallery->id }}" onchange="updateBulkActionsBar()">
         </td>
         <td class="px-6 py-4 whitespace-nowrap">
-            {{ $gallery->firstItem() + $key }}
+            {{ $galleries->firstItem() + $key }}
         </td>
         <td class="px-6 py-4">
-            <div class="text-sm font-medium text-gray-900 max-w-xs">{{ Str::limit($gallery->image, 60) }}</div>
+            <div class="flex items-center">
+                @if ($gallery->image)
+                    <img src="{{ asset('storage/' . $gallery->image) }}" alt="{{ $gallery->title }}"
+                        class="w-12 h-12 rounded-lg object-cover mr-3">
+                @else
+                    <div class="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center mr-3">
+                        <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
+                            </path>
+                        </svg>
+                    </div>
+                @endif
+                <div>
+                    <div class="text-sm font-medium text-gray-900">{{ Str::limit($gallery->title, 30) }}</div>
+                    @if ($gallery->event_date)
+                        <div class="text-xs text-gray-500">{{ $gallery->event_date->format('d M Y') }}</div>
+                    @endif
+                </div>
+            </div>
         </td>
         <td class="px-6 py-4">
             <div class="text-sm text-gray-600 max-w-xs">{{ Str::limit(strip_tags($gallery->description), 80) }}</div>
@@ -33,9 +52,8 @@
         </td>
         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
             <div class="flex items-center space-x-2">
-
                 @if ($gallery->status === 'archived')
-                    {{-- FAQ Archived: Restore atau Hapus Permanen --}}
+                    {{-- Gallery Archived: Restore atau Hapus Permanen --}}
                     <button onclick="quickStatusChange({{ $gallery->id }}, 'draft')"
                         class="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50" title="Restore ke Draft">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -45,7 +63,7 @@
                         </svg>
                     </button>
 
-                    <button onclick="permanentDeleteFaq({{ $gallery->id }})"
+                    <button onclick="permanentDeleteGallery({{ $gallery->id }})"
                         class="text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-50" title="Hapus Permanen">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -53,7 +71,7 @@
                         </svg>
                     </button>
                 @else
-                    {{-- FAQ Draft/Published: Quick Actions --}}
+                    {{-- Gallery Draft/Published: Quick Actions --}}
                     @if ($gallery->status === 'draft')
                         <button onclick="quickStatusChange({{ $gallery->id }}, 'published')"
                             class="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-50" title="Publish">
@@ -85,7 +103,7 @@
                     </button>
 
                     <!-- Archive -->
-                    <button onclick="softDeleteFaq({{ $gallery->id }})"
+                    <button onclick="softDeleteGallery({{ $gallery->id }})"
                         class="text-gray-600 hover:text-gray-900 p-1 rounded hover:bg-gray-50" title="Archive">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -98,23 +116,23 @@
     </tr>
 @empty
     <tr class="hover:bg-gray-50">
-        <td colspan="6" class="px-6 py-4 text-center text-gray-500 italic">
+        <td colspan="7" class="px-6 py-4 text-center text-gray-500 italic">
             <div class="flex flex-col items-center justify-center text-sm text-gray-500 space-y-1">
-                @if ($gallery->isEmpty() && !request()->filled('search') && !request()->filled('filter'))
+                @if ($galleries->isEmpty() && !request()->filled('search') && !request()->filled('filter'))
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-400 mb-1" fill="none"
                         viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                            d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
-                    <span class="text-blue-500 font-medium">Belum ada FAQ yang tersedia.</span>
-                @elseif ($gallery->isEmpty() && request()->filled('search'))
+                    <span class="text-blue-500 font-medium">Belum ada Gallery yang tersedia.</span>
+                @elseif ($galleries->isEmpty() && request()->filled('search'))
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-400 mb-1" fill="none"
                         viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                             d="M21 21l-4.35-4.35M10.5 17a6.5 6.5 0 100-13 6.5 6.5 0 000 13z" />
                     </svg>
                     <span class="text-yellow-600 font-medium">Tidak ditemukan hasil pencarian yang cocok.</span>
-                @elseif ($gallery->isEmpty() && request()->filled('filter'))
+                @elseif ($galleries->isEmpty() && request()->filled('filter'))
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-400 mb-1" fill="none"
                         viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
@@ -130,10 +148,10 @@
 <script>
     // Quick status change
     function quickStatusChange(id, status) {
-        if (confirm(`Ubah status FAQ ke ${status}?`)) {
+        if (confirm(`Ubah status Gallery ke ${status}?`)) {
             const form = document.createElement('form');
             form.method = 'POST';
-            form.action = '{{ route('admin.manage-content.faq.bulk') }}';
+            form.action = '{{ route('admin.manage-content.tentang.gallery.bulk') }}';
             form.innerHTML = `
                 @csrf
                 <input type="hidden" name="action" value="${status}">
@@ -145,8 +163,8 @@
     }
 
     // Soft delete (archive)
-    function softDeleteFaq(id) {
-        if (confirm('FAQ akan diarsipkan, bukan dihapus permanen. Lanjutkan?')) {
+    function softDeleteGallery(id) {
+        if (confirm('Gallery akan diarsipkan, bukan dihapus permanen. Lanjutkan?')) {
             quickStatusChange(id, 'archived');
         }
     }

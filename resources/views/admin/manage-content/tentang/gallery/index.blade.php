@@ -21,7 +21,7 @@
             </button>
         </div>
 
-        <!-- Bulk Actions Bar (di index.blade.php) -->
+        <!-- Bulk Actions Bar -->
         <div id="bulkActionsBar" class="hidden bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <div class="flex items-center gap-2">
@@ -89,7 +89,7 @@
             </div>
         </div>
 
-        <!-- Filter dan Search (tetap sama) -->
+        <!-- Filter dan Search -->
         <div class="flex flex-col gap-3 mb-4 sm:mb-6">
             <div class="relative">
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -146,10 +146,10 @@
                                         No.</th>
                                     <th
                                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Pertanyaan</th>
+                                        Gambar & Judul</th>
                                     <th
                                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Jawaban</th>
+                                        Deskripsi</th>
                                     <th
                                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Urutan</th>
@@ -172,14 +172,13 @@
             <!-- Pagination -->
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4 pt-4">
                 <div class="text-sm text-gray-500 text-center sm:text-left">
-                    Menampilkan {{ $gallery->firstItem() }} sampai {{ $gallery->lastItem() }} dari
-                    {{ $gallery->total() }}
-                    {{ strtolower($title) }}
+                    Menampilkan {{ $galleries->firstItem() }} sampai {{ $galleries->lastItem() }} dari
+                    {{ $galleries->total() }} {{ strtolower($title) }}
                 </div>
 
                 <div class="flex justify-center sm:justify-end">
                     <nav class="inline-flex space-x-1 sm:space-x-2" aria-label="Pagination">
-                        @if ($gallery->onFirstPage())
+                        @if ($galleries->onFirstPage())
                             <span
                                 class="px-3 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-300 rounded-lg cursor-not-allowed flex items-center gap-1">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:hidden" fill="none"
@@ -190,7 +189,7 @@
                                 <span class="hidden sm:inline">Sebelumnya</span>
                             </span>
                         @else
-                            <a href="{{ $gallery->appends(request()->all())->previousPageUrl() }}"
+                            <a href="{{ $galleries->appends(request()->all())->previousPageUrl() }}"
                                 class="pagination-link px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center gap-1">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:hidden" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor">
@@ -201,8 +200,8 @@
                             </a>
                         @endif
 
-                        @foreach ($gallery->appends(request()->all())->getUrlRange(1, $gallery->lastPage()) as $page => $url)
-                            @if ($page == $gallery->currentPage())
+                        @foreach ($galleries->appends(request()->all())->getUrlRange(1, $galleries->lastPage()) as $page => $url)
+                            @if ($page == $galleries->currentPage())
                                 <span
                                     class="px-3 py-2 text-sm font-semibold text-white bg-blue-600 border border-blue-600 rounded-lg">{{ $page }}</span>
                             @else
@@ -211,8 +210,8 @@
                             @endif
                         @endforeach
 
-                        @if ($gallery->hasMorePages())
-                            <a href="{{ $gallery->appends(request()->all())->nextPageUrl() }}"
+                        @if ($galleries->hasMorePages())
+                            <a href="{{ $galleries->appends(request()->all())->nextPageUrl() }}"
                                 class="pagination-link px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center gap-1">
                                 <span class="hidden sm:inline">Selanjutnya</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:hidden" fill="none"
@@ -236,17 +235,13 @@
                 </div>
             </div>
         </div>
-
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-
-            // ================================
             // AJAX RELOAD FUNCTION
-            // ================================
             function reloadTable(params = {}) {
-                const url = new URL("{{ route('admin.manage-content.Gallery.index') }}");
+                const url = new URL("{{ route('admin.manage-content.tentang.gallery.index') }}");
 
                 // Preserve existing params
                 const currentParams = new URLSearchParams(window.location.search);
@@ -302,9 +297,7 @@
                     });
             }
 
-            // ================================
             // UPDATE PAGINATION LINKS
-            // ================================
             function updatePaginationLinks(pagination) {
                 const nav = document.querySelector('nav[aria-label="Pagination"]');
                 if (!nav) return;
@@ -359,9 +352,7 @@
                 nav.innerHTML = html;
             }
 
-            // ================================
             // PAGINATION CLICK HANDLERS
-            // ================================
             function attachPaginationListeners() {
                 document.querySelectorAll('.pagination-link').forEach(link => {
                     link.addEventListener('click', function(e) {
@@ -374,9 +365,7 @@
                 });
             }
 
-            // ================================
             // FILTER & SEARCH EVENT LISTENERS
-            // ================================
 
             // Search with debounce
             let searchTimeout;
@@ -415,9 +404,7 @@
                 });
             }
 
-            // ================================
             // SELECT ALL FUNCTIONALITY
-            // ================================
             const selectAllCheckbox = document.getElementById('selectAll');
             if (selectAllCheckbox) {
                 selectAllCheckbox.addEventListener('change', function() {
@@ -427,9 +414,7 @@
                 });
             }
 
-            // ================================
             // BULK ACTIONS FUNCTIONS
-            // ================================
             window.updateBulkActionsBar = function() {
                 const checkedBoxes = document.querySelectorAll('.item-checkbox:checked');
                 const bulkBar = document.getElementById('bulkActionsBar');
@@ -491,7 +476,7 @@
                 if (confirm(confirmMessage)) {
                     const form = document.createElement('form');
                     form.method = 'POST';
-                    form.action = '{{ route('admin.manage-content.Gallery.bulk') }}';
+                    form.action = '{{ route('admin.manage-content.tentang.gallery.bulk') }}';
                     form.innerHTML = `
                         @csrf
                         <input type="hidden" name="action" value="${action}">
@@ -505,10 +490,10 @@
             window.permanentDeleteGallery = function(id) {
                 if (confirm(
                         '⚠️ PERINGATAN!\n\nGallery akan dihapus PERMANEN dan tidak dapat dikembalikan.\n\nApakah Anda yakin?'
-                    )) {
+                        )) {
                     const form = document.createElement('form');
                     form.method = 'POST';
-                    form.action = '{{ route('admin.manage-content.Gallery.bulk') }}';
+                    form.action = '{{ route('admin.manage-content.tentang.gallery.bulk') }}';
                     form.innerHTML = `
                         @csrf
                         <input type="hidden" name="action" value="permanent_delete">
@@ -520,16 +505,16 @@
             };
 
             window.softDeleteGallery = function(id) {
-                if (confirm('FAQ akan diarsipkan dan bisa di-restore kembali. Lanjutkan?')) {
+                if (confirm('Gallery akan diarsipkan dan bisa di-restore kembali. Lanjutkan?')) {
                     quickStatusChange(id, 'archived');
                 }
             };
 
             window.quickStatusChange = function(id, status) {
-                if (confirm(`Ubah status FAQ ke ${status}?`)) {
+                if (confirm(`Ubah status Gallery ke ${status}?`)) {
                     const form = document.createElement('form');
                     form.method = 'POST';
-                    form.action = '{{ route('admin.manage-content.faq.bulk') }}';
+                    form.action = '{{ route('admin.manage-content.tentang.gallery.bulk') }}';
                     form.innerHTML = `
                         @csrf
                         <input type="hidden" name="action" value="${status}">

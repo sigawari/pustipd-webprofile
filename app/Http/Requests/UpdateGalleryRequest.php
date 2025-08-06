@@ -18,7 +18,7 @@ class UpdateGalleryRequest extends FormRequest
             'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'event_date' => 'required|date',
-            'status' => 'required|in:publish,draft,archived',
+            'status' => 'required|in:published,draft,archived',
             'sort_order' => 'nullable|integer|min:0'
         ];
     }
