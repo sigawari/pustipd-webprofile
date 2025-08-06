@@ -120,15 +120,17 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
                 Route::get('/gallery/export', 'export')->name('gallery.export');
             });
 
-            // Visi-Misi Routes
+
+            // Di routes - yang BENAR
             Route::controller(VisiMisiController::class)->group(function(){
-                Route::get('/visi-misi', 'index')->name('visi-misi');
-                Route::get('/visi-misi/create', 'create')->name('visi-misi.create');
-                Route::post('/visi-misi', 'store')->name('visi-misi.store');
-                Route::get('/visi-misi/{visi-misi}/edit', 'edit')->name('visi-misi.edit');
-                Route::put('/visi-misi/{visi-misi}', 'update')->name('visi-misi.update');
-                Route::delete('/visi-misi/{visi-misi}', 'destroy')->name('visi-misi.destroy');
-                Route::get('/visi-misi/export', 'export')->name('visi-misi.export');
+                Route::get('/visi-misi', 'index')->name('visi-misi.index');
+                Route::get('/visi-misi/create', 'create')->name('visi-misi.create');        
+                Route::post('/visi-misi', 'store')->name('visi-misi.store');               
+                Route::put('/visi-misi/update', 'updateVisi')->name('visi-misi.update');
+                Route::get('/visi-misi/{index}/edit', 'edit')->name('visi-misi.edit');     
+                Route::put('/visi-misi/{index}', 'updateMisi')->name('visi-misi.update-misi'); // ← INI untuk update misi
+                Route::get('/visi-misi/{index}/delete', 'delete')->name('visi-misi.delete'); 
+                Route::delete('/visi-misi/{index}', 'deleteMisi')->name('visi-misi.destroy'); // ← INI untuk hapus misi
             });
 
 
@@ -309,7 +311,7 @@ Route::prefix('/')->group(function () {
     // PublicsController routes
     Route::get('/', [PublicsController::class, 'index'])->name('home');
     Route::get('/tentang', [PublicsController::class, 'index'])->name('about');
-    Route::get('/visi', [PublicsController::class, 'index'])->name('vision');
+    Route::get('/visi-misi', [PublicsController::class, 'index'])->name('vision');
     Route::get('/struktur', [PublicsController::class, 'index'])->name('structure');
     Route::get('/layanan', [PublicsController::class, 'index'])->name('services');
     Route::get('/berita/contohberita', [PublicsController::class, 'index'])->name('contohberita');

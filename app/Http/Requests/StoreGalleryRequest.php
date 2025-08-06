@@ -6,23 +6,32 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StoreGalleryRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
+    public function authorize()
     {
-        return false;
+        return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
-    public function rules(): array
+    public function rules()
     {
         return [
-            //
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'event_date' => 'required|date',
+            'status' => 'required|in:publish,draft,archived',
+            'sort_order' => 'nullable|integer|min:0'
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'title.required' => 'Judul gallery wajib diisi',
+            'image.required' => 'Gambar wajib diupload',
+            'image.image' => 'File harus berupa gambar',
+            'image.max' => 'Ukuran gambar maksimal 2MB',
+            'event_date.required' => 'Tanggal kegiatan wajib diisi',
+            'status.required' => 'Status wajib dipilih',
         ];
     }
 }

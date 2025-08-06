@@ -20,6 +20,7 @@ class RoleMiddleware
         if (!Auth::check()) {
             abort(401, 'Oops! You are not authorized to access this page.');
         }
+        
         // Get the currently logged in user
         $user = Auth::user();
 

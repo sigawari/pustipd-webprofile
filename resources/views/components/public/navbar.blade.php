@@ -94,7 +94,7 @@
                                         Tentang PUSTIPD
                                     </button>
                                 </a>
-                                <a href="/visi">
+                                <a href="/visi-misi">
                                     <button
                                         class="block w-full px-5 py-2 text-white text-justify hover:bg-gray-700 transition">
                                         Visi Misi
@@ -210,7 +210,7 @@
             </button>
             <div id="dropdownTentangMenu" class="hidden flex-col space-y-1 mt-1 pl-4">
                 <a href="/tentang" class="block text-secondary hover:text-custom-blue">Tentang PUSTIPD</a>
-                <a href="/visi" class="block text-secondary hover:text-custom-blue">Visi Misi</a>
+                <a href="/visi-misi" class="block text-secondary hover:text-custom-blue">Visi Misi</a>
                 <a href="/struktur" class="block text-secondary hover:text-custom-blue">Struktur Organisasi</a>
             </div>
         </div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Announcement;
 use App\Models\ManageContent\Faq; 
+use App\Models\ManageContent\AboutUs\VisiMisi;
 
 // Uncomment the following lines if you need to use Publics model or requests
 // use App\Models\Publics;
@@ -25,12 +26,20 @@ class PublicsController extends Controller
 
             return view('public.about', compact('title', 'description', 'keywords'));
         }
-        if ($request->is('visi')) {
-            $title = 'Visi Misi PUSTIPD UIN Raden Fatah Palembang';
-            $description = 'Visi dan misi PUSTIPD UIN Raden Fatah Palembang dalam mengembangkan teknologi informasi dan data.';
-            $keywords = 'visi, misi, pustipd';
 
-            return view('public.vision', compact('title', 'description', 'keywords'));
+        if ($request->is('visi-misi')) {
+            $title = 'Visi & Misi PUSTIPD UIN Raden Fatah Palembang';
+            $description = 'Visi dan Misi PUSTIPD UIN Raden Fatah Palembang dalam mendukung transformasi digital perguruan tinggi';
+            $keywords = 'visi, misi, pustipd, uin raden fatah, teknologi informasi';
+        
+            // Ambil data visi dan misi dari satu model
+            $visiMisi = VisiMisi::firstOrCreate(['id' => 1], [
+                'visi' => '',
+                'misi' => [],
+                'is_active' => true
+            ]);
+        
+            return view('public.vision', compact('title', 'description', 'keywords', 'visiMisi'));
         }
         if ($request->is('struktur')) {
             $title = 'Struktur Organisasi PUSTIPD UIN Raden Fatah Palembang';
