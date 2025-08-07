@@ -45,8 +45,8 @@
 
         {{-- progress-bar (opsional) --}}
         <div class="h-1 w-full overflow-hidden bg-gray-200 rounded-b-lg">
-            <div :class="type === 'success' ? 'bg-green-400' : 'bg-red-400'" class="h-full" x-init="setTimeout(() => $el.style.width = '0%', 100)"
-                style="width:100%; transition:width 4s linear"></div>
+            <div x-data="{ type: '{{ session('type') ?? 'info' }}' }" :class="type === 'success' ? 'bg-green-400' : 'bg-red-400'" class="h-full"
+                x-init="setTimeout(() => $el.style.width = '0%', 100)" style="width:100%; transition:width 4s linear"></div>
         </div>
     </div>
 @endif

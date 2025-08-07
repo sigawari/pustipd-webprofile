@@ -2,21 +2,6 @@
     <x-slot:title>{{ $title }}</x-slot:title>
 
     <style>
-        .underline-animate::after {
-            content: '';
-            position: absolute;
-            bottom: -1rem;
-            left: 0;
-            height: 4px;
-            width: 0;
-            background-color: #062749;
-            transition: width 0.4s ease;
-        }
-
-        .group:hover .underline-animate::after {
-            width: 100%;
-        }
-
         /* Tab Navigation Styles */
         .tab-navigation {
             background: rgba(255, 255, 255, 0.95);
@@ -172,7 +157,7 @@
             <!-- Heading -->
             <div class="text-center mb-10 group max-w-3xl mx-auto">
                 <h2 class="text-3xl md:text-4xl font-bold text-secondary relative inline-block underline-animate mb-3">
-                    Dokumen
+                    Regulasi
                 </h2>
                 <h3 class="text-lg text-secondary pt-4">
                     Informasi Publik dan dokumen terkait PUSTIPD yang bisa diunduh
@@ -181,7 +166,7 @@
 
             <!-- Search Form -->
             <form action="#" method="GET" class="relative w-full max-w-md mx-auto mb-8">
-                <input type="text" name="search" placeholder="Cari dokumen di sini...."
+                <input type="text" name="search" placeholder="Cari {{ $title }} di sini...."
                     class="w-full rounded-xl pl-12 pr-4 py-2 sm:py-3 
                    text-secondary placeholder-gray-400
                    bg-white border border-white shadow-sm focus:ring-2 focus:ring-secondary focus:border-transparent
@@ -195,43 +180,6 @@
                 </button>
             </form>
 
-            <!-- Tab Navigation -->
-            <div class="max-w-3xl mx-auto mb-8">
-                <div class="tab-navigation">
-                    <div class="flex flex-wrap md:flex-nowrap gap-2 justify-center">
-                        <a href="#" class="tab-item" data-tab="ketetapan">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                            </svg>
-                            Ketetapan
-                        </a>
-                        <a href="#" class="tab-item" data-tab="panduan">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            Panduan
-                        </a>
-                        <a href="#" class="tab-item" data-tab="regulasi">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2m-6 4h6" />
-                            </svg>
-                            Regulasi
-                        </a>
-                        <a href="#" class="tab-item" data-tab="sop">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 5H7a2 2 0 00-2 2v6a2 2 0 002 2h2m0 0h6a2 2 0 002-2V7a2 2 0 00-2-2h-2m0 0V3a2 2 0 00-2-2H9a2 2 0 00-2 2v2z" />
-                            </svg>
-                            SOP
-                        </a>
-                    </div>
-                </div>
-            </div>
 
             <!-- Tab Contents -->
             <div class="max-w-4xl mx-auto">

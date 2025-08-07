@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Models\Announcement;
 use App\Models\ManageContent\Faq; 
 use App\Models\ManageContent\AboutUs\VisiMisi;
-use App\Models\ManageContent\AboutUs\Gallery;
 
 // Uncomment the following lines if you need to use Publics model or requests
 // use App\Models\Publics;
@@ -143,12 +142,61 @@ class PublicsController extends Controller
 
             return view('public.contohtutorial', compact('title', 'description', 'keywords'));
         }
-        if ($request->is('info-publik')) {
-            $title = 'info-publik';
+        if ($request->is('ketetapan')) {
+            $title = 'Ketetapan';
+            $description = 'Informasi Publik dan dokumen terkait PUSTIPD UIN Raden Fatah Palembang yang bisa didownload';
+            $keywords = 'ketetapan, publik, pustipd';
+        
+            // Ambil parameter search dan per_page
+            $search = $request->get('search');
+            $perPage = $request->get('per_page', 10); // Default 10 per halaman
+            
+            // Validasi per_page
+            $validPerPage = [10, 20, 50, 100];
+            if (!in_array($perPage, $validPerPage)) {
+                $perPage = 10;
+            }
+        
+            // Query untuk data ketetapan yang published dan active
+            $query = \App\Models\Ketetapan::active() // Menggunakan scope active
+                                         ->orderBy('sort_order', 'asc')
+                                         ->orderBy('created_at', 'desc');
+        
+            // Apply search filter jika ada
+            if ($search) {
+                $query->search($search); // Menggunakan scope search
+            }
+        
+            // Paginate results
+            $ketetapans = $query->paginate($perPage);
+        
+            return view('public.ketetapan', compact(
+                'title', 
+                'description', 
+                'keywords', 
+                'ketetapans'
+            ));
+        }        
+        if ($request->is('regulasi')) {
+            $title = 'regulasi';
             $description = 'Informasi Publik dan dokumen terkait PUSTIPD UIN Raden Fatah Palembang yang bisa didownload';
             $keywords = 'info, publik, pustipd';
 
-            return view('public.public-info', compact('title', 'description', 'keywords'));
+            return view('public.regulasi', compact('title', 'description', 'keywords'));
+        }
+        if ($request->is('panduan')) {
+            $title = 'panduan';
+            $description = 'Informasi Publik dan dokumen terkait PUSTIPD UIN Raden Fatah Palembang yang bisa didownload';
+            $keywords = 'info, publik, pustipd';
+
+            return view('public.panduan', compact('title', 'description', 'keywords'));
+        }
+        if ($request->is('sop')) {
+            $title = 'sop';
+            $description = 'Informasi Publik dan dokumen terkait PUSTIPD UIN Raden Fatah Palembang yang bisa didownload';
+            $keywords = 'info, publik, pustipd';
+
+            return view('public.sop', compact('title', 'description', 'keywords'));
         }
 
         // Default untuk beranda

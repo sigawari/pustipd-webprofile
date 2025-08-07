@@ -148,12 +148,41 @@
                             </div>
                         </div>
 
-                        <div>
-                            <a href="/info-publik">
-                                <button class="text-white  transition focus:outline-none">
-                                    <h3 class="navbar-menu hover:text-custom-blue">Dokumen</h3>
-                                </button>
-                            </a>
+                        <div class="relative group">
+                            <button class="flex items-center transition focus:outline-none text-white">
+                                <h3 class="text-white navbar-menu hover:text-custom-blue">Dokumen</h3>
+                                <svg class="w-4 h-4 ml-1 text-gray-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+                            <div
+                                class="absolute left-0 mt-2 w-56 shadow-lg rounded-lg py-2 z-30 opacity-0 group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity duration-200 bg-gray-800">
+                                <a href="/ketetapan">
+                                    <button
+                                        class="block w-full px-5 py-2 text-white text-justify hover:bg-gray-700 transition">
+                                        Ketetapan
+                                    </button>
+                                </a>
+                                <a href="/panduan">
+                                    <button
+                                        class="block w-full px-5 py-2 text-white text-justify hover:bg-gray-700 transition">
+                                        Panduan
+                                    </button>
+                                </a>
+                                <a href="/regulasi">
+                                    <button
+                                        class="block w-full px-5 py-2 text-white text-justify hover:bg-gray-700 transition">
+                                        Regulasi
+                                    </button>
+                                </a>
+                                <a href="/sop">
+                                    <button
+                                        class="block w-full px-5 py-2 text-white text-justify hover:bg-gray-700 transition">
+                                        SOP
+                                    </button>
+                                </a>
+                            </div>
                         </div>
 
                         {{-- Di komen dulu kita fokus sama yang sudah ada --}}
@@ -239,11 +268,23 @@
         </div>
 
         <div class="relative">
-            <a href="/info-publik"
-                class="block px-0 py-2 text-left focus:outline-none hover:text-custom-blue transition">
+            <button id="dropdownDokumenToggle" type="button"
+                class="w-full flex justify-between items-center px-0 py-2 text-left focus:outline-none hover:text-custom-blue transition">
                 <span>Dokumen</span>
-            </a>
+                <svg id="dropdownDokumenChevron"
+                    class="w-4 h-4 ml-1 transform transition-transform duration-200 text-gray-400" fill="none"
+                    stroke="currentColor" viewBox="0 0 24 24">
+                    <path d="M19 9l-7 7-7-7" />
+                </svg>
+            </button>
+            <div id="dropdownDokumenMenu" class="hidden flex-col space-y-1 mt-1 pl-4">
+                <a href="/ketetapan" class="block text-secondary hover:text-custom-blue">Ketetapan</a>
+                <a href="/panduan" class="block text-secondary hover:text-custom-blue">Panduan</a>
+                <a href="/regulasi" class="block text-secondary hover:text-custom-blue">Regulasi</a>
+                <a href="/sop" class="block text-secondary hover:text-custom-blue">SOP</a>
+            </div>
         </div>
+
         {{-- <div class="relative">
             <a href="/pendaftaran"
                 class="block px-0 py-2 text-left focus:outline-none hover:text-custom-blue transition">
@@ -316,6 +357,30 @@
             });
         });
 
+        // Helper function to close all mobile dropdowns
+        function closeAllMobileDropdowns() {
+            const dropdowns = [{
+                    menu: document.getElementById('dropdownTentangMenu'),
+                    chevron: document.getElementById('dropdownTentangChevron')
+                },
+                {
+                    menu: document.getElementById('dropdownInformasiMenu'),
+                    chevron: document.getElementById('dropdownInformasiChevron')
+                },
+                {
+                    menu: document.getElementById('dropdownDokumenMenu'),
+                    chevron: document.getElementById('dropdownDokumenChevron')
+                }
+            ];
+
+            dropdowns.forEach(dropdown => {
+                if (dropdown.menu && dropdown.chevron) {
+                    dropdown.menu.classList.add('hidden');
+                    dropdown.chevron.classList.remove('rotate-180');
+                }
+            });
+        }
+
         // Dropdown Mobile - Tentang Kami
         const dropdownTentangToggle = document.getElementById('dropdownTentangToggle');
         const dropdownTentangMenu = document.getElementById('dropdownTentangMenu');
@@ -326,12 +391,19 @@
                 e.stopPropagation();
                 const isHidden = dropdownTentangMenu.classList.contains('hidden');
 
-                // Close other dropdown first
+                // Close other dropdowns first
                 const dropdownInformasiMenu = document.getElementById('dropdownInformasiMenu');
                 const dropdownInformasiChevron = document.getElementById('dropdownInformasiChevron');
+                const dropdownDokumenMenu = document.getElementById('dropdownDokumenMenu');
+                const dropdownDokumenChevron = document.getElementById('dropdownDokumenChevron');
+
                 if (dropdownInformasiMenu) {
                     dropdownInformasiMenu.classList.add('hidden');
                     dropdownInformasiChevron.classList.remove('rotate-180');
+                }
+                if (dropdownDokumenMenu) {
+                    dropdownDokumenMenu.classList.add('hidden');
+                    dropdownDokumenChevron.classList.remove('rotate-180');
                 }
 
                 if (isHidden) {
@@ -354,10 +426,19 @@
                 e.stopPropagation();
                 const isHidden = dropdownInformasiMenu.classList.contains('hidden');
 
-                // Close other dropdown first
+                // Close other dropdowns first
+                const dropdownTentangMenu = document.getElementById('dropdownTentangMenu');
+                const dropdownTentangChevron = document.getElementById('dropdownTentangChevron');
+                const dropdownDokumenMenu = document.getElementById('dropdownDokumenMenu');
+                const dropdownDokumenChevron = document.getElementById('dropdownDokumenChevron');
+
                 if (dropdownTentangMenu) {
                     dropdownTentangMenu.classList.add('hidden');
                     dropdownTentangChevron.classList.remove('rotate-180');
+                }
+                if (dropdownDokumenMenu) {
+                    dropdownDokumenMenu.classList.add('hidden');
+                    dropdownDokumenChevron.classList.remove('rotate-180');
                 }
 
                 if (isHidden) {
@@ -366,6 +447,41 @@
                 } else {
                     dropdownInformasiMenu.classList.add('hidden');
                     dropdownInformasiChevron.classList.remove('rotate-180');
+                }
+            });
+        }
+
+        // Dropdown Mobile - Dokumen
+        const dropdownDokumenToggle = document.getElementById('dropdownDokumenToggle');
+        const dropdownDokumenMenu = document.getElementById('dropdownDokumenMenu');
+        const dropdownDokumenChevron = document.getElementById('dropdownDokumenChevron');
+
+        if (dropdownDokumenToggle) {
+            dropdownDokumenToggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const isHidden = dropdownDokumenMenu.classList.contains('hidden');
+
+                // Close other dropdowns first
+                const dropdownTentangMenu = document.getElementById('dropdownTentangMenu');
+                const dropdownTentangChevron = document.getElementById('dropdownTentangChevron');
+                const dropdownInformasiMenu = document.getElementById('dropdownInformasiMenu');
+                const dropdownInformasiChevron = document.getElementById('dropdownInformasiChevron');
+
+                if (dropdownTentangMenu) {
+                    dropdownTentangMenu.classList.add('hidden');
+                    dropdownTentangChevron.classList.remove('rotate-180');
+                }
+                if (dropdownInformasiMenu) {
+                    dropdownInformasiMenu.classList.add('hidden');
+                    dropdownInformasiChevron.classList.remove('rotate-180');
+                }
+
+                if (isHidden) {
+                    dropdownDokumenMenu.classList.remove('hidden');
+                    dropdownDokumenChevron.classList.add('rotate-180');
+                } else {
+                    dropdownDokumenMenu.classList.add('hidden');
+                    dropdownDokumenChevron.classList.remove('rotate-180');
                 }
             });
         }

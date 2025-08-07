@@ -184,17 +184,17 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
         // Beranda Section Routes
         Route::prefix('dokumen')->as('dokumen.')->group(function () {
 
-            // Pencapaian Routes
             Route::controller(KetetapanController::class)->group(function () {
-                Route::get('/ketetapan', 'index')->name('ketetapan');
+                Route::get('/ketetapan', 'index')->name('ketetapan.index');
                 Route::get('/ketetapan/create', 'create')->name('ketetapan.create');
                 Route::post('/ketetapan', 'store')->name('ketetapan.store');
                 Route::get('/ketetapan/{ketetapan}/edit', 'edit')->name('ketetapan.edit');
                 Route::put('/ketetapan/{ketetapan}', 'update')->name('ketetapan.update');
                 Route::delete('/ketetapan/{ketetapan}', 'destroy')->name('ketetapan.destroy');
+                Route::post('/ketetapan/bulk', 'bulk')->name('ketetapan.bulk');
                 Route::get('/ketetapan/export', 'export')->name('ketetapan.export');
             });
-
+            
             // SOP Routes
             Route::controller(SopController::class)->group(function(){
                 Route::get('/sop', 'index')->name('sop');
@@ -321,9 +321,11 @@ Route::prefix('/')->group(function () {
     // PublicsController routes
     Route::get('/berita', [PublicsController::class, 'index'])->name('news');
     Route::get('/pengumuman', [PublicsController::class, 'index'])->name('announcements');
-    Route::get('/info-publik', [PublicsController::class, 'index'])->name('info-publik');
-    Route::get('/tutorial', [PublicsController::class, 'index'])->name('tutorial');
+    Route::get('/ketetapan', [PublicsController::class, 'index'])->name('ketetapan');
+    Route::get('/panduan', [PublicsController::class, 'index'])->name('panduan');
+    Route::get('/regulasi', [PublicsController::class, 'index'])->name('regulasi');
     Route::get('/sop', [PublicsController::class, 'index'])->name('sop');
+    Route::get('/tutorial', [PublicsController::class, 'index'])->name('tutorial');
     Route::get('/faq', [PublicsController::class, 'index'])->name('faq');
     
     // Add more public routes here
