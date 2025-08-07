@@ -90,8 +90,8 @@
                 // ===============================
                 // ADD MODAL HANDLER
                 // ===============================
-                const addModal = document.getElementById("achievementModal");
-                const addForm = addModal?.querySelector("#achievementForm");
+                const addModal = document.getElementById("AddModal");
+                const addForm = addModal?.querySelector("#addForm");
 
                 window.openAddModal = function() {
                     if (addModal) {
@@ -301,7 +301,7 @@
             function openAddModal() {
                 console.log('openAddModal called');
 
-                const modal = document.getElementById('achievementModal');
+                const modal = document.getElementById('AddModal');
                 if (!modal) {
                     console.error('Modal not found!');
                     alert('Error: Modal tidak ditemukan');
@@ -314,14 +314,14 @@
 
                 // Reset form
                 document.getElementById('modalTitle').textContent = 'Tambah mitra Baru';
-                document.getElementById('achievementForm').reset();
+                document.getElementById('addForm').reset();
                 clearLogoSelection();
 
                 console.log('Modal opened successfully');
             }
 
             function closeModal() {
-                const modal = document.getElementById('achievementModal');
+                const modal = document.getElementById('AddModal');
                 if (modal) {
                     modal.classList.add('hidden');
                     modal.style.display = 'none';
@@ -521,7 +521,7 @@
                 });
 
                 // Form submission
-                document.getElementById('achievementForm').addEventListener('submit', function(e) {
+                document.getElementById('addForm').addEventListener('submit', function(e) {
                     e.preventDefault();
 
                     if (!validateForm()) {
@@ -539,7 +539,7 @@
                 // Keyboard shortcuts
                 document.addEventListener('keydown', function(e) {
                     if (e.key === 'Escape') {
-                        if (!document.getElementById('achievementModal').classList.contains('hidden')) {
+                        if (!document.getElementById('AddModal').classList.contains('hidden')) {
                             closeModal();
                         }
                         if (!document.getElementById('previewModal').classList.contains('hidden')) {
@@ -556,8 +556,8 @@
                 openModal: () => openAddModal(),
                 closeModal: () => closeModal(),
                 testModal: () => {
-                    console.log('Modal element:', document.getElementById('achievementModal'));
-                    console.log('Form element:', document.getElementById('achievementForm'));
+                    console.log('Modal element:', document.getElementById('AddModal'));
+                    console.log('Form element:', document.getElementById('addForm'));
                     console.log('Logo options:', document.querySelectorAll('.logo-option').length);
                 }
             };

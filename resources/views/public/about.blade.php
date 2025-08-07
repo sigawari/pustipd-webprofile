@@ -1,32 +1,18 @@
-@php
-    $gallery = [
-        ['image' => asset('assets/img/placeholder/dummy.png'), 'caption' => 'Sosialisasi Sistem Informasi PUSTIPD'],
-        ['image' => asset('assets/img/placeholder/dummy.png'), 'caption' => 'Maintenance jaringan rutin'],
-        ['image' => asset('assets/img/placeholder/dummy.png'), 'caption' => 'Pelatihan Digitalisasi Kampus'],
-        ['image' => asset('assets/img/placeholder/dummy.png'), 'caption' => 'Tim IT PUSTIPD UIN Raden Fatah'],
-        ['image' => asset('assets/img/placeholder/dummy.png'), 'caption' => 'Seminar Teknologi Informasi'],
-        ['image' => asset('assets/img/placeholder/dummy.png'), 'caption' => 'Lomba Inovasi Digital'],
-        ['image' => asset('assets/img/placeholder/dummy.png'), 'caption' => 'Pendampingan UMKM Digital'],
-        ['image' => asset('assets/img/placeholder/dummy.png'), 'caption' => 'Workshop Data Analytics'],
-        // Tambah lagi jika perlu...
-    ];
-@endphp
-
 <x-public.layouts title="{{ $title }}" description="{{ $description }}" keywords="{{ $keywords }}">
     <x-slot:title>{{ $title }}</x-slot:title>
 
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    {{-- Style tetap sama seperti sebelumnya --}}
     <style>
         .underline-animate::after {
             content: '';
             position: absolute;
             bottom: -1rem;
-            /* Jarak dari teks */
             left: 0;
             height: 4px;
             width: 0;
             background-color: #062749;
-            /* Tailwind blue-500 */
             transition: width 0.4s ease;
         }
 
@@ -36,19 +22,61 @@
 
         .gallery-card {
             position: relative;
-            width: 100px;
-            height: 100px;
+            width: 200px;
+            height: 200px;
             cursor: pointer;
         }
 
         .gallery-img {
-            width: 100px;
-            height: 100px;
+            width: 200px;
+            height: 200px;
             object-fit: cover;
             border-radius: 0.75rem;
             box-shadow: 0 2px 8px 0 rgb(0 0 0 / 5%);
             background: #f3f4f6;
             display: block;
+        }
+
+        /* ===== MOBILE RESPONSIVE - 100px ===== */
+        @media (max-width: 768px) {
+            .gallery-card {
+                width: 100px;
+                height: 100px;
+            }
+
+            .gallery-img {
+                width: 100px;
+                height: 100px;
+                border-radius: 0.5rem;
+                /* Sedikit lebih kecil border radius untuk mobile */
+            }
+
+            .caption-hover {
+                font-size: 0.75rem;
+                /* Ukuran font lebih kecil di mobile */
+                padding: 0 4px;
+                /* Padding lebih kecil */
+                border-radius: 0.5rem;
+                /* Sesuaikan dengan gambar */
+            }
+        }
+
+        /* ===== TABLET RESPONSIVE - 150px (Optional) ===== */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .gallery-card {
+                width: 150px;
+                height: 150px;
+            }
+
+            .gallery-img {
+                width: 150px;
+                height: 150px;
+            }
+
+            .caption-hover {
+                font-size: 0.85rem;
+                padding: 0 6px;
+            }
         }
 
         .caption-hover {
@@ -96,7 +124,6 @@
             max-height: 88vh;
             box-shadow: 0 6px 32px 0 rgb(0 0 0 / 20%);
             padding: 18px 18px 24px 18px;
-            /* Tambah padding bawah supaya ada ruang tombol */
             text-align: center;
             position: relative;
             display: flex;
@@ -109,21 +136,41 @@
             max-height: 60vh;
             border-radius: 0.5rem;
             margin-top: 8px;
-            /* beri jarak setelah caption */
         }
 
         .popup-caption {
             color: #314061;
             font-size: 1.05rem;
             margin-bottom: 8px;
-            /* beri margin bawah supaya tidak mepet gambar */
             font-weight: 600;
             text-align: center;
         }
 
+        /* ===== POPUP MOBILE RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .gallery-popup-box {
+                max-width: 95vw;
+                max-height: 90vh;
+                padding: 12px 12px 18px 12px;
+            }
+
+            .gallery-popup-img {
+                max-width: 85vw;
+                max-height: 65vh;
+            }
+
+            .popup-caption {
+                font-size: 0.95rem;
+            }
+
+            .popup-close {
+                padding: 0.3rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+
         .popup-close {
             position: static;
-            /* hilangkan posisi absolut */
             margin-top: 16px;
             background: #062749;
             color: #fff;
@@ -134,16 +181,31 @@
             font-size: 1rem;
             cursor: pointer;
             z-index: 10;
+        }
 
-            /* Responsif container */
-            .content-about {
-                max-width: 600px;
-            }
+        .content-about {
+            max-width: 600px;
+        }
 
-            @media (min-width: 1024px) {
-                /* Reset gallery-img max-width if needed */
+        /* Style untuk empty state */
+        .empty-gallery {
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+
+        .empty-gallery svg {
+            color: #9CA3AF;
+        }
+
+        /* ===== MOBILE GALLERY CONTAINER ===== */
+        @media (max-width: 768px) {
+            .gallery-container {
+                gap: 0.75rem;
+                /* Gap lebih kecil di mobile */
             }
+        }
     </style>
+
 
     <section id="about" class="py-20 mt-8 bg-primary">
         <div class="container mx-auto px-12">
@@ -180,60 +242,107 @@
             <!-- Gallery Section -->
             <div class="mt-20">
                 <h3 class="text-2xl font-bold text-secondary mb-8 text-center">Galeri Kegiatan</h3>
-                <div class="flex flex-wrap justify-center gap-6">
-                    @foreach ($gallery as $idx => $item)
-                        <div class="gallery-card" data-idx="{{ $idx }}">
-                            <img src="{{ $item['image'] }}" alt="Galeri {{ $idx + 1 }}" class="gallery-img" />
-                            <div class="caption-hover">{{ $item['caption'] }}</div>
-                        </div>
-                    @endforeach
-                </div>
+
+                @if ($galleries->count() > 0)
+                    <div class="flex flex-wrap justify-center gap-6">
+                        @foreach ($galleries as $idx => $gallery)
+                            <div class="gallery-card" data-idx="{{ $idx }}">
+                                <img src="{{ $gallery->image_url }}" alt="{{ $gallery->title }}" class="gallery-img"
+                                    loading="lazy" />
+                                <div class="caption-hover">{{ $gallery->title }}</div>
+                            </div>
+                        @endforeach
+                    </div>
+                @else
+                    <div class="empty-gallery">
+                        <svg class="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        <p class="text-lg text-secondary">Galeri kegiatan akan segera hadir</p>
+                        <p class="text-sm text-gray-500 mt-2">Admin sedang menyiapkan foto-foto kegiatan terbaru</p>
+                    </div>
+                @endif
             </div>
 
             <!-- Modal Popup for gallery -->
-            <div id="gallery-popup" class="gallery-popup-bg" tabindex="-1" role="dialog" aria-modal="true"
-                aria-labelledby="popup-caption">
-                <div class="gallery-popup-box">
-                    <div id="popup-caption" class="popup-caption"></div>
-                    <img id="popup-img" class="gallery-popup-img" src="" alt="Foto galeri yang diperbesar" />
-                    <button class="popup-close pt-2 pb-0.5" id="popup-close" aria-label="Tutup Galeri">Tutup</button>
+            @if ($galleries->count() > 0)
+                <div id="gallery-popup" class="gallery-popup-bg" tabindex="-1" role="dialog" aria-modal="true"
+                    aria-labelledby="popup-caption">
+                    <div class="gallery-popup-box">
+                        <div id="popup-caption" class="popup-caption"></div>
+                        <div id="popup-description" class="text-sm text-gray-600 mb-4 px-4 text-center max-w-md"></div>
+                        <div id="popup-event-date" class="text-xs text-gray-500 mb-4"></div>
+                        <img id="popup-img" class="gallery-popup-img" src="" alt="Foto galeri yang diperbesar"
+                            loading="lazy" />
+                        <button class="popup-close pt-2 pb-0.5" id="popup-close"
+                            aria-label="Tutup Galeri">Tutup</button>
+                    </div>
                 </div>
-            </div>
+            @endif
         </div>
     </section>
 
-    <script>
-        const gallery = @json($gallery);
-        document.addEventListener('DOMContentLoaded', function() {
-            const galleryCards = document.querySelectorAll('.gallery-card');
-            const popup = document.getElementById('gallery-popup');
-            const popupImg = document.getElementById('popup-img');
-            const popupCaption = document.getElementById('popup-caption');
-            const closeBtn = document.getElementById('popup-close');
+    @if ($galleries->count() > 0)
+        <script>
+            // Gunakan hanya satu definisi galleries dari controller (galleriesData)
+            const galleries = @json($galleriesData);
+            console.log('Galleries data:', galleries);
 
-            galleryCards.forEach(card => {
-                card.addEventListener('click', function() {
-                    const idx = Number(card.dataset.idx);
-                    popupImg.src = gallery[idx].image;
-                    popupCaption.textContent = gallery[idx].caption;
-                    popup.classList.add('active');
-                    popup.focus();
+            document.addEventListener('DOMContentLoaded', function() {
+                const galleryCards = document.querySelectorAll('.gallery-card');
+                const popup = document.getElementById('gallery-popup');
+                const popupImg = document.getElementById('popup-img');
+                const popupCaption = document.getElementById('popup-caption');
+                const popupDescription = document.getElementById('popup-description');
+                const popupEventDate = document.getElementById('popup-event-date');
+                const closeBtn = document.getElementById('popup-close');
+
+                if (!popup) {
+                    console.warn('Gallery popup not found');
+                    return;
+                }
+
+                galleryCards.forEach(card => {
+                    card.addEventListener('click', function() {
+                        const idx = Number(card.dataset.idx);
+                        const gallery = galleries[idx];
+
+                        if (gallery) {
+                            popupImg.src = gallery.image;
+                            popupImg.alt = gallery.title;
+                            popupCaption.textContent = gallery.title;
+                            popupDescription.textContent = gallery.description || '';
+                            popupEventDate.textContent = gallery.event_date ?
+                                `📅 ${gallery.event_date}` : '';
+
+                            // Sembunyikan elemen kosong
+                            popupDescription.style.display = gallery.description ? 'block' : 'none';
+                            popupEventDate.style.display = gallery.event_date ? 'block' : 'none';
+
+                            popup.classList.add('active');
+                            popup.focus();
+                        }
+                    });
+                });
+
+                closeBtn?.addEventListener('click', function() {
+                    popup.classList.remove('active');
+                });
+
+                popup?.addEventListener('click', function(e) {
+                    if (e.target === popup) {
+                        popup.classList.remove('active');
+                    }
+                });
+
+                window.addEventListener('keydown', function(e) {
+                    if (popup?.classList.contains('active') && e.key === 'Escape') {
+                        popup.classList.remove('active');
+                    }
                 });
             });
+        </script>
+    @endif
 
-            closeBtn.addEventListener('click', function() {
-                popup.classList.remove('active');
-            });
-
-            popup.addEventListener('click', function(e) {
-                if (e.target === popup) popup.classList.remove('active');
-            });
-
-            window.addEventListener('keydown', function(e) {
-                if (popup.classList.contains('active') && e.key === 'Escape') {
-                    popup.classList.remove('active');
-                }
-            });
-        });
-    </script>
 </x-public.layouts>

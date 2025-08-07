@@ -1,4 +1,5 @@
 <?php
+// app/Models/ManageContent/AboutUs/Gallery.php
 
 namespace App\Models\ManageContent\AboutUs;
 
@@ -23,54 +24,21 @@ class Gallery extends Model
     ];
 
     /**
-     * Scope untuk filter status
-     */
-    public function scopePublished($query)
-    {
-        return $query->where('status', 'publish');
-    }
-
-    public function scopeDraft($query)
-    {
-        return $query->where('status', 'draft');
-    }
-
-    public function scopeArchived($query)
-    {
-        return $query->where('status', 'archived');
-    }
-
-    /**
-     * Get image URL
+     * Get image URL dengan fallback ke placeholder
      */
     public function getImageUrlAttribute()
     {
-        return $this->image ? asset('storage/' . $this->image) : asset('images/no-image.png');
+        if ($this->image && file_exists(storage_path('app/public/' . $this->image))) {
+            return asset('storage/' . $this->image);
+        }
+        return asset('assets/img/placeholder/dummy.png');
     }
 
     /**
-     * Get status badge color
+     * Scope untuk filter status published
      */
-    public function getStatusColorAttribute()
+    public function scopePublished($query)
     {
-        return match ($this->status) {
-            'publish' => 'green',
-            'draft' => 'yellow',
-            'archived' => 'red',
-            default => 'gray',
-        };
-    }
-
-    /**
-     * Get status display text
-     */
-    public function getStatusTextAttribute()
-    {
-        return match ($this->status) {
-            'publish' => 'Dipublikasi',
-            'draft' => 'Draft',
-            'archived' => 'Diarsipkan',
-            default => 'Unknown',
-        };
+        return $query->where('status', 'published');
     }
 }

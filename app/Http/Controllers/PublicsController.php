@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Announcement;
 use App\Models\ManageContent\Faq; 
 use App\Models\ManageContent\AboutUs\VisiMisi;
+use App\Models\ManageContent\AboutUs\Gallery;
 
 // Uncomment the following lines if you need to use Publics model or requests
 // use App\Models\Publics;
@@ -23,9 +24,26 @@ class PublicsController extends Controller
             $title = 'Tentang PUSTIPD';
             $description = 'Apa itu PUSTIPD UIN Raden Fatah Palembang dan apa saja yang kami lakukan.';
             $keywords = 'tentang, news, pustipd';
-
-            return view('public.about', compact('title', 'description', 'keywords'));
+        
+            $galleries = \App\Models\ManageContent\AboutUs\Gallery::where('status', 'published')
+                               ->orderBy('sort_order', 'asc')
+                               ->orderBy('created_at', 'desc')
+                               ->get();
+        
+            // Transform data di controller
+            $galleriesData = $galleries->map(function ($gallery) {
+                return [
+                    'id' => $gallery->id,
+                    'title' => $gallery->title ?? '',
+                    'description' => $gallery->description ?? '',
+                    'image' => $gallery->image_url ?? asset('assets/img/placeholder/dummy.png'),
+                    'event_date' => $gallery->event_date ? $gallery->event_date->format('d M Y') : null,
+                ];
+            });
+        
+            return view('public.about', compact('title', 'description', 'keywords', 'galleries', 'galleriesData'));
         }
+        
 
         if ($request->is('visi-misi')) {
             $title = 'Visi & Misi PUSTIPD UIN Raden Fatah Palembang';

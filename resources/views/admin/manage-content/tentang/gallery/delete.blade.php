@@ -1,83 +1,50 @@
-<!-- Modal Hapus Gallery -->
-@foreach ($galleries as $gallery)
-    <div id="DeleteModal-{{ $gallery->id }}"
-        class="hidden fixed inset-0 z-50 bg-black/50 items-center justify-center px-4">
-        <div class="bg-white rounded-xl shadow-lg w-full max-w-md p-6 relative">
-            <h2 class="text-lg font-semibold text-gray-800 mb-4">Hapus {{ $title }}</h2>
-
-            <p class="text-gray-600 mb-4">Apakah Anda yakin ingin menghapus Gallery berikut?</p>
-
-            <!-- Preview Item -->
-            <div class="border border-gray-200 rounded-lg p-3 mb-6">
-                <div class="flex items-center space-x-3">
-                    @if ($gallery->image)
-                        <img src="{{ asset('storage/' . $gallery->image) }}" alt="{{ $gallery->title }}"
-                            class="w-12 h-12 rounded object-cover flex-shrink-0">
-                    @else
-                        <div class="w-12 h-12 bg-gray-200 rounded flex items-center justify-center flex-shrink-0">
-                            <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
-                                </path>
-                            </svg>
-                        </div>
-                    @endif
-                    <div class="flex-1 min-w-0">
-                        <p class="font-medium text-gray-900 truncate">{{ $gallery->title }}</p>
-                        @if ($gallery->event_date)
-                            <p class="text-sm text-gray-500">{{ $gallery->event_date->format('d M Y') }}</p>
-                        @endif
-                    </div>
-                </div>
-            </div>
-
-            <form method="POST" action="{{ route('admin.manage-content.tentang.gallery.destroy', $gallery->id) }}">
-                @csrf
-                @method('DELETE')
-
-                <div class="flex justify-end space-x-2">
-                    <button type="button" onclick="closeDeleteModal('{{ $gallery->id }}')"
-                        class="px-4 py-2 text-sm text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200">
-                        Batal
-                    </button>
-                    <button type="submit" class="px-4 py-2 text-sm text-white bg-red-600 rounded-lg hover:bg-red-700">
-                        Hapus
-                    </button>
-                </div>
-            </form>
-
-            <!-- Tombol X di pojok -->
-            <button onclick="closeDeleteModal('{{ $gallery->id }}')"
-                class="absolute top-3 right-3 text-gray-400 hover:text-gray-600">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+<!-- Modal Delete Gallery -->
+<div id="DeleteModal-" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+    <div class="bg-white rounded-lg p-6 w-full max-w-md mx-4">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-semibold text-gray-900">Konfirmasi Hapus</h3>
+            <button type="button" onclick="closeDeleteModal()" class="text-gray-400 hover:text-gray-600">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
                 </svg>
             </button>
         </div>
+
+        <div class="mb-4">
+            <div class="flex items-center mb-3">
+                <div class="flex-shrink-0">
+                    <svg class="w-10 h-10 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4.5c-.77-.833-2.694-.833-3.464 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z">
+                        </path>
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm text-gray-600">
+                        Apakah Anda yakin ingin menghapus gallery ini?
+                    </p>
+                    <p class="text-sm font-medium text-gray-900 mt-1" id="deleteGalleryTitle">
+                        <!-- Title akan diisi via JavaScript -->
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <form id="deleteForm" method="POST">
+            @csrf
+            @method('DELETE')
+
+            <div class="flex justify-end space-x-3">
+                <button type="button" onclick="closeDeleteModal()"
+                    class="px-4 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
+                    Batal
+                </button>
+                <button type="submit"
+                    class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+                    Ya, Hapus
+                </button>
+            </div>
+        </form>
     </div>
-@endforeach
-
-<script>
-    // Delete modal functions
-    function openDeleteModal(id) {
-        document.getElementById('DeleteModal-' + id).classList.remove('hidden');
-        document.getElementById('DeleteModal-' + id).classList.add('flex');
-        document.body.style.overflow = 'hidden';
-    }
-
-    function closeDeleteModal(id) {
-        document.getElementById('DeleteModal-' + id).classList.add('hidden');
-        document.getElementById('DeleteModal-' + id).classList.remove('flex');
-        document.body.style.overflow = 'auto';
-    }
-
-    // Close modal when clicking backdrop
-    document.querySelectorAll('[id^="DeleteModal-"]').forEach(modal => {
-        modal.addEventListener('click', function(e) {
-            if (e.target === this) {
-                const id = this.id.replace('DeleteModal-', '');
-                closeDeleteModal(id);
-            }
-        });
-    });
-</script>
+</div>

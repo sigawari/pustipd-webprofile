@@ -1,4 +1,5 @@
 <?php
+// database/migrations/xxxx_create_galleries_table.php
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -6,21 +7,26 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    public function up()
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
     {
         Schema::create('galleries', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->text('description')->nullable();
-            $table->string('image');
+            // $table->text('description')->nullable(); // HAPUS ini
+            $table->string('image'); // Path gambar
             $table->date('event_date');
-            $table->enum('status', ['publish', 'draft', 'archived'])->default('draft');
-            $table->integer('sort_order')->default(0);
+            $table->enum('status', ['published', 'draft', 'archived'])->default('draft'); // Default draft
             $table->timestamps();
         });
     }
 
-    public function down()
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
     {
         Schema::dropIfExists('galleries');
     }

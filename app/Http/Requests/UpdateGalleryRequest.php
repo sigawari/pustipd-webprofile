@@ -1,4 +1,5 @@
 <?php
+// app/Http/Requests/UpdateGalleryRequest.php
 
 namespace App\Http\Requests;
 
@@ -18,7 +19,7 @@ class UpdateGalleryRequest extends FormRequest
             'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'event_date' => 'required|date',
-            'status' => 'required|in:published,draft,archived',
+            'status' => 'required|in:published,draft,archived', // Ubah 'published' jika sebelumnya 'publish'
             'sort_order' => 'nullable|integer|min:0'
         ];
     }

@@ -69,29 +69,32 @@ class GalleryController extends Controller
         return view('admin.manage-content.tentang.gallery.index', compact('title', 'galleries'));
     }
 
-    public function store(StoreGalleryRequest $request)
-    {
-        $data = $request->validated();
-        
-        // Handle image upload
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
-            $imagePath = $image->storeAs('gallery', $imageName, 'public');
-            $data['image'] = $imagePath;
-        }
-        
-        // Auto sort order
-        if (!isset($data['sort_order']) || $data['sort_order'] === null) {
-            $data['sort_order'] = (Gallery::max('sort_order') ?? 0) + 1;
-        }
-        
-        Gallery::create($data);
+    public function store(Request $request)
+{
+    $request->validate([
+        'title' => 'required|string|max:255',
+        'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'event_date' => 'required|date',
+    ]);
 
-        return redirect()
-               ->route('admin.manage-content.tentang.gallery.index')
-               ->with('success', 'Gallery berhasil ditambahkan!');
+    // Handle image upload dengan nama yang unique
+    $imagePath = null;
+    if ($request->hasFile('image')) {
+        $file = $request->file('image');
+        $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+        $imagePath = $file->storeAs('gallery', $filename, 'public');
     }
+
+    Gallery::create([
+        'title' => $request->title,
+        'image' => $imagePath,
+        'event_date' => $request->event_date,
+        'status' => 'draft', // Default draft
+    ]);
+
+    return redirect()->back()->with('success', 'Gallery berhasil disimpan sebagai draft!');
+}
+
 
     public function update(UpdateGalleryRequest $request, Gallery $gallery)
     {
@@ -109,10 +112,7 @@ class GalleryController extends Controller
             $imagePath = $image->storeAs('gallery', $imageName, 'public');
             $data['image'] = $imagePath;
         }
-        
-        if (!isset($data['sort_order']) || $data['sort_order'] === null) {
-            $data['sort_order'] = $gallery->sort_order ?: ((Gallery::max('sort_order') ?? 0) + 1);
-        }
+    
         
         $gallery->update($data);
 
@@ -134,36 +134,62 @@ class GalleryController extends Controller
     {
         $request->validate([
             'action' => 'required|in:published,draft,archived,permanent_delete',
-            'ids' => 'required|array',
+            'ids' => 'required|array|min:1', // ← Tambah min:1
             'ids.*' => 'exists:galleries,id'
         ]);
-
+    
         $action = $request->action;
         $ids = $request->ids;
-
-        switch ($action) {
-            case 'published':
-            case 'draft':
-            case 'archived':
-                Gallery::whereIn('id', $ids)->update(['status' => $action]);
-                $message = 'Gallery berhasil diubah ke status ' . $action;
-                break;
-                
-            case 'permanent_delete':
-                $galleries = Gallery::whereIn('id', $ids)->get();
-                foreach ($galleries as $gallery) {
-                    if ($gallery->image && Storage::disk('public')->exists($gallery->image)) {
-                        Storage::disk('public')->delete($gallery->image);
+    
+        try {
+            switch ($action) {
+                case 'published':
+                case 'draft':
+                case 'archived':
+                    $affected = Gallery::whereIn('id', $ids)->update(['status' => $action]);
+                    $message = "Berhasil mengubah status {$affected} gallery ke {$action}";
+                    break;
+                    
+                case 'permanent_delete':
+                    $galleries = Gallery::whereIn('id', $ids)->get();
+                    $deletedCount = 0;
+                    
+                    foreach ($galleries as $gallery) {
+                        // Delete image file
+                        if ($gallery->image && Storage::disk('public')->exists($gallery->image)) {
+                            Storage::disk('public')->delete($gallery->image);
+                        }
+                        $gallery->delete();
+                        $deletedCount++;
                     }
-                    $gallery->delete();
-                }
-                $message = 'Gallery berhasil dihapus permanen';
-                break;
+                    $message = "Berhasil menghapus {$deletedCount} gallery secara permanen";
+                    break;
+            }
+    
+            // ✅ PERBAIKAN: Support both AJAX and regular form submission
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => $message
+                ]);
+            }
+    
+            return redirect()
+                   ->route('admin.manage-content.tentang.gallery.index')
+                   ->with('success', $message);
+                   
+        } catch (\Exception $e) {
+            // ✅ PERBAIKAN: Error handling
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+                ], 500);
+            }
+    
+            return redirect()
+                   ->route('admin.manage-content.tentang.gallery.index')
+                   ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
-
-        return response()->json([
-            'success' => true,
-            'message' => $message
-        ]);
     }
 }

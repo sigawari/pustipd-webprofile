@@ -1,10 +1,9 @@
 <!-- Modal Tambah Data -->
-<div id="achievementModal" class="hidden fixed inset-0 z-50 bg-black/50 items-center justify-center px-4">
+<div id="AddModal" class="hidden fixed inset-0 z-50 bg-black/50 items-center justify-center px-4">
     <div class="bg-white rounded-xl shadow-lg w-full max-w-lg p-6 relative">
         <h2 id="modalTitle" class="text-lg font-semibold text-gray-800 mb-4">Tambah {{ $title }}</h2>
 
-        <form id="achievementForm" method="POST" action="{{ route('admin.sistem.users.store') }}"
-            enctype="multipart/form-data">
+        <form id="addForm" method="POST" action="{{ route('admin.sistem.users.store') }}" enctype="multipart/form-data">
             @csrf
             <!-- Nama -->
             <div class="mb-4">

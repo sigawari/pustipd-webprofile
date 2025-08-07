@@ -134,6 +134,7 @@
                 <div class="min-w-full inline-block align-middle">
                     <div class="overflow-hidden border border-gray-200 sm:rounded-lg">
                         <table class="min-w-full divide-y divide-gray-200">
+                            <!-- Di file utama index -->
                             <thead class="bg-gray-50">
                                 <tr>
                                     <th
@@ -143,24 +144,27 @@
                                     </th>
                                     <th
                                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        No.</th>
+                                        No.
+                                    </th>
                                     <th
                                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Gambar & Judul</th>
+                                        Gambar
+                                    </th>
                                     <th
                                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Deskripsi</th>
+                                        Judul & Tanggal
+                                    </th>
                                     <th
                                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Urutan</th>
+                                        Status
+                                    </th>
                                     <th
                                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Status</th>
-                                    <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Aksi</th>
+                                        Aksi
+                                    </th>
                                 </tr>
                             </thead>
+
                             <tbody id="GalleryTableBody" class="bg-white divide-y divide-gray-200">
                                 @include('admin.manage-content.tentang.gallery.partials.table_body')
                             </tbody>
@@ -237,9 +241,16 @@
         </div>
     </div>
 
+    @include('admin.manage-content.tentang.gallery.create')
+    @include('admin.manage-content.tentang.gallery.update')
+    @include('admin.manage-content.tentang.gallery.delete')
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+
+            // ================================
             // AJAX RELOAD FUNCTION
+            // ================================
             function reloadTable(params = {}) {
                 const url = new URL("{{ route('admin.manage-content.tentang.gallery.index') }}");
 
@@ -297,7 +308,9 @@
                     });
             }
 
+            // ================================
             // UPDATE PAGINATION LINKS
+            // ================================
             function updatePaginationLinks(pagination) {
                 const nav = document.querySelector('nav[aria-label="Pagination"]');
                 if (!nav) return;
@@ -352,7 +365,9 @@
                 nav.innerHTML = html;
             }
 
+            // ================================
             // PAGINATION CLICK HANDLERS
+            // ================================
             function attachPaginationListeners() {
                 document.querySelectorAll('.pagination-link').forEach(link => {
                     link.addEventListener('click', function(e) {
@@ -365,7 +380,9 @@
                 });
             }
 
+            // ================================
             // FILTER & SEARCH EVENT LISTENERS
+            // ================================
 
             // Search with debounce
             let searchTimeout;
@@ -404,7 +421,9 @@
                 });
             }
 
+            // ================================
             // SELECT ALL FUNCTIONALITY
+            // ================================
             const selectAllCheckbox = document.getElementById('selectAll');
             if (selectAllCheckbox) {
                 selectAllCheckbox.addEventListener('change', function() {
@@ -414,7 +433,9 @@
                 });
             }
 
+            // ================================
             // BULK ACTIONS FUNCTIONS
+            // ================================
             window.updateBulkActionsBar = function() {
                 const checkedBoxes = document.querySelectorAll('.item-checkbox:checked');
                 const bulkBar = document.getElementById('bulkActionsBar');
@@ -490,7 +511,7 @@
             window.permanentDeleteGallery = function(id) {
                 if (confirm(
                         '⚠️ PERINGATAN!\n\nGallery akan dihapus PERMANEN dan tidak dapat dikembalikan.\n\nApakah Anda yakin?'
-                        )) {
+                    )) {
                     const form = document.createElement('form');
                     form.method = 'POST';
                     form.action = '{{ route('admin.manage-content.tentang.gallery.bulk') }}';
@@ -529,8 +550,4 @@
             attachPaginationListeners();
         });
     </script>
-
-    @include('admin.manage-content.tentang.gallery.create')
-    @include('admin.manage-content.tentang.gallery.update')
-    @include('admin.manage-content.tentang.gallery.delete')
 </x-admin.layouts>
