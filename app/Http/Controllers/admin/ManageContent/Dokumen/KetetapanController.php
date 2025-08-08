@@ -88,68 +88,46 @@ class KetetapanController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreKetetapanRequest $request)
+    public function store(Request $request)
     {
-        if ($request->hasFile('file')) {
-        $file = $request->file('file');
-        
-        \Log::info('File Upload Debug:', [
-            'original_name' => $file->getClientOriginalName(),
-            'size' => $file->getSize(),
-            'mime_type' => $file->getMimeType(),
-            'is_valid' => $file->isValid(),
-            'error' => $file->getError(),
+        session_write_close();
+        // Debug file upload
+        \Log::info('Upload attempt:', [
+            'has_file' => $request->hasFile('file'),
+            'file_size' => $request->hasFile('file') ? $request->file('file')->getSize() : null,
+            'file_error' => $request->hasFile('file') ? $request->file('file')->getError() : null,
+            'all_input' => $request->except(['file'])
         ]);
-        
-        if (!$file->isValid()) {
-            return back()->withErrors(['file' => 'File upload error: ' . $file->getErrorMessage()]);
-        }
-    }else {
-            \Log::warning('No file received in request');
-            return back()->withErrors(['file' => 'No file was uploaded']);
-        }
-
-        try {
-            $data = $request->validated();
-
-            // Handle file upload
-            if ($request->hasFile('file')) {
-                $fileData = $this->handleFileUpload($request->file('file'));
-                $data = array_merge($data, $fileData);
-            }
-
-            // Set default values
-            $data['status'] = $data['status'] ?? 'draft';
-            $data['sort_order'] = $data['sort_order'] ?? 0;
-
-            Ketetapan::create($data);
-
-            if ($request->wantsJson()) {
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Ketetapan berhasil ditambahkan!'
+    
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            
+            if (!$file->isValid()) {
+                \Log::error('File upload error:', [
+                    'error_code' => $file->getError(),
+                    'error_message' => $file->getErrorMessage()
                 ]);
+                
+                return back()->withErrors(['file' => 'File upload failed: ' . $file->getErrorMessage()]);
             }
-
-            return redirect()->route('admin.manage-content.dokumen.ketetapan.index')
-                           ->with('success', 'Ketetapan berhasil ditambahkan!');
-
-        } catch (\Exception $e) {
-            \Log::error('Error creating ketetapan: ' . $e->getMessage());
-
-            if ($request->wantsJson()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Terjadi kesalahan saat menyimpan ketetapan.'
-                ], 500);
-            }
-
-            return redirect()->back()
-                           ->withInput()
-                           ->with('error', 'Terjadi kesalahan saat menyimpan ketetapan.');
         }
+    
+        // Validasi dengan debugging
+        try {
+            $request->validate([
+                'title' => 'required|string|max:255',
+                'description' => 'required|string',
+                'file' => 'required|file|mimes:pdf,doc,docx|max:10240', // 10MB
+                'year_published' => 'nullable|integer',
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            \Log::error('Validation failed:', $e->errors());
+            throw $e;
+        }
+    
+        // ... rest of upload logic
     }
-
+    
     /**
      * Display the specified resource.
      */
