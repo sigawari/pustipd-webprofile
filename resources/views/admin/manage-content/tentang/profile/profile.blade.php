@@ -28,9 +28,8 @@
 
     <!-- Content Form -->
     <div class="bg-white rounded-xl border border-gray-200 p-6 m-6 shadow-sm">
-        <form action="#" method="POST"
-            enctype="multipart/form-data">
-            @csrf
+        <form action="#" method="POST" enctype="multipart/form-data">
+            @csrf            
             @if (isset($profileData))
                 @method('PUT')
             @endif
@@ -157,136 +156,32 @@
                     <!-- Lists Section -->
                     <div>
                         <h3 class="text-md font-medium text-gray-900 mb-3">Daftar Links</h3>
+                        <x-admin.link_list 
+                            label="Daftar Aplikasi"
+                            type="applications"
+                            placeholderName="Nama Aplikasi"
+                            placeholderUrl="https://link-aplikasi.com"
+                            :items="$profileData->applications ?? []"
+                            emptyText="Belum ada aplikasi. Klik 'Tambah' untuk menambahkan."
+                        />
 
-                        <!-- Applications List -->
-                        <div class="mb-6">
-                            <div class="flex justify-between items-center mb-3">
-                                <label class="block text-sm font-medium text-gray-700">Daftar Aplikasi</label>
-                                <button type="button"
-                                    onclick="addListItem('applications', 'Nama Aplikasi', 'https://link-aplikasi.com')"
-                                    class="text-sm bg-blue-600 text-white px-3 py-1 rounded-lg hover:bg-blue-700 flex items-center">
-                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                                    </svg>
-                                    Tambah
-                                </button>
-                            </div>
-                            <div id="applications-list" class="space-y-2">
-                                @if (isset($profileData->applications) && count($profileData->applications) > 0)
-                                    @foreach ($profileData->applications as $index => $app)
-                                        <div class="flex gap-2 items-center p-3 bg-gray-50 rounded-lg">
-                                            <input type="text" name="applications[{{ $index }}][name]"
-                                                value="{{ $app['name'] }}" placeholder="Nama Aplikasi" readonly
-                                                class="flex-1 px-3 py-2 border border-gray-200 rounded-lg bg-white">
-                                            <input type="url" name="applications[{{ $index }}][url]"
-                                                value="{{ $app['url'] }}" placeholder="https://link-aplikasi.com"
-                                                readonly
-                                                class="flex-1 px-3 py-2 border border-gray-200 rounded-lg bg-white">
-                                            <button type="button" onclick="editListItem(this)"
-                                                class="text-sm text-blue-600 hover:text-blue-800 px-2 py-1 rounded">Edit</button>
-                                            <button type="button" onclick="saveListItem(this)"
-                                                class="text-sm text-green-600 hover:text-green-800 px-2 py-1 rounded hidden">Save</button>
-                                            <button type="button" onclick="removeListItem(this)"
-                                                class="text-sm text-red-600 hover:text-red-800 px-2 py-1 rounded">Delete</button>
-                                        </div>
-                                    @endforeach
-                                @else
-                                    <div
-                                        class="text-sm text-gray-500 text-center py-4 border-2 border-dashed border-gray-300 rounded-lg">
-                                        Belum ada aplikasi. Klik "Tambah" untuk menambahkan.
-                                    </div>
-                                @endif
-                            </div>
-                        </div>
+                        <x-admin.link_list 
+                            label="Daftar Lembaga"
+                            type="institutions"
+                            placeholderName="Nama Lembaga"
+                            placeholderUrl="https://link-lembaga.com"
+                            :items="$profileData->institutions ?? []"
+                            emptyText="Belum ada lembaga. Klik 'Tambah' untuk menambahkan."
+                        />
 
-                        <!-- Institutions List -->
-                        <div class="mb-6">
-                            <div class="flex justify-between items-center mb-3">
-                                <label class="block text-sm font-medium text-gray-700">Daftar Lembaga</label>
-                                <button type="button"
-                                    onclick="addListItem('institutions', 'Nama Lembaga', 'https://link-lembaga.com')"
-                                    class="text-sm bg-blue-600 text-white px-3 py-1 rounded-lg hover:bg-blue-700 flex items-center">
-                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                                    </svg>
-                                    Tambah
-                                </button>
-                            </div>
-                            <div id="institutions-list" class="space-y-2">
-                                @if (isset($profileData->institutions) && count($profileData->institutions) > 0)
-                                    @foreach ($profileData->institutions as $index => $inst)
-                                        <div class="flex gap-2 items-center p-3 bg-gray-50 rounded-lg">
-                                            <input type="text" name="institutions[{{ $index }}][name]"
-                                                value="{{ $inst['name'] }}" placeholder="Nama Lembaga" readonly
-                                                class="flex-1 px-3 py-2 border border-gray-200 rounded-lg bg-white">
-                                            <input type="url" name="institutions[{{ $index }}][url]"
-                                                value="{{ $inst['url'] }}" placeholder="https://link-lembaga.com"
-                                                readonly
-                                                class="flex-1 px-3 py-2 border border-gray-200 rounded-lg bg-white">
-                                            <button type="button" onclick="editListItem(this)"
-                                                class="text-sm text-blue-600 hover:text-blue-800 px-2 py-1 rounded">Edit</button>
-                                            <button type="button" onclick="saveListItem(this)"
-                                                class="text-sm text-green-600 hover:text-green-800 px-2 py-1 rounded hidden">Save</button>
-                                            <button type="button" onclick="removeListItem(this)"
-                                                class="text-sm text-red-600 hover:text-red-800 px-2 py-1 rounded">Delete</button>
-                                        </div>
-                                    @endforeach
-                                @else
-                                    <div
-                                        class="text-sm text-gray-500 text-center py-4 border-2 border-dashed border-gray-300 rounded-lg">
-                                        Belum ada lembaga. Klik "Tambah" untuk menambahkan.
-                                    </div>
-                                @endif
-                            </div>
-                        </div>
-
-                        <!-- Universities/Faculties List -->
-                        <div class="mb-6">
-                            <div class="flex justify-between items-center mb-3">
-                                <label class="block text-sm font-medium text-gray-700">Daftar Fakultas
-                                    Universitas</label>
-                                <button type="button"
-                                    onclick="addListItem('universities', 'Nama Fakultas', 'https://fakultas.univ.ac.id')"
-                                    class="text-sm bg-blue-600 text-white px-3 py-1 rounded-lg hover:bg-blue-700 flex items-center">
-                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                                    </svg>
-                                    Tambah
-                                </button>
-                            </div>
-                            <div id="universities-list" class="space-y-2">
-                                @if (isset($profileData->universities) && count($profileData->universities) > 0)
-                                    @foreach ($profileData->universities as $index => $univ)
-                                        <div class="flex gap-2 items-center p-3 bg-gray-50 rounded-lg">
-                                            <input type="text" name="universities[{{ $index }}][faculty]"
-                                                value="{{ $univ['faculty'] }}" placeholder="Nama Fakultas" readonly
-                                                class="flex-1 px-3 py-2 border border-gray-200 rounded-lg bg-white">
-                                            <input type="url" name="universities[{{ $index }}][url]"
-                                                value="{{ $univ['url'] }}" placeholder="https://fakultas.univ.ac.id"
-                                                readonly
-                                                class="flex-1 px-3 py-2 border border-gray-200 rounded-lg bg-white">
-                                            <button type="button" onclick="editListItem(this)"
-                                                class="text-sm text-blue-600 hover:text-blue-800 px-2 py-1 rounded">Edit</button>
-                                            <button type="button" onclick="saveListItem(this)"
-                                                class="text-sm text-green-600 hover:text-green-800 px-2 py-1 rounded hidden">Save</button>
-                                            <button type="button" onclick="removeListItem(this)"
-                                                class="text-sm text-red-600 hover:text-red-800 px-2 py-1 rounded">Delete</button>
-                                        </div>
-                                    @endforeach
-                                @else
-                                    <div
-                                        class="text-sm text-gray-500 text-center py-4 border-2 border-dashed border-gray-300 rounded-lg">
-                                        Belum ada fakultas. Klik "Tambah" untuk menambahkan.
-                                    </div>
-                                @endif
-                            </div>
-                        </div>
+                        <x-admin.link_list 
+                            label="Daftar Fakultas Universitas"
+                            type="universities"
+                            placeholderName="Nama Fakultas"
+                            placeholderUrl="https://fakultas.univ.ac.id"
+                            :items="$profileData->universities ?? []"
+                            emptyText="Belum ada fakultas. Klik 'Tambah' untuk menambahkan."
+                        />
                     </div>
                 </div>
             </div>
@@ -325,151 +220,7 @@
                     </button>
                 </div>
             </div>
-
         </form>
     </div>
-
-    <!-- Enhanced JavaScript -->
-    <script>
-        // Preview uploaded image
-        function previewImage(input) {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('preview-img').src = e.target.result;
-                    document.getElementById('photo-preview').classList.remove('hidden');
-                    document.getElementById('upload-icon').classList.add('hidden');
-                }
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-
-        // Add new list item
-        function addListItem(listType, namePlaceholder, urlPlaceholder) {
-            const container = document.getElementById(listType + '-list');
-
-            // Remove empty state message if exists
-            const emptyMessage = container.querySelector('.border-dashed');
-            if (emptyMessage) {
-                emptyMessage.remove();
-            }
-
-            const index = container.children.length;
-            let nameField = listType === 'universities' ? 'faculty' : 'name';
-
-            const newItem = document.createElement('div');
-            newItem.className = 'flex gap-2 items-center p-3 bg-gray-50 rounded-lg';
-            newItem.innerHTML = `
-        <input type="text" name="${listType}[${index}][${nameField}]" value="" placeholder="${namePlaceholder}"
-            class="flex-1 px-3 py-2 border border-gray-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-        <input type="url" name="${listType}[${index}][url]" value="" placeholder="${urlPlaceholder}"
-            class="flex-1 px-3 py-2 border border-gray-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-        <button type="button" onclick="editListItem(this)" 
-            class="text-sm text-blue-600 hover:text-blue-800 px-2 py-1 rounded hidden">Edit</button>
-        <button type="button" onclick="saveListItem(this)" 
-            class="text-sm text-green-600 hover:text-green-800 px-2 py-1 rounded">Save</button>
-        <button type="button" onclick="removeListItem(this)" 
-            class="text-sm text-red-600 hover:text-red-800 px-2 py-1 rounded">Delete</button>
-    `;
-            container.appendChild(newItem);
-
-            // Focus on first input
-            newItem.querySelector('input').focus();
-        }
-
-        // Enable editing mode for list item
-        function editListItem(button) {
-            const item = button.closest('.flex');
-            const inputs = item.querySelectorAll('input');
-
-            inputs.forEach(input => {
-                input.removeAttribute('readonly');
-                input.classList.remove('bg-white');
-                input.classList.add('bg-yellow-50', 'border-yellow-300');
-            });
-
-            // Toggle buttons
-            button.classList.add('hidden');
-            item.querySelector('.text-green-600').classList.remove('hidden');
-
-            // Focus first input
-            inputs[0].focus();
-        }
-
-        // Save list item (disable editing)
-        function saveListItem(button) {
-            const item = button.closest('.flex');
-            const inputs = item.querySelectorAll('input');
-
-            // Validate inputs
-            let isValid = true;
-            inputs.forEach(input => {
-                if (!input.value.trim()) {
-                    input.classList.add('border-red-300');
-                    isValid = false;
-                } else {
-                    input.classList.remove('border-red-300');
-                }
-            });
-
-            if (!isValid) {
-                alert('Mohon isi semua field yang diperlukan.');
-                return;
-            }
-
-            inputs.forEach(input => {
-                input.setAttribute('readonly', true);
-                input.classList.remove('bg-yellow-50', 'border-yellow-300');
-                input.classList.add('bg-white');
-            });
-
-            // Toggle buttons
-            button.classList.add('hidden');
-            item.querySelector('.text-blue-600').classList.remove('hidden');
-        }
-
-        // Remove list item with confirmation
-        function removeListItem(button) {
-            if (confirm('Apakah Anda yakin ingin menghapus item ini?')) {
-                const item = button.closest('.flex');
-                const container = item.parentNode;
-
-                item.remove();
-
-                // Re-index remaining items
-                const items = Array.from(container.children).filter(child => child.classList.contains('flex'));
-                items.forEach((item, index) => {
-                    const inputs = item.querySelectorAll('input');
-                    inputs.forEach(input => {
-                        const name = input.name;
-                        const newName = name.replace(/\[\d+\]/, `[${index}]`);
-                        input.name = newName;
-                    });
-                });
-
-                // Show empty message if no items
-                if (items.length === 0) {
-                    const listType = container.id.replace('-list', '');
-                    const emptyMessage = document.createElement('div');
-                    emptyMessage.className =
-                        'text-sm text-gray-500 text-center py-4 border-2 border-dashed border-gray-300 rounded-lg';
-                    emptyMessage.textContent = `Belum ada ${listType}. Klik "Tambah" untuk menambahkan.`;
-                    container.appendChild(emptyMessage);
-                }
-            }
-        }
-
-        // Auto-save draft functionality (optional)
-        let autoSaveTimeout;
-        document.addEventListener('input', function(e) {
-            if (e.target.matches('input, textarea')) {
-                clearTimeout(autoSaveTimeout);
-                autoSaveTimeout = setTimeout(() => {
-                    console.log('Auto-saving draft...'); // Implement AJAX save here
-                }, 2000);
-            }
-        });
-    </script>
-
 
 </x-admin.layouts>
