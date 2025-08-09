@@ -61,7 +61,10 @@ class ManageUserController extends Controller
 
         // Merge + Pagination
         $merged = $admins->concat($user_publics);
-        $perPage = 10;
+        // Jika perPage adalah 'all', set ke jumlah total item
+        if ($perPage === 'all') {
+            $perPage = $merged->count();
+        }
         $currentPage = LengthAwarePaginator::resolveCurrentPage();
         $currentItems = $merged->slice(($currentPage - 1) * $perPage, $perPage)->values();
         $users = new LengthAwarePaginator($currentItems, $merged->count(), $perPage, $currentPage, [
@@ -89,7 +92,7 @@ class ManageUserController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'role' => 'required|string|in:admin,user-public',
+            'role' => 'required|string|in:admin,user_public',
             'password' => 'required|string|min:8',
         ]);
 
@@ -142,7 +145,7 @@ class ManageUserController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,'.$user->id,
-            'role' => 'required|string|in:admin,user-public',
+            'role' => 'required|string|in:admin,user_public',
             'password' => 'nullable|string|min:8',
         ]);
         

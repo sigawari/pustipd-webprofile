@@ -47,14 +47,18 @@
                 <select id="perpage-select" name="perPage" data-url="{{ route('admin.sistem.users.index') }}"
                     data-target="usersTableBody"
                     class="flex-1 sm:flex-none px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
-                    <option value="all" {{ request('perPage') == 'all' ? 'selected' : '' }}>-- Semua
-                        {{ $title }} --</option>
                     <option value="10" {{ request('perPage') == 10 ? 'selected' : '' }}>10 {{ $title }} per
-                        halaman</option>
+                        halaman
+                    </option>
                     <option value="25" {{ request('perPage') == 25 ? 'selected' : '' }}>25 {{ $title }} per
-                        halaman</option>
+                        halaman
+                    </option>
                     <option value="50" {{ request('perPage') == 50 ? 'selected' : '' }}>50 {{ $title }} per
-                        halaman</option>
+                        halaman
+                    </option>
+                    <option value="all" {{ request('perPage') == 'all' ? 'selected' : '' }}>
+                        -- Semua {{ $title }} --
+                    </option>
                 </select>
             </div>
         </div>
@@ -139,15 +143,17 @@
                     {{-- Tombol Angka Halaman --}}
                     @foreach ($users->getUrlRange(1, $users->lastPage()) as $page => $url)
                         @if ($page == $users->currentPage())
+                            {{-- Halaman aktif --}}
                             <span
                                 class="px-3 py-2 text-sm font-semibold text-white bg-blue-600 border border-blue-600 rounded-lg">
                                 {{ $page }}
                             </span>
                         @else
-                            <a href="{{ $url }}"
-                                class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                            {{-- Halaman lain (indikator saja, tidak bisa diklik) --}}
+                            <span
+                                class="px-3 py-2 text-sm font-medium text-gray-500 bg-gray-100 border border-gray-300 rounded-lg cursor-not-allowed">
                                 {{ $page }}
-                            </a>
+                            </span>
                         @endif
                     @endforeach
 
