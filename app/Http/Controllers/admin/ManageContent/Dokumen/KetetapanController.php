@@ -7,9 +7,8 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
-use App\Http\Requests\StoreKetetapanRequest;
-use App\Http\Requests\UpdateKetetapanRequest;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Log;
 
 class KetetapanController extends Controller
 {
@@ -271,7 +270,7 @@ class KetetapanController extends Controller
             return redirect()->back()->with('success', $message);
 
         } catch (\Exception $e) {
-            \Log::error('Error in bulk action: ' . $e->getMessage());
+            Log::error('Error in bulk action: ' . $e->getMessage());
 
             return redirect()->back()->with('error', 'Terjadi kesalahan saat melakukan aksi bulk.');
         }
@@ -332,9 +331,8 @@ class KetetapanController extends Controller
             abort(404, 'File tidak ditemukan');
         }
 
-        return Storage::disk('public')->download(
-            $ketetapan->file_path, 
-            $ketetapan->original_filename ?? 'ketetapan.' . $ketetapan->file_type
-        );
+        $filePath = Storage::disk('public')->path($ketetapan->file_path);
+        $downloadName = $ketetapan->original_filename ?? 'ketetapan.' . $ketetapan->file_type;
+        return response()->download($filePath, $downloadName);
     }
 }
