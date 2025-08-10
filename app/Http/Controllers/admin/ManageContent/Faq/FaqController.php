@@ -7,6 +7,7 @@ use App\Http\Requests\StoreFaqRequest;
 use App\Http\Requests\UpdateFaqRequest;
 use App\Models\ManageContent\Faq;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class FaqController extends Controller
 {
@@ -16,57 +17,63 @@ class FaqController extends Controller
     public function index(Request $request)
     {
         $title = 'FAQ';
-        $query = Faq::query();
-    
-        // Search
-        if ($search = $request->input('search')) {
-            $query->where(function ($q) use ($search) {
-                $q->where('question', 'like', "%{$search}%")
-                  ->orWhere('answer', 'like', "%{$search}%");
+        $search = $request->input('search', '');
+        $filter = $request->query('filter', 'all');
+        $perPage = $request->input('perPage', 10);
+
+        // Pisahkan multi keyword
+        $keywords = !empty($search) ? preg_split('/\s+/', (string) $search) : [];
+
+        // Query builder awal
+        $faqQuery = Faq::query();
+
+        // Apply search jika ada
+        if ($search) {
+            $faqQuery->where(function ($q) use ($keywords) {
+                foreach ($keywords as $word) {
+                    $q->where(function ($q) use ($word) {
+                        $q->where('question', 'like', "%{$word}%")
+                          ->orWhere('answer', 'like', "%{$word}%");
+                    });
+                }
             });
         }
-    
+
         // Filter status
-        if (($status = $request->input('filter')) && $status !== 'all') {
-            $query->where('status', $status);
+        if ($filter && $filter !== 'all') {
+            $faqQuery->where('status', $filter);
         }
-    
+
+        // Merge results
+        $merged = $faqQuery->get();
+
         // Per-page validation
-        $perPageOptions = ['10', '25', '50', 'all'];
-        $perPageInput = $request->input('perPage', '10');
-        
-        if (!in_array($perPageInput, $perPageOptions)) {
-            $perPageInput = '10';
-        }
-    
-        // Calculate per page
-        if ($perPageInput === 'all') {
-            $perPage = max(1, (clone $query)->count());
+        if ($perPage === 'all') {
+            $perPage = max($merged->count(), 1); // Kalau 0, set jadi 1
         } else {
-            $perPage = (int) $perPageInput;
+            $perPage = (int) $perPage;
+            if ($perPage < 1) {
+                $perPage = 1;
+            }
         }
-    
-        // Get paginated results
-        $faqs = $query->orderBy('sort_order')
-                      ->paginate($perPage)
-                      ->appends($request->all());
-    
+
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        $currentItems = $merged->slice(($currentPage - 1) * $perPage, $perPage)->values();
+
+        $faqs = new LengthAwarePaginator(
+            $currentItems,
+            $merged->count(),
+            $perPage,
+            $currentPage,
+            ['path' => LengthAwarePaginator::resolveCurrentPath()]
+        );
+
         // AJAX Response di controller
         if ($request->ajax()) {
-            return response()->json([
-                'html' => view('admin.manage-content.faq.partials.table_body', compact('faqs'))->render(),
-                'pagination' => [
-                    'current_page' => $faqs->currentPage(),
-                    'last_page' => $faqs->lastPage(),
-                    'total' => $faqs->total(),
-                    'from' => $faqs->firstItem(),
-                    'to' => $faqs->lastItem(),
-                    'has_more_pages' => $faqs->hasMorePages(),
-                    'on_first_page' => $faqs->onFirstPage(),
-                ]
-            ]);
-        }
-    
+            return view('admin.manage-content.faq.partials.table_body', compact('title', 'faqs'))->render();
+        } 
+
+        // Render full view    
         return view('admin.manage-content.faq.index', compact('title', 'faqs'));
     }    
 

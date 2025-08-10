@@ -18,9 +18,6 @@
         <td class="px-6 py-4 text-left">
             <div class="text-sm text-gray-600 max-w-xs">{{ Str::limit(strip_tags($faq->answer), 80) }}</div>
         </td>
-        <!-- <td class="px-6 py-4 whitespace-nowrap">
-            <span class="text-sm text-gray-900">{{ $faq->sort_order }}</span>
-        </td> -->
         <!-- Status -->
         <td class="px-6 py-4 whitespace-nowrap">
             <span
@@ -142,28 +139,3 @@
         </td>
     </tr>
 @endforelse
-<!-- 
-<script>
-    // Quick status change
-    function quickStatusChange(id, status) {
-        if (confirm(`Ubah status FAQ ke ${status}?`)) {
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = '{{ route('admin.manage-content.faq.bulk') }}';
-            form.innerHTML = `
-                @csrf
-                <input type="hidden" name="action" value="${status}">
-                <input type="hidden" name="ids[]" value="${id}">
-            `;
-            document.body.appendChild(form);
-            form.submit();
-        }
-    }
-
-    // Soft delete (archive)
-    function softDeleteFaq(id) {
-        if (confirm('FAQ akan diarsipkan, bukan dihapus permanen. Lanjutkan?')) {
-            quickStatusChange(id, 'archived');
-        }
-    }
-</script> -->
