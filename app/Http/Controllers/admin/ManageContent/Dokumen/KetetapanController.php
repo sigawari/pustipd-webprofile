@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Admin\ManageContent\Dokumen;
 
 use App\Models\Ketetapan;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request; // ✅ TAMBAHKAN INI
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreKetetapanRequest;
 use App\Http\Requests\UpdateKetetapanRequest;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class KetetapanController extends Controller
 {
@@ -17,61 +18,69 @@ class KetetapanController extends Controller
      */
     public function index(Request $request)
     {
+        $title = 'Ketetapan';
         $search = $request->get('search');
         $filter = $request->get('filter', 'all');
         $perPage = $request->get('perPage', 10);
-    
-        // Validasi per_page
-        $validPerPage = [10, 25, 50, 'all'];
-        if (!in_array($perPage, $validPerPage)) {
-            $perPage = 10;
-        }
-    
-        // Query builder
-        $query = Ketetapan::query();
-    
-        // Apply search filter
+        
+        // Pisahkan multi keyword
+        $keywords = !empty($search) ? preg_split('/\s+/', (string) $search) : [];
+
+        // Query builder awal
+        $ketetapanQuery = Ketetapan::query();
+
+        // Apply search jika ada
         if ($search) {
-            $query->search($search);
+            $ketetapanQuery->where(function ($q) use ($keywords) {
+                foreach ($keywords as $word) {
+                    $q->where(function ($q) use ($word) {
+                        $q->where('title', 'like', "%{$word}%")
+                          ->orWhere('description', 'like', "%{$word}%");
+                    });
+                }
+            });
         }
-    
-        // Apply status filter
+
+        // Filter status
         if ($filter && $filter !== 'all') {
-            $query->where('status', $filter);
+            $ketetapanQuery->where('status', $filter);
         }
-    
-        // ✅ AUTO SORTING: Tahun terbaru dulu, lalu tanggal dibuat terbaru
-        $query->orderByRaw('year_published DESC NULLS LAST') // Tahun terbaru dulu, NULL di akhir
-              ->orderBy('created_at', 'desc'); // Jika tahun sama, yang baru dibuat dulu
-    
-        // Paginate results
+
+        // Merge results
+        $merged = $ketetapanQuery->get();
+
+        // Per-page validation
         if ($perPage === 'all') {
-            $ketetapans = $query->paginate(1000);
+            $perPage = max($merged->count(), 1); // Kalau 0, set jadi 1
         } else {
-            $ketetapans = $query->paginate($perPage);
+            $perPage = (int) $perPage;
+            if ($perPage < 1) {
+                $perPage = 1;
+            }
         }
-    
-        // Return response
-        if ($request->wantsJson()) {
-            return response()->json([
-                'html' => view('admin.manage-content.dokumen.ketetapan.partials.table_body', compact('ketetapans'))->render(),
-                'pagination' => [
-                    'current_page' => $ketetapans->currentPage(),
-                    'last_page' => $ketetapans->lastPage(),
-                    'per_page' => $ketetapans->perPage(),
-                    'total' => $ketetapans->total(),
-                    'from' => $ketetapans->firstItem(),
-                    'to' => $ketetapans->lastItem(),
-                    'has_more_pages' => $ketetapans->hasMorePages(),
-                    'on_first_page' => $ketetapans->onFirstPage(),
-                ]
-            ]);
+
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        $ketetapans = $ketetapanQuery->paginate($perPage);
+
+        // ✅ AUTO SORTING: Tahun terbaru dulu, lalu tanggal dibuat terbaru
+        $ketetapans->getCollection()->sortByDesc(function ($ketetapan) {
+            return [$ketetapan->year_published ?? 0, $ketetapan->created_at];
+        });
+
+        $ketetapans = new LengthAwarePaginator(
+            $ketetapans->getCollection()->slice(($currentPage - 1) * $perPage, $perPage)->values(),
+            $ketetapans->total(),
+            $perPage,
+            $currentPage,
+            ['path' => LengthAwarePaginator::resolveCurrentPath()]
+        );
+
+        // AJAX response
+        if (request()->ajax()) {
+            return view('admin.manage-content.dokumen.ketetapan.partials.table_body', compact('title', 'ketetapans'))->render();
         }
-    
-        return view('admin.manage-content.dokumen.ketetapan.index', [
-            'title' => 'Ketetapan',
-            'ketetapans' => $ketetapans
-        ]);
+        // Render full view
+        return view('admin.manage-content.dokumen.ketetapan.index', compact('title', 'ketetapans'));
     }
     
 
@@ -90,42 +99,34 @@ class KetetapanController extends Controller
      */
     public function store(Request $request)
     {
-        session_write_close();
-        // Debug file upload
-        \Log::info('Upload attempt:', [
-            'has_file' => $request->hasFile('file'),
-            'file_size' => $request->hasFile('file') ? $request->file('file')->getSize() : null,
-            'file_error' => $request->hasFile('file') ? $request->file('file')->getError() : null,
-            'all_input' => $request->except(['file'])
+        // Validasi input
+        $request->validate([
+            'title'          => 'required|string|max:255',
+            'description'    => 'required|string',
+            'file'           => 'required|file|mimes:pdf,doc,docx|max:10240', // 10MB
+            'year_published' => 'nullable|digits:4|integer|min:1900|max:' . (date('Y') + 1),
+            'status'         => 'required|in:published,draft,archived'
         ]);
-    
-        if ($request->hasFile('file')) {
-            $file = $request->file('file');
-            
-            if (!$file->isValid()) {
-                \Log::error('File upload error:', [
-                    'error_code' => $file->getError(),
-                    'error_message' => $file->getErrorMessage()
-                ]);
-                
-                return back()->withErrors(['file' => 'File upload failed: ' . $file->getErrorMessage()]);
-            }
-        }
-    
-        // Validasi dengan debugging
-        try {
-            $request->validate([
-                'title' => 'required|string|max:255',
-                'description' => 'required|string',
-                'file' => 'required|file|mimes:pdf,doc,docx|max:10240', // 10MB
-                'year_published' => 'nullable|integer',
-            ]);
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            \Log::error('Validation failed:', $e->errors());
-            throw $e;
-        }
-    
-        // ... rest of upload logic
+
+        // Simpan file ke storage
+        $file = $request->file('file');
+        $path = $file->store('ketetapan_files', 'public'); // simpan di storage/app/public/ketetapan_files
+
+        // Simpan ke database
+        Ketetapan::create([
+            'title'          => $request->input('title'),
+            'description'    => $request->input('description'),
+            'file_path'      => $path,
+            'original_filename' => $file->getClientOriginalName(),
+            'file_size'      => $file->getSize(),
+            'file_type'      => $file->getClientOriginalExtension(),
+            'year_published' => $request->input('year_published') ?? null,
+            'status'         => $request->input('status'),
+        ]);
+
+        return redirect()
+            ->back()
+            ->with('success', 'Ketetapan berhasil ditambahkan sebagai Draft.');
     }
     
     /**
@@ -153,69 +154,71 @@ class KetetapanController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateKetetapanRequest $request, Ketetapan $ketetapan)
+    public function update(Request $request, $id)
     {
-        try {
-            $data = $request->validated();
-            $oldFilePath = $ketetapan->file_path;
+        // Ambil data ketetapan yang akan diupdate
+        $ketetapan = Ketetapan::findOrFail($id);
 
-            // Handle file upload if new file provided
-            if ($request->hasFile('file')) {
-                $fileData = $this->handleFileUpload($request->file('file'), $oldFilePath);
-                $data = array_merge($data, $fileData);
+        // Validasi input (file opsional saat update)
+        $request->validate([
+            'title'          => 'required|string|max:255',
+            'description'    => 'required|string',
+            'file'           => 'nullable|file|mimes:pdf,doc,docx|max:10240', // opsional
+            'year_published' => 'nullable|digits:4|integer|min:1900|max:' . (date('Y') + 1),
+            'status'         => 'required|in:published,draft,archived'
+        ]);
+
+        // Cek apakah ada file baru diupload
+        if ($request->hasFile('file')) {
+            // Hapus file lama jika ada
+            if ($ketetapan->file_path && Storage::disk('public')->exists($ketetapan->file_path)) {
+                Storage::disk('public')->delete($ketetapan->file_path);
             }
 
-            $ketetapan->update($data);
+            // Simpan file baru
+            $file = $request->file('file');
+            $path = $file->store('ketetapan_files', 'public');
 
-            if ($request->wantsJson()) {
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Ketetapan berhasil diperbarui!'
-                ]);
-            }
-
-            return redirect()->route('admin.manage-content.dokumen.ketetapan.index')
-                           ->with('success', 'Ketetapan berhasil diperbarui!');
-
-        } catch (\Exception $e) {
-            \Log::error('Error updating ketetapan: ' . $e->getMessage());
-
-            if ($request->wantsJson()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Terjadi kesalahan saat memperbarui ketetapan.'
-                ], 500);
-            }
-
-            return redirect()->back()
-                           ->withInput()
-                           ->with('error', 'Terjadi kesalahan saat memperbarui ketetapan.');
+            $ketetapan->file_path = $path;
+            $ketetapan->original_filename = $file->getClientOriginalName();
+            $ketetapan->file_size = $file->getSize();
+            $ketetapan->file_type = $file->getClientOriginalExtension();
         }
+
+        // Update field lainnya
+        $ketetapan->title = $request->input('title');
+        $ketetapan->description = $request->input('description');
+        $ketetapan->year_published = $request->input('year_published') ?? null;
+        $ketetapan->status = $request->input('status');
+
+        $ketetapan->save();
+
+        return redirect()
+            ->back()
+            ->with('success', 'Ketetapan berhasil diperbarui.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Ketetapan $ketetapan)
+    public function destroy($id)
     {
-        try {
-            // Soft delete - pindah ke archived
-            $ketetapan->update(['status' => 'archived']);
+        // Cari data ketetapan
+        $ketetapan = Ketetapan::findOrFail($id);
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Ketetapan berhasil diarsipkan!'
-            ]);
-
-        } catch (\Exception $e) {
-            \Log::error('Error archiving ketetapan: ' . $e->getMessage());
-
-            return response()->json([
-                'success' => false,
-                'message' => 'Terjadi kesalahan saat mengarsipkan ketetapan.'
-            ], 500);
+        // Hapus file di storage kalau ada
+        if ($ketetapan->file_path && Storage::disk('public')->exists($ketetapan->file_path)) {
+            Storage::disk('public')->delete($ketetapan->file_path);
         }
+
+        // Hapus data dari database
+        $ketetapan->delete();
+
+        return redirect()
+            ->back()
+            ->with('success', 'Ketetapan berhasil dihapus.');
     }
+
 
     /**
      * Handle bulk actions

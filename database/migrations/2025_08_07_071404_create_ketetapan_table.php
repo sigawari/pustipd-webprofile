@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('file_type')->nullable(); // Tipe file (pdf, doc, etc)
             $table->year('year_published')->nullable(); // Tahun terbit
             $table->enum('status', ['published', 'draft', 'archived'])->default('draft');
-            // ❌ HAPUS: $table->integer('sort_order')->default(0); 
             $table->timestamps();
 
             // Indexes untuk performa

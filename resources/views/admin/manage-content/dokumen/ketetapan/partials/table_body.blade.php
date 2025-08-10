@@ -2,42 +2,38 @@
 @forelse ($ketetapans as $key => $ketetapan)
     <tr class="hover:bg-gray-50">
         <!-- Checkbox -->
-        <td class="px-6 py-4 whitespace-nowrap">
+        <td class="px-4 py-4 text-center">
             <input type="checkbox" class="item-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                 value="{{ $ketetapan->id }}" onchange="updateBulkActionsBar()">
         </td>
-
         <!-- No. -->
-        <td class="px-6 py-4 whitespace-nowrap">
+        <td class="px-3 py-4 text-center whitespace-nowrap">
             {{ $ketetapans->firstItem() + $key }}
         </td>
-
         <!-- Nama Ketetapan -->
         <td class="px-6 py-4">
             <div class="text-sm font-medium text-gray-900 max-w-xs">
                 {{ Str::limit($ketetapan->title, 50) }}
+                <br>
+                @if ($ketetapan->original_filename)
+                    <span class="text-xs text-gray-600">📄 {{ $ketetapan->original_filename }}</span>
+                @else
+                    <span class="text-xs text-gray-400">-</span>
+                @endif
             </div>
-            @if ($ketetapan->original_filename)
-                <div class="text-xs text-gray-500 mt-1">
-                    📄 {{ $ketetapan->original_filename }}
-                </div>
-            @endif
         </td>
-
         <!-- Deskripsi -->
         <td class="px-6 py-4">
             <div class="text-sm text-gray-600 max-w-xs">
                 {{ Str::limit(strip_tags($ketetapan->description), 80) }}
             </div>
         </td>
-
         <!-- Tahun Terbit -->
-        <td class="px-6 py-4 whitespace-nowrap">
+        <td class="px-3 py-4 text-center whitespace-nowrap">
             <span class="text-sm font-medium text-gray-900">
                 {{ $ketetapan->year_published ?? '-' }}
             </span>
         </td>
-
         <!-- File Info -->
         <td class="px-6 py-4 whitespace-nowrap">
             @if ($ketetapan->file_path && $ketetapan->file_exists)
@@ -67,100 +63,86 @@
                 <span class="text-xs text-gray-400">Belum upload</span>
             @endif
         </td>
-
         <!-- Status -->
-        <td class="px-6 py-4 whitespace-nowrap">
-            @php
-                $statusColors = [
-                    'published' => 'bg-green-100 text-green-800',
-                    'draft' => 'bg-yellow-100 text-yellow-800',
-                    'archived' => 'bg-gray-100 text-gray-800',
-                ];
-                $color = $statusColors[$ketetapan->status] ?? 'bg-gray-100 text-gray-800';
-            @endphp
-            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $color }}">
-                <div class="w-1.5 h-1.5 bg-current rounded-full mr-1.5 opacity-75"></div>
+        <td class="px-3 py-4 text-center whitespace-nowrap">
+            <span
+                @class([
+                    'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium',
+                    'bg-green-300 text-green-800' => $ketetapan->status === 'published',
+                    'bg-yellow-300 text-yellow-800' => $ketetapan->status === 'draft',
+                    'bg-gray-300 text-gray-800' => $ketetapan->status === 'archived',
+                ])>
                 {{ ucfirst($ketetapan->status) }}
             </span>
         </td>
 
         <!-- Aksi -->
-        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-            <div class="flex items-center space-x-2">
-
-                @if ($ketetapan->status === 'archived')
-                    {{-- Ketetapan Archived: Restore atau Hapus Permanen --}}
-                    <button onclick="quickStatusChange({{ $ketetapan->id }}, 'draft')"
-                        class="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50" title="Restore ke Draft">
+        <td class="px-3 py-4 whitespace-nowrap text-sm font-medium">
+            <div class="flex justify-center space-x-2">
+                {{-- Publish Button --}}
+                @if ($ketetapan->status !== 'published')
+                    <button onclick="quickStatusChange('{{ $ketetapan->id }}', 'published')"
+                        class="p-1 text-green-600 rounded hover:text-green-900 hover:bg-green-50"
+                        title="Publish">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
-                            </path>
-                        </svg>
-                    </button>
-
-                    <button onclick="permanentDeleteKetetapan({{ $ketetapan->id }})"
-                        class="text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-50" title="Hapus Permanen">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
-                    </button>
-                @else
-                    {{-- Ketetapan Draft/Published: Quick Actions --}}
-                    @if ($ketetapan->status === 'draft')
-                        <button onclick="quickStatusChange({{ $ketetapan->id }}, 'published')"
-                            class="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-50" title="Publish">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>
-                        </button>
-                    @elseif($ketetapan->status === 'published')
-                        <button onclick="quickStatusChange({{ $ketetapan->id }}, 'draft')"
-                            class="text-yellow-600 hover:text-yellow-900 p-1 rounded hover:bg-yellow-50"
-                            title="Unpublish">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
-                                </path>
-                            </svg>
-                        </button>
-                    @endif
-
-                    <!-- Download File (jika ada) -->
-                    @if ($ketetapan->file_exists)
-                        <a href="{{ $ketetapan->file_url }}" target="_blank"
-                            download="{{ $ketetapan->original_filename }}"
-                            class="text-purple-600 hover:text-purple-900 p-1 rounded hover:bg-purple-50"
-                            title="Download File">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                                </path>
-                            </svg>
-                        </a>
-                    @endif
-
-                    <!-- Edit -->
-                    <button onclick="openUpdateModal('{{ $ketetapan->id }}')"
-                        class="text-indigo-600 hover:text-indigo-900 p-1 rounded hover:bg-indigo-50" title="Edit">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
-                            </path>
-                        </svg>
-                    </button>
-
-                    <!-- Archive -->
-                    <button onclick="softDeleteKetetapan({{ $ketetapan->id }})"
-                        class="text-gray-600 hover:text-gray-900 p-1 rounded hover:bg-gray-50" title="Archive">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M5 8l6 6m0 0l6-6m-6 6V3"></path>
+                                d="M5 13l4 4L19 7" />
                         </svg>
                     </button>
                 @endif
+
+                {{-- Edit Button --}}
+                <button onclick="openUpdateModal('{{ $ketetapan->id }}')"
+                    class="p-1 text-blue-600 rounded hover:text-blue-900 hover:bg-blue-50"
+                    title="Edit">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5
+                            m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9
+                            v-2.828l8.586-8.586z" />
+                    </svg>
+                </button>
+
+                {{-- Show Button --}}
+                <button class="p-1 text-amber-600 rounded hover:text-amber-900 hover:bg-amber-50"
+                    title="Show">
+                    <svg class="w-4 h-4 icon-show" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M2.036 12.322a1.012 1.012 0 0 1 0-.639
+                            C3.423 7.51 7.36 4.5 12 4.5
+                            c4.638 0 8.573 3.007 9.963 7.178
+                            .07.207.07.431 0 .639
+                            C20.577 16.49 16.64 19.5 12 19.5
+                            c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                    </svg>
+                </button>
+
+                {{-- Download Button --}}
+                <a href="#"
+                    class="p-1 text-purple-600 rounded hover:text-purple-900 hover:bg-purple-50"
+                    title="Download">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2
+                            M7 10l5 5m0 0l5-5m-5 5V4" />
+                    </svg>
+                </a>
+
+                {{-- Delete Button --}}
+                <button onclick="openDeleteModal('{{ $ketetapan->id }}')"
+                    class="p-1 text-red-600 rounded hover:text-red-900 hover:bg-red-50"
+                    title="Hapus">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21
+                            H7.862a2 2 0 01-1.995-1.858L5 7
+                            m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1
+                            h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                </button>
             </div>
         </td>
     </tr>
@@ -200,7 +182,7 @@
     </tr>
 @endforelse
 
-<script>
+<!-- <script>
     // Quick status change untuk ketetapan
     function quickStatusChange(id, status) {
         let confirmMessage = '';
@@ -257,4 +239,4 @@
             form.submit();
         }
     }
-</script>
+</script> -->
