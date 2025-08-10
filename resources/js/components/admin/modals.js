@@ -36,6 +36,14 @@ document.addEventListener("DOMContentLoaded", function () {
             modal.classList.remove("hidden");
             modal.classList.add("flex");
             document.body.classList.add("overflow-hidden");
+
+            // Klik di luar konten modal untuk close
+            modal.addEventListener("click", function handler(e) {
+                if (e.target === modal) {
+                    closeUpdateModal(id);
+                    modal.removeEventListener("click", handler); // biar event nggak dobel
+                }
+            });
         }
     };
 

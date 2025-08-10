@@ -28,6 +28,7 @@
     </td>
     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
         <div class="flex items-center space-x-2">
+            <!-- Edit Button -->
             <button
                 onclick="openUpdateModal('{{ $user->id }}')"
                 class="text-indigo-600 hover:text-indigo-900 p-1 rounded hover:bg-indigo-50"
@@ -39,6 +40,7 @@
                     </path>
                 </svg>
             </button>
+            <!-- Delete Button -->
             <button
                 onclick="openDeleteModal('{{ $user->id }}')"
                 class="text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-50"

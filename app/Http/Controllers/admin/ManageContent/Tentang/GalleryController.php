@@ -4,7 +4,6 @@ namespace App\Http\Controllers\admin\ManageContent\Tentang;
 
 use App\Models\ManageContent\AboutUs\Gallery;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreGalleryRequest;
 use App\Http\Requests\UpdateGalleryRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -70,30 +69,30 @@ class GalleryController extends Controller
     }
 
     public function store(Request $request)
-{
-    $request->validate([
-        'title' => 'required|string|max:255',
-        'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-        'event_date' => 'required|date',
-    ]);
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'event_date' => 'required|date',
+        ]);
 
-    // Handle image upload dengan nama yang unique
-    $imagePath = null;
-    if ($request->hasFile('image')) {
-        $file = $request->file('image');
-        $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-        $imagePath = $file->storeAs('gallery', $filename, 'public');
+        // Handle image upload dengan nama yang unique
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+            $imagePath = $file->storeAs('gallery', $filename, 'public');
+        }
+
+        Gallery::create([
+            'title' => $request->title,
+            'image' => $imagePath,
+            'event_date' => $request->event_date,
+            'status' => 'draft', // Default draft
+        ]);
+
+        return redirect()->back()->with('success', 'Gallery berhasil disimpan sebagai draft!');
     }
-
-    Gallery::create([
-        'title' => $request->title,
-        'image' => $imagePath,
-        'event_date' => $request->event_date,
-        'status' => 'draft', // Default draft
-    ]);
-
-    return redirect()->back()->with('success', 'Gallery berhasil disimpan sebagai draft!');
-}
 
 
     public function update(UpdateGalleryRequest $request, Gallery $gallery)
