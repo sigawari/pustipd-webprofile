@@ -36,30 +36,45 @@
 
                 <!-- Actions berdasarkan status yang dipilih -->
                 <div class="flex flex-col sm:flex-row gap-2" id="bulkActionButtons">
-                    <!-- Default actions (untuk draft/published) -->
-                    <div id="defaultActions">
+                    <!-- Default actions (Published/Draft/Archive) -->
+                    <div id="defaultActions" class="flex flex-wrap gap-2">
+                        <!-- Publish -->
                         <button onclick="bulkAction('published')"
-                            class="px-3 py-2 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700">
-                            <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
+                            class="flex items-center gap-1.5 px-3 py-2 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 
+                                    4.5 4.5M12 3v13.5" />
                             </svg>
                             Publish
                         </button>
+
+                        <!-- Draft -->
                         <button onclick="bulkAction('draft')"
-                            class="px-3 py-2 text-sm bg-yellow-600 text-white rounded-lg hover:bg-yellow-700">
-                            <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
-                                </path>
+                            class="flex items-center gap-1.5 px-3 py-2 text-sm bg-yellow-600 text-white rounded-lg hover:bg-yellow-700">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 
+                                    113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                             </svg>
                             Draft
                         </button>
+
+                        <!-- Archive -->
                         <button onclick="bulkAction('archived')"
-                            class="px-3 py-2 text-sm bg-gray-600 text-white rounded-lg hover:bg-gray-700">
-                            <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 8l6 6m0 0l6-6m-6 6V3"></path>
+                            class="flex items-center gap-1.5 px-3 py-2 text-sm bg-gray-600 text-white rounded-lg hover:bg-gray-700">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 
+                                    1-2.247 2.118H6.622a2.25 2.25 0 0 
+                                    1-2.247-2.118L3.75 7.5m8.25 3v6.75m0 
+                                    0-3-3m3 3 3-3M3.375 7.5h17.25c.621 
+                                    0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 
+                                    0-1.125.504-1.125 1.125v1.5c0 
+                                    .621.504 1.125 1.125 1.125Z" />
                             </svg>
                             Archive
                         </button>
