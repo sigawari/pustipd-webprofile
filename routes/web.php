@@ -101,9 +101,7 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
             // Profile Routes
             Route::controller(ProfileController::class)->group(function(){
                 Route::get('/profile', 'index')->name('profile');
-                Route::get('/profile/create', 'create')->name('profile.create');
                 Route::post('/profile', 'store')->name('profile.store');
-                Route::get('/profile/{profile}/edit', 'edit')->name('profile.edit');
                 Route::put('/profile/{profile}', 'update')->name('profile.update');
                 Route::delete('/profile/{profile}', 'destroy')->name('profile.destroy');
                 Route::get('/profile/export', 'export')->name('profile.export');
@@ -112,9 +110,7 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
             // Gallery Routes
             Route::controller(GalleryController::class)->group(function(){
                 Route::get('/gallery', 'index')->name('gallery.index');
-                Route::get('/gallery/create', 'create')->name('gallery.create');
                 Route::post('/gallery', 'store')->name('gallery.store');
-                Route::get('/gallery/{gallery}/edit', 'edit')->name('gallery.edit');
                 Route::put('/gallery/{gallery}', 'update')->name('gallery.update');
                 Route::delete('/gallery/{gallery}', 'destroy')->name('gallery.destroy');
                 Route::get('/gallery/export', 'export')->name('gallery.export');

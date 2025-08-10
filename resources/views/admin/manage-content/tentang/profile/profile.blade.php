@@ -1,39 +1,21 @@
 <!-- resources/views/admin/manage-content/about/profile.blade.php -->
 <x-admin.layouts>
     <x-slot:title>{{ $title }}</x-slot:title>
-    <!-- @section('page-title', 'Profil PUSTIPD')
-    @section('page-description', 'Kelola konten profil organisasi PUSTIPD')
-    @section('breadcrumb')
-        <li>
-            <div class="flex items-center">
-                <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd"
-                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 111.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                        clip-rule="evenodd"></path>
-                </svg>
-                <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2">Kelola Konten</span>
-            </div>
-        </li>
-        <li>
-            <div class="flex items-center">
-                <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd"
-                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 111.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                        clip-rule="evenodd"></path>
-                </svg>
-                <span class="ml-1 text-sm font-medium text-gray-700 md:ml-2">Profil PUSTIPD</span>
-            </div>
-        </li>
-    @endsection -->
 
     <!-- Content Form -->
     <div class="bg-white rounded-xl border border-gray-200 p-6 m-6 shadow-sm">
-        <form action="#" method="POST" enctype="multipart/form-data">
-            @csrf            
+        <form 
+        action="{{ isset($profileData) 
+                ? route('admin.manage-content.tentang.profile.update', $profileData->id) 
+                : route('admin.manage-content.tentang.profile.store') }}" 
+            method="POST" 
+            enctype="multipart/form-data"
+            >
+            @csrf
             @if (isset($profileData))
-                @method('PUT')
+            @method('PUT')
             @endif
-
+            
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <!-- Left Column -->
                 <div class="space-y-6">
@@ -204,7 +186,6 @@
                     </a>
                 </div>
 
-                <!-- Action Section -->
                 <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:space-x-3">
                     <button type="button" onclick="window.history.back()"
                         class="w-full sm:w-auto px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors duration-200 text-sm sm:text-base">

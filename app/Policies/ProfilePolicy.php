@@ -3,7 +3,7 @@
 namespace App\Policies;
 
 use App\Models\Profile;
-use App\Models\User;
+use App\Models\Sistem\User;
 use Illuminate\Auth\Access\Response;
 
 class ProfilePolicy
