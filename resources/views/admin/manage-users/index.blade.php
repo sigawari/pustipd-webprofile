@@ -183,6 +183,8 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal -->
     @include('admin.manage-users.create')
     @include('admin.manage-users.update')
     @include('admin.manage-users.delete')

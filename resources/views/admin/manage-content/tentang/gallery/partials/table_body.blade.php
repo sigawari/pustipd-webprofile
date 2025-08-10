@@ -138,20 +138,37 @@
 </tr>
 @empty
 <tr class="hover:bg-gray-50">
-    <td colspan="7" class="px-6 py-12 text-center">
-        <div class="text-gray-500">
-            <svg class="w-12 h-12 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor"
-                viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
-                </path>
-            </svg>
-            <p class="text-lg font-medium text-gray-900">Belum ada gallery</p>
-            <p class="text-gray-500">Tambah gallery pertama Anda</p>
-            <button onclick="openAddModal()"
-                class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                Tambah Gallery
-            </button>
+    <td colspan="7" class="px-6 py-4 text-center text-gray-500 italic">
+        <div class="flex flex-col items-center justify-center text-sm text-gray-500 space-y-1">
+            @if ($galleries->isEmpty() && !request()->filled('search') && !request()->filled('filter'))
+                <!-- Icon Data Kosong -->
+                <svg class="w-12 h-12 mx-auto mb-4 text-blue-400" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
+                    </path>
+                </svg>
+                <p class="text-lg font-medium text-blue-900">Belum ada gallery</p>
+                <p class="text-blue-500">Tambah gallery pertama Anda</p>
+                <button onclick="openAddModal()"
+                    class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                    Tambah Gallery
+                </button>
+
+            @elseif ($galleries->isEmpty() && request()->filled('search'))
+                <!-- Icon Pencarian -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-400 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-4.35-4.35M10.5 17a6.5 6.5 0 100-13 6.5 6.5 0 000 13z" />
+                </svg>
+                <span class="text-yellow-600 font-medium">Tidak ditemukan hasil pencarian yang cocok.</span>
+
+            @elseif ($galleries->isEmpty() && request()->filled('filter'))
+                <!-- Icon Filter -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-400 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2l-7 8v5a1 1 0 01-2 0v-5l-7-8V4z" />
+                </svg>
+                <span class="text-red-500 font-medium">Data tidak tersedia untuk filter yang dipilih.</span>
+            @endif
         </div>
     </td>
 </tr>

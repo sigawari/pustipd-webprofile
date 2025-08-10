@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin\ManageContent\Tentang;
 use App\Models\ManageContent\AboutUs\Gallery;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateGalleryRequest;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -13,58 +14,63 @@ class GalleryController extends Controller
     public function index(Request $request)
     {
         $title = 'Gallery';
-        $query = Gallery::query();
+        $search = $request->input('search', '');
+        $filter = $request->query('filter', 'all');
+        $perPage = $request->input('perPage', 10);
 
-        // Search
-        if ($search = $request->input('search')) {
-            $query->where(function ($q) use ($search) {
-                $q->where('title', 'like', "%{$search}%")
-                  ->orWhere('description', 'like', "%{$search}%");
+        // Pisahkan multi keyword
+        $keywords = !empty($search) ? preg_split('/\s+/', (string) $search) : [];
+
+        // Query builder awal
+        $galleryQuery = Gallery::query();
+
+        // Apply search jika ada
+        if ($search) {
+            $galleryQuery->where(function ($q) use ($keywords) {
+                foreach ($keywords as $word) {
+                    $q->where(function ($q) use ($word) {
+                        $q->where('title', 'like', "%{$word}%")
+                          ->orWhere('description', 'like', "%{$word}%");
+                    });
+                }
             });
         }
 
         // Filter status
-        if (($status = $request->input('filter')) && $status !== 'all') {
-            $query->where('status', $status);
+        if ($filter && $filter !== 'all') {
+            $galleryQuery->where('status', $filter);
         }
+
+        // Merge results
+        $merged = $galleryQuery->get();
 
         // Per-page validation
-        $perPageOptions = ['10', '25', '50', 'all'];
-        $perPageInput = $request->input('perPage', '10');
-        
-        if (!in_array($perPageInput, $perPageOptions)) {
-            $perPageInput = '10';
-        }
-
-        // Calculate per page
-        if ($perPageInput === 'all') {
-            $perPage = max(1, (clone $query)->count());
+        if ($perPage === 'all') {
+            $perPage = max($merged->count(), 1); // Kalau 0, set jadi 1
         } else {
-            $perPage = (int) $perPageInput;
+            $perPage = (int) $perPage;
+            if ($perPage < 1) {
+                $perPage = 1;
+            }
         }
 
-        // Get paginated results
-        $galleries = $query->orderBy('sort_order')
-                          ->orderBy('created_at', 'asc')
-                          ->paginate($perPage)
-                          ->appends($request->all());
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        $currentItems = $merged->slice(($currentPage - 1) * $perPage, $perPage)->values();
+
+        $galleries = new LengthAwarePaginator(
+            $currentItems,
+            $merged->count(),
+            $perPage,
+            $currentPage,
+            ['path' => $request->url(), 'query' => $request->query()]
+        );
 
         // AJAX Response
         if ($request->ajax()) {
-            return response()->json([
-                'html' => view('admin.manage-content.tentang.gallery.partials.table_body', compact('galleries'))->render(),
-                'pagination' => [
-                    'current_page' => $galleries->currentPage(),
-                    'last_page' => $galleries->lastPage(),
-                    'total' => $galleries->total(),
-                    'from' => $galleries->firstItem(),
-                    'to' => $galleries->lastItem(),
-                    'has_more_pages' => $galleries->hasMorePages(),
-                    'on_first_page' => $galleries->onFirstPage(),
-                ]
-            ]);
+            return view('admin.manage-content.tentang.gallery.partials.table_body', compact('title', 'galleries', 'keywords', 'filter'))->render();
         }
 
+        // Render the main view
         return view('admin.manage-content.tentang.gallery.index', compact('title', 'galleries'));
     }
 

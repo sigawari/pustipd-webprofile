@@ -120,6 +120,7 @@
             </div>
             <div class="flex flex-col sm:flex-row gap-2">
                 <select id="filter-select" name="filter"
+                    data-url="{{ route('admin.manage-content.tentang.gallery.index') }}" data-target="GalleryTableBody"
                     class="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
                     <option value="all" {{ request('filter') == 'all' ? 'selected' : '' }}>-- Semua Status --
                     </option>
@@ -130,6 +131,7 @@
                 </select>
 
                 <select id="perpage-select" name="perPage"
+                    data-url="{{ route('admin.manage-content.tentang.gallery.index') }}" data-target="GalleryTableBody"
                     class="flex-1 sm:flex-none px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
                     <option value="all" {{ request('perPage') == 'all' ? 'selected' : '' }}>
                         -- Semua {{ $title }} --
@@ -147,116 +149,126 @@
             </div>
         </div>
 
-        <!-- WRAPPER untuk Table + Pagination (AJAX reload target) -->
-        <div id="GalleryTableWrapper">
-            <!-- Table dengan checkbox -->
-            <div class="overflow-x-auto -mx-3 sm:mx-0">
-                <div class="min-w-full inline-block align-middle">
-                    <div class="overflow-hidden border border-gray-200 sm:rounded-lg">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <!-- Di file utama index -->
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        <input type="checkbox" id="selectAll"
-                                            class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
-                                    </th>
-                                    <th
-                                        class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        No.
-                                    </th>
-                                    <th
-                                        class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Gambar
-                                    </th>
-                                    <th
-                                        class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Judul & Tanggal
-                                    </th>
-                                    <th
-                                        class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Status
-                                    </th>
-                                    <th
-                                        class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Aksi
-                                    </th>
-                                </tr>
-                            </thead>
+        <!-- Table dengan checkbox -->
+        <div class="overflow-x-auto -mx-3 sm:mx-0">
+            <div class="min-w-full inline-block align-middle">
+                <div class="overflow-hidden border border-gray-200 sm:rounded-lg">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <!-- Di file utama index -->
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <input type="checkbox" id="selectAll"
+                                        class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                </th>
+                                <th
+                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    No.
+                                </th>
+                                <th
+                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Gambar
+                                </th>
+                                <th
+                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Judul & Tanggal
+                                </th>
+                                <th
+                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Status
+                                </th>
+                                <th
+                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Aksi
+                                </th>
+                            </tr>
+                        </thead>
 
-                            <tbody id="GalleryTableBody" class="bg-white divide-y divide-gray-200">
-                                @include('admin.manage-content.tentang.gallery.partials.table_body')
-                            </tbody>
-                        </table>
-                    </div>
+                        <tbody id="GalleryTableBody" class="bg-white divide-y divide-gray-200">
+                            @include('admin.manage-content.tentang.gallery.partials.table_body')
+                        </tbody>
+                    </table>
                 </div>
             </div>
+        </div>
 
-            <!-- Pagination -->
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4 pt-4">
-                <div class="text-sm text-gray-500 text-center sm:text-left">
-                    Menampilkan {{ $galleries->firstItem() }} sampai {{ $galleries->lastItem() }} dari
-                    {{ $galleries->total() }} {{ strtolower($title) }}
-                </div>
+        <!-- Pagination -->
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4 pt-4">
+            <!-- Info jumlah data -->
+            <div class="text-sm text-gray-500 text-center sm:text-left">
+                Menampilkan {{ $galleries->firstItem() }} sampai {{ $galleries->lastItem() }} dari {{ $galleries->total() }}
+                {{ strtolower($title) }}
+            </div>
 
-                <div class="flex justify-center sm:justify-end">
-                    <nav class="inline-flex space-x-1 sm:space-x-2" aria-label="Pagination">
-                        @if ($galleries->onFirstPage())
+            <!-- Tombol Pagination -->
+            <div class="flex justify-center sm:justify-end">
+                <nav class="inline-flex space-x-1 sm:space-x-2" aria-label="Pagination">
+                    <!-- Tombol Sebelumnya -->
+                    @if ($galleries->onFirstPage())
+                        <span
+                            class="px-3 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-300 rounded-lg cursor-not-allowed flex items-center gap-1">
+                            <!-- Icon: panah kiri -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:hidden" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 19l-7-7 7-7" />
+                            </svg>
+                            <!-- Teks hanya di desktop -->
+                            <span class="hidden sm:inline">Sebelumnya</span>
+                        </span>
+                    @else
+                        <a href="{{ $galleries->previousPageUrl() }}"
+                            class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:hidden" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 19l-7-7 7-7" />
+                            </svg>
+                            <span class="hidden sm:inline">Sebelumnya</span>
+                        </a>
+                    @endif
+
+                    {{-- Tombol Angka Halaman --}}
+                    @foreach ($galleries->getUrlRange(1, $galleries->lastPage()) as $page => $url)
+                        @if ($page == $galleries->currentPage())
+                            {{-- Halaman aktif --}}
                             <span
-                                class="px-3 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-300 rounded-lg cursor-not-allowed flex items-center gap-1">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:hidden" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M15 19l-7-7 7-7" />
-                                </svg>
-                                <span class="hidden sm:inline">Sebelumnya</span>
+                                class="px-3 py-2 text-sm font-semibold text-white bg-blue-600 border border-blue-600 rounded-lg">
+                                {{ $page }}
                             </span>
                         @else
-                            <a href="{{ $galleries->appends(request()->all())->previousPageUrl() }}"
-                                class="pagination-link px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center gap-1">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:hidden" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M15 19l-7-7 7-7" />
-                                </svg>
-                                <span class="hidden sm:inline">Sebelumnya</span>
-                            </a>
-                        @endif
-
-                        @foreach ($galleries->appends(request()->all())->getUrlRange(1, $galleries->lastPage()) as $page => $url)
-                            @if ($page == $galleries->currentPage())
-                                <span
-                                    class="px-3 py-2 text-sm font-semibold text-white bg-blue-600 border border-blue-600 rounded-lg">{{ $page }}</span>
-                            @else
-                                <a href="{{ $url }}"
-                                    class="pagination-link px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">{{ $page }}</a>
-                            @endif
-                        @endforeach
-
-                        @if ($galleries->hasMorePages())
-                            <a href="{{ $galleries->appends(request()->all())->nextPageUrl() }}"
-                                class="pagination-link px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center gap-1">
-                                <span class="hidden sm:inline">Selanjutnya</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:hidden" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M9 5l7 7-7 7" />
-                                </svg>
-                            </a>
-                        @else
+                            {{-- Halaman lain (indikator saja, tidak bisa diklik) --}}
                             <span
-                                class="px-3 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-300 rounded-lg cursor-not-allowed flex items-center gap-1">
-                                <span class="hidden sm:inline">Selanjutnya</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:hidden" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M9 5l7 7-7 7" />
-                                </svg>
+                                class="px-3 py-2 text-sm font-medium text-gray-500 bg-gray-100 border border-gray-300 rounded-lg cursor-not-allowed">
+                                {{ $page }}
                             </span>
                         @endif
-                    </nav>
-                </div>
+                    @endforeach
+
+                    <!-- Tombol Selanjutnya -->
+                    @if ($galleries->hasMorePages())
+                        <a href="{{ $$galleries->nextPageUrl() }}"
+                            class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center gap-1">
+                            <span class="hidden sm:inline">Selanjutnya</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:hidden" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 5l7 7-7 7" />
+                            </svg>
+                        </a>
+                    @else
+                        <span
+                            class="px-3 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-300 rounded-lg cursor-not-allowed flex items-center gap-1">
+                            <span class="hidden sm:inline">Selanjutnya</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:hidden" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 5l7 7-7 7" />
+                            </svg>
+                        </span>
+                    @endif
+                </nav>
             </div>
         </div>
     </div>
@@ -267,180 +279,6 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-
-            // ================================
-            // AJAX RELOAD FUNCTION
-            // ================================
-            function reloadTable(params = {}) {
-                const url = new URL("{{ route('admin.manage-content.tentang.gallery.index') }}");
-
-                // Preserve existing params
-                const currentParams = new URLSearchParams(window.location.search);
-                for (const [key, value] of currentParams) {
-                    url.searchParams.set(key, value);
-                }
-
-                // Override with new params
-                Object.entries(params).forEach(([key, value]) => {
-                    if (value === '' || value === null || value === undefined) {
-                        url.searchParams.delete(key);
-                    } else {
-                        url.searchParams.set(key, value);
-                    }
-                });
-
-                fetch(url, {
-                        headers: {
-                            'X-Requested-With': 'XMLHttpRequest',
-                            'Accept': 'application/json'
-                        }
-                    })
-                    .then(response => {
-                        if (!response.ok) throw new Error('Network response was not ok');
-                        return response.json();
-                    })
-                    .then(data => {
-                        // Update table body
-                        document.getElementById('GalleryTableBody').innerHTML = data.html;
-
-                        // Update pagination info
-                        const paginationInfo = document.querySelector('.text-sm.text-gray-500');
-                        if (paginationInfo) {
-                            paginationInfo.textContent =
-                                `Menampilkan ${data.pagination.from || 0} sampai ${data.pagination.to || 0} dari ${data.pagination.total || 0} Gallery`;
-                        }
-
-                        // Update pagination links
-                        const paginationContainer = document.querySelector('nav[aria-label="Pagination"]');
-                        if (paginationContainer) {
-                            updatePaginationLinks(data.pagination);
-                        }
-
-                        // Update browser URL
-                        window.history.pushState({}, '', url.toString());
-
-                        // Re-initialize event listeners
-                        attachPaginationListeners();
-                        updateBulkActionsBar();
-                    })
-                    .catch(error => {
-                        console.error('Error reloading table:', error);
-                    });
-            }
-
-            // ================================
-            // UPDATE PAGINATION LINKS
-            // ================================
-            function updatePaginationLinks(pagination) {
-                const nav = document.querySelector('nav[aria-label="Pagination"]');
-                if (!nav) return;
-
-                let html = '';
-
-                // Previous button
-                if (pagination.on_first_page) {
-                    html += `<span class="px-3 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-300 rounded-lg cursor-not-allowed flex items-center gap-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                        </svg>
-                        <span class="hidden sm:inline">Sebelumnya</span>
-                    </span>`;
-                } else {
-                    html += `<a href="#" data-page="${pagination.current_page - 1}" class="pagination-link px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center gap-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                        </svg>
-                        <span class="hidden sm:inline">Sebelumnya</span>
-                    </a>`;
-                }
-
-                // Page numbers
-                for (let i = 1; i <= pagination.last_page; i++) {
-                    if (i === pagination.current_page) {
-                        html +=
-                            `<span class="px-3 py-2 text-sm font-semibold text-white bg-blue-600 border border-blue-600 rounded-lg">${i}</span>`;
-                    } else {
-                        html +=
-                            `<a href="#" data-page="${i}" class="pagination-link px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">${i}</a>`;
-                    }
-                }
-
-                // Next button
-                if (!pagination.has_more_pages) {
-                    html += `<span class="px-3 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-300 rounded-lg cursor-not-allowed flex items-center gap-1">
-                        <span class="hidden sm:inline">Selanjutnya</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                        </svg>
-                    </span>`;
-                } else {
-                    html += `<a href="#" data-page="${pagination.current_page + 1}" class="pagination-link px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center gap-1">
-                        <span class="hidden sm:inline">Selanjutnya</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                        </svg>
-                    </a>`;
-                }
-
-                nav.innerHTML = html;
-            }
-
-            // ================================
-            // PAGINATION CLICK HANDLERS
-            // ================================
-            function attachPaginationListeners() {
-                document.querySelectorAll('.pagination-link').forEach(link => {
-                    link.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        const page = this.getAttribute('data-page');
-                        reloadTable({
-                            page: page
-                        });
-                    });
-                });
-            }
-
-            // ================================
-            // FILTER & SEARCH EVENT LISTENERS
-            // ================================
-
-            // Search with debounce
-            let searchTimeout;
-            const searchInput = document.getElementById('search-input');
-            if (searchInput) {
-                searchInput.addEventListener('input', function() {
-                    clearTimeout(searchTimeout);
-                    searchTimeout = setTimeout(() => {
-                        reloadTable({
-                            search: this.value.trim(),
-                            page: 1
-                        });
-                    }, 500);
-                });
-            }
-
-            // Filter change
-            const filterSelect = document.getElementById('filter-select');
-            if (filterSelect) {
-                filterSelect.addEventListener('change', function() {
-                    reloadTable({
-                        filter: this.value,
-                        page: 1
-                    });
-                });
-            }
-
-            // Per page change  
-            const perpageSelect = document.getElementById('perpage-select');
-            if (perpageSelect) {
-                perpageSelect.addEventListener('change', function() {
-                    reloadTable({
-                        perPage: this.value,
-                        page: 1
-                    });
-                });
-            }
-
             // ================================
             // SELECT ALL FUNCTIONALITY
             // ================================
@@ -525,29 +363,6 @@
                     `;
                     document.body.appendChild(form);
                     form.submit();
-                }
-            };
-
-            window.permanentDeleteGallery = function(id) {
-                if (confirm(
-                        '⚠️ PERINGATAN!\n\nGallery akan dihapus PERMANEN dan tidak dapat dikembalikan.\n\nApakah Anda yakin?'
-                    )) {
-                    const form = document.createElement('form');
-                    form.method = 'POST';
-                    form.action = '{{ route('admin.manage-content.tentang.gallery.bulk') }}';
-                    form.innerHTML = `
-                        @csrf
-                        <input type="hidden" name="action" value="permanent_delete">
-                        <input type="hidden" name="ids[]" value="${id}">
-                    `;
-                    document.body.appendChild(form);
-                    form.submit();
-                }
-            };
-
-            window.softDeleteGallery = function(id) {
-                if (confirm('Gallery akan diarsipkan dan bisa di-restore kembali. Lanjutkan?')) {
-                    quickStatusChange(id, 'archived');
                 }
             };
 
