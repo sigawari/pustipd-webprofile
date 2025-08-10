@@ -99,6 +99,7 @@
                     </svg>
                 </div>
                 <input type="search" id="search-input" value="{{ request('search') }}"
+                    data-url="{{ route('admin.manage-content.tentang.gallery.index') }}" data-target="GalleryTableBody"
                     placeholder="Cari {{ $title }}..."
                     class="block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
             </div>
@@ -115,14 +116,18 @@
 
                 <select id="perpage-select" name="perPage"
                     class="flex-1 sm:flex-none px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
-                    <option value="all" {{ request('perPage') == 'all' ? 'selected' : '' }}>-- Semua
-                        {{ $title }} --</option>
-                    <option value="10" {{ request('perPage') == 10 ? 'selected' : '' }}>10 {{ $title }}
-                        per halaman</option>
-                    <option value="25" {{ request('perPage') == 25 ? 'selected' : '' }}>25 {{ $title }}
-                        per halaman</option>
-                    <option value="50" {{ request('perPage') == 50 ? 'selected' : '' }}>50 {{ $title }}
-                        per halaman</option>
+                    <option value="all" {{ request('perPage') == 'all' ? 'selected' : '' }}>
+                        -- Semua {{ $title }} --
+                    </option>
+                    <option value="10" {{ request('perPage') == 10 ? 'selected' : '' }}>
+                        10 {{ $title }} per halaman
+                    </option>
+                    <option value="25" {{ request('perPage') == 25 ? 'selected' : '' }}>
+                        25 {{ $title }} per halaman
+                    </option>
+                    <option value="50" {{ request('perPage') == 50 ? 'selected' : '' }}>
+                        50 {{ $title }} per halaman
+                    </option>
                 </select>
             </div>
         </div>

@@ -10,3 +10,4 @@ import './components/admin/removeListItem';
 import './components/admin/saveListItem';
 import './components/admin/autoSaveTimeOut';
 import './components/admin/previewImage';
+import './components/admin/toggleVisibility';

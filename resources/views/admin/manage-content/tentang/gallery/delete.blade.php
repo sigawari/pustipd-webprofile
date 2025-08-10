@@ -1,50 +1,42 @@
-<!-- Modal Delete Gallery -->
-<div id="DeleteModal-" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
-    <div class="bg-white rounded-lg p-6 w-full max-w-md mx-4">
-        <div class="flex justify-between items-center mb-4">
-            <h3 class="text-lg font-semibold text-gray-900">Konfirmasi Hapus</h3>
-            <button type="button" onclick="closeDeleteModal()" class="text-gray-400 hover:text-gray-600">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
-                    </path>
+<!-- Modal Delete -->
+@foreach($galleries as $gallery)
+    <div id="DeleteModal-{{ $gallery->id }}" class="hidden fixed inset-0 z-50 bg-black/50 items-center justify-center px-4">
+        <div class="bg-white rounded-xl shadow-lg p-6 max-w-md w-full text-center relative">
+            <div class="flex flex-col items-center space-y-4">
+                <!-- Icon Warning -->
+                <div class="bg-red-100 text-red-600 rounded-full p-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 16h-1v-4h-1m1-4h.01M12 2a10 10 0 100 20 10 10 0 000-20z" />
+                    </svg>
+                </div>
+                <h2 class="text-xl font-semibold text-gray-800">Yakin ingin menghapus data ini?</h2>
+                <p class="text-gray-500 text-sm">Tindakan ini tidak dapat dibatalkan.</p>
+                <form id="deleteForm-{{ $gallery->id }}" method="POST" action="{{ route('admin.manage-content.tentang.gallery.destroy', $gallery->id) }}">
+                    @csrf
+                    @method('DELETE')
+                    <div class="flex justify-center space-x-3 mt-4">
+                        <button type="button"
+                            onclick="closeDeleteModal('{{ $gallery->id }}')"
+                            class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">
+                            Batal
+                        </button>
+                        <button type="submit"
+                            class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
+                            Hapus
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <!-- Tombol X -->
+            <button onclick="closeDeleteModal('{{ $gallery->id }}')" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M6 18L18 6M6 6l12 12" />
                 </svg>
             </button>
         </div>
-
-        <div class="mb-4">
-            <div class="flex items-center mb-3">
-                <div class="flex-shrink-0">
-                    <svg class="w-10 h-10 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4.5c-.77-.833-2.694-.833-3.464 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z">
-                        </path>
-                    </svg>
-                </div>
-                <div class="ml-3">
-                    <p class="text-sm text-gray-600">
-                        Apakah Anda yakin ingin menghapus gallery ini?
-                    </p>
-                    <p class="text-sm font-medium text-gray-900 mt-1" id="deleteGalleryTitle">
-                        <!-- Title akan diisi via JavaScript -->
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <form id="deleteForm" method="POST">
-            @csrf
-            @method('DELETE')
-
-            <div class="flex justify-end space-x-3">
-                <button type="button" onclick="closeDeleteModal()"
-                    class="px-4 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
-                    Batal
-                </button>
-                <button type="submit"
-                    class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
-                    Ya, Hapus
-                </button>
-            </div>
-        </form>
     </div>
-</div>
+@endforeach
+

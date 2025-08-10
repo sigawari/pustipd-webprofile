@@ -20,7 +20,7 @@
             </button>
         </div>
 
-        <!-- Filter dan Search - MOBILE RESPONSIVE -->
+        <!-- Filter dan Search -->
         <div class="flex flex-col gap-3 mb-4 sm:mb-6">
             <div class="relative">
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -47,6 +47,9 @@
                 <select id="perpage-select" name="perPage" data-url="{{ route('admin.sistem.users.index') }}"
                     data-target="usersTableBody"
                     class="flex-1 sm:flex-none px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                    <option value="all" {{ request('perPage') == 'all' ? 'selected' : '' }}>
+                        -- Semua {{ $title }} --
+                    </option>
                     <option value="10" {{ request('perPage') == 10 ? 'selected' : '' }}>10 {{ $title }} per
                         halaman
                     </option>
@@ -55,9 +58,6 @@
                     </option>
                     <option value="50" {{ request('perPage') == 50 ? 'selected' : '' }}>50 {{ $title }} per
                         halaman
-                    </option>
-                    <option value="all" {{ request('perPage') == 'all' ? 'selected' : '' }}>
-                        -- Semua {{ $title }} --
                     </option>
                 </select>
             </div>
