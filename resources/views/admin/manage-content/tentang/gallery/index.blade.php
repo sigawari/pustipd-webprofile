@@ -21,6 +21,18 @@
             </button>
         </div>
 
+        <!-- CSRF token meta untuk JS -->
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+
+        <script>
+            window.bulkActionRoute = "{{ route('admin.manage-content.tentang.gallery.bulk') }}";
+        </script>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                window.initBulkActions();
+            });
+        </script>
         <!-- Bulk Actions Bar -->
         <div id="bulkActionsBar" class="hidden bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
@@ -277,7 +289,7 @@
     @include('admin.manage-content.tentang.gallery.update')
     @include('admin.manage-content.tentang.gallery.delete')
 
-    <script>
+    <!-- <script>
         document.addEventListener('DOMContentLoaded', function() {
             // ================================
             // SELECT ALL FUNCTIONALITY
@@ -387,5 +399,5 @@
             // Initialize pagination listeners
             attachPaginationListeners();
         });
-    </script>
+    </script> -->
 </x-admin.layouts>

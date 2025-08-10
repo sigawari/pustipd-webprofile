@@ -59,6 +59,7 @@
         </span>
 
     </td>
+    <!-- Aksi -->
     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
         <div class="flex flex-wrap gap-2 justify-center">
             

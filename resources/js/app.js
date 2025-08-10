@@ -11,3 +11,4 @@ import './components/admin/saveListItem';
 import './components/admin/autoSaveTimeOut';
 import './components/admin/previewImage';
 import './components/admin/toggleVisibility';
+import './components/admin/bulk-actions';

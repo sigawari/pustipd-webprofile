@@ -19,6 +19,17 @@
                 Tambah {{ $title }}
             </button>
         </div>
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+
+        <script>
+            window.bulkActionRoute = "{{ route('admin.manage-content.faq.bulk') }}";
+        </script>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                window.initBulkActions();
+            });
+        </script>
 
         <!-- Bulk Actions Bar (di index.blade.php) -->
         <div id="bulkActionsBar" class="hidden bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
@@ -142,22 +153,28 @@
                                     </th>
                                     <th
                                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        No.</th>
+                                        No.
+                                    </th>
                                     <th
                                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Pertanyaan</th>
+                                        Pertanyaan
+                                    </th>
                                     <th
                                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Jawaban</th>
-                                    <th
+                                        Jawaban
+                                    </th>
+                                    <!-- <th
                                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Urutan</th>
+                                        Urutan
+                                    </th> -->
                                     <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Status</th>
+                                        class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Status
+                                    </th>
                                     <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Aksi</th>
+                                        class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Aksi
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody id="faqTableBody" class="bg-white divide-y divide-gray-200">
@@ -237,182 +254,8 @@
 
     </div>
 
-    <script>
+    <!-- <script>
         document.addEventListener('DOMContentLoaded', function() {
-
-            // ================================
-            // AJAX RELOAD FUNCTION
-            // ================================
-            function reloadTable(params = {}) {
-                const url = new URL("{{ route('admin.manage-content.faq.index') }}");
-
-                // Preserve existing params
-                const currentParams = new URLSearchParams(window.location.search);
-                for (const [key, value] of currentParams) {
-                    url.searchParams.set(key, value);
-                }
-
-                // Override with new params
-                Object.entries(params).forEach(([key, value]) => {
-                    if (value === '' || value === null || value === undefined) {
-                        url.searchParams.delete(key);
-                    } else {
-                        url.searchParams.set(key, value);
-                    }
-                });
-
-                fetch(url, {
-                        headers: {
-                            'X-Requested-With': 'XMLHttpRequest',
-                            'Accept': 'application/json'
-                        }
-                    })
-                    .then(response => {
-                        if (!response.ok) throw new Error('Network response was not ok');
-                        return response.json();
-                    })
-                    .then(data => {
-                        // Update table body
-                        document.getElementById('faqTableBody').innerHTML = data.html;
-
-                        // Update pagination info
-                        const paginationInfo = document.querySelector('.text-sm.text-gray-500');
-                        if (paginationInfo) {
-                            paginationInfo.textContent =
-                                `Menampilkan ${data.pagination.from || 0} sampai ${data.pagination.to || 0} dari ${data.pagination.total || 0} FAQ`;
-                        }
-
-                        // Update pagination links
-                        const paginationContainer = document.querySelector('nav[aria-label="Pagination"]');
-                        if (paginationContainer) {
-                            updatePaginationLinks(data.pagination);
-                        }
-
-                        // Update browser URL
-                        window.history.pushState({}, '', url.toString());
-
-                        // Re-initialize event listeners
-                        attachPaginationListeners();
-                        updateBulkActionsBar();
-                    })
-                    .catch(error => {
-                        console.error('Error reloading table:', error);
-                    });
-            }
-
-            // ================================
-            // UPDATE PAGINATION LINKS
-            // ================================
-            function updatePaginationLinks(pagination) {
-                const nav = document.querySelector('nav[aria-label="Pagination"]');
-                if (!nav) return;
-
-                let html = '';
-
-                // Previous button
-                if (pagination.on_first_page) {
-                    html += `<span class="px-3 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-300 rounded-lg cursor-not-allowed flex items-center gap-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                        </svg>
-                        <span class="hidden sm:inline">Sebelumnya</span>
-                    </span>`;
-                } else {
-                    html += `<a href="#" data-page="${pagination.current_page - 1}" class="pagination-link px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center gap-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                        </svg>
-                        <span class="hidden sm:inline">Sebelumnya</span>
-                    </a>`;
-                }
-
-                // Page numbers
-                for (let i = 1; i <= pagination.last_page; i++) {
-                    if (i === pagination.current_page) {
-                        html +=
-                            `<span class="px-3 py-2 text-sm font-semibold text-white bg-blue-600 border border-blue-600 rounded-lg">${i}</span>`;
-                    } else {
-                        html +=
-                            `<a href="#" data-page="${i}" class="pagination-link px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">${i}</a>`;
-                    }
-                }
-
-                // Next button
-                if (!pagination.has_more_pages) {
-                    html += `<span class="px-3 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-300 rounded-lg cursor-not-allowed flex items-center gap-1">
-                        <span class="hidden sm:inline">Selanjutnya</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                        </svg>
-                    </span>`;
-                } else {
-                    html += `<a href="#" data-page="${pagination.current_page + 1}" class="pagination-link px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center gap-1">
-                        <span class="hidden sm:inline">Selanjutnya</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                        </svg>
-                    </a>`;
-                }
-
-                nav.innerHTML = html;
-            }
-
-            // ================================
-            // PAGINATION CLICK HANDLERS
-            // ================================
-            function attachPaginationListeners() {
-                document.querySelectorAll('.pagination-link').forEach(link => {
-                    link.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        const page = this.getAttribute('data-page');
-                        reloadTable({
-                            page: page
-                        });
-                    });
-                });
-            }
-
-            // ================================
-            // FILTER & SEARCH EVENT LISTENERS
-            // ================================
-
-            // Search with debounce
-            let searchTimeout;
-            const searchInput = document.getElementById('search-input');
-            if (searchInput) {
-                searchInput.addEventListener('input', function() {
-                    clearTimeout(searchTimeout);
-                    searchTimeout = setTimeout(() => {
-                        reloadTable({
-                            search: this.value.trim(),
-                            page: 1
-                        });
-                    }, 500);
-                });
-            }
-
-            // Filter change
-            const filterSelect = document.getElementById('filter-select');
-            if (filterSelect) {
-                filterSelect.addEventListener('change', function() {
-                    reloadTable({
-                        filter: this.value,
-                        page: 1
-                    });
-                });
-            }
-
-            // Per page change  
-            const perpageSelect = document.getElementById('perpage-select');
-            if (perpageSelect) {
-                perpageSelect.addEventListener('change', function() {
-                    reloadTable({
-                        perPage: this.value,
-                        page: 1
-                    });
-                });
-            }
-
             // ================================
             // SELECT ALL FUNCTIONALITY
             // ================================
@@ -541,7 +384,7 @@
             // Initialize pagination listeners
             attachPaginationListeners();
         });
-    </script>
+    </script> -->
 
 
     @include('admin.manage-content.faq.create')

@@ -59,7 +59,7 @@
 
                     <div class="mb-4">
                         <textarea name="visi" rows="8"
-                            class="w-full px-3 py-2 text-sm sm:text-base border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent @error('visi') border-red-500 @enderror"
+                            class="w-full px-3 py-2 text-sm sm:text-base border rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent {{ $errors->has('visi') ? 'border-red-500' : 'border-gray-200' }}"
                             placeholder="Masukkan visi..." required>{{ old('visi', $visiMisi->visi) }}</textarea>
                         @error('visi')
                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
@@ -113,7 +113,7 @@
                                             </div>
                                             {{-- Action buttons untuk mobile --}}
                                             <div class="flex space-x-1 sm:hidden">
-                                                <button onclick="OpenUpdateModal({{ $index }})"
+                                                <button onclick="OpenUpdateModal('{{ $index }}')"
                                                     class="p-1.5 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors duration-200"
                                                     title="Edit Misi">
                                                     <svg class="w-3 h-3" fill="none" stroke="currentColor"
@@ -124,7 +124,7 @@
                                                         </path>
                                                     </svg>
                                                 </button>
-                                                <button onclick="OpenDeleteModal({{ $index }})"
+                                                <button onclick="OpenDeleteModal('{{ $index }}')"
                                                     class="p-1.5 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors duration-200"
                                                     title="Hapus Misi">
                                                     <svg class="w-3 h-3" fill="none" stroke="currentColor"
@@ -146,7 +146,7 @@
 
                                     {{-- Action buttons untuk desktop --}}
                                     <div class="hidden sm:flex space-x-1 ml-3 flex-shrink-0">
-                                        <button onclick="OpenUpdateModal({{ $index }})"
+                                        <button onclick="OpenUpdateModal('{{ $index }}')"
                                             class="p-1.5 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors duration-200"
                                             title="Edit Misi">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor"
@@ -156,7 +156,7 @@
                                                 </path>
                                             </svg>
                                         </button>
-                                        <button onclick="OpenDeleteModal({{ $index }})"
+                                        <button onclick="OpenDeleteModal('{{ $index }}')"
                                             class="p-1.5 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors duration-200"
                                             title="Hapus Misi">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor"
@@ -206,7 +206,7 @@
     @include('admin.manage-content.tentang.visi-misi.update')
     @include('admin.manage-content.tentang.visi-misi.delete')
 
-    <script>
+    <!-- <script>
         // PERBAIKAN: Function dengan naming yang konsisten dan ID yang benar
         function OpenCreateModal() {
             console.log('🔍 Opening create modal');
@@ -341,6 +341,6 @@
                 }
             });
         });
-    </script>
+    </script> -->
 
 </x-admin.layouts>
