@@ -78,7 +78,7 @@
                     </button>
                     <button type="submit"
                         class="px-4 py-2 text-sm text-white bg-blue-600 rounded-lg hover:bg-blue-700">
-                        Simpan
+                        Update
                     </button>
                 </div>
             </div>

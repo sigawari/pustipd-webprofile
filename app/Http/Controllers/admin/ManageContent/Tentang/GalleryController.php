@@ -45,7 +45,7 @@ class GalleryController extends Controller
 
         // Get paginated results
         $galleries = $query->orderBy('sort_order')
-                          ->orderBy('created_at', 'desc')
+                          ->orderBy('created_at', 'asc')
                           ->paginate($perPage)
                           ->appends($request->all());
 
@@ -91,12 +91,13 @@ class GalleryController extends Controller
             'status' => 'draft', // Default draft
         ]);
 
-        return redirect()->back()->with('success', 'Gallery berhasil disimpan sebagai draft!');
+        return redirect()->back()->with('success', 'Gambar berhasil disimpan sebagai draft!');
     }
 
 
     public function update(UpdateGalleryRequest $request, Gallery $gallery)
     {
+        // dd($request->all()); // uncomment untuk debug
         $data = $request->validated();
         
         // Handle image upload
@@ -117,16 +118,24 @@ class GalleryController extends Controller
 
         return redirect()
                ->route('admin.manage-content.tentang.gallery.index')
-               ->with('success', 'Gallery berhasil diperbarui!');
+               ->with('success', 'Gambar berhasil diperbarui!');
     }
 
-    public function destroy(Gallery $gallery)
+    public function destroy($id)
     {
-        $gallery->update(['status' => 'archived']);
+        // dd($id); // uncomment untuk debug
+        // Cari gallery berdasarkan ID
+        $gallery = Gallery::findOrFail($id);
+        // Hapus file gambar jika ada
+        if (!$gallery) {
+            return redirect()->route('admin.manage-content.tentang.gallery.index')->with('error', 'Gambar tidak ditemukan.');
+        }
+        // Hapus gallery
+        $gallery->delete();
 
         return redirect()
                ->route('admin.manage-content.tentang.gallery.index')
-               ->with('success', 'Gallery berhasil diarsipkan!');
+               ->with('success', 'Gambar berhasil dihapus!');
     }
 
     public function bulk(Request $request)
