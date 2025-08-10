@@ -48,7 +48,7 @@
 
             <!-- Tombol -->
             <div class="flex justify-end space-x-2 pt-2">
-                <button type="button" onclick="closeModal()"
+                <button type="button" onclick="closeAddModal()"
                     class="px-4 py-2 text-sm text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 flex items-center gap-1">
                     <!-- Icon X -->
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

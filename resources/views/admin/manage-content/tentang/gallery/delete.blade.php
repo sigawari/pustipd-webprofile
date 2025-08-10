@@ -17,15 +17,25 @@
                     @csrf
                     @method('DELETE')
                     <div class="flex justify-center space-x-3 mt-4">
-                        <button type="button"
-                            onclick="closeDeleteModal('{{ $gallery->id }}')"
-                            class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">
-                            Batal
-                        </button>
-                        <button type="submit"
-                            class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
-                            Hapus
-                        </button>
+                        <button type="button" onclick="closeDeleteModal('{{ $gallery->id }}')"
+                        class="px-4 py-2 text-sm text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 flex items-center gap-1">
+                        <!-- Icon X -->
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                        Batal
+                    </button>
+
+                    <button type="submit"
+                        class="px-4 py-2 text-sm text-white bg-red-600 rounded-lg hover:bg-red-700 flex items-center gap-1">
+                        <!-- Icon Trash -->
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5-4h4m-4 0a1 1 0 00-1 1v1h6V4a1 1 0 00-1-1m-4 0h4" />
+                        </svg>
+                        Hapus
+                    </button>
                     </div>
                 </form>
             </div>
