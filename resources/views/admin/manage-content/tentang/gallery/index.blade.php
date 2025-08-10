@@ -326,6 +326,9 @@
                 }
             };
 
+            // Assign the route to a JS variable using Blade outside the function
+            const bulkActionRoute = "{{ route('admin.manage-content.tentang.gallery.bulk') }}";
+
             window.bulkAction = function(action) {
                 const checkedBoxes = document.querySelectorAll('.item-checkbox:checked');
                 const ids = Array.from(checkedBoxes).map(cb => cb.value);
@@ -355,7 +358,7 @@
                 if (confirm(confirmMessage)) {
                     const form = document.createElement('form');
                     form.method = 'POST';
-                    form.action = '{{ route('admin.manage-content.tentang.gallery.bulk') }}';
+                    form.action = bulkActionRoute;
                     form.innerHTML = `
                         @csrf
                         <input type="hidden" name="action" value="${action}">
@@ -370,7 +373,7 @@
                 if (confirm(`Ubah status Gallery ke ${status}?`)) {
                     const form = document.createElement('form');
                     form.method = 'POST';
-                    form.action = '{{ route('admin.manage-content.tentang.gallery.bulk') }}';
+                    form.action = bulkActionRoute;
                     form.innerHTML = `
                         @csrf
                         <input type="hidden" name="action" value="${status}">
