@@ -13,6 +13,19 @@ return new class extends Migration
     {
         Schema::create('kelola_beritas', function (Blueprint $table) {
             $table->id();
+            $table->enum('category', [
+                'academic_services',
+                'library_resources',
+                'student_information_system',
+                'administration',
+                'communication',
+                'research_development',
+                'other'
+            ]);
+            $table->string('name');
+            $table->text('description');
+            $table->string('link');
+            $table->enum('status', ['draft', 'published', 'archived'])->default('draft');
             $table->timestamps();
         });
     }

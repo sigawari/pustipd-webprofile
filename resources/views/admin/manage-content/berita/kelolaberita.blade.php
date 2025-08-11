@@ -34,7 +34,7 @@
                 <p class="text-gray-600 mt-1 text-sm">Kelola berita berdasarkan kategori yang akan ditampilkan di
                     halaman berita</p>
             </div>
-            <button onclick="openAppModal()"
+            <button onclick="openAddModal()"
                 class="w-full sm:w-auto bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200 flex items-center justify-center">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -42,6 +42,69 @@
                 </svg>
                 Tambah Berita
             </button>
+        </div>
+
+        <script>
+            window.bulkActionRoute = "{{ route('admin.manage-content.berita.kelolaberita.bulk') }}";
+        </script>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                window.initBulkActions();
+            });
+        </script>
+
+        <!-- Actions berdasarkan status yang dipilih -->
+        <div class="flex flex-col sm:flex-row gap-2" id="bulkActionButtons">
+            <!-- Default actions (untuk draft/published) -->
+            <div id="defaultActions">
+                <button onclick="bulkAction('published')"
+                    class="px-3 py-2 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700">
+                    <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    Publish
+                </button>
+                <button onclick="bulkAction('draft')"
+                    class="px-3 py-2 text-sm bg-yellow-600 text-white rounded-lg hover:bg-yellow-700">
+                    <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
+                        </path>
+                    </svg>
+                    Draft
+                </button>
+                <button onclick="bulkAction('archived')"
+                    class="px-3 py-2 text-sm bg-gray-600 text-white rounded-lg hover:bg-gray-700">
+                    <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M5 8l6 6m0 0l6-6m-6 6V3"></path>
+                    </svg>
+                    Archive
+                </button>
+            </div>
+
+            <!-- Actions untuk archived items -->
+            <div id="archivedActions" class="hidden">
+                <button onclick="bulkAction('draft')"
+                    class="px-3 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                    <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
+                        </path>
+                    </svg>
+                    Restore
+                </button>
+                <button onclick="bulkAction('permanent_delete')"
+                    class="px-3 py-2 text-sm bg-red-600 text-white rounded-lg hover:bg-red-700">
+                    <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                    Hapus Permanen
+                </button>
+            </div>
         </div>
 
         <!-- Filter dan Search - MOBILE RESPONSIVE -->
@@ -53,20 +116,20 @@
                             d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                     </svg>
                 </div>
-                <input type="search" id="searchInput" placeholder="Cari aplikasi..."
+                <input type="search" id="searchInput" placeholder="Cari Berita..."
                     class="block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
             </div>
             <div class="flex flex-col sm:flex-row gap-2">
                 <select id="categoryFilter"
                     class="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
                     <option value="">Semua Kategori</option>
-                    <option value="Academic Services">Layanan Akademik</option>
-                    <option value="Library & Resources">Perpustakaan & Sumber Daya</option>
-                    <option value="Student Information System">Sistem Informasi Mahasiswa</option>
-                    <option value="Administration">Administrasi</option>
-                    <option value="Communication">Komunikasi</option>
-                    <option value="Research & Development">Penelitian & Pengembangan</option>
-                    <option value="Other">Lainnya</option>
+                    <option value="academic_services">Layanan Akademik</option>
+                    <option value="library_resources">Perpustakaan & Sumber Daya</option>
+                    <option value="student_information_system">Sistem Informasi Mahasiswa</option>
+                    <option value="administration">Administrasi</option>
+                    <option value="communication">Komunikasi</option>
+                    <option value="research_development">Penelitian & Pengembangan</option>
+                    <option value="other">Lainnya</option>
                 </select>
                 <select id="statusFilter"
                     class="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
@@ -96,12 +159,15 @@
                                     <input type="checkbox" id="selectAll"
                                         class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
                                 </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    No
+                                </th>
                                 <th
                                     class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Kategori</th>
                                 <th
                                     class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Nama Aplikasi</th>
+                                    Nama Berita</th>
                                 <th
                                     class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Deskripsi</th>
@@ -119,8 +185,8 @@
                                     Aksi</th>
                             </tr>
                         </thead>
-                        <tbody id="appTableBody" class="bg-white divide-y divide-gray-200">
-                            <!-- Data akan diisi oleh JavaScript -->
+                        <tbody id="beritaTableBody" class="bg-white divide-y divide-gray-200">
+                            @include('admin.manage-content.berita.partials.table_body')
                         </tbody>
                     </table>
                 </div>
@@ -128,26 +194,91 @@
         </div>
 
         <!-- Pagination -->
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-6 gap-4">
-            <div id="paginationInfo" class="text-sm text-gray-500 text-center sm:text-left">
-                <!-- Info pagination akan diisi oleh JS -->
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4 pt-4">
+            <!-- Info jumlah data -->
+            <div class="text-sm text-gray-500 text-center sm:text-left">
+                Menampilkan {{ $kelolaBeritas->firstItem() }} sampai {{ $kelolaBeritas->lastItem() }} dari {{ $kelolaBeritas->total() }}
+                {{ strtolower($title) }}
             </div>
 
-            <!-- Mobile Pagination -->
-            <div class="flex justify-center sm:hidden">
-                <div id="paginationControlsMobile" class="flex items-center space-x-1">
-                    <!-- Controls akan diisi oleh JS -->
-                </div>
-            </div>
+            <!-- Tombol Pagination -->
+            <div class="flex justify-center sm:justify-end">
+                <nav class="inline-flex space-x-1 sm:space-x-2" aria-label="Pagination">
+                    <!-- Tombol Sebelumnya -->
+                    @if ($kelolaBeritas->onFirstPage())
+                        <span
+                            class="px-3 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-300 rounded-lg cursor-not-allowed flex items-center gap-1">
+                            <!-- Icon: panah kiri -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:hidden" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 19l-7-7 7-7" />
+                            </svg>
+                            <!-- Teks hanya di desktop -->
+                            <span class="hidden sm:inline">Sebelumnya</span>
+                        </span>
+                    @else
+                        <a href="{{ $kelolaBeritas->previousPageUrl() }}"
+                            class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:hidden" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 19l-7-7 7-7" />
+                            </svg>
+                            <span class="hidden sm:inline">Sebelumnya</span>
+                        </a>
+                    @endif
 
-            <!-- Desktop Pagination -->
-            <div class="hidden sm:flex items-center space-x-2" id="paginationControls">
-                <!-- Controls akan diisi oleh JS -->
+                    {{-- Tombol Angka Halaman --}}
+                    @foreach ($kelolaBeritas->getUrlRange(1, $kelolaBeritas->lastPage()) as $page => $url)
+                        @if ($page == $kelolaBeritas->currentPage())
+                            {{-- Halaman aktif --}}
+                            <span
+                                class="px-3 py-2 text-sm font-semibold text-white bg-blue-600 border border-blue-600 rounded-lg">
+                                {{ $page }}
+                            </span>
+                        @else
+                            {{-- Halaman lain (indikator saja, tidak bisa diklik) --}}
+                            <span
+                                class="px-3 py-2 text-sm font-medium text-gray-500 bg-gray-100 border border-gray-300 rounded-lg cursor-not-allowed">
+                                {{ $page }}
+                            </span>
+                        @endif
+                    @endforeach
+
+                    <!-- Tombol Selanjutnya -->
+                    @if ($kelolaBeritas->hasMorePages())
+                        <a href="{{ $kelolaBeritas->nextPageUrl() }}"
+                            class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center gap-1">
+                            <span class="hidden sm:inline">Selanjutnya</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:hidden" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 5l7 7-7 7" />
+                            </svg>
+                        </a>
+                    @else
+                        <span
+                            class="px-3 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-300 rounded-lg cursor-not-allowed flex items-center gap-1">
+                            <span class="hidden sm:inline">Selanjutnya</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:hidden" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 5l7 7-7 7" />
+                            </svg>
+                        </span>
+                    @endif
+                </nav>
             </div>
         </div>
 
+        @include('admin.manage-content.berita.create')
+        @include('admin.manage-content.berita.update')
+        @include('admin.manage-content.berita.delete')
+
+
         <!-- Bulk Actions -->
-        <div
+        <!-- <div
             class="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-4 pt-4 border-t border-gray-200 gap-3">
             <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2 pl-2 sm:pl-0">
                 <div class="flex flex-col sm:flex-row gap-2 w-fit">
@@ -183,7 +314,7 @@
                     <span id="selectedCount">0 aplikasi dipilih</span>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 
     <!-- Modal Add/Edit Aplikasi -->
@@ -208,20 +339,20 @@
                                     <select id="appCategory" name="category" required
                                         class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                                         <option value="">Pilih Kategori</option>
-                                        <option value="Academic Services">Layanan Akademik</option>
-                                        <option value="Library & Resources">Perpustakaan & Sumber Daya</option>
-                                        <option value="Student Information System">Sistem Informasi Mahasiswa</option>
-                                        <option value="Administration">Administrasi</option>
-                                        <option value="Communication">Komunikasi</option>
-                                        <option value="Research & Development">Penelitian & Pengembangan</option>
-                                        <option value="Other">Lainnya</option>
+                                        <option value="academic_services">Layanan Akademik</option>
+                                        <option value="library_resources">Perpustakaan & Sumber Daya</option>
+                                        <option value="student_information_system">Sistem Informasi Mahasiswa</option>
+                                        <option value="administration">Administrasi</option>
+                                        <option value="communication">Komunikasi</option>
+                                        <option value="research_development">Penelitian & Pengembangan</option>
+                                        <option value="other">Lainnya</option>
                                     </select>
                                 </div>
 
                                 <!-- Nama Aplikasi -->
                                 <div class="mb-4">
                                     <label for="appName" class="block text-sm font-medium text-gray-700 mb-2">Nama
-                                        Aplikasi</label>
+                                        Berita</label>
                                     <input type="text" id="appName" name="name" required
                                         class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                         placeholder="Contoh: SIAKAD, Perpustakaan Digital, dll">
@@ -233,17 +364,17 @@
                                         class="block text-sm font-medium text-gray-700 mb-2">Deskripsi Singkat</label>
                                     <textarea id="appDescription" name="description" rows="3" required
                                         class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                        placeholder="Deskripsi singkat tentang fungsi aplikasi ini..."></textarea>
+                                        placeholder="Deskripsi singkat tentang fungsi Berita ini..."></textarea>
                                 </div>
 
                                 <!-- Hyperlink -->
                                 <div class="mb-4">
                                     <label for="appLink" class="block text-sm font-medium text-gray-700 mb-2">Link
-                                        Akses Aplikasi</label>
+                                        Akses Berita</label>
                                     <input type="url" id="appLink" name="link" required
                                         class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                         placeholder="https://example.com">
-                                    <p class="text-xs text-gray-500 mt-1">URL lengkap untuk mengakses aplikasi</p>
+                                    <p class="text-xs text-gray-500 mt-1">URL lengkap untuk mengakses Berita</p>
                                 </div>
 
                                 <!-- Status -->
@@ -284,7 +415,7 @@
                 class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md sm:w-full">
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6">
                     <div class="text-center">
-                        <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Preview Aplikasi</h3>
+                        <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Preview Berita</h3>
 
                         <div
                             class="bg-gradient-to-br from-white to-gray-50 rounded-xl p-6 border border-gray-200 shadow-sm">
@@ -299,8 +430,8 @@
                             </div>
                             <span id="previewCategory"
                                 class="inline-block px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full mb-2">Kategori</span>
-                            <h4 id="previewName" class="text-lg font-semibold text-gray-900 mb-2">Nama Aplikasi</h4>
-                            <p id="previewDescription" class="text-sm text-gray-600 mb-3">Deskripsi aplikasi</p>
+                            <h4 id="previewName" class="text-lg font-semibold text-gray-900 mb-2">Nama Berita</h4>
+                            <p id="previewDescription" class="text-sm text-gray-600 mb-3">Deskripsi Berita</p>
                             <a id="previewLink" href="#" target="_blank"
                                 class="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors">
                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -308,7 +439,7 @@
                                         d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14">
                                     </path>
                                 </svg>
-                                Akses Aplikasi
+                                Akses Berita
                             </a>
                         </div>
                     </div>
@@ -323,7 +454,7 @@
         </div>
     </div>
 
-    <script>
+    <!-- <script>
         (function() {
             'use strict';
 
@@ -881,6 +1012,6 @@
             });
 
         })();
-    </script>
+    </script> -->
 
 </x-admin.layouts>

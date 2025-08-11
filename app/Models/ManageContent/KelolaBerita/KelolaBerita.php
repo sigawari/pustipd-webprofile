@@ -9,4 +9,11 @@ class KelolaBerita extends Model
 {
     /** @use HasFactory<\Database\Factories\KelolaBeritaFactory> */
     use HasFactory;
+    protected $fillable = [
+        'category',
+        'name',
+        'description',
+        'link',
+        'status',
+    ];
 }
