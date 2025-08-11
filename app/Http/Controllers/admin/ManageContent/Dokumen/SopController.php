@@ -5,11 +5,12 @@ namespace App\Http\Controllers\Admin\ManageContent\Dokumen;
 use App\Models\Sop;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\File;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class SopController extends Controller
 {
@@ -268,7 +269,7 @@ class SopController extends Controller
     public function download(Sop $sop)
     {
         // Cek akses: jika user tidak login (public access), pastikan status published
-        if (!auth()->check()) {
+        if (!Auth::check()) {
             if ($sop->status !== 'published') {
                 abort(404, 'Dokumen tidak tersedia untuk publik');
             }
@@ -288,7 +289,7 @@ class SopController extends Controller
             'title' => $sop->title,
             'user_ip' => request()->ip(),
             'user_agent' => request()->userAgent(),
-            'user_type' => auth()->check() ? 'admin' : 'public'
+            'user_type' => Auth::check() ? 'admin' : 'public'
         ]);
         
         return response()->download($filePath, $downloadName);
@@ -310,7 +311,7 @@ class SopController extends Controller
         $query = Sop::whereIn('id', $ids)->whereNotNull('file_path');
         
         // Jika akses public, hanya yang published
-        if (!auth()->check()) {
+        if (!Auth::check()) {
             $query->where('status', 'published');
         }
         
@@ -382,7 +383,7 @@ class SopController extends Controller
                 'Sop_ids' => $sops->pluck('id')->toArray(),
                 'user_ip' => request()->ip(),
                 'user_agent' => request()->userAgent(),
-                'user_type' => auth()->check() ? 'admin' : 'public'
+                'user_type' => Auth::check() ? 'admin' : 'public'
             ]);
 
             return response()->download($zipPath, $zipFileName)->deleteFileAfterSend(true);

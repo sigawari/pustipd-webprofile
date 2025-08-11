@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class KetetapanController extends Controller
 {
@@ -268,7 +269,7 @@ class KetetapanController extends Controller
     public function download(Ketetapan $ketetapan)
     {
         // Cek akses: jika user tidak login (public access), pastikan status published
-        if (!auth()->check()) {
+        if (!Auth::check()) {
             if ($ketetapan->status !== 'published') {
                 abort(404, 'Dokumen tidak tersedia untuk publik');
             }
@@ -288,7 +289,7 @@ class KetetapanController extends Controller
             'title' => $ketetapan->title,
             'user_ip' => request()->ip(),
             'user_agent' => request()->userAgent(),
-            'user_type' => auth()->check() ? 'admin' : 'public'
+            'user_type' => Auth::check() ? 'admin' : 'user_public'
         ]);
         
         return response()->download($filePath, $downloadName);
@@ -310,7 +311,7 @@ class KetetapanController extends Controller
         $query = Ketetapan::whereIn('id', $ids)->whereNotNull('file_path');
         
         // Jika akses public, hanya yang published
-        if (!auth()->check()) {
+        if (!Auth::check()) {
             $query->where('status', 'published');
         }
         
@@ -382,7 +383,7 @@ class KetetapanController extends Controller
                 'ketetapan_ids' => $ketetapans->pluck('id')->toArray(),
                 'user_ip' => request()->ip(),
                 'user_agent' => request()->userAgent(),
-                'user_type' => auth()->check() ? 'admin' : 'public'
+                'user_type' => Auth::check() ? 'admin' : 'public'
             ]);
 
             return response()->download($zipPath, $zipFileName)->deleteFileAfterSend(true);
