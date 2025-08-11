@@ -1,157 +1,391 @@
-@php
-    // Data SOP
-    $sop = [
-        [
-            'title' => 'SOP Mengganti E-Mail',
-            'excerpt' => 'Panduan lengkap cara mengganti email utama pada sistem kampus.',
-            'link' => '/sop/mengganti-email',
-        ],
-        [
-            'title' => 'Reset/Lupa Akun E-Learning',
-            'excerpt' => 'Solusi jika lupa password akun e-learning atau ingin reset akun.',
-            'link' => '/sop/reset-elearning',
-        ],
-        [
-            'title' => 'Mengganti Password Email',
-            'excerpt' => 'Langkah-langkah penggantian sandi email UIN.',
-            'link' => '/sop/ganti-password-email',
-        ],
-        [
-            'title' => 'Aktivasi Laravel',
-            'excerpt' => 'Bagaimana mengaktifkan akun Laravel dan tips pemrograman dasar.',
-            'link' => '/sop/aktivasi-laravel',
-        ],
-        [
-            'title' => 'SOP Makan Ayam',
-            'excerpt' => 'Tips efektif menikmati ayam di kantin kampus (dummy contoh).',
-            'link' => '/sop/makan-ayam',
-        ],
-        [
-            'title' => 'SOP Backup Data',
-            'excerpt' => 'Prosedur backup data sistem dan database secara berkala.',
-            'link' => '/sop/backup-data',
-        ],
-        [
-            'title' => 'SOP Maintenance Server',
-            'excerpt' => 'Panduan perawatan server dan troubleshooting umum.',
-            'link' => '/sop/maintenance-server',
-        ],
-        [
-            'title' => 'SOP Akses WiFi Kampus',
-            'excerpt' => 'Cara mengakses dan troubleshooting WiFi kampus.',
-            'link' => '/sop/akses-wifi',
-        ],
-    ];
-@endphp
-
 <x-public.layouts title="{{ $title }}" description="{{ $description }}" keywords="{{ $keywords }}">
     <x-slot:title>{{ $title }}</x-slot:title>
 
-    <!-- Hero Section -->
-    <section class="py-20 bg-primary" id="sop">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8 m-6">
-            <!-- Header Section -->
-            <div class="text-center mb-10 group">
-                <h2 class="text-3xl md:text-4xl font-bold text-secondary m-4 relative inline-block underline-animate">
-                    SOP
-                </h2>
-                <h3 class="text-lg text-secondary max-w-2xl mx-auto pt-2">
-                    Kumpulan dokumen SOP yang terdapat di PUSTIPD UIN Raden Fatah Palembang
-                </h3>
-            </div>
-        </div>
-
+    <section id="public-info" class="py-20 mt-8 bg-primary">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-            <!-- Search Form -->
-            <form action="#" method="GET" class="relative w-full max-w-md mx-auto mb-6">
-                <input type="text" name="search" placeholder="Cari dokumen SOP di sini...."
-                    class="w-full rounded-xl pl-12 pr-4 py-2 sm:py-3 
-                           text-secondary placeholder-gray-400
-                           bg-white border border-white shadow-sm focus:ring-2 focus:ring-secondary focus:border-transparent
-                           focus:outline-none " />
-                <button type="submit" class="absolute top-1/2 left-3 transform -translate-y-1/2 text-secondary">
-                    <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" stroke-width="2"
-                        viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1010.5 3a7.5 7.5 0 006.15 13.65z" />
-                    </svg>
-                </button>
-            </form>
+            <!-- Heading -->
+            <div class="text-center mb-10 group max-w-3xl mx-auto">
+                <h2 class="text-3xl md:text-4xl font-bold text-secondary relative inline-block underline-animate mb-3">
+                    {{ $title }}
+                </h2>
+                <h3 class="text-lg text-secondary pt-4">
+                    {{ $title }} terkait PUSTIPD yang bisa diunduh
+                </h3>
+                @if (isset($totalDownloadableFiles))
+                    <p class="text-sm text-secondary/80 mt-2">
+                        Total {{ $totalDownloadableFiles }} dokumen tersedia untuk diunduh
+                    </p>
+                @endif
+            </div>
 
-            <!-- Grid Card SOP -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-                @foreach ($sop as $soperasional)
-                    <a href="{{ $soperasional['link'] }}"
-                        class="group bg-white rounded-xl p-6 shadow-sm hover:shadow-lg border border-gray-100 hover:border-custom-blue/20 transition-all duration-300 transform hover:-translate-y-1"
-                        title="{{ $soperasional['title'] }}">
-                        <!-- Icon -->
-                        <div
-                            class="flex items-center justify-center w-12 h-12 bg-custom-blue/10 rounded-lg mb-4 group-hover:bg-custom-blue/20 transition-colors">
-                            <svg class="w-6 h-6 text-custom-blue" fill="none" stroke="currentColor" stroke-width="2"
+            <!-- ✅ FIXED: Search & Bulk Actions Bar - SOLID WHITE BACKGROUND -->
+            <div class="max-w-6xl mx-auto mb-8">
+                <div class="bg-white rounded-xl p-4 lg:p-6 border border-gray-200 shadow-lg">
+                    <div class="flex flex-col space-y-4 lg:space-y-0 lg:flex-row lg:items-center lg:justify-between">
+                        <!-- Search Form - LIGHT GRAY BACKGROUND TO DISTINGUISH FROM WHITE HEADER -->
+                        <div class="flex-1 max-w-md">
+                            <form action="{{ request()->url() }}" method="GET" class="relative">
+                                <input type="text" name="search" value="{{ request('search') }}"
+                                    placeholder="Cari {{ strtolower($title) }} di sini...."
+                                    class="w-full rounded-lg pl-12 pr-4 py-3 text-gray-900 placeholder-gray-500
+                                          bg-gray-50 border border-gray-300 shadow-sm 
+                                          focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none
+                                          transition-all duration-200" />
+                                <button type="submit"
+                                    class="absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-500 hover:text-blue-600 transition-colors">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1010.5 3a7.5 7.5 0 006.15 13.65z" />
+                                    </svg>
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- Bulk Actions -->
+                        <div class="flex flex-col sm:flex-row items-center gap-3">
+                            <!-- Info Count -->
+                            <div class="text-sm text-gray-600 font-medium">
+                                <span id="info-count">{{ $sops->total() }} dokumen tersedia</span>
+                            </div>
+
+                            <!-- Select All Button -->
+                            <button onclick="toggleSelectAll()" id="select-all-btn"
+                                class="inline-flex items-center px-4 py-2 bg-blue-100 text-blue-800 rounded-lg 
+                                       hover:bg-blue-200 border border-blue-300 hover:border-blue-400
+                                       transition-all duration-200 text-sm font-medium min-w-[120px]">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                                </svg>
+                                <span id="select-text">Pilih Semua</span>
+                            </button>
+
+                            <!-- Bulk Download Button -->
+                            <button onclick="bulkDownloadSelected()" id="bulk-download-btn"
+                                class="hidden inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg 
+                                       hover:bg-green-700 border border-green-500 hover:border-green-600
+                                       transition-all duration-200 text-sm font-medium shadow-lg min-w-[160px]">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                                Download (<span id="selected-count">0</span>)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Responsive Table Container -->
+            <div class="max-w-6xl mx-auto">
+                <!-- Desktop Table -->
+                <div class="hidden lg:block bg-white rounded-xl border border-gray-200 shadow-lg overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <!-- Table Header -->
+                            <thead>
+                                <tr class="bg-secondary border-b border-blue-600">
+                                    <!-- ✅ FIXED: Header Checkbox with Proper Event Handler -->
+                                    <th class="px-4 py-4 text-center w-12">
+                                        <input type="checkbox" id="header-checkbox"
+                                            class="rounded border-gray-300 text-blue-600 focus:ring-blue-500 focus:border-blue-500 cursor-pointer"
+                                            onchange="toggleAllCheckboxes(this)" title="Pilih/Batal Semua">
+                                    </th>
+                                    <th
+                                        class="px-6 py-4 text-left text-sm font-semibold text-white uppercase tracking-wider w-16">
+                                        No.
+                                    </th>
+                                    <th
+                                        class="px-6 py-4 text-left text-sm font-semibold text-white uppercase tracking-wider">
+                                        Nama {{ $title }}
+                                    </th>
+                                    <th
+                                        class="px-6 py-4 text-left text-sm font-semibold text-white uppercase tracking-wider">
+                                        Deskripsi
+                                    </th>
+                                    <th
+                                        class="px-6 py-4 text-center text-sm font-semibold text-white uppercase tracking-wider w-32">
+                                        Tahun
+                                    </th>
+                                    <th
+                                        class="px-6 py-4 text-center text-sm font-semibold text-white uppercase tracking-wider w-32">
+                                        Download
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <!-- Table Body -->
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                @forelse($sops as $index => $sop)
+                                    <tr class="hover:bg-gray-50 transition-colors duration-150">
+                                        <!-- ✅ FIXED: Body Checkbox with Proper Class and Event -->
+                                        <td class="px-4 py-4 text-center">
+                                            @if ($sop->file_path && file_exists(storage_path('app/public/' . $sop->file_path)))
+                                                <input type="checkbox"
+                                                    class="file-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500 focus:border-blue-500 cursor-pointer"
+                                                    value="{{ $sop->id }}" data-id="{{ $sop->id }}"
+                                                    onchange="updateBulkDownloadButton()">
+                                            @else
+                                                <span class="w-4 h-4 inline-block"></span>
+                                            @endif
+                                        </td>
+
+                                        <!-- Number -->
+                                        <td class="px-6 py-4 text-sm font-medium text-secondary">
+                                            {{ ($sops->currentPage() - 1) * $sops->perPage() + $index + 1 }}.
+                                        </td>
+
+                                        <!-- Title -->
+                                        <td class="px-6 py-4">
+                                            <div class="font-semibold text-secondary mb-1 leading-tight">
+                                                {{ $sop->title }}
+                                            </div>
+                                            @if ($sop->formatted_file_size)
+                                                <div
+                                                    class="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
+                                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor"
+                                                        viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                                    </svg>
+                                                    {{ $sop->formatted_file_size }}
+                                                </div>
+                                            @endif
+                                        </td>
+
+                                        <!-- Description -->
+                                        <td class="px-6 py-4 text-sm text-secondary leading-relaxed">
+                                            <div class="max-w-sm">
+                                                {{ Str::limit(strip_tags($sop->description), 120) }}
+                                            </div>
+                                        </td>
+
+                                        <!-- Year -->
+                                        <td class="px-6 py-4 text-center">
+                                            <div class="font-semibold text-secondary">
+                                                @if ($sop->year_published)
+                                                    {{ $sop->year_published }}
+                                                @elseif($sop->created_at)
+                                                    {{ $sop->created_at->format('Y') }}
+                                                @else
+                                                    <span class="text-gray-400">-</span>
+                                                @endif
+                                            </div>
+                                        </td>
+
+                                        <!-- Download Button -->
+                                        <td class="px-6 py-4 text-center">
+                                            @if ($sop->file_path && file_exists(storage_path('app/public/' . $sop->file_path)))
+                                                <a href="{{ route('ketetapan.download', $sop->id) }}"
+                                                    class="inline-flex items-center px-3 py-2 bg-blue-600 text-white rounded-lg 
+                                                           hover:bg-blue-700 transition-colors text-xs font-medium shadow-sm"
+                                                    title="Download {{ $sop->title }}" target="_blank">
+                                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
+                                                        viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                                    </svg>
+                                                    Download
+                                                </a>
+                                            @else
+                                                <span
+                                                    class="inline-flex items-center px-3 py-2 bg-gray-500 text-gray-300 rounded-lg text-xs font-medium cursor-not-allowed">
+                                                    N/A
+                                                </span>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <!-- Empty State -->
+                                    <tr>
+                                        <td colspan="6" class="px-6 py-12 text-center bg-white">
+                                            <div class="text-center">
+                                                <svg class="w-12 h-12 mx-auto mb-4 text-gray-400" fill="none"
+                                                    stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="1.5"
+                                                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                                </svg>
+                                                <p class="text-lg font-medium text-gray-900 mb-2">Belum ada ketetapan
+                                                    tersedia</p>
+                                                <p class="text-gray-600">Ketetapan akan segera ditambahkan oleh admin
+                                                </p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Mobile Cards -->
+                <div class="lg:hidden space-y-4">
+                    @forelse($sops as $index => $sop)
+                        <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-lg">
+                            <div class="flex items-start justify-between mb-3">
+                                <!-- Checkbox dan Number -->
+                                <div class="flex items-center space-x-3">
+                                    @if ($sop->file_path && file_exists(storage_path('app/public/' . $sop->file_path)))
+                                        <input type="checkbox"
+                                            class="file-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500 focus:border-blue-500 cursor-pointer"
+                                            value="{{ $sop->id }}" data-id="{{ $sop->id }}"
+                                            onchange="updateBulkDownloadButton()">
+                                    @else
+                                        <span class="w-4 h-4 inline-block"></span>
+                                    @endif
+                                    <span class="text-sm font-medium text-secondary">
+                                        {{ ($sops->currentPage() - 1) * $sops->perPage() + $index + 1 }}.
+                                    </span>
+                                </div>
+
+                                <!-- Year Badge -->
+                                @if ($sop->year_published || $sop->created_at)
+                                    <div
+                                        class="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
+                                        {{ $sop->year_published ?? $sop->created_at->format('Y') }}
+                                    </div>
+                                @endif
+                            </div>
+
+                            <!-- Title -->
+                            <h3 class="font-semibold text-secondary text-base mb-2 leading-tight">
+                                {{ $sop->title }}
+                            </h3>
+
+                            <!-- Description -->
+                            <p class="text-sm text-secondary mb-3 leading-relaxed opacity-80">
+                                {{ Str::limit(strip_tags($sop->description), 100) }}
+                            </p>
+
+                            <!-- File Info & Download -->
+                            <div class="flex items-center justify-between">
+                                @if ($sop->formatted_file_size)
+                                    <div
+                                        class="inline-flex items-center px-2 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded">
+                                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                        </svg>
+                                        {{ $sop->formatted_file_size }}
+                                    </div>
+                                @else
+                                    <div></div>
+                                @endif
+
+                                <!-- Download Button -->
+                                @if ($sop->file_path && file_exists(storage_path('app/public/' . $sop->file_path)))
+                                    <a href="{{ route('ketetapan.download', $sop->id) }}"
+                                        class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg 
+                                               hover:bg-blue-700 transition-colors text-sm font-medium shadow-sm"
+                                        title="Download {{ $sop->title }}" target="_blank">
+                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                        </svg>
+                                        Download
+                                    </a>
+                                @else
+                                    <span
+                                        class="inline-flex items-center px-4 py-2 bg-gray-500 text-gray-300 rounded-lg text-sm font-medium cursor-not-allowed">
+                                        N/A
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+                    @empty
+                        <!-- Empty State Mobile -->
+                        <div class="bg-white rounded-xl border border-gray-200 p-8 text-center shadow-lg">
+                            <svg class="w-12 h-12 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round"
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                     d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                             </svg>
+                            <p class="text-lg font-medium text-gray-900 mb-2">Belum ada ketetapan tersedia</p>
+                            <p class="text-gray-600">Ketetapan akan segera ditambahkan oleh admin</p>
+                        </div>
+                    @endforelse
+                </div>
+
+                <!-- Pagination -->
+                @if ($sops->hasPages())
+                    <div class="mt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+                        <!-- Info Pagination -->
+                        <div class="text-sm text-secondary">
+                            Menampilkan {{ $sops->firstItem() ?? 0 }} sampai {{ $sops->lastItem() ?? 0 }}
+                            dari {{ $sops->total() ?? 0 }} ketetapan
                         </div>
 
-                        <!-- Title -->
-                        <h3
-                            class="text-xl font-semibold text-secondary mb-3 group-hover:text-custom-blue transition-colors line-clamp-2">
-                            {{ $soperasional['title'] }}
-                        </h3>
+                        <!-- Pagination Links -->
+                        <div class="flex justify-center items-center gap-2">
+                            <!-- Previous Button -->
+                            @if ($sops->onFirstPage())
+                                <span
+                                    class="flex items-center justify-center w-10 h-10 rounded-lg bg-white/10 text-secondary/50 border border-white/20 cursor-not-allowed">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                                    </svg>
+                                </span>
+                            @else
+                                <a href="{{ $sops->appends(request()->all())->previousPageUrl() }}"
+                                    class="flex items-center justify-center w-10 h-10 rounded-lg bg-white/20 text-secondary hover:bg-white hover:text-primary border border-white/30 hover:border-white transition-all duration-200">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                                    </svg>
+                                </a>
+                            @endif
 
-                        <!-- Excerpt -->
-                        <p class="text-gray-600 text-sm leading-relaxed line-clamp-3 mb-4">
-                            {{ $soperasional['excerpt'] }}
-                        </p>
+                            <!-- Page Numbers -->
+                            @foreach ($sops->appends(request()->all())->getUrlRange(1, $sops->lastPage()) as $page => $url)
+                                @if ($page == $sops->currentPage())
+                                    <span
+                                        class="flex items-center justify-center w-10 h-10 rounded-lg bg-white text-primary font-semibold shadow-sm">
+                                        {{ $page }}
+                                    </span>
+                                @else
+                                    <a href="{{ $url }}"
+                                        class="flex items-center justify-center w-10 h-10 rounded-lg bg-white/20 text-secondary hover:bg-white hover:text-primary border border-white/30 hover:border-white transition-all duration-200">
+                                        {{ $page }}
+                                    </a>
+                                @endif
+                            @endforeach
 
-                        <!-- Read More Link -->
-                        <div
-                            class="flex items-center text-custom-blue font-medium text-sm group-hover:text-custom-blue/80 transition-colors">
-                            <span>Baca Selengkapnya</span>
-                            <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform"
-                                fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                            </svg>
+                            <!-- Next Button -->
+                            @if ($sops->hasMorePages())
+                                <a href="{{ $sops->appends(request()->all())->nextPageUrl() }}"
+                                    class="flex items-center justify-center w-10 h-10 rounded-lg bg-white/20 text-secondary hover:bg-white hover:text-primary border border-white/30 hover:border-white transition-all duration-200">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </a>
+                            @else
+                                <span
+                                    class="flex items-center justify-center w-10 h-10 rounded-lg bg-white/10 text-secondary/50 border border-white/20 cursor-not-allowed">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </span>
+                            @endif
                         </div>
-                    </a>
-                @endforeach
-            </div>
-
-            <!-- Pagination -->
-            <div class="flex justify-center items-center gap-2">
-                <!-- Previous Button -->
-                <button
-                    class="flex items-center justify-center w-10 h-10 rounded-lg bg-white text-gray-400 hover:bg-custom-blue hover:text-white border border-gray-200 hover:border-custom-blue transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                    aria-label="Halaman Sebelumnya">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
-                    </svg>
-                </button>
-
-                <!-- Page Numbers -->
-                <button
-                    class="flex items-center justify-center w-10 h-10 rounded-lg bg-custom-blue text-white font-semibold shadow-sm transition-all duration-200">
-                    1
-                </button>
-                <button
-                    class="flex items-center justify-center w-10 h-10 rounded-lg bg-white text-gray-600 hover:bg-custom-blue hover:text-white border border-gray-200 hover:border-custom-blue transition-all duration-200">
-                    2
-                </button>
-                <button
-                    class="flex items-center justify-center w-10 h-10 rounded-lg bg-white text-gray-600 hover:bg-custom-blue hover:text-white border border-gray-200 hover:border-custom-blue transition-all duration-200">
-                    3
-                </button>
-
-                <!-- Next Button -->
-                <button
-                    class="flex items-center justify-center w-10 h-10 rounded-lg bg-white text-gray-600 hover:bg-custom-blue hover:text-white border border-gray-200 hover:border-custom-blue transition-all duration-200"
-                    aria-label="Halaman Selanjutnya">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-                    </svg>
-                </button>
+                    </div>
+                @endif
             </div>
         </div>
     </section>
+
+    <!-- ✅ FIXED: Bulk Download Form -->
+    <form id="bulk-download-form" method="POST" action="{{ route('public.ketetapan.bulk-download') }}"
+        style="display: none;">
+        @csrf
+        <div id="bulk-download-inputs"></div>
+    </form>
 </x-public.layouts>

@@ -1,22 +1,21 @@
-@foreach ($ketetapans as $ketetapan)
-    <!-- Modal Edit Ketetapan -->
-    <div id="UpdateModal-{{ $ketetapan->id }}"
+@foreach ($sops as $sop)
+    <!-- Modal Edit Panduan -->
+    <div id="UpdateModal-{{ $sop->id }}"
         class="hidden fixed inset-0 z-50 bg-black/50 items-center justify-center px-4">
         <div class="bg-white rounded-xl shadow-lg w-full max-w-lg p-6 relative max-h-[90vh] overflow-y-auto">
             <h2 class="text-lg font-semibold text-gray-800 mb-4">Edit {{ $title }}</h2>
 
             <!-- Form -->
-            <form id="editForm" method="POST"
-                action="{{ route('admin.manage-content.dokumen.ketetapan.update', $ketetapan->id) }}"
+            <form id="editForm" method="POST" action="{{ route('admin.manage-content.dokumen.sop.update', $sop->id) }}"
                 enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
 
-                <!-- Judul Ketetapan -->
+                <!-- Judul Panduan -->
                 <div class="mb-4">
-                    <label for="edit_title" class="block text-sm font-medium text-gray-700 mb-2">Judul Ketetapan</label>
+                    <label for="edit_title" class="block text-sm font-medium text-gray-700 mb-2">Judul Panduan</label>
                     <input type="text" name="title" id="edit_title" required
-                        value="{{ old('title', $ketetapan->title) }}" placeholder="Masukkan judul ketetapan..."
+                        value="{{ old('title', $sop->title) }}" placeholder="Masukkan judul sop..."
                         class="w-full px-3 py-2 border border-gray-200 rounded-lg 
                             focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                     @error('title')
@@ -27,9 +26,9 @@
                 <!-- Deskripsi -->
                 <div class="mb-4">
                     <label for="edit_description" class="block text-sm font-medium text-gray-700 mb-2">Deskripsi</label>
-                    <textarea name="description" id="edit_description" rows="4" required placeholder="Tulis deskripsi ketetapan..."
+                    <textarea name="description" id="edit_description" rows="4" required placeholder="Tulis deskripsi sop..."
                         class="w-full px-3 py-2 border border-gray-200 rounded-lg 
-                            focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">{{ old('description', $ketetapan->description) }}</textarea>
+                            focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">{{ old('description', $sop->description) }}</textarea>
                     @error('description')
                         <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
                     @enderror
@@ -51,7 +50,7 @@
                     </p>
 
                     <!-- File Sebelumnya -->
-                    @if ($ketetapan->file_path)
+                    @if ($sop->file_path)
                         <div class="mt-2 p-2 bg-gray-50 border border-gray-200 rounded-lg">
                             <p class="text-xs text-gray-500 mb-1">File saat ini:</p>
                             <div class="flex items-center gap-2">
@@ -60,9 +59,9 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M7 21h10a2 2 0 002-2V9.5L14.5 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                                 </svg>
-                                <a href="{{ asset('storage/' . $ketetapan->file_path) }}" target="_blank"
+                                <a href="{{ asset('storage/' . $sop->file_path) }}" target="_blank"
                                     class="text-blue-600 text-sm truncate max-w-[200px] hover:underline">
-                                    {{ $ketetapan->original_filename }}
+                                    {{ $sop->original_filename }}
                                 </a>
                             </div>
                         </div>
@@ -79,7 +78,7 @@
                         Tahun Terbit <span class="text-gray-500 text-xs">(opsional)</span>
                     </label>
                     <input type="number" name="year_published" id="edit_year_published" min="1900"
-                        max="{{ date('Y') + 1 }}" value="{{ old('year_published', $ketetapan->year_published) }}"
+                        max="{{ date('Y') + 1 }}" value="{{ old('year_published', $sop->year_published) }}"
                         placeholder="{{ date('Y') }}"
                         class="w-full px-3 py-2 border border-gray-200 rounded-lg 
                             focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
@@ -89,11 +88,11 @@
                 </div>
 
                 <!-- Status (Hidden - Default Draft) -->
-                <input type="hidden" name="status" value="{{ old('status', $ketetapan->status) }}">
+                <input type="hidden" name="status" value="{{ old('status', $sop->status) }}">
 
                 <!-- Tombol -->
                 <div class="flex justify-end space-x-2 mt-6">
-                    <button type="button" onclick="closeUpdateModal('{{ $ketetapan->id }}')"
+                    <button type="button" onclick="closeUpdateModal('{{ $sop->id }}')"
                         class="px-4 py-2 text-sm text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 flex items-center gap-1">
                         <!-- Icon X -->
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -116,7 +115,7 @@
             </form>
 
             <!-- Tombol X di pojok -->
-            <button onclick="closeUpdateModal('{{ $ketetapan->id }}')"
+            <button onclick="closeUpdateModal('{{ $sop->id }}')"
                 class="absolute top-3 right-3 text-gray-400 hover:text-gray-600">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />

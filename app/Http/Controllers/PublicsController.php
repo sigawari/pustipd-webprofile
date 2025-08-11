@@ -194,26 +194,149 @@ class PublicsController extends Controller
                 'totalDownloadableFiles' // ✅ TAMBAHAN
             ));
         }
-        if ($request->is('regulasi')) {
-            $title = 'regulasi';
-            $description = 'Informasi Publik dan dokumen terkait PUSTIPD UIN Raden Fatah Palembang yang bisa didownload';
-            $keywords = 'info, publik, pustipd';
-
-            return view('public.regulasi', compact('title', 'description', 'keywords'));
-        }
         if ($request->is('panduan')) {
-            $title = 'panduan';
+            $title = 'Panduan';
             $description = 'Informasi Publik dan dokumen terkait PUSTIPD UIN Raden Fatah Palembang yang bisa didownload';
-            $keywords = 'info, publik, pustipd';
-
-            return view('public.panduan', compact('title', 'description', 'keywords'));
+            $keywords = 'panduan, publik, pustipd';
+        
+            // Ambil parameter search dan per_page
+            $search = $request->get('search');
+            $perPage = $request->get('per_page', 10); // Default 10 per halaman
+            
+            // Validasi per_page
+            $validPerPage = [10, 20, 50, 100];
+            if (!in_array($perPage, $validPerPage)) {
+                $perPage = 10;
+            }
+        
+            // ✅ PERBAIKAN: Query yang benar untuk panduan published
+            $query = \App\Models\Panduan::where('status', 'published')
+                                        ->whereNotNull('file_path') // ✅ TAMBAHAN: Hanya yang ada filenya
+                                        ->orderBy('year_published', 'desc')
+                                        ->orderBy('created_at', 'desc');
+        
+            // Apply search filter jika ada
+            if ($search) {
+                $query->where(function($q) use ($search) {
+                    $q->where('title', 'like', "%{$search}%")
+                      ->orWhere('description', 'like', "%{$search}%");
+                });
+            }
+        
+            // Paginate results
+            $panduans = $query->paginate($perPage);
+        
+            // Append search parameter ke pagination links
+            $panduans->appends(request()->query());
+        
+            // ✅ TAMBAHAN: Total files yang bisa didownload untuk bulk download info
+            $totalDownloadableFiles = \App\Models\Panduan::where('status', 'published')
+                                                           ->whereNotNull('file_path')
+                                                           ->count();
+        
+            return view('public.panduan', compact(
+                'title', 
+                'description', 
+                'keywords', 
+                'panduans',
+                'totalDownloadableFiles' // ✅ TAMBAHAN
+            ));
+        }
+        if ($request->is('regulasi')) {
+            $title = 'Regulasi';
+            $description = 'Informasi Publik dan dokumen terkait PUSTIPD UIN Raden Fatah Palembang yang bisa didownload';
+            $keywords = 'regulasi, publik, pustipd';
+        
+            // Ambil parameter search dan per_page
+            $search = $request->get('search');
+            $perPage = $request->get('per_page', 10); // Default 10 per halaman
+            
+            // Validasi per_page
+            $validPerPage = [10, 20, 50, 100];
+            if (!in_array($perPage, $validPerPage)) {
+                $perPage = 10;
+            }
+        
+            // ✅ PERBAIKAN: Query yang benar untuk regulasi published
+            $query = \App\Models\Regulasi::where('status', 'published')
+                                        ->whereNotNull('file_path') // ✅ TAMBAHAN: Hanya yang ada filenya
+                                        ->orderBy('year_published', 'desc')
+                                        ->orderBy('created_at', 'desc');
+        
+            // Apply search filter jika ada
+            if ($search) {
+                $query->where(function($q) use ($search) {
+                    $q->where('title', 'like', "%{$search}%")
+                      ->orWhere('description', 'like', "%{$search}%");
+                });
+            }
+        
+            // Paginate results
+            $regulasis = $query->paginate($perPage);
+        
+            // Append search parameter ke pagination links
+            $regulasis->appends(request()->query());
+        
+            // ✅ TAMBAHAN: Total files yang bisa didownload untuk bulk download info
+            $totalDownloadableFiles = \App\Models\Regulasi::where('status', 'published')
+                                                           ->whereNotNull('file_path')
+                                                           ->count();
+        
+            return view('public.regulasi', compact(
+                'title', 
+                'description', 
+                'keywords', 
+                'regulasis',
+                'totalDownloadableFiles' // ✅ TAMBAHAN
+            ));
         }
         if ($request->is('sop')) {
-            $title = 'sop';
+            $title = 'SOP';
             $description = 'Informasi Publik dan dokumen terkait PUSTIPD UIN Raden Fatah Palembang yang bisa didownload';
-            $keywords = 'info, publik, pustipd';
-
-            return view('public.sop', compact('title', 'description', 'keywords'));
+            $keywords = 'sop, publik, pustipd';
+        
+            // Ambil parameter search dan per_page
+            $search = $request->get('search');
+            $perPage = $request->get('per_page', 10); // Default 10 per halaman
+            
+            // Validasi per_page
+            $validPerPage = [10, 20, 50, 100];
+            if (!in_array($perPage, $validPerPage)) {
+                $perPage = 10;
+            }
+        
+            // ✅ PERBAIKAN: Query yang benar untuk sop published
+            $query = \App\Models\Sop::where('status', 'published')
+                                        ->whereNotNull('file_path') // ✅ TAMBAHAN: Hanya yang ada filenya
+                                        ->orderBy('year_published', 'desc')
+                                        ->orderBy('created_at', 'desc');
+        
+            // Apply search filter jika ada
+            if ($search) {
+                $query->where(function($q) use ($search) {
+                    $q->where('title', 'like', "%{$search}%")
+                      ->orWhere('description', 'like', "%{$search}%");
+                });
+            }
+        
+            // Paginate results
+            $sops = $query->paginate($perPage);
+        
+            // Append search parameter ke pagination links
+            $sops->appends(request()->query());
+        
+            // ✅ TAMBAHAN: Total files yang bisa didownload untuk bulk download info
+            $totalDownloadableFiles = \App\Models\Sop::where('status', 'published')
+                                                           ->whereNotNull('file_path')
+                                                           ->count();
+        
+            return view('public.sop', compact(
+                'title', 
+                'description', 
+                'keywords', 
+                'sops',
+                'totalDownloadableFiles' // ✅ TAMBAHAN
+            ));
         }
 
         // Default untuk beranda
@@ -224,9 +347,6 @@ class PublicsController extends Controller
         return view('public.homepage', compact('title', 'description', 'keywords'));
     }
 
-        /**
-     * ✅ TAMBAHAN: Download single file ketetapan (untuk public)
-     */
     public function downloadKetetapan(\App\Models\Ketetapan $ketetapan)
     {
         // Cek akses public: hanya file published yang bisa didownload

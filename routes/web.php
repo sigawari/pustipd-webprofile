@@ -50,11 +50,29 @@ Route::prefix('auth')->group(function () {
     Route::post('/logout', [LoginController::class, 'logout'])->name('login.logout');
 });
 
-Route::get('/ketetapan/{ketetapan}/download', [PublicsController::class, 'downloadKetetapan'])
+Route::get('/ketetapan/{ketetapan}/download', [PublicsController::class, 'downloadDokumen'])
     ->name('ketetapan.download');
 
-Route::post('/ketetapan/bulk-download', [PublicsController::class, 'bulkDownloadKetetapan'])
+Route::post('/ketetapan/bulk-download', [PublicsController::class, 'bulkDownloadDokumen'])
     ->name('public.ketetapan.bulk-download');
+
+Route::get('/panduan/{panduan}/download', [PublicsController::class, 'downloadDokumen'])
+    ->name('panduan.download');
+
+Route::post('/panduan/bulk-download', [PublicsController::class, 'bulkDownloadDokumen'])
+    ->name('public.panduan.bulk-download');
+
+    Route::get('/regulasi/{regulasi}/download', [PublicsController::class, 'downloadDokumen'])
+    ->name('regulasi.download');
+
+Route::post('/regulasi/bulk-download', [PublicsController::class, 'bulkDownloadDokumen'])
+    ->name('public.regulasi.bulk-download');
+
+Route::get('/sop/{sop}/download', [PublicsController::class, 'downloadDokumen'])
+    ->name('sop.download');
+
+Route::post('/sop/bulk-download', [PublicsController::class, 'bulkDownloadDokumen'])
+    ->name('public.sop.bulk-download');
 
 // Admin Routes - Protected by authentication
 Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
@@ -155,12 +173,18 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
             // Route::get('/organisasi', [ManageContentController::class, 'tentangOrganisasi'])->name('organisasi');
             // Route::put('/organisasi', [ManageContentController::class, 'tentangOrganisasiUpdate'])->name('organisasi.update');
 
-        Route::prefix('layanan')->as('layanan.')->group(function () {
-           //Layanan App Layanan
-            Route::controller(AppLayananController::class)->group(function(){
-                Route::get('/applayanan', 'index')->name('applayanan'); 
-        });       
-        });
+            Route::prefix('applayanan')->as('applayanan.')->group(function () {
+                Route::controller(AppLayananController::class)->group(function () {
+                    Route::get('/', 'index')->name('index');
+                    Route::get('/create', 'create')->name('create');
+                    Route::post('/', 'store')->name('store');
+                    Route::get('/{applayanan}/edit', 'edit')->name('edit');
+                    Route::put('/{applayanan}', 'update')->name('update');
+                    Route::delete('/{applayanan}', 'destroy')->name('destroy');
+                    Route::post('/bulk-action', 'bulk')->name('bulk');
+                    Route::get('/{applayanan}/delete', 'delete')->name('delete');
+                });
+            });
 
         Route::prefix('berita')->as('berita.')->group(function () {
            //Berita
@@ -185,7 +209,6 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
 
         // Beranda Section Routes
         Route::prefix('dokumen')->as('dokumen.')->group(function () {
-
             Route::controller(KetetapanController::class)->group(function () {
                 Route::get('/ketetapan', 'index')->name('ketetapan.index');
                 Route::get('/ketetapan/create', 'create')->name('ketetapan.create');
@@ -201,36 +224,48 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
             });
             
             // SOP Routes
-            Route::controller(SopController::class)->group(function(){
-                Route::get('/sop', 'index')->name('sop');
+            Route::controller(SopController::class)->group(function () {
+                Route::get('/sop', 'index')->name('sop.index');
                 Route::get('/sop/create', 'create')->name('sop.create');
                 Route::post('/sop', 'store')->name('sop.store');
                 Route::get('/sop/{sop}/edit', 'edit')->name('sop.edit');
                 Route::put('/sop/{sop}', 'update')->name('sop.update');
                 Route::delete('/sop/{sop}', 'destroy')->name('sop.destroy');
+                Route::post('/sop/bulk', 'bulk')->name('sop.bulk');
                 Route::get('/sop/export', 'export')->name('sop.export');
+                Route::get('/sop/{sop}/download', 'download')->name('sop.download');
+                Route::post('/sop/bulk', [sopController::class, 'bulk'])->name('sop.bulk');
+                Route::post('/sop/bulk-download', [App\Http\Controllers\PublicsController::class, 'bulkDownload']) ->name('public.sop.bulk-download');
             });
 
             // Panduan
-            Route::controller(PanduanController::class)->group(function(){
-                Route::get('/panduan', 'index')->name('panduan');
+            Route::controller(PanduanController::class)->group(function () {
+                Route::get('/panduan', 'index')->name('panduan.index');
                 Route::get('/panduan/create', 'create')->name('panduan.create');
                 Route::post('/panduan', 'store')->name('panduan.store');
                 Route::get('/panduan/{panduan}/edit', 'edit')->name('panduan.edit');
                 Route::put('/panduan/{panduan}', 'update')->name('panduan.update');
                 Route::delete('/panduan/{panduan}', 'destroy')->name('panduan.destroy');
+                Route::post('/panduan/bulk', 'bulk')->name('panduan.bulk');
                 Route::get('/panduan/export', 'export')->name('panduan.export');
+                Route::get('/panduan/{panduan}/download', 'download')->name('panduan.download');
+                Route::post('/panduan/bulk', [PanduanController::class, 'bulk'])->name('panduan.bulk');
+                Route::post('/panduan/bulk-download', [App\Http\Controllers\PublicsController::class, 'bulkDownload']) ->name('public.panduan.bulk-download');
             });
 
             // Regulasi
-            Route::controller(RegulasiController::class)->group(function(){
-                Route::get('/regulasi', 'index')->name('regulasi');
+            Route::controller(RegulasiController::class)->group(function () {
+                Route::get('/regulasi', 'index')->name('regulasi.index');
                 Route::get('/regulasi/create', 'create')->name('regulasi.create');
                 Route::post('/regulasi', 'store')->name('regulasi.store');
                 Route::get('/regulasi/{regulasi}/edit', 'edit')->name('regulasi.edit');
                 Route::put('/regulasi/{regulasi}', 'update')->name('regulasi.update');
                 Route::delete('/regulasi/{regulasi}', 'destroy')->name('regulasi.destroy');
+                Route::post('/regulasi/bulk', 'bulk')->name('regulasi.bulk');
                 Route::get('/regulasi/export', 'export')->name('regulasi.export');
+                Route::get('/regulasi/{regulasi}/download', 'download')->name('regulasi.download');
+                Route::post('/regulasi/bulk', [RegulasiController::class, 'bulk'])->name('regulasi.bulk');
+                Route::post('/regulasi/bulk-download', [App\Http\Controllers\PublicsController::class, 'bulkDownload']) ->name('public.regulasi.bulk-download');
             });
         });
 

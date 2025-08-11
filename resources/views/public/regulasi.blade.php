@@ -1,355 +1,391 @@
 <x-public.layouts title="{{ $title }}" description="{{ $description }}" keywords="{{ $keywords }}">
     <x-slot:title>{{ $title }}</x-slot:title>
 
-    <style>
-        /* Tab Navigation Styles */
-        .tab-navigation {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 1rem;
-            padding: 0.5rem;
-            box-shadow: 0 8px 32px rgba(6, 39, 73, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .tab-item {
-            position: relative;
-            padding: 1rem 1rem;
-            border-radius: 0.75rem;
-            font-weight: 600;
-            font-size: 0.95rem;
-            color: #6b7280;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            white-space: nowrap;
-        }
-
-        .tab-item:hover {
-            color: #062749;
-            background: rgba(6, 39, 73, 0.05);
-            transform: translateY(-1px);
-        }
-
-        .tab-item.active {
-            color: #fff;
-            background: #062749;
-            box-shadow: 0 4px 15px rgba(6, 39, 73, 0.3);
-            transform: translateY(-2px);
-        }
-
-        .tab-item.active::after {
-            content: '';
-            position: absolute;
-            bottom: -0.5rem;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-left: 6px solid transparent;
-            border-right: 6px solid transparent;
-            border-top: 6px solid #062749;
-        }
-
-        /* Content Sections */
-        .tab-content {
-            display: none;
-            animation: fadeInUp 0.5s ease;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Document Cards */
-        .document-card {
-            background: white;
-            border-radius: 1rem;
-            padding: 1.5rem;
-            box-shadow: 0 4px 20px rgba(6, 39, 73, 0.08);
-            border: 1px solid rgba(6, 39, 73, 0.1);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .document-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: #062749;
-        }
-
-        .document-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 30px rgba(6, 39, 73, 0.15);
-        }
-
-        .download-btn {
-            background: #062749;
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            font-weight: 600;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
-        }
-
-        .download-btn:hover {
-            background: #82BEE0;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(6, 39, 73, 0.3);
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .tab-navigation {
-                overflow-x: auto;
-                padding: 0.5rem 0.25rem;
-            }
-
-            .tab-item {
-                padding: 0.75rem 1rem;
-                font-size: 0.875rem;
-                min-width: max-content;
-            }
-
-            .tab-navigation::-webkit-scrollbar {
-                height: 4px;
-            }
-
-            .tab-navigation::-webkit-scrollbar-track {
-                background: transparent;
-            }
-
-            .tab-navigation::-webkit-scrollbar-thumb {
-                background: rgba(6, 39, 73, 0.3);
-                border-radius: 2px;
-            }
-        }
-    </style>
-
     <section id="public-info" class="py-20 mt-8 bg-primary">
-        <div class="container mx-auto px-12">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Heading -->
             <div class="text-center mb-10 group max-w-3xl mx-auto">
                 <h2 class="text-3xl md:text-4xl font-bold text-secondary relative inline-block underline-animate mb-3">
-                    Regulasi
+                    {{ $title }}
                 </h2>
                 <h3 class="text-lg text-secondary pt-4">
-                    Informasi Publik dan dokumen terkait PUSTIPD yang bisa diunduh
+                    {{ $title }} terkait PUSTIPD yang bisa diunduh
                 </h3>
+                @if (isset($totalDownloadableFiles))
+                    <p class="text-sm text-secondary/80 mt-2">
+                        Total {{ $totalDownloadableFiles }} dokumen tersedia untuk diunduh
+                    </p>
+                @endif
             </div>
 
-            <!-- Search Form -->
-            <form action="#" method="GET" class="relative w-full max-w-md mx-auto mb-8">
-                <input type="text" name="search" placeholder="Cari {{ $title }} di sini...."
-                    class="w-full rounded-xl pl-12 pr-4 py-2 sm:py-3 
-                   text-secondary placeholder-gray-400
-                   bg-white border border-white shadow-sm focus:ring-2 focus:ring-secondary focus:border-transparent
-                   focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" />
-                <button type="submit" class="absolute top-1/2 left-3 transform -translate-y-1/2 text-secondary">
-                    <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" stroke-width="2"
-                        viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1010.5 3a7.5 7.5 0 006.15 13.65z" />
-                    </svg>
-                </button>
-            </form>
+            <!-- ✅ FIXED: Search & Bulk Actions Bar - SOLID WHITE BACKGROUND -->
+            <div class="max-w-6xl mx-auto mb-8">
+                <div class="bg-white rounded-xl p-4 lg:p-6 border border-gray-200 shadow-lg">
+                    <div class="flex flex-col space-y-4 lg:space-y-0 lg:flex-row lg:items-center lg:justify-between">
+                        <!-- Search Form - LIGHT GRAY BACKGROUND TO DISTINGUISH FROM WHITE HEADER -->
+                        <div class="flex-1 max-w-md">
+                            <form action="{{ request()->url() }}" method="GET" class="relative">
+                                <input type="text" name="search" value="{{ request('search') }}"
+                                    placeholder="Cari {{ strtolower($title) }} di sini...."
+                                    class="w-full rounded-lg pl-12 pr-4 py-3 text-gray-900 placeholder-gray-500
+                                          bg-gray-50 border border-gray-300 shadow-sm 
+                                          focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none
+                                          transition-all duration-200" />
+                                <button type="submit"
+                                    class="absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-500 hover:text-blue-600 transition-colors">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1010.5 3a7.5 7.5 0 006.15 13.65z" />
+                                    </svg>
+                                </button>
+                            </form>
+                        </div>
 
-
-            <!-- Tab Contents -->
-            <div class="max-w-4xl mx-auto">
-                <!-- Ketetapan Tab Content -->
-                <div id="ketetapan" class="tab-content">
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <div class="document-card">
-                            <div class="flex items-start justify-between mb-4">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
-                                        <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <h4 class="font-bold text-gray-800">Laporan Tahunan 2024</h4>
-                                        <p class="text-sm text-gray-500">PDF • 12.3 MB</p>
-                                    </div>
-                                </div>
+                        <!-- Bulk Actions -->
+                        <div class="flex flex-col sm:flex-row items-center gap-3">
+                            <!-- Info Count -->
+                            <div class="text-sm text-gray-600 font-medium">
+                                <span id="info-count">{{ $regulasis->total() }} dokumen tersedia</span>
                             </div>
-                            <p class="text-gray-600 text-sm mb-4">
-                                Laporan komprehensif kegiatan dan pencapaian PUSTIPD selama tahun 2024.
-                            </p>
-                            <button class="download-btn">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                            <!-- Select All Button -->
+                            <button onclick="toggleSelectAll()" id="select-all-btn"
+                                class="inline-flex items-center px-4 py-2 bg-blue-100 text-blue-800 rounded-lg 
+                                       hover:bg-blue-200 border border-blue-300 hover:border-blue-400
+                                       transition-all duration-200 text-sm font-medium min-w-[120px]">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                                </svg>
+                                <span id="select-text">Pilih Semua</span>
+                            </button>
+
+                            <!-- Bulk Download Button -->
+                            <button onclick="bulkDownloadSelected()" id="bulk-download-btn"
+                                class="hidden inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg 
+                                       hover:bg-green-700 border border-green-500 hover:border-green-600
+                                       transition-all duration-200 text-sm font-medium shadow-lg min-w-[160px]">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                 </svg>
-                                Unduh
+                                Download (<span id="selected-count">0</span>)
                             </button>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Panduan Tab Content -->
-                <div id="panduan" class="tab-content">
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <div class="document-card">
-                            <div class="flex items-start justify-between mb-4">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center">
-                                        <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <h4 class="font-bold text-gray-800">Panduan Pengguna Sistem</h4>
-                                        <p class="text-sm text-gray-500">PDF • 5.4 MB</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <p class="text-gray-600 text-sm mb-4">
-                                Panduan lengkap penggunaan sistem informasi PUSTIPD untuk mahasiswa dan dosen.
-                            </p>
-                            <button class="download-btn">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                </svg>
-                                Unduh
-                            </button>
-                        </div>
+            <!-- Responsive Table Container -->
+            <div class="max-w-6xl mx-auto">
+                <!-- Desktop Table -->
+                <div class="hidden lg:block bg-white rounded-xl border border-gray-200 shadow-lg overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <!-- Table Header -->
+                            <thead>
+                                <tr class="bg-secondary border-b border-blue-600">
+                                    <!-- ✅ FIXED: Header Checkbox with Proper Event Handler -->
+                                    <th class="px-4 py-4 text-center w-12">
+                                        <input type="checkbox" id="header-checkbox"
+                                            class="rounded border-gray-300 text-blue-600 focus:ring-blue-500 focus:border-blue-500 cursor-pointer"
+                                            onchange="toggleAllCheckboxes(this)" title="Pilih/Batal Semua">
+                                    </th>
+                                    <th
+                                        class="px-6 py-4 text-left text-sm font-semibold text-white uppercase tracking-wider w-16">
+                                        No.
+                                    </th>
+                                    <th
+                                        class="px-6 py-4 text-left text-sm font-semibold text-white uppercase tracking-wider">
+                                        Nama {{ $title }}
+                                    </th>
+                                    <th
+                                        class="px-6 py-4 text-left text-sm font-semibold text-white uppercase tracking-wider">
+                                        Deskripsi
+                                    </th>
+                                    <th
+                                        class="px-6 py-4 text-center text-sm font-semibold text-white uppercase tracking-wider w-32">
+                                        Tahun
+                                    </th>
+                                    <th
+                                        class="px-6 py-4 text-center text-sm font-semibold text-white uppercase tracking-wider w-32">
+                                        Download
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <!-- Table Body -->
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                @forelse($regulasis as $index => $regulasi)
+                                    <tr class="hover:bg-gray-50 transition-colors duration-150">
+                                        <!-- ✅ FIXED: Body Checkbox with Proper Class and Event -->
+                                        <td class="px-4 py-4 text-center">
+                                            @if ($regulasi->file_path && file_exists(storage_path('app/public/' . $regulasi->file_path)))
+                                                <input type="checkbox"
+                                                    class="file-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500 focus:border-blue-500 cursor-pointer"
+                                                    value="{{ $regulasi->id }}" data-id="{{ $regulasi->id }}"
+                                                    onchange="updateBulkDownloadButton()">
+                                            @else
+                                                <span class="w-4 h-4 inline-block"></span>
+                                            @endif
+                                        </td>
+
+                                        <!-- Number -->
+                                        <td class="px-6 py-4 text-sm font-medium text-secondary">
+                                            {{ ($regulasis->currentPage() - 1) * $regulasis->perPage() + $index + 1 }}.
+                                        </td>
+
+                                        <!-- Title -->
+                                        <td class="px-6 py-4">
+                                            <div class="font-semibold text-secondary mb-1 leading-tight">
+                                                {{ $regulasi->title }}
+                                            </div>
+                                            @if ($regulasi->formatted_file_size)
+                                                <div
+                                                    class="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
+                                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor"
+                                                        viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                                    </svg>
+                                                    {{ $regulasi->formatted_file_size }}
+                                                </div>
+                                            @endif
+                                        </td>
+
+                                        <!-- Description -->
+                                        <td class="px-6 py-4 text-sm text-secondary leading-relaxed">
+                                            <div class="max-w-sm">
+                                                {{ Str::limit(strip_tags($regulasi->description), 120) }}
+                                            </div>
+                                        </td>
+
+                                        <!-- Year -->
+                                        <td class="px-6 py-4 text-center">
+                                            <div class="font-semibold text-secondary">
+                                                @if ($regulasi->year_published)
+                                                    {{ $regulasi->year_published }}
+                                                @elseif($regulasi->created_at)
+                                                    {{ $regulasi->created_at->format('Y') }}
+                                                @else
+                                                    <span class="text-gray-400">-</span>
+                                                @endif
+                                            </div>
+                                        </td>
+
+                                        <!-- Download Button -->
+                                        <td class="px-6 py-4 text-center">
+                                            @if ($regulasi->file_path && file_exists(storage_path('app/public/' . $regulasi->file_path)))
+                                                <a href="{{ route('ketetapan.download', $regulasi->id) }}"
+                                                    class="inline-flex items-center px-3 py-2 bg-blue-600 text-white rounded-lg 
+                                                           hover:bg-blue-700 transition-colors text-xs font-medium shadow-sm"
+                                                    title="Download {{ $regulasi->title }}" target="_blank">
+                                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
+                                                        viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                                    </svg>
+                                                    Download
+                                                </a>
+                                            @else
+                                                <span
+                                                    class="inline-flex items-center px-3 py-2 bg-gray-500 text-gray-300 rounded-lg text-xs font-medium cursor-not-allowed">
+                                                    N/A
+                                                </span>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <!-- Empty State -->
+                                    <tr>
+                                        <td colspan="6" class="px-6 py-12 text-center bg-white">
+                                            <div class="text-center">
+                                                <svg class="w-12 h-12 mx-auto mb-4 text-gray-400" fill="none"
+                                                    stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="1.5"
+                                                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                                </svg>
+                                                <p class="text-lg font-medium text-gray-900 mb-2">Belum ada ketetapan
+                                                    tersedia</p>
+                                                <p class="text-gray-600">Ketetapan akan segera ditambahkan oleh admin
+                                                </p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
-                <!-- Regulasi Tab Content -->
-                <div id="regulasi" class="tab-content">
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <div class="document-card">
-                            <div class="flex items-start justify-between mb-4">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
-                                        <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor"
+                <!-- Mobile Cards -->
+                <div class="lg:hidden space-y-4">
+                    @forelse($regulasis as $index => $regulasi)
+                        <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-lg">
+                            <div class="flex items-start justify-between mb-3">
+                                <!-- Checkbox dan Number -->
+                                <div class="flex items-center space-x-3">
+                                    @if ($regulasi->file_path && file_exists(storage_path('app/public/' . $regulasi->file_path)))
+                                        <input type="checkbox"
+                                            class="file-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500 focus:border-blue-500 cursor-pointer"
+                                            value="{{ $regulasi->id }}" data-id="{{ $regulasi->id }}"
+                                            onchange="updateBulkDownloadButton()">
+                                    @else
+                                        <span class="w-4 h-4 inline-block"></span>
+                                    @endif
+                                    <span class="text-sm font-medium text-secondary">
+                                        {{ ($regulasis->currentPage() - 1) * $regulasis->perPage() + $index + 1 }}.
+                                    </span>
+                                </div>
+
+                                <!-- Year Badge -->
+                                @if ($regulasi->year_published || $regulasi->created_at)
+                                    <div
+                                        class="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
+                                        {{ $regulasi->year_published ?? $regulasi->created_at->format('Y') }}
+                                    </div>
+                                @endif
+                            </div>
+
+                            <!-- Title -->
+                            <h3 class="font-semibold text-secondary text-base mb-2 leading-tight">
+                                {{ $regulasi->title }}
+                            </h3>
+
+                            <!-- Description -->
+                            <p class="text-sm text-secondary mb-3 leading-relaxed opacity-80">
+                                {{ Str::limit(strip_tags($regulasi->description), 100) }}
+                            </p>
+
+                            <!-- File Info & Download -->
+                            <div class="flex items-center justify-between">
+                                @if ($regulasi->formatted_file_size)
+                                    <div
+                                        class="inline-flex items-center px-2 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded">
+                                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z" />
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2m-6 4h6" />
+                                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                         </svg>
+                                        {{ $regulasi->formatted_file_size }}
                                     </div>
-                                    <div>
-                                        <h4 class="font-bold text-gray-800">Regulasi IT Governance</h4>
-                                        <p class="text-sm text-gray-500">PDF • 3.2 MB</p>
-                                    </div>
-                                </div>
+                                @else
+                                    <div></div>
+                                @endif
+
+                                <!-- Download Button -->
+                                @if ($regulasi->file_path && file_exists(storage_path('app/public/' . $regulasi->file_path)))
+                                    <a href="{{ route('ketetapan.download', $regulasi->id) }}"
+                                        class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg 
+                                               hover:bg-blue-700 transition-colors text-sm font-medium shadow-sm"
+                                        title="Download {{ $regulasi->title }}" target="_blank">
+                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                        </svg>
+                                        Download
+                                    </a>
+                                @else
+                                    <span
+                                        class="inline-flex items-center px-4 py-2 bg-gray-500 text-gray-300 rounded-lg text-sm font-medium cursor-not-allowed">
+                                        N/A
+                                    </span>
+                                @endif
                             </div>
-                            <p class="text-gray-600 text-sm mb-4">
-                                Dokumen regulasi tata kelola teknologi informasi di lingkungan UIN Raden Fatah
-                                Palembang.
-                            </p>
-                            <button class="download-btn">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                </svg>
-                                Unduh
-                            </button>
                         </div>
-                    </div>
+                    @empty
+                        <!-- Empty State Mobile -->
+                        <div class="bg-white rounded-xl border border-gray-200 p-8 text-center shadow-lg">
+                            <svg class="w-12 h-12 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                            <p class="text-lg font-medium text-gray-900 mb-2">Belum ada ketetapan tersedia</p>
+                            <p class="text-gray-600">Ketetapan akan segera ditambahkan oleh admin</p>
+                        </div>
+                    @endforelse
                 </div>
 
-                <!-- SOP Tab Content -->
-                <div id="sop" class="tab-content">
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <div class="document-card">
-                            <div class="flex items-start justify-between mb-4">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center">
-                                        <svg class="w-6 h-6 text-teal-600" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M9 5H7a2 2 0 00-2 2v6a2 2 0 002 2h2m0 0h6a2 2 0 002-2V7a2 2 0 00-2-2h-2m0 0V3a2 2 0 00-2-2H9a2 2 0 00-2 2v2z" />
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <h4 class="font-bold text-gray-800">SOP Layanan IT</h4>
-                                        <p class="text-sm text-gray-500">PDF • 4.1 MB</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <p class="text-gray-600 text-sm mb-4">
-                                Standard Operating Procedure untuk seluruh layanan teknologi informasi PUSTIPD.
-                            </p>
-                            <button class="download-btn">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                </svg>
-                                Unduh
-                            </button>
+                <!-- Pagination -->
+                @if ($regulasis->hasPages())
+                    <div class="mt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+                        <!-- Info Pagination -->
+                        <div class="text-sm text-secondary">
+                            Menampilkan {{ $regulasis->firstItem() ?? 0 }} sampai {{ $regulasis->lastItem() ?? 0 }}
+                            dari {{ $regulasis->total() ?? 0 }} ketetapan
+                        </div>
+
+                        <!-- Pagination Links -->
+                        <div class="flex justify-center items-center gap-2">
+                            <!-- Previous Button -->
+                            @if ($regulasis->onFirstPage())
+                                <span
+                                    class="flex items-center justify-center w-10 h-10 rounded-lg bg-white/10 text-secondary/50 border border-white/20 cursor-not-allowed">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                                    </svg>
+                                </span>
+                            @else
+                                <a href="{{ $regulasis->appends(request()->all())->previousPageUrl() }}"
+                                    class="flex items-center justify-center w-10 h-10 rounded-lg bg-white/20 text-secondary hover:bg-white hover:text-primary border border-white/30 hover:border-white transition-all duration-200">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                                    </svg>
+                                </a>
+                            @endif
+
+                            <!-- Page Numbers -->
+                            @foreach ($regulasis->appends(request()->all())->getUrlRange(1, $regulasis->lastPage()) as $page => $url)
+                                @if ($page == $regulasis->currentPage())
+                                    <span
+                                        class="flex items-center justify-center w-10 h-10 rounded-lg bg-white text-primary font-semibold shadow-sm">
+                                        {{ $page }}
+                                    </span>
+                                @else
+                                    <a href="{{ $url }}"
+                                        class="flex items-center justify-center w-10 h-10 rounded-lg bg-white/20 text-secondary hover:bg-white hover:text-primary border border-white/30 hover:border-white transition-all duration-200">
+                                        {{ $page }}
+                                    </a>
+                                @endif
+                            @endforeach
+
+                            <!-- Next Button -->
+                            @if ($regulasis->hasMorePages())
+                                <a href="{{ $regulasis->appends(request()->all())->nextPageUrl() }}"
+                                    class="flex items-center justify-center w-10 h-10 rounded-lg bg-white/20 text-secondary hover:bg-white hover:text-primary border border-white/30 hover:border-white transition-all duration-200">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </a>
+                            @else
+                                <span
+                                    class="flex items-center justify-center w-10 h-10 rounded-lg bg-white/10 text-secondary/50 border border-white/20 cursor-not-allowed">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </span>
+                            @endif
                         </div>
                     </div>
-                </div>
+                @endif
             </div>
         </div>
     </section>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const tabItems = document.querySelectorAll('.tab-item');
-            const tabContents = document.querySelectorAll('.tab-content');
-
-            tabItems.forEach(item => {
-                item.addEventListener('click', function(e) {
-                    e.preventDefault();
-
-                    const targetTab = this.getAttribute('data-tab');
-
-                    // Remove active class from all tabs and contents
-                    tabItems.forEach(tab => tab.classList.remove('active'));
-                    tabContents.forEach(content => content.classList.remove('active'));
-
-                    // Add active class to clicked tab and corresponding content
-                    this.classList.add('active');
-                    document.getElementById(targetTab).classList.add('active');
-                });
-            });
-
-            // Download functionality
-            const downloadBtns = document.querySelectorAll('.download-btn');
-            downloadBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    // Add your download logic here
-                    alert('Download started!');
-                });
-            });
-        });
-    </script>
+    <!-- ✅ FIXED: Bulk Download Form -->
+    <form id="bulk-download-form" method="POST" action="{{ route('public.ketetapan.bulk-download') }}"
+        style="display: none;">
+        @csrf
+        <div id="bulk-download-inputs"></div>
+    </form>
 </x-public.layouts>

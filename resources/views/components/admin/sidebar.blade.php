@@ -167,7 +167,7 @@
 
                 <ul class="flex flex-col gap-2 mb-2">
                     <li>
-                        <a href="{{ route('admin.manage-content.layanan.applayanan') }}"
+                        <a href="{{ route('admin.manage-content.applayanan.index') }}"
                             @click.stop="selected = (selected === 'Services' ? '' : 'Services')"
                             class="group relative flex items-center gap-3 rounded-xl px-4 py-3 font-medium text-gray-600 duration-300 ease-in-out hover:bg-orange-50 hover:text-orange-600 cursor-pointer"
                             :class="(selected === 'Services') ? 'bg-orange-50 text-orange-600' : ''"
@@ -285,19 +285,19 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('admin.manage-content.dokumen.panduan') }}"
+                                    <a href="{{ route('admin.manage-content.dokumen.panduan.index') }}"
                                         class="block py-2 px-4 text-sm text-gray-500 hover:text-teal-600 hover:bg-teal-25 rounded-lg transition-colors duration-200">
                                         Panduan
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('admin.manage-content.dokumen.regulasi') }}"
+                                    <a href="{{ route('admin.manage-content.dokumen.regulasi.index') }}"
                                         class="block py-2 px-4 text-sm text-gray-500 hover:text-teal-600 hover:bg-teal-25 rounded-lg transition-colors duration-200">
                                         Regulasi
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('admin.manage-content.dokumen.sop') }}"
+                                    <a href="{{ route('admin.manage-content.dokumen.sop.index') }}"
                                         class="block py-2 px-4 text-sm text-gray-500 hover:text-teal-600 hover:bg-teal-25 rounded-lg transition-colors duration-200">
                                         SOP
                                     </a>

@@ -1,7 +1,7 @@
 <x-admin.layouts>
     <x-slot:title>{{ $title }}</x-slot:title>
     @section('page-title', 'Dokumen PUSTIPD')
-    @section('page-description', 'Kelola konten Ketetapan UIN Raden Fatah Palembang')
+    @section('page-description', 'Kelola konten Panduan UIN Raden Fatah Palembang')
     @section('breadcrumb')
         <li>
             <div class="flex items-center">
@@ -44,7 +44,7 @@
         </div>
 
         <script>
-            window.bulkActionRoute = "{{ route('admin.manage-content.dokumen.ketetapan.bulk') }}";
+            window.bulkActionRoute = "{{ route('admin.manage-content.dokumen.panduan.bulk') }}";
         </script>
 
         <script>
@@ -178,10 +178,10 @@
                                     No.
                                 </th>
 
-                                <!-- Judul Ketetapan -->
+                                <!-- Judul Panduan -->
                                 <th
                                     class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Nama Ketetapan
+                                    Nama Panduan
                                 </th>
 
                                 <!-- Deskripsi -->
@@ -215,8 +215,8 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody id="KetetapanTableBody" class="bg-white divide-y divide-gray-200">
-                            @include('admin.manage-content.dokumen.ketetapan.partials.table_body')
+                        <tbody id="PanduanTableBody" class="bg-white divide-y divide-gray-200">
+                            @include('admin.manage-content.dokumen.panduan.partials.table_body')
                         </tbody>
                     </table>
                 </div>
@@ -226,13 +226,13 @@
         <!-- Pagination -->
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4 pt-4">
             <div class="text-sm text-gray-500 text-center sm:text-left">
-                Menampilkan {{ $ketetapans->firstItem() }} sampai {{ $ketetapans->lastItem() }} dari
-                {{ $ketetapans->total() }} {{ strtolower($title) }}
+                Menampilkan {{ $panduans->firstItem() }} sampai {{ $panduans->lastItem() }} dari
+                {{ $panduans->total() }} {{ strtolower($title) }}
             </div>
 
             <div class="flex justify-center sm:justify-end">
                 <nav class="inline-flex space-x-1 sm:space-x-2" aria-label="Pagination">
-                    @if ($ketetapans->onFirstPage())
+                    @if ($panduans->onFirstPage())
                         <span
                             class="px-3 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-300 rounded-lg cursor-not-allowed flex items-center gap-1">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:hidden" fill="none"
@@ -243,7 +243,7 @@
                             <span class="hidden sm:inline">Sebelumnya</span>
                         </span>
                     @else
-                        <a href="{{ $ketetapans->appends(request()->all())->previousPageUrl() }}"
+                        <a href="{{ $panduans->appends(request()->all())->previousPageUrl() }}"
                             class="pagination-link px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center gap-1">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:hidden" fill="none"
                                 viewBox="0 0 24 24" stroke="currentColor">
@@ -254,8 +254,8 @@
                         </a>
                     @endif
 
-                    @foreach ($ketetapans->appends(request()->all())->getUrlRange(1, $ketetapans->lastPage()) as $page => $url)
-                        @if ($page == $ketetapans->currentPage())
+                    @foreach ($panduans->appends(request()->all())->getUrlRange(1, $panduans->lastPage()) as $page => $url)
+                        @if ($page == $panduans->currentPage())
                             <span
                                 class="px-3 py-2 text-sm font-semibold text-white bg-blue-600 border border-blue-600 rounded-lg">{{ $page }}</span>
                         @else
@@ -264,8 +264,8 @@
                         @endif
                     @endforeach
 
-                    @if ($ketetapans->hasMorePages())
-                        <a href="{{ $ketetapans->appends(request()->all())->nextPageUrl() }}"
+                    @if ($panduans->hasMorePages())
+                        <a href="{{ $panduans->appends(request()->all())->nextPageUrl() }}"
                             class="pagination-link px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center gap-1">
                             <span class="hidden sm:inline">Selanjutnya</span>
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:hidden" fill="none"
@@ -290,7 +290,7 @@
         </div>
     </div>
 
-    @include('admin.manage-content.dokumen.ketetapan.create')
-    @include('admin.manage-content.dokumen.ketetapan.update')
-    @include('admin.manage-content.dokumen.ketetapan.delete')
+    @include('admin.manage-content.dokumen.panduan.create')
+    @include('admin.manage-content.dokumen.panduan.update')
+    @include('admin.manage-content.dokumen.panduan.delete')
 </x-admin.layouts>

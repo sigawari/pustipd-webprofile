@@ -9,7 +9,7 @@
                     {{ $title }}
                 </h2>
                 <h3 class="text-lg text-secondary pt-4">
-                    Ketetapan terkait PUSTIPD yang bisa diunduh
+                    {{ $title }} terkait PUSTIPD yang bisa diunduh
                 </h3>
                 @if (isset($totalDownloadableFiles))
                     <p class="text-sm text-secondary/80 mt-2">
@@ -98,7 +98,7 @@
                                     </th>
                                     <th
                                         class="px-6 py-4 text-left text-sm font-semibold text-white uppercase tracking-wider">
-                                        Nama Ketetapan
+                                        Nama {{ $title }}
                                     </th>
                                     <th
                                         class="px-6 py-4 text-left text-sm font-semibold text-white uppercase tracking-wider">

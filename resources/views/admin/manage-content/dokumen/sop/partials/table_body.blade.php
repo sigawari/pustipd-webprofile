@@ -1,24 +1,24 @@
 {{-- partials/table_body.blade.php --}}
-@forelse ($ketetapans as $key => $ketetapan)
+@forelse ($sops as $key => $sop)
     <tr class="hover:bg-gray-50">
         <!-- Checkbox -->
         <td class="px-4 py-4 text-center">
             <input type="checkbox" class="item-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                value="{{ $ketetapan->id }}" onchange="updateBulkActionsBar()">
+                value="{{ $sop->id }}" onchange="updateBulkActionsBar()">
         </td>
 
         <!-- No. -->
         <td class="px-3 py-4 text-center whitespace-nowrap">
-            {{ $ketetapans->firstItem() + $key }}
+            {{ $sops->firstItem() + $key }}
         </td>
 
-        <!-- Nama Ketetapan -->
+        <!-- Nama Panduan -->
         <td class="px-6 py-4">
             <div class="text-sm font-medium text-gray-900 max-w-xs">
-                {{ Str::limit($ketetapan->title, 50) }}
+                {{ Str::limit($sop->title, 50) }}
                 <br>
-                @if ($ketetapan->original_filename)
-                    <span class="text-xs text-gray-600">📄 {{ $ketetapan->original_filename }}</span>
+                @if ($sop->original_filename)
+                    <span class="text-xs text-gray-600">📄 {{ $sop->original_filename }}</span>
                 @else
                     <span class="text-xs text-gray-400">-</span>
                 @endif
@@ -28,20 +28,20 @@
         <!-- Deskripsi -->
         <td class="px-6 py-4">
             <div class="text-sm text-gray-600 max-w-xs">
-                {{ Str::limit(strip_tags($ketetapan->description), 80) }}
+                {{ Str::limit(strip_tags($sop->description), 80) }}
             </div>
         </td>
 
         <!-- Tahun Terbit -->
         <td class="px-3 py-4 text-center whitespace-nowrap">
             <span class="text-sm font-medium text-gray-900">
-                {{ $ketetapan->year_published ?? '-' }}
+                {{ $sop->year_published ?? '-' }}
             </span>
         </td>
 
         <!-- File Info -->
         <td class="px-6 py-4 whitespace-nowrap">
-            @if ($ketetapan->file_path && $ketetapan->file_exists)
+            @if ($sop->file_path && $sop->file_exists)
                 <div class="flex items-center space-x-1">
                     <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -49,13 +49,13 @@
                         </path>
                     </svg>
                     <div class="text-xs">
-                        <div class="text-green-600 font-medium">{{ strtoupper($ketetapan->file_type ?? 'FILE') }}</div>
-                        @if ($ketetapan->formatted_file_size)
-                            <div class="text-gray-500">{{ $ketetapan->formatted_file_size }}</div>
+                        <div class="text-green-600 font-medium">{{ strtoupper($sop->file_type ?? 'FILE') }}</div>
+                        @if ($sop->formatted_file_size)
+                            <div class="text-gray-500">{{ $sop->formatted_file_size }}</div>
                         @endif
                     </div>
                 </div>
-            @elseif($ketetapan->file_path && !$ketetapan->file_exists)
+            @elseif($sop->file_path && !$sop->file_exists)
                 <div class="flex items-center space-x-1">
                     <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -73,11 +73,11 @@
         <td class="px-3 py-4 text-center whitespace-nowrap">
             <span @class([
                 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium',
-                'bg-green-300 text-green-800' => $ketetapan->status === 'published',
-                'bg-yellow-300 text-yellow-800' => $ketetapan->status === 'draft',
-                'bg-gray-300 text-gray-800' => $ketetapan->status === 'archived',
+                'bg-green-300 text-green-800' => $sop->status === 'published',
+                'bg-yellow-300 text-yellow-800' => $sop->status === 'draft',
+                'bg-gray-300 text-gray-800' => $sop->status === 'archived',
             ])>
-                {{ ucfirst($ketetapan->status) }}
+                {{ ucfirst($sop->status) }}
             </span>
         </td>
 
@@ -85,8 +85,8 @@
         <td class="px-3 py-4 whitespace-nowrap text-sm font-medium">
             <div class="flex justify-center space-x-1">
                 {{-- Quick Publish/Draft Toggle --}}
-                @if ($ketetapan->status === 'published')
-                    <button onclick="quickStatusChange('{{ $ketetapan->id }}', 'draft')"
+                @if ($sop->status === 'published')
+                    <button onclick="quickStatusChange('{{ $sop->id }}', 'draft')"
                         class="p-1 text-orange-600 rounded hover:text-orange-900 hover:bg-orange-50"
                         title="Sembunyikan dari publik">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -95,7 +95,7 @@
                         </svg>
                     </button>
                 @else
-                    <button onclick="quickStatusChange('{{ $ketetapan->id }}', 'published')"
+                    <button onclick="quickStatusChange('{{ $sop->id }}', 'published')"
                         class="p-1 text-green-600 rounded hover:text-green-900 hover:bg-green-50"
                         title="Publish ke publik">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -105,7 +105,7 @@
                 @endif
 
                 {{-- Edit Button - menggunakan openUpdateModal dari modals.js --}}
-                <button onclick="openUpdateModal('{{ $ketetapan->id }}')"
+                <button onclick="openUpdateModal('{{ $sop->id }}')"
                     class="p-1 text-blue-600 rounded hover:text-blue-900 hover:bg-blue-50" title="Edit">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5
@@ -114,12 +114,12 @@
                     </svg>
                 </button>
 
-                <button onclick="toggleVisibility(this)" data-id="{{ $ketetapan->id }}"
-                    data-status="{{ $ketetapan->status }}"
-                    class="p-1 rounded {{ $ketetapan->status === 'published' ? 'text-green-600 hover:text-green-900 hover:bg-green-50' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50' }}"
-                    title="{{ $ketetapan->status === 'published' ? 'Sembunyikan dari publik' : 'Tampilkan di publik' }}">
+                <button onclick="toggleVisibility(this)" data-id="{{ $sop->id }}"
+                    data-status="{{ $sop->status }}"
+                    class="p-1 rounded {{ $sop->status === 'published' ? 'text-green-600 hover:text-green-900 hover:bg-green-50' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50' }}"
+                    title="{{ $sop->status === 'published' ? 'Sembunyikan dari publik' : 'Tampilkan di publik' }}">
 
-                    @if ($ketetapan->status === 'published')
+                    @if ($sop->status === 'published')
                         {{-- Show icon (currently visible) --}}
                         <svg class="w-4 h-4 icon-show" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -146,10 +146,10 @@
                 </button>
 
                 {{-- Download Button --}}
-                @if ($ketetapan->file_path && $ketetapan->file_exists)
-                    <a href="{{ route('admin.manage-content.dokumen.ketetapan.download', $ketetapan->id) }}"
+                @if ($sop->file_path && $sop->file_exists)
+                    <a href="{{ route('admin.manage-content.dokumen.panduan.download', $sop->id) }}"
                         class="p-1 text-purple-600 rounded hover:text-purple-900 hover:bg-purple-50"
-                        title="Download {{ $ketetapan->original_filename }}" target="_blank">
+                        title="Download {{ $sop->original_filename }}" target="_blank">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V4" />
@@ -165,7 +165,7 @@
                 @endif
 
                 {{-- Delete Button --}}
-                <button onclick="openDeleteModal('{{ $ketetapan->id }}')"
+                <button onclick="openDeleteModal('{{ $sop->id }}')"
                     class="p-1 text-red-600 rounded hover:text-red-900 hover:bg-red-50" title="Hapus">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -179,7 +179,7 @@
     <tr class="hover:bg-gray-50">
         <td colspan="8" class="px-6 py-4 text-center text-gray-500 italic">
             <div class="flex flex-col items-center justify-center text-sm text-gray-500 space-y-1">
-                @if ($ketetapans->isEmpty() && !request()->filled('search') && !request()->filled('filter'))
+                @if ($sops->isEmpty() && !request()->filled('search') && !request()->filled('filter'))
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-400 mb-2" fill="none"
                         viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
@@ -188,7 +188,7 @@
                     <span class="text-blue-500 font-medium">Belum ada {{ $title }} yang tersedia.</span>
                     <p class="text-gray-400">Klik "Tambah {{ $title }}" untuk membuat {{ $title }}
                         pertama</p>
-                @elseif ($ketetapans->isEmpty() && request()->filled('search'))
+                @elseif ($sops->isEmpty() && request()->filled('search'))
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-yellow-400 mb-2" fill="none"
                         viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
@@ -197,7 +197,7 @@
                     <span class="text-yellow-600 font-medium">Tidak ditemukan hasil pencarian untuk
                         "{{ request('search') }}"</span>
                     <p class="text-gray-400">Coba gunakan kata kunci yang berbeda</p>
-                @elseif ($ketetapans->isEmpty() && request()->filled('filter'))
+                @elseif ($sops->isEmpty() && request()->filled('filter'))
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-400 mb-2" fill="none"
                         viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
