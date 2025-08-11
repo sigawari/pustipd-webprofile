@@ -3,7 +3,7 @@ import "./bootstrap";
 // Import file JS modular
 import "./components/admin/ajaxSearch";
 import "./components/admin/modals";
-import "./components/admin/rencana_dummyJS";
+// import "./components/admin/rencana_dummyJS";
 import "./components/admin/addListItem";
 import "./components/admin/editListItem";
 import "./components/admin/removeListItem";

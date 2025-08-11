@@ -88,7 +88,7 @@ class KelolaBeritaController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all()); // Hapus ini setelah testing
+        // dd($request->all()); // Hapus ini setelah testing
         // Validasi input
         $request->validate([
             'category'    => 'required|in:academic_services,library_resources,student_information_system,administration,communication,research_development,other',

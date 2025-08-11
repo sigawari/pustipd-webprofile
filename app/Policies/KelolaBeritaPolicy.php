@@ -2,7 +2,7 @@
 
 namespace App\Policies;
 
-use App\Models\KelolaBerita;
+use App\Models\ManageContent\KelolaBerita\KelolaBerita;
 use App\Models\Sistem\User;
 use Illuminate\Auth\Access\Response;
 
