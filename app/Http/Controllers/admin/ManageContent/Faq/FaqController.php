@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Admin\ManageContent\Faq;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreFaqRequest;
-use App\Http\Requests\UpdateFaqRequest;
 use App\Models\ManageContent\Faq;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;

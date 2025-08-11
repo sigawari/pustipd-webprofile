@@ -7,30 +7,30 @@ use App\Http\Controllers\Auth\LoginController;
 
 use App\Http\Controllers\ManageContentController;
 use App\Http\Controllers\admin\DashboardController;
-use App\Http\Controllers\admin\Sistem\ManageUserController;
 use App\Http\Controllers\admin\Sistem\ReportsController;
-
-use App\Http\Controllers\admin\ManageContent\Beranda\MitraController;
-use App\Http\Controllers\admin\ManageContent\Beranda\LayananController;
-use App\Http\Controllers\admin\ManageContent\Beranda\PencapaianController;
-
-use App\Http\Controllers\admin\ManageContent\Berita\BeritaController;
-use App\Http\Controllers\admin\ManageContent\Pengumuman\PengumumanController;
-use App\Http\Controllers\admin\ManageContent\Tutorial\TutorialController;
-
-use App\Http\Controllers\admin\ManageContent\AppLayanan\AppLayananController;
-
-use App\Http\Controllers\admin\ManageContent\Dokumen\KetetapanController;
-use App\Http\Controllers\admin\ManageContent\Dokumen\RegulasiController;
-use App\Http\Controllers\admin\ManageContent\Dokumen\PanduanController;
-use App\Http\Controllers\admin\ManageContent\Dokumen\SopController;
+use App\Http\Controllers\admin\Sistem\ManageUserController;
 
 use App\Http\Controllers\admin\ManageContent\Faq\FaqController;
+use App\Http\Controllers\admin\ManageContent\Dokumen\SopController;
+use App\Http\Controllers\admin\ManageContent\Beranda\MitraController;
+
+use App\Http\Controllers\Admin\ManageContent\KelolaBerita\KelolaBeritaController;
+use App\Http\Controllers\admin\ManageContent\Beranda\LayananController;
+use App\Http\Controllers\admin\ManageContent\Dokumen\PanduanController;
+
+use App\Http\Controllers\admin\ManageContent\Tentang\GalleryController;
 
 use App\Http\Controllers\admin\ManageContent\Tentang\ProfileController;
+use App\Http\Controllers\admin\ManageContent\Dokumen\RegulasiController;
 use App\Http\Controllers\admin\ManageContent\Tentang\VisiMisiController;
+use App\Http\Controllers\admin\ManageContent\Dokumen\KetetapanController;
+
+use App\Http\Controllers\admin\ManageContent\Tutorial\TutorialController;
+
+use App\Http\Controllers\admin\ManageContent\Beranda\PencapaianController;
 use App\Http\Controllers\admin\ManageContent\Tentang\OranizationController;
-use App\Http\Controllers\admin\ManageContent\Tentang\GalleryController;
+use App\Http\Controllers\admin\ManageContent\AppLayanan\AppLayananController;
+use App\Http\Controllers\admin\ManageContent\Pengumuman\PengumumanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -188,9 +188,14 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
 
         Route::prefix('berita')->as('berita.')->group(function () {
            //Berita
-            Route::controller(BeritaController::class)->group(function(){
-                Route::get('/kelolaberita', 'index')->name('kelolaberita'); 
-        });       
+            Route::controller(KelolaBeritaController::class)->group(function(){
+                Route::get('/kelolaberita', 'index')->name('kelolaberita');
+                Route::post('/kelolaberita', 'store')->name('kelolaberita.store');
+                Route::put('/kelolaberita/{kelolaberita}', 'update')->name('kelolaberita.update');
+                Route::delete('/kelolaberita/{kelolaberita}', 'destroy')->name('kelolaberita.destroy');
+                Route::get('/kelolaberita/export', 'export')->name('kelolaberita.export');
+                Route::post('/kelolaberita/bulk-action', 'bulk')->name('kelolaberita.bulk');
+            });
         });
 
         Route::prefix('pengumuman')->as('pengumuman.')->group(function () {

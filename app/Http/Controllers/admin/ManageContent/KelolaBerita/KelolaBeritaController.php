@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\admin\ManageContent\Berita;
+namespace App\Http\Controllers\Admin\ManageContent\KelolaBerita;
 
-use App\Models\Berita;
+use App\Models\ManageContent\KelolaBerita\KelolaBerita;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreBeritaRequest;
-use App\Http\Requests\UpdateBeritaRequest;
+use Illuminate\Http\Request;
 
-class BeritaController extends Controller
+class KelolaBeritaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -30,7 +29,7 @@ class BeritaController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreBeritaRequest $request)
+    public function store(Request $request)
     {
         //
     }
@@ -38,7 +37,7 @@ class BeritaController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Berita $kelolaberita)
+    public function show(KelolaBerita $kelolaBerita)
     {
         //
     }
@@ -46,7 +45,7 @@ class BeritaController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Berita $kelolaberita)
+    public function edit(KelolaBerita $kelolaBerita)
     {
         //
     }
@@ -54,7 +53,7 @@ class BeritaController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateBeritaRequest $request, Berita $kelolaberita)
+    public function update(Request $request, KelolaBerita $kelolaBerita)
     {
         //
     }
@@ -62,7 +61,7 @@ class BeritaController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Berita $kelolaberita)
+    public function destroy(KelolaBerita $kelolaBerita)
     {
         //
     }
