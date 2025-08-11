@@ -48,7 +48,7 @@
         </script>
 
         <script>
-            document.addEventListener("DOMContentLoaded", function () {
+            document.addEventListener("DOMContentLoaded", function() {
                 window.initBulkActions();
             });
         </script>
@@ -173,37 +173,44 @@
                                 </th>
 
                                 <!-- Nomor Urut -->
-                                <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-12">
+                                <th
+                                    class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-12">
                                     No.
                                 </th>
 
                                 <!-- Judul Ketetapan -->
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Nama Ketetapan
                                 </th>
 
                                 <!-- Deskripsi -->
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Deskripsi
                                 </th>
 
                                 <!-- Tahun Terbit -->
-                                <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th
+                                    class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Tahun Terbit
                                 </th>
 
                                 <!-- File Info (tipe + size) -->
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     File
                                 </th>
 
                                 <!-- Status -->
-                                <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th
+                                    class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Status
                                 </th>
 
                                 <!-- Aksi -->
-                                <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th
+                                    class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Aksi
                                 </th>
                             </tr>
@@ -549,7 +556,7 @@
             window.permanentDeleteKetetapan = function(id) {
                 if (confirm(
                         '⚠️ PERINGATAN!\n\nKetetapan akan dihapus PERMANEN dan tidak dapat dikembalikan.\n\nApakah Anda yakin?'
-                        )) {
+                    )) {
                     const form = document.createElement('form');
                     form.method = 'POST';
                     form.action = '{{ route('admin.manage-content.dokumen.ketetapan.bulk') }}';

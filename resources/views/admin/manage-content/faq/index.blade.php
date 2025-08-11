@@ -26,7 +26,7 @@
         </script>
 
         <script>
-            document.addEventListener("DOMContentLoaded", function () {
+            document.addEventListener("DOMContentLoaded", function() {
                 window.initBulkActions();
             });
         </script>
@@ -114,8 +114,8 @@
                     class="block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
             </div>
             <div class="flex flex-col sm:flex-row gap-2">
-                <select id="filter-select" name="filter"
-                    data-url="{{ route('admin.manage-content.faq.index') }}" data-target="faqTableBody"
+                <select id="filter-select" name="filter" data-url="{{ route('admin.manage-content.faq.index') }}"
+                    data-target="faqTableBody"
                     class="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
                     <option value="all" {{ request('filter') == 'all' ? 'selected' : '' }}>-- Semua Status --
                     </option>
@@ -125,8 +125,8 @@
                     <option value="archived" {{ request('filter') == 'archived' ? 'selected' : '' }}>Archived</option>
                 </select>
 
-                <select id="perpage-select" name="perPage"
-                    data-url="{{ route('admin.manage-content.faq.index') }}" data-target="faqTableBody"
+                <select id="perpage-select" name="perPage" data-url="{{ route('admin.manage-content.faq.index') }}"
+                    data-target="faqTableBody"
                     class="flex-1 sm:flex-none px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
                     <option value="all" {{ request('perPage') == 'all' ? 'selected' : '' }}>-- Semua
                         {{ $title }} --</option>

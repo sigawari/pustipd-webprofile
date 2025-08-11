@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 use App\Models\Announcement;
 use App\Models\ManageContent\Faq; 
 use App\Models\ManageContent\AboutUs\VisiMisi;
+use App\Models\ManageContent\AboutUs\Gallery;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 
 // Uncomment the following lines if you need to use Publics model or requests
 // use App\Models\Publics;
@@ -24,7 +28,7 @@ class PublicsController extends Controller
             $description = 'Apa itu PUSTIPD UIN Raden Fatah Palembang dan apa saja yang kami lakukan.';
             $keywords = 'tentang, news, pustipd';
         
-            $galleries = \App\Models\ManageContent\AboutUs\Gallery::where('status', 'published')
+            $galleries = Gallery::where('status', 'published')
                                ->orderBy('sort_order', 'asc')
                                ->orderBy('created_at', 'desc')
                                ->get();
@@ -157,26 +161,39 @@ class PublicsController extends Controller
                 $perPage = 10;
             }
         
-            // Query untuk data ketetapan yang published dan active
-            $query = \App\Models\Ketetapan::active() // Menggunakan scope active
-                                         ->orderBy('sort_order', 'asc')
-                                         ->orderBy('created_at', 'desc');
+            // ✅ PERBAIKAN: Query yang benar untuk ketetapan published
+            $query = \App\Models\Ketetapan::where('status', 'published')
+                                        ->whereNotNull('file_path') // ✅ TAMBAHAN: Hanya yang ada filenya
+                                        ->orderBy('year_published', 'desc')
+                                        ->orderBy('created_at', 'desc');
         
             // Apply search filter jika ada
             if ($search) {
-                $query->search($search); // Menggunakan scope search
+                $query->where(function($q) use ($search) {
+                    $q->where('title', 'like', "%{$search}%")
+                      ->orWhere('description', 'like', "%{$search}%");
+                });
             }
         
             // Paginate results
             $ketetapans = $query->paginate($perPage);
         
+            // Append search parameter ke pagination links
+            $ketetapans->appends(request()->query());
+        
+            // ✅ TAMBAHAN: Total files yang bisa didownload untuk bulk download info
+            $totalDownloadableFiles = \App\Models\Ketetapan::where('status', 'published')
+                                                           ->whereNotNull('file_path')
+                                                           ->count();
+        
             return view('public.ketetapan', compact(
                 'title', 
                 'description', 
                 'keywords', 
-                'ketetapans'
+                'ketetapans',
+                'totalDownloadableFiles' // ✅ TAMBAHAN
             ));
-        }        
+        }
         if ($request->is('regulasi')) {
             $title = 'regulasi';
             $description = 'Informasi Publik dan dokumen terkait PUSTIPD UIN Raden Fatah Palembang yang bisa didownload';
@@ -206,6 +223,126 @@ class PublicsController extends Controller
 
         return view('public.homepage', compact('title', 'description', 'keywords'));
     }
-    
 
+        /**
+     * ✅ TAMBAHAN: Download single file ketetapan (untuk public)
+     */
+    public function downloadKetetapan(\App\Models\Ketetapan $ketetapan)
+    {
+        // Cek akses public: hanya file published yang bisa didownload
+        if ($ketetapan->status !== 'published') {
+            abort(404, 'Dokumen tidak tersedia untuk publik');
+        }
+
+        // Cek file exists
+        if (!$ketetapan->file_path || !Storage::disk('public')->exists($ketetapan->file_path)) {
+            abort(404, 'File tidak ditemukan');
+        }
+
+        $filePath = Storage::disk('public')->path($ketetapan->file_path);
+        $downloadName = $ketetapan->original_filename ?? ($ketetapan->title . '.pdf');
+        
+        // Log download activity
+        Log::info('Public file downloaded', [
+            'ketetapan_id' => $ketetapan->id,
+            'title' => $ketetapan->title,
+            'user_ip' => request()->ip(),
+            'user_agent' => request()->userAgent()
+        ]);
+        
+        return response()->download($filePath, $downloadName);
+    }
+
+    /**
+     * ✅ TAMBAHAN: Bulk download files ketetapan (untuk public)
+     */
+    public function bulkDownloadKetetapan(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'exists:ketetapans,id'
+        ]);
+
+        $ids = $request->input('ids');
+        
+        // Ambil ketetapan yang published dan ada filenya (khusus untuk public)
+        $ketetapans = \App\Models\Ketetapan::where('status', 'published')
+                                           ->whereIn('id', $ids)
+                                           ->whereNotNull('file_path')
+                                           ->get();
+
+        if ($ketetapans->isEmpty()) {
+            return redirect()->back()->with('error', 'Tidak ada file yang dapat didownload');
+        }
+
+        // Jika hanya 1 file, download langsung
+        if ($ketetapans->count() === 1) {
+            return $this->downloadKetetapan($ketetapans->first());
+        }
+
+        // Jika lebih dari 1 file, buat ZIP
+        return $this->createZipDownload($ketetapans);
+    }
+
+    /**
+     * ✅ TAMBAHAN: Create ZIP download
+     */
+    private function createZipDownload($ketetapans)
+    {
+        $zip = new \ZipArchive();
+        $zipFileName = 'ketetapan_' . date('Y-m-d_H-i-s') . '.zip';
+        $zipPath = storage_path('app/temp/' . $zipFileName);
+        
+        // Buat folder temp jika belum ada
+        if (!File::exists(storage_path('app/temp'))) {
+            File::makeDirectory(storage_path('app/temp'), 0755, true);
+        }
+
+        if ($zip->open($zipPath, \ZipArchive::CREATE) === TRUE) {
+            $fileCount = 0;
+            
+            foreach ($ketetapans as $ketetapan) {
+                if (Storage::disk('public')->exists($ketetapan->file_path)) {
+                    $filePath = Storage::disk('public')->path($ketetapan->file_path);
+                    $fileName = $ketetapan->original_filename ?? ($ketetapan->title . '.pdf');
+                    
+                    // Pastikan nama file unik dalam ZIP
+                    $counter = 1;
+                    $originalFileName = $fileName;
+                    while ($zip->locateName($fileName) !== false) {
+                        $pathInfo = pathinfo($originalFileName);
+                        $extension = isset($pathInfo['extension']) ? '.' . $pathInfo['extension'] : '';
+                        $fileName = $pathInfo['filename'] . '_' . $counter . $extension;
+                        $counter++;
+                    }
+                    
+                    $zip->addFile($filePath, $fileName);
+                    $fileCount++;
+                }
+            }
+            
+            $zip->close();
+            
+            if ($fileCount === 0) {
+                // Hapus ZIP kosong
+                if (File::exists($zipPath)) {
+                    File::delete($zipPath);
+                }
+                return redirect()->back()->with('error', 'Tidak ada file yang dapat didownload');
+            }
+
+            // Log bulk download activity
+            Log::info('Public bulk download', [
+                'file_count' => $fileCount,
+                'ketetapan_ids' => $ketetapans->pluck('id')->toArray(),
+                'user_ip' => request()->ip(),
+                'user_agent' => request()->userAgent()
+            ]);
+
+            return response()->download($zipPath, $zipFileName)->deleteFileAfterSend(true);
+        }
+
+        return redirect()->back()->with('error', 'Gagal membuat file ZIP');
+    }
+    
 }

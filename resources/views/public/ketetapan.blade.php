@@ -1,88 +1,6 @@
 <x-public.layouts title="{{ $title }}" description="{{ $description }}" keywords="{{ $keywords }}">
     <x-slot:title>{{ $title }}</x-slot:title>
 
-    <style>
-        .underline-animate::after {
-            content: '';
-            position: absolute;
-            bottom: -1rem;
-            left: 0;
-            height: 4px;
-            width: 0;
-            background-color: #062749;
-            transition: width 0.4s ease;
-        }
-
-        .group:hover .underline-animate::after {
-            width: 100%;
-        }
-
-        /* Table Styles */
-        .ketetapan-table {
-            background: white;
-            border-radius: 1rem;
-            overflow: hidden;
-            box-shadow: 0 4px 20px rgba(6, 39, 73, 0.08);
-            border: 1px solid rgba(6, 39, 73, 0.1);
-        }
-
-        .table-header {
-            background: linear-gradient(135deg, #062749 0%, #0f3460 100%);
-            color: white;
-        }
-
-        .table-row:hover {
-            background-color: #f8fafc;
-            transform: translateY(-1px);
-            transition: all 0.2s ease;
-        }
-
-        .download-btn {
-            background: linear-gradient(135deg, #062749 0%, #0f3460 100%);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            font-weight: 600;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: all 0.3s ease;
-            font-size: 0.875rem;
-        }
-
-        .download-btn:hover {
-            background: linear-gradient(135deg, #0f3460 0%, #1a4a73 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(6, 39, 73, 0.3);
-        }
-
-        .not-available {
-            color: #9ca3af;
-            font-style: italic;
-        }
-
-        /* Responsive Table */
-        @media (max-width: 768px) {
-            .ketetapan-table {
-                font-size: 0.875rem;
-            }
-
-            .table-header th {
-                padding: 0.75rem 0.5rem;
-            }
-
-            .table-row td {
-                padding: 0.75rem 0.5rem;
-            }
-
-            .download-btn {
-                font-size: 0.75rem;
-                padding: 0.375rem 0.75rem;
-            }
-        }
-    </style>
-
     <section id="public-info" class="py-20 mt-8 bg-primary">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Heading -->
@@ -93,144 +11,189 @@
                 <h3 class="text-lg text-secondary pt-4">
                     Ketetapan terkait PUSTIPD yang bisa diunduh
                 </h3>
+                @if (isset($totalDownloadableFiles))
+                    <p class="text-sm text-secondary/80 mt-2">
+                        Total {{ $totalDownloadableFiles }} dokumen tersedia untuk diunduh
+                    </p>
+                @endif
             </div>
 
-            <!-- Search Form -->
-            <form action="{{ request()->url() }}" method="GET" class="relative w-full max-w-md mx-auto mb-8">
-                <input type="text" name="search" value="{{ request('search') }}"
-                    placeholder="Cari {{ strtolower($title) }} di sini...."
-                    class="w-full rounded-xl pl-12 pr-4 py-2 sm:py-3 
-                              text-secondary placeholder-gray-400
-                              bg-white border border-white shadow-sm focus:ring-2 focus:ring-secondary focus:border-transparent
-                              focus:outline-none" />
-                <button type="submit" class="absolute top-1/2 left-3 transform -translate-y-1/2 text-secondary">
-                    <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" stroke-width="2"
-                        viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1010.5 3a7.5 7.5 0 006.15 13.65z" />
-                    </svg>
-                </button>
-            </form>
+            <!-- ✅ FIXED: Search & Bulk Actions Bar - SOLID WHITE BACKGROUND -->
+            <div class="max-w-6xl mx-auto mb-8">
+                <div class="bg-white rounded-xl p-4 lg:p-6 border border-gray-200 shadow-lg">
+                    <div class="flex flex-col space-y-4 lg:space-y-0 lg:flex-row lg:items-center lg:justify-between">
+                        <!-- Search Form - LIGHT GRAY BACKGROUND TO DISTINGUISH FROM WHITE HEADER -->
+                        <div class="flex-1 max-w-md">
+                            <form action="{{ request()->url() }}" method="GET" class="relative">
+                                <input type="text" name="search" value="{{ request('search') }}"
+                                    placeholder="Cari {{ strtolower($title) }} di sini...."
+                                    class="w-full rounded-lg pl-12 pr-4 py-3 text-gray-900 placeholder-gray-500
+                                          bg-gray-50 border border-gray-300 shadow-sm 
+                                          focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none
+                                          transition-all duration-200" />
+                                <button type="submit"
+                                    class="absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-500 hover:text-blue-600 transition-colors">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1010.5 3a7.5 7.5 0 006.15 13.65z" />
+                                    </svg>
+                                </button>
+                            </form>
+                        </div>
 
-            <!-- Tabel Ketetapan -->
+                        <!-- Bulk Actions -->
+                        <div class="flex flex-col sm:flex-row items-center gap-3">
+                            <!-- Info Count -->
+                            <div class="text-sm text-gray-600 font-medium">
+                                <span id="info-count">{{ $ketetapans->total() }} dokumen tersedia</span>
+                            </div>
+
+                            <!-- Select All Button -->
+                            <button onclick="toggleSelectAll()" id="select-all-btn"
+                                class="inline-flex items-center px-4 py-2 bg-blue-100 text-blue-800 rounded-lg 
+                                       hover:bg-blue-200 border border-blue-300 hover:border-blue-400
+                                       transition-all duration-200 text-sm font-medium min-w-[120px]">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                                </svg>
+                                <span id="select-text">Pilih Semua</span>
+                            </button>
+
+                            <!-- Bulk Download Button -->
+                            <button onclick="bulkDownloadSelected()" id="bulk-download-btn"
+                                class="hidden inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg 
+                                       hover:bg-green-700 border border-green-500 hover:border-green-600
+                                       transition-all duration-200 text-sm font-medium shadow-lg min-w-[160px]">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                                Download (<span id="selected-count">0</span>)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Responsive Table Container -->
             <div class="max-w-6xl mx-auto">
-                <div class="ketetapan-table mb-8">
+                <!-- Desktop Table -->
+                <div class="hidden lg:block bg-white rounded-xl border border-gray-200 shadow-lg overflow-hidden">
                     <div class="overflow-x-auto">
                         <table class="w-full">
                             <!-- Table Header -->
-                            <thead class="table-header">
-                                <tr>
-                                    <th class="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider w-16">
+                            <thead>
+                                <tr class="bg-secondary border-b border-blue-600">
+                                    <!-- ✅ FIXED: Header Checkbox with Proper Event Handler -->
+                                    <th class="px-4 py-4 text-center w-12">
+                                        <input type="checkbox" id="header-checkbox"
+                                            class="rounded border-gray-300 text-blue-600 focus:ring-blue-500 focus:border-blue-500 cursor-pointer"
+                                            onchange="toggleAllCheckboxes(this)" title="Pilih/Batal Semua">
+                                    </th>
+                                    <th
+                                        class="px-6 py-4 text-left text-sm font-semibold text-white uppercase tracking-wider w-16">
                                         No.
                                     </th>
-                                    <th class="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider">
+                                    <th
+                                        class="px-6 py-4 text-left text-sm font-semibold text-white uppercase tracking-wider">
                                         Nama Ketetapan
                                     </th>
                                     <th
-                                        class="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider hidden md:table-cell">
-                                        Deskripsi Singkat
-                                    </th>
-                                    <th class="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider w-32">
-                                        Tahun Terbit
+                                        class="px-6 py-4 text-left text-sm font-semibold text-white uppercase tracking-wider">
+                                        Deskripsi
                                     </th>
                                     <th
-                                        class="px-6 py-4 text-center text-sm font-semibold uppercase tracking-wider w-32">
-                                        Dokumen
+                                        class="px-6 py-4 text-center text-sm font-semibold text-white uppercase tracking-wider w-32">
+                                        Tahun
+                                    </th>
+                                    <th
+                                        class="px-6 py-4 text-center text-sm font-semibold text-white uppercase tracking-wider w-32">
+                                        Download
                                     </th>
                                 </tr>
                             </thead>
 
                             <!-- Table Body -->
-                            <tbody class="divide-y divide-gray-200">
+                            <tbody class="bg-white divide-y divide-gray-200">
                                 @forelse($ketetapans as $index => $ketetapan)
-                                    <tr class="table-row">
-                                        <!-- Nomor -->
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                    <tr class="hover:bg-gray-50 transition-colors duration-150">
+                                        <!-- ✅ FIXED: Body Checkbox with Proper Class and Event -->
+                                        <td class="px-4 py-4 text-center">
+                                            @if ($ketetapan->file_path && file_exists(storage_path('app/public/' . $ketetapan->file_path)))
+                                                <input type="checkbox"
+                                                    class="file-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500 focus:border-blue-500 cursor-pointer"
+                                                    value="{{ $ketetapan->id }}" data-id="{{ $ketetapan->id }}"
+                                                    onchange="updateBulkDownloadButton()">
+                                            @else
+                                                <span class="w-4 h-4 inline-block"></span>
+                                            @endif
+                                        </td>
+
+                                        <!-- Number -->
+                                        <td class="px-6 py-4 text-sm font-medium text-secondary">
                                             {{ ($ketetapans->currentPage() - 1) * $ketetapans->perPage() + $index + 1 }}.
                                         </td>
 
-                                        <!-- Nama -->
-                                        <td class="px-6 py-4 text-sm text-gray-900">
-                                            <div class="font-semibold text-secondary mb-1">
+                                        <!-- Title -->
+                                        <td class="px-6 py-4">
+                                            <div class="font-semibold text-secondary mb-1 leading-tight">
                                                 {{ $ketetapan->title }}
                                             </div>
-                                            <!-- Kategori & Authority -->
-                                            <div class="flex flex-wrap gap-2 mt-1">
-                                                @if ($ketetapan->category)
-                                                    <span
-                                                        class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                                        {{ $ketetapan->category }}
-                                                    </span>
-                                                @endif
-                                                @if ($ketetapan->authority)
-                                                    <span
-                                                        class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                                                        {{ $ketetapan->authority }}
-                                                    </span>
-                                                @endif
-                                            </div>
-                                            <!-- Deskripsi di mobile -->
-                                            <div class="text-xs text-gray-600 md:hidden mt-2">
-                                                {{ Str::limit($ketetapan->description, 80) }}
-                                            </div>
-                                        </td>
-
-                                        <!-- Deskripsi (hidden di mobile) -->
-                                        <td class="px-6 py-4 text-sm text-gray-600 hidden md:table-cell">
-                                            <div class="max-w-xs">
-                                                {{ Str::limit($ketetapan->description, 120) }}
-                                            </div>
-                                            @if ($ketetapan->file_size)
-                                                <div class="text-xs text-gray-400 mt-1">
-                                                    Ukuran: {{ $ketetapan->formatted_file_size }}
+                                            @if ($ketetapan->formatted_file_size)
+                                                <div
+                                                    class="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
+                                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor"
+                                                        viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                                    </svg>
+                                                    {{ $ketetapan->formatted_file_size }}
                                                 </div>
                                             @endif
                                         </td>
 
-                                        <!-- Tahun Terbit -->
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                            <div class="font-semibold">
-                                                @if ($ketetapan->effective_date)
-                                                    {{ \Carbon\Carbon::parse($ketetapan->effective_date)->format('Y') }}
+                                        <!-- Description -->
+                                        <td class="px-6 py-4 text-sm text-secondary leading-relaxed">
+                                            <div class="max-w-sm">
+                                                {{ Str::limit(strip_tags($ketetapan->description), 120) }}
+                                            </div>
+                                        </td>
+
+                                        <!-- Year -->
+                                        <td class="px-6 py-4 text-center">
+                                            <div class="font-semibold text-secondary">
+                                                @if ($ketetapan->year_published)
+                                                    {{ $ketetapan->year_published }}
                                                 @elseif($ketetapan->created_at)
-                                                    {{ \Carbon\Carbon::parse($ketetapan->created_at)->format('Y') }}
+                                                    {{ $ketetapan->created_at->format('Y') }}
                                                 @else
-                                                    <span class="not-available">-</span>
+                                                    <span class="text-gray-400">-</span>
                                                 @endif
                                             </div>
-                                            @if ($ketetapan->effective_date)
-                                                <div class="text-xs text-gray-500">
-                                                    {{ \Carbon\Carbon::parse($ketetapan->effective_date)->format('d M Y') }}
-                                                </div>
-                                            @endif
                                         </td>
 
                                         <!-- Download Button -->
-                                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                                        <td class="px-6 py-4 text-center">
                                             @if ($ketetapan->file_path && file_exists(storage_path('app/public/' . $ketetapan->file_path)))
-                                                <a href="{{ asset('storage/' . $ketetapan->file_path) }}"
-                                                    class="download-btn" target="_blank"
-                                                    download="{{ $ketetapan->title }}.{{ pathinfo($ketetapan->file_path, PATHINFO_EXTENSION) }}">
-                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                                <a href="{{ route('ketetapan.download', $ketetapan->id) }}"
+                                                    class="inline-flex items-center px-3 py-2 bg-blue-600 text-white rounded-lg 
+                                                           hover:bg-blue-700 transition-colors text-xs font-medium shadow-sm"
+                                                    title="Download {{ $ketetapan->title }}" target="_blank">
+                                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
                                                         viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round"
                                                             stroke-width="2"
                                                             d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                                     </svg>
-                                                    <span class="hidden sm:inline">Download</span>
-                                                    <span class="sm:hidden">PDF</span>
+                                                    Download
                                                 </a>
                                             @else
                                                 <span
-                                                    class="inline-flex items-center px-3 py-2 rounded-lg bg-gray-100 text-gray-400 text-xs font-medium cursor-not-allowed">
-                                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
-                                                        viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2"
-                                                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
-                                                    </svg>
-                                                    <span class="hidden sm:inline">Tidak Tersedia</span>
-                                                    <span class="sm:hidden">N/A</span>
+                                                    class="inline-flex items-center px-3 py-2 bg-gray-500 text-gray-300 rounded-lg text-xs font-medium cursor-not-allowed">
+                                                    N/A
                                                 </span>
                                             @endif
                                         </td>
@@ -238,44 +201,18 @@
                                 @empty
                                     <!-- Empty State -->
                                     <tr>
-                                        <td colspan="5" class="px-6 py-12 text-center">
-                                            <div class="text-gray-500">
-                                                @if (request('search'))
-                                                    <!-- Empty search result -->
-                                                    <svg class="w-12 h-12 mx-auto mb-4 text-gray-400" fill="none"
-                                                        stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="1.5"
-                                                            d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1010.5 3a7.5 7.5 0 006.15 13.65z" />
-                                                    </svg>
-                                                    <p class="text-lg font-medium text-gray-900 mb-2">Tidak ditemukan
-                                                    </p>
-                                                    <p class="text-gray-500 mb-4">Tidak ada ketetapan yang sesuai dengan
-                                                        pencarian "{{ request('search') }}"</p>
-                                                    <a href="{{ request()->url() }}"
-                                                        class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700">
-                                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor"
-                                                            viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                stroke-width="2"
-                                                                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
-                                                            </path>
-                                                        </svg>
-                                                        Lihat Semua Ketetapan
-                                                    </a>
-                                                @else
-                                                    <!-- No data at all -->
-                                                    <svg class="w-12 h-12 mx-auto mb-4 text-gray-400" fill="none"
-                                                        stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="1.5"
-                                                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                                    </svg>
-                                                    <p class="text-lg font-medium text-gray-900 mb-2">Belum ada
-                                                        ketetapan tersedia</p>
-                                                    <p class="text-gray-500">Ketetapan akan segera ditambahkan oleh
-                                                        admin</p>
-                                                @endif
+                                        <td colspan="6" class="px-6 py-12 text-center bg-white">
+                                            <div class="text-center">
+                                                <svg class="w-12 h-12 mx-auto mb-4 text-gray-400" fill="none"
+                                                    stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="1.5"
+                                                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                                </svg>
+                                                <p class="text-lg font-medium text-gray-900 mb-2">Belum ada ketetapan
+                                                    tersedia</p>
+                                                <p class="text-gray-600">Ketetapan akan segera ditambahkan oleh admin
+                                                </p>
                                             </div>
                                         </td>
                                     </tr>
@@ -285,9 +222,99 @@
                     </div>
                 </div>
 
+                <!-- Mobile Cards -->
+                <div class="lg:hidden space-y-4">
+                    @forelse($ketetapans as $index => $ketetapan)
+                        <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-lg">
+                            <div class="flex items-start justify-between mb-3">
+                                <!-- Checkbox dan Number -->
+                                <div class="flex items-center space-x-3">
+                                    @if ($ketetapan->file_path && file_exists(storage_path('app/public/' . $ketetapan->file_path)))
+                                        <input type="checkbox"
+                                            class="file-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500 focus:border-blue-500 cursor-pointer"
+                                            value="{{ $ketetapan->id }}" data-id="{{ $ketetapan->id }}"
+                                            onchange="updateBulkDownloadButton()">
+                                    @else
+                                        <span class="w-4 h-4 inline-block"></span>
+                                    @endif
+                                    <span class="text-sm font-medium text-secondary">
+                                        {{ ($ketetapans->currentPage() - 1) * $ketetapans->perPage() + $index + 1 }}.
+                                    </span>
+                                </div>
+
+                                <!-- Year Badge -->
+                                @if ($ketetapan->year_published || $ketetapan->created_at)
+                                    <div
+                                        class="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
+                                        {{ $ketetapan->year_published ?? $ketetapan->created_at->format('Y') }}
+                                    </div>
+                                @endif
+                            </div>
+
+                            <!-- Title -->
+                            <h3 class="font-semibold text-secondary text-base mb-2 leading-tight">
+                                {{ $ketetapan->title }}
+                            </h3>
+
+                            <!-- Description -->
+                            <p class="text-sm text-secondary mb-3 leading-relaxed opacity-80">
+                                {{ Str::limit(strip_tags($ketetapan->description), 100) }}
+                            </p>
+
+                            <!-- File Info & Download -->
+                            <div class="flex items-center justify-between">
+                                @if ($ketetapan->formatted_file_size)
+                                    <div
+                                        class="inline-flex items-center px-2 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded">
+                                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                        </svg>
+                                        {{ $ketetapan->formatted_file_size }}
+                                    </div>
+                                @else
+                                    <div></div>
+                                @endif
+
+                                <!-- Download Button -->
+                                @if ($ketetapan->file_path && file_exists(storage_path('app/public/' . $ketetapan->file_path)))
+                                    <a href="{{ route('ketetapan.download', $ketetapan->id) }}"
+                                        class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg 
+                                               hover:bg-blue-700 transition-colors text-sm font-medium shadow-sm"
+                                        title="Download {{ $ketetapan->title }}" target="_blank">
+                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                        </svg>
+                                        Download
+                                    </a>
+                                @else
+                                    <span
+                                        class="inline-flex items-center px-4 py-2 bg-gray-500 text-gray-300 rounded-lg text-sm font-medium cursor-not-allowed">
+                                        N/A
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+                    @empty
+                        <!-- Empty State Mobile -->
+                        <div class="bg-white rounded-xl border border-gray-200 p-8 text-center shadow-lg">
+                            <svg class="w-12 h-12 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                            <p class="text-lg font-medium text-gray-900 mb-2">Belum ada ketetapan tersedia</p>
+                            <p class="text-gray-600">Ketetapan akan segera ditambahkan oleh admin</p>
+                        </div>
+                    @endforelse
+                </div>
+
                 <!-- Pagination -->
                 @if ($ketetapans->hasPages())
-                    <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+                    <div class="mt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
                         <!-- Info Pagination -->
                         <div class="text-sm text-secondary">
                             Menampilkan {{ $ketetapans->firstItem() ?? 0 }} sampai {{ $ketetapans->lastItem() ?? 0 }}
@@ -299,7 +326,7 @@
                             <!-- Previous Button -->
                             @if ($ketetapans->onFirstPage())
                                 <span
-                                    class="flex items-center justify-center w-10 h-10 rounded-lg bg-gray-100 text-gray-400 border border-gray-200 cursor-not-allowed">
+                                    class="flex items-center justify-center w-10 h-10 rounded-lg bg-white/10 text-secondary/50 border border-white/20 cursor-not-allowed">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
@@ -307,7 +334,7 @@
                                 </span>
                             @else
                                 <a href="{{ $ketetapans->appends(request()->all())->previousPageUrl() }}"
-                                    class="flex items-center justify-center w-10 h-10 rounded-lg bg-white text-gray-600 hover:bg-blue-600 hover:text-white border border-gray-200 hover:border-blue-600 transition-all duration-200">
+                                    class="flex items-center justify-center w-10 h-10 rounded-lg bg-white/20 text-secondary hover:bg-white hover:text-primary border border-white/30 hover:border-white transition-all duration-200">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
@@ -319,12 +346,12 @@
                             @foreach ($ketetapans->appends(request()->all())->getUrlRange(1, $ketetapans->lastPage()) as $page => $url)
                                 @if ($page == $ketetapans->currentPage())
                                     <span
-                                        class="flex items-center justify-center w-10 h-10 rounded-lg bg-blue-600 text-white font-semibold shadow-sm">
+                                        class="flex items-center justify-center w-10 h-10 rounded-lg bg-white text-primary font-semibold shadow-sm">
                                         {{ $page }}
                                     </span>
                                 @else
                                     <a href="{{ $url }}"
-                                        class="flex items-center justify-center w-10 h-10 rounded-lg bg-white text-gray-600 hover:bg-blue-600 hover:text-white border border-gray-200 hover:border-blue-600 transition-all duration-200">
+                                        class="flex items-center justify-center w-10 h-10 rounded-lg bg-white/20 text-secondary hover:bg-white hover:text-primary border border-white/30 hover:border-white transition-all duration-200">
                                         {{ $page }}
                                     </a>
                                 @endif
@@ -333,7 +360,7 @@
                             <!-- Next Button -->
                             @if ($ketetapans->hasMorePages())
                                 <a href="{{ $ketetapans->appends(request()->all())->nextPageUrl() }}"
-                                    class="flex items-center justify-center w-10 h-10 rounded-lg bg-white text-gray-600 hover:bg-blue-600 hover:text-white border border-gray-200 hover:border-blue-600 transition-all duration-200">
+                                    class="flex items-center justify-center w-10 h-10 rounded-lg bg-white/20 text-secondary hover:bg-white hover:text-primary border border-white/30 hover:border-white transition-all duration-200">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
@@ -341,12 +368,12 @@
                                 </a>
                             @else
                                 <span
-                                    class="flex items-center justify-center w-10 h-10 rounded-lg bg-gray-100 text-gray-400 border border-gray-200 cursor-not-allowed">
+                                    class="flex items-center justify-center w-10 h-10 rounded-lg bg-white/10 text-secondary/50 border border-white/20 cursor-not-allowed">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
                                     </svg>
-                                    </a>
+                                </span>
                             @endif
                         </div>
                     </div>
@@ -354,4 +381,11 @@
             </div>
         </div>
     </section>
+
+    <!-- ✅ FIXED: Bulk Download Form -->
+    <form id="bulk-download-form" method="POST" action="{{ route('public.ketetapan.bulk-download') }}"
+        style="display: none;">
+        @csrf
+        <div id="bulk-download-inputs"></div>
+    </form>
 </x-public.layouts>

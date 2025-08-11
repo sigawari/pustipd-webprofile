@@ -4,8 +4,8 @@
 @endphp
 
 @if ($type && $msg)
-    <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 4000)" x-transition role="alert" {{--     sm: → desktop / default      --}}
-        {{--  !sm: → mobile (<640px)          --}}
+    <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 4000)" x-transition role="alert" {{-- sm: → desktop / default --}}
+        {{-- !sm: → mobile (<640px) --}}
         class="fixed
              top-2 left-1/2 -translate-x-1/2        {{-- mobile: tengah-atas --}}
              sm:top-4 sm:left-auto sm:right-4 sm:translate-x-0   {{-- desktop: kanan-atas --}}
@@ -43,10 +43,11 @@
             </button>
         </div>
 
-        {{-- progress-bar (opsional) --}}
+        {{-- progress-bar yang diperbaiki --}}
         <div class="h-1 w-full overflow-hidden bg-gray-200 rounded-b-lg">
-            <div x-data="{ type: '{{ session('type') ?? 'info' }}' }" :class="type === 'success' ? 'bg-green-400' : 'bg-red-400'" class="h-full"
-                x-init="setTimeout(() => $el.style.width = '0%', 100)" style="width:100%; transition:width 4s linear"></div>
+            <div class="h-full {{ $type === 'success' ? 'bg-green-400' : 'bg-red-400' }}" x-init="setTimeout(() => $el.style.width = '0%', 100)"
+                style="width:100%; transition:width 4s linear">
+            </div>
         </div>
     </div>
 @endif

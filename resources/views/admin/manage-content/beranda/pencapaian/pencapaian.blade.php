@@ -3,26 +3,26 @@
     <!-- @section('page-title', 'Beranda PUSTIPD')
     @section('page-description', 'Kelola konten pencapaian UIN Raden Fatah Palembang')
     @section('breadcrumb')
-        <li>
-            <div class="flex items-center">
-                <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd"
-                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 111.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                        clip-rule="evenodd"></path>
-                </svg>
-                <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2">Kelola Konten</span>
-            </div>
-        </li>
-        <li>
-            <div class="flex items-center">
-                <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd"
-                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 111.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                        clip-rule="evenodd"></path>
-                </svg>
-                <span class="ml-1 text-sm font-medium text-gray-700 md:ml-2">Beranda {{ $title }}</span>
-            </div>
-        </li>
+            <li>
+                <div class="flex items-center">
+                    <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd"
+                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 111.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                            clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2">Kelola Konten</span>
+                </div>
+            </li>
+            <li>
+                <div class="flex items-center">
+                    <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd"
+                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 111.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                            clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="ml-1 text-sm font-medium text-gray-700 md:ml-2">Beranda {{ $title }}</span>
+                </div>
+            </li>
     @endsection -->
     <!-- Content Management Area - PERBAIKAN MOBILE -->
     <div class="bg-white rounded-xl border border-gray-200 p-3 sm:p-6 m-3 sm:m-6 shadow-sm">
@@ -831,14 +831,14 @@
         </div>
 
         <!-- Modal Add/Edit Achievement -->
-        <div id="achievementModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+        <div id="AddModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
             <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
                 <div class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" onclick="closeModal()">
                 </div>
 
                 <div
                     class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                    <form id="achievementForm">
+                    <form id="addForm">
                         <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                             <div class="sm:flex sm:items-start">
                                 <div class="w-full">
@@ -912,7 +912,8 @@
                     class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md sm:w-full">
                     <div class="bg-white px-4 pt-5 pb-4 sm:p-6">
                         <div class="text-center">
-                            <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Preview {{ $title }}</h3>
+                            <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Preview {{ $title }}
+                            </h3>
 
                             <!-- Achievement Card Preview -->
                             <div

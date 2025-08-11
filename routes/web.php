@@ -50,6 +50,12 @@ Route::prefix('auth')->group(function () {
     Route::post('/logout', [LoginController::class, 'logout'])->name('login.logout');
 });
 
+Route::get('/ketetapan/{ketetapan}/download', [PublicsController::class, 'downloadKetetapan'])
+    ->name('ketetapan.download');
+
+Route::post('/ketetapan/bulk-download', [PublicsController::class, 'bulkDownloadKetetapan'])
+    ->name('public.ketetapan.bulk-download');
+
 // Admin Routes - Protected by authentication
 Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
     
@@ -189,6 +195,9 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
                 Route::delete('/ketetapan/{ketetapan}', 'destroy')->name('ketetapan.destroy');
                 Route::post('/ketetapan/bulk', 'bulk')->name('ketetapan.bulk');
                 Route::get('/ketetapan/export', 'export')->name('ketetapan.export');
+                Route::get('/ketetapan/{ketetapan}/download', 'download')->name('ketetapan.download');
+                Route::post('/ketetapan/bulk', [KetetapanController::class, 'bulk'])->name('ketetapan.bulk');
+                Route::post('/ketetapan/bulk-download', [App\Http\Controllers\PublicsController::class, 'bulkDownload']) ->name('public.ketetapan.bulk-download');
             });
             
             // SOP Routes

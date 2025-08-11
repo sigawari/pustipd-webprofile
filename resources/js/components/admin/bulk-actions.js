@@ -14,7 +14,10 @@ window.updateBulkActionsBar = function () {
             const statusElement = row.querySelector(".inline-flex");
             return (
                 statusElement &&
-                statusElement.textContent.trim().toLowerCase().includes("archived")
+                statusElement.textContent
+                    .trim()
+                    .toLowerCase()
+                    .includes("archived")
             );
         });
 
@@ -60,9 +63,13 @@ window.bulkAction = function (action) {
         form.method = "POST";
         form.action = window.bulkActionRoute;
         form.innerHTML = `
-            <input type="hidden" name="_token" value="${document.querySelector('meta[name="csrf-token"]').getAttribute('content')}">
+            <input type="hidden" name="_token" value="${document
+                .querySelector('meta[name="csrf-token"]')
+                .getAttribute("content")}">
             <input type="hidden" name="action" value="${action}">
-            ${ids.map(id => `<input type="hidden" name="ids[]" value="${id}">`).join('')}
+            ${ids
+                .map((id) => `<input type="hidden" name="ids[]" value="${id}">`)
+                .join("")}
         `;
         document.body.appendChild(form);
         form.submit();
@@ -70,12 +77,14 @@ window.bulkAction = function (action) {
 };
 
 window.quickStatusChange = function (id, status) {
-    if (confirm(`Ubah status Gallery ke ${status}?`)) {
+    if (confirm(`Ubah status ke ${status}?`)) {
         const form = document.createElement("form");
         form.method = "POST";
         form.action = window.bulkActionRoute;
         form.innerHTML = `
-            <input type="hidden" name="_token" value="${document.querySelector('meta[name="csrf-token"]').getAttribute('content')}">
+            <input type="hidden" name="_token" value="${document
+                .querySelector('meta[name="csrf-token"]')
+                .getAttribute("content")}">
             <input type="hidden" name="action" value="${status}">
             <input type="hidden" name="ids[]" value="${id}">
         `;

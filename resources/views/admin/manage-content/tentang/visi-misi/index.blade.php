@@ -206,7 +206,7 @@
     @include('admin.manage-content.tentang.visi-misi.update')
     @include('admin.manage-content.tentang.visi-misi.delete')
 
-    <!-- <script>
+    <script>
         // PERBAIKAN: Function dengan naming yang konsisten dan ID yang benar
         function OpenCreateModal() {
             console.log('🔍 Opening create modal');
@@ -306,21 +306,9 @@
             console.log('🔒 All modals Closed');
         }
 
-        // HAPUS atau COMMENT bagian ini untuk menghentikan auto-Open modal
-        // function TestModalSystem() {
-        //     console.log('🔧 Testing modal system...');
-        //     // PROBLEM: Ini yang menyebabkan modal terbuka otomatis saat reload
-        //     setTimeout(() => {
-        //         OpenUpdateModal(0); // ← HAPUS BARIS INI
-        //     }, 1000);
-        // }
-
         // Event listeners
         document.addEventListener('DOMContentLoaded', function() {
             console.log('✅ DOM ready');
-
-            // HAPUS atau COMMENT ini untuk menghentikan auto-test
-            // setTimeout(TestModalSystem, 1000); // ← HAPUS BARIS INI
 
             // Backdrop click handler
             document.addEventListener('click', function(event) {
@@ -341,6 +329,6 @@
                 }
             });
         });
-    </script> -->
+    </script>
 
 </x-admin.layouts>

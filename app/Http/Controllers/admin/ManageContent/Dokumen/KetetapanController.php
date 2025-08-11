@@ -7,6 +7,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Log;
 
@@ -22,14 +23,12 @@ class KetetapanController extends Controller
         $filter = $request->get('filter', 'all');
         $perPage = $request->get('perPage', 10);
         
-        // Pisahkan multi keyword
-        $keywords = !empty($search) ? preg_split('/\s+/', (string) $search) : [];
-
         // Query builder awal
         $ketetapanQuery = Ketetapan::query();
 
         // Apply search jika ada
         if ($search) {
+            $keywords = preg_split('/\s+/', trim($search));
             $ketetapanQuery->where(function ($q) use ($keywords) {
                 foreach ($keywords as $word) {
                     $q->where(function ($q) use ($word) {
@@ -45,43 +44,29 @@ class KetetapanController extends Controller
             $ketetapanQuery->where('status', $filter);
         }
 
-        // Merge results
-        $merged = $ketetapanQuery->get();
+        // Auto sorting: Tahun terbaru dulu, lalu tanggal dibuat terbaru
+        $ketetapanQuery->orderByDesc('year_published')
+                       ->orderByDesc('created_at');
 
         // Per-page validation
         if ($perPage === 'all') {
-            $perPage = max($merged->count(), 1); // Kalau 0, set jadi 1
+            $ketetapans = $ketetapanQuery->get();
+            $perPage = max($ketetapans->count(), 1);
         } else {
-            $perPage = (int) $perPage;
-            if ($perPage < 1) {
-                $perPage = 1;
-            }
+            $perPage = max((int) $perPage, 1);
         }
 
-        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        // Paginate
         $ketetapans = $ketetapanQuery->paginate($perPage);
 
-        // ✅ AUTO SORTING: Tahun terbaru dulu, lalu tanggal dibuat terbaru
-        $ketetapans->getCollection()->sortByDesc(function ($ketetapan) {
-            return [$ketetapan->year_published ?? 0, $ketetapan->created_at];
-        });
-
-        $ketetapans = new LengthAwarePaginator(
-            $ketetapans->getCollection()->slice(($currentPage - 1) * $perPage, $perPage)->values(),
-            $ketetapans->total(),
-            $perPage,
-            $currentPage,
-            ['path' => LengthAwarePaginator::resolveCurrentPath()]
-        );
-
         // AJAX response
-        if (request()->ajax()) {
+        if ($request->ajax()) {
             return view('admin.manage-content.dokumen.ketetapan.partials.table_body', compact('title', 'ketetapans'))->render();
         }
+
         // Render full view
         return view('admin.manage-content.dokumen.ketetapan.index', compact('title', 'ketetapans'));
     }
-    
 
     /**
      * Show the form for creating a new resource.
@@ -107,25 +92,33 @@ class KetetapanController extends Controller
             'status'         => 'required|in:published,draft,archived'
         ]);
 
-        // Simpan file ke storage
-        $file = $request->file('file');
-        $path = $file->store('ketetapan_files', 'public'); // simpan di storage/app/public/ketetapan_files
+        try {
+            // Handle file upload
+            $fileData = $this->handleFileUpload($request->file('file'));
 
-        // Simpan ke database
-        Ketetapan::create([
-            'title'          => $request->input('title'),
-            'description'    => $request->input('description'),
-            'file_path'      => $path,
-            'original_filename' => $file->getClientOriginalName(),
-            'file_size'      => $file->getSize(),
-            'file_type'      => $file->getClientOriginalExtension(),
-            'year_published' => $request->input('year_published') ?? null,
-            'status'         => $request->input('status'),
-        ]);
+            // Simpan ke database
+            Ketetapan::create([
+                'title'          => $request->input('title'),
+                'description'    => $request->input('description'),
+                'file_path'      => $fileData['file_path'],
+                'original_filename' => $fileData['original_filename'],
+                'file_size'      => $fileData['file_size'],
+                'file_type'      => $fileData['file_type'],
+                'year_published' => $request->input('year_published') ?? null,
+                'status'         => $request->input('status'),
+            ]);
 
-        return redirect()
-            ->back()
-            ->with('success', 'Ketetapan berhasil ditambahkan sebagai Draft.');
+            return redirect()
+                ->back()
+                ->with('success', 'Ketetapan berhasil ditambahkan.');
+
+        } catch (\Exception $e) {
+            Log::error('Error storing ketetapan: ' . $e->getMessage());
+            return redirect()
+                ->back()
+                ->with('error', 'Gagal menambahkan ketetapan: ' . $e->getMessage())
+                ->withInput();
+        }
     }
     
     /**
@@ -153,11 +146,8 @@ class KetetapanController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Ketetapan $ketetapan)
     {
-        // Ambil data ketetapan yang akan diupdate
-        $ketetapan = Ketetapan::findOrFail($id);
-
         // Validasi input (file opsional saat update)
         $request->validate([
             'title'          => 'required|string|max:255',
@@ -167,57 +157,63 @@ class KetetapanController extends Controller
             'status'         => 'required|in:published,draft,archived'
         ]);
 
-        // Cek apakah ada file baru diupload
-        if ($request->hasFile('file')) {
-            // Hapus file lama jika ada
-            if ($ketetapan->file_path && Storage::disk('public')->exists($ketetapan->file_path)) {
-                Storage::disk('public')->delete($ketetapan->file_path);
+        try {
+            // Cek apakah ada file baru diupload
+            if ($request->hasFile('file')) {
+                $fileData = $this->handleFileUpload($request->file('file'), $ketetapan->file_path);
+                
+                $ketetapan->file_path = $fileData['file_path'];
+                $ketetapan->original_filename = $fileData['original_filename'];
+                $ketetapan->file_size = $fileData['file_size'];
+                $ketetapan->file_type = $fileData['file_type'];
             }
 
-            // Simpan file baru
-            $file = $request->file('file');
-            $path = $file->store('ketetapan_files', 'public');
+            // Update field lainnya
+            $ketetapan->title = $request->input('title');
+            $ketetapan->description = $request->input('description');
+            $ketetapan->year_published = $request->input('year_published') ?? null;
+            $ketetapan->status = $request->input('status');
 
-            $ketetapan->file_path = $path;
-            $ketetapan->original_filename = $file->getClientOriginalName();
-            $ketetapan->file_size = $file->getSize();
-            $ketetapan->file_type = $file->getClientOriginalExtension();
+            $ketetapan->save();
+
+            return redirect()
+                ->back()
+                ->with('success', 'Ketetapan berhasil diperbarui.');
+
+        } catch (\Exception $e) {
+            Log::error('Error updating ketetapan: ' . $e->getMessage());
+            return redirect()
+                ->back()
+                ->with('error', 'Gagal memperbarui ketetapan: ' . $e->getMessage())
+                ->withInput();
         }
-
-        // Update field lainnya
-        $ketetapan->title = $request->input('title');
-        $ketetapan->description = $request->input('description');
-        $ketetapan->year_published = $request->input('year_published') ?? null;
-        $ketetapan->status = $request->input('status');
-
-        $ketetapan->save();
-
-        return redirect()
-            ->back()
-            ->with('success', 'Ketetapan berhasil diperbarui.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(Ketetapan $ketetapan)
     {
-        // Cari data ketetapan
-        $ketetapan = Ketetapan::findOrFail($id);
+        try {
+            // Hapus file di storage kalau ada
+            if ($ketetapan->file_path && Storage::disk('public')->exists($ketetapan->file_path)) {
+                Storage::disk('public')->delete($ketetapan->file_path);
+            }
 
-        // Hapus file di storage kalau ada
-        if ($ketetapan->file_path && Storage::disk('public')->exists($ketetapan->file_path)) {
-            Storage::disk('public')->delete($ketetapan->file_path);
+            // Hapus data dari database
+            $ketetapan->delete();
+
+            return redirect()
+                ->back()
+                ->with('success', 'Ketetapan berhasil dihapus.');
+
+        } catch (\Exception $e) {
+            Log::error('Error deleting ketetapan: ' . $e->getMessage());
+            return redirect()
+                ->back()
+                ->with('error', 'Gagal menghapus ketetapan: ' . $e->getMessage());
         }
-
-        // Hapus data dari database
-        $ketetapan->delete();
-
-        return redirect()
-            ->back()
-            ->with('success', 'Ketetapan berhasil dihapus.');
     }
-
 
     /**
      * Handle bulk actions
@@ -230,70 +226,169 @@ class KetetapanController extends Controller
             'ids.*' => 'exists:ketetapans,id'
         ]);
 
+        $action = $request->input('action');
+        $ids = $request->input('ids');
+
         try {
-            $action = $request->action;
-            $ids = $request->ids;
-            $count = count($ids);
-
-            switch ($action) {
-                case 'published':
-                    Ketetapan::whereIn('id', $ids)->update(['status' => 'published']);
-                    $message = "{$count} ketetapan berhasil dipublish!";
-                    break;
-
-                case 'draft':
-                    Ketetapan::whereIn('id', $ids)->update(['status' => 'draft']);
-                    $message = "{$count} ketetapan berhasil dijadikan draft!";
-                    break;
-
-                case 'archived':
-                    Ketetapan::whereIn('id', $ids)->update(['status' => 'archived']);
-                    $message = "{$count} ketetapan berhasil diarsipkan!";
-                    break;
-
-                case 'permanent_delete':
-                    $ketetapans = Ketetapan::whereIn('id', $ids)->get();
-                    
-                    // Delete files first
-                    foreach ($ketetapans as $ketetapan) {
-                        if ($ketetapan->file_path && Storage::disk('public')->exists($ketetapan->file_path)) {
-                            Storage::disk('public')->delete($ketetapan->file_path);
-                        }
+            if ($action === 'permanent_delete') {
+                $ketetapans = Ketetapan::whereIn('id', $ids)->get();
+                
+                foreach ($ketetapans as $ketetapan) {
+                    // Delete file if exists
+                    if ($ketetapan->file_path && Storage::disk('public')->exists($ketetapan->file_path)) {
+                        Storage::disk('public')->delete($ketetapan->file_path);
                     }
                     
-                    // Then delete records
-                    Ketetapan::whereIn('id', $ids)->delete();
-                    $message = "{$count} ketetapan berhasil dihapus permanen!";
-                    break;
+                    // Delete record
+                    $ketetapan->delete();
+                }
+                
+                $message = 'Ketetapan berhasil dihapus permanen';
+            } else {
+                Ketetapan::whereIn('id', $ids)->update(['status' => $action]);
+                
+                $message = match($action) {
+                    'published' => 'Ketetapan berhasil dipublish ke halaman publik',
+                    'draft' => 'Ketetapan berhasil disembunyikan dari halaman publik',
+                    'archived' => 'Ketetapan berhasil diarsipkan'
+                };
             }
 
             return redirect()->back()->with('success', $message);
 
         } catch (\Exception $e) {
-            Log::error('Error in bulk action: ' . $e->getMessage());
-
-            return redirect()->back()->with('error', 'Terjadi kesalahan saat melakukan aksi bulk.');
+            Log::error('Error bulk action: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
 
     /**
-     * Export ketetapan data
+     * Download file
      */
-    public function export(Request $request)
+    public function download(Ketetapan $ketetapan)
     {
-        // Implementation for export functionality
-        // Could export to Excel, PDF, etc.
-        
-        $ketetapans = Ketetapan::when($request->status, function($query) use ($request) {
-            $query->where('status', $request->status);
-        })->get();
+        // Cek akses: jika user tidak login (public access), pastikan status published
+        if (!auth()->check()) {
+            if ($ketetapan->status !== 'published') {
+                abort(404, 'Dokumen tidak tersedia untuk publik');
+            }
+        }
 
-        // For now, return JSON
-        return response()->json([
-            'data' => $ketetapans,
-            'exported_at' => now(),
-            'total' => $ketetapans->count()
+        // Cek file exists
+        if (!$ketetapan->file_path || !Storage::disk('public')->exists($ketetapan->file_path)) {
+            abort(404, 'File tidak ditemukan');
+        }
+
+        $filePath = Storage::disk('public')->path($ketetapan->file_path);
+        $downloadName = $ketetapan->original_filename ?? ($ketetapan->title . '.' . ($ketetapan->file_type ?? 'pdf'));
+        
+        // Log download activity
+        Log::info('File downloaded', [
+            'ketetapan_id' => $ketetapan->id,
+            'title' => $ketetapan->title,
+            'user_ip' => request()->ip(),
+            'user_agent' => request()->userAgent(),
+            'user_type' => auth()->check() ? 'admin' : 'public'
         ]);
+        
+        return response()->download($filePath, $downloadName);
+    }
+
+    /**
+     * Bulk download files
+     */
+    public function bulkDownload(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'exists:ketetapans,id'
+        ]);
+
+        $ids = $request->input('ids');
+        
+        // Ambil ketetapan yang published dan ada filenya
+        $query = Ketetapan::whereIn('id', $ids)->whereNotNull('file_path');
+        
+        // Jika akses public, hanya yang published
+        if (!auth()->check()) {
+            $query->where('status', 'published');
+        }
+        
+        $ketetapans = $query->get();
+
+        if ($ketetapans->isEmpty()) {
+            return redirect()->back()->with('error', 'Tidak ada file yang dapat didownload');
+        }
+
+        // Jika hanya 1 file, download langsung
+        if ($ketetapans->count() === 1) {
+            return $this->download($ketetapans->first());
+        }
+
+        // Jika lebih dari 1 file, buat ZIP
+        return $this->createZipDownload($ketetapans);
+    }
+
+    /**
+     * Create ZIP download
+     */
+    private function createZipDownload($ketetapans)
+    {
+        $zip = new \ZipArchive();
+        $zipFileName = 'ketetapan_' . date('Y-m-d_H-i-s') . '.zip';
+        $zipPath = storage_path('app/temp/' . $zipFileName);
+        
+        // Buat folder temp jika belum ada
+        if (!File::exists(storage_path('app/temp'))) {
+            File::makeDirectory(storage_path('app/temp'), 0755, true);
+        }
+
+        if ($zip->open($zipPath, \ZipArchive::CREATE) === TRUE) {
+            $fileCount = 0;
+            
+            foreach ($ketetapans as $ketetapan) {
+                if (Storage::disk('public')->exists($ketetapan->file_path)) {
+                    $filePath = Storage::disk('public')->path($ketetapan->file_path);
+                    $fileName = $ketetapan->original_filename ?? ($ketetapan->title . '.pdf');
+                    
+                    // Pastikan nama file unik dalam ZIP
+                    $counter = 1;
+                    $originalFileName = $fileName;
+                    while ($zip->locateName($fileName) !== false) {
+                        $pathInfo = pathinfo($originalFileName);
+                        $extension = isset($pathInfo['extension']) ? '.' . $pathInfo['extension'] : '';
+                        $fileName = $pathInfo['filename'] . '_' . $counter . $extension;
+                        $counter++;
+                    }
+                    
+                    $zip->addFile($filePath, $fileName);
+                    $fileCount++;
+                }
+            }
+            
+            $zip->close();
+            
+            if ($fileCount === 0) {
+                // Hapus ZIP kosong
+                if (File::exists($zipPath)) {
+                    File::delete($zipPath);
+                }
+                return redirect()->back()->with('error', 'Tidak ada file yang dapat didownload');
+            }
+
+            // Log bulk download activity
+            Log::info('Bulk download', [
+                'file_count' => $fileCount,
+                'ketetapan_ids' => $ketetapans->pluck('id')->toArray(),
+                'user_ip' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+                'user_type' => auth()->check() ? 'admin' : 'public'
+            ]);
+
+            return response()->download($zipPath, $zipFileName)->deleteFileAfterSend(true);
+        }
+
+        return redirect()->back()->with('error', 'Gagal membuat file ZIP');
     }
 
     /**
@@ -312,7 +407,7 @@ class KetetapanController extends Controller
         $filename = time() . '_' . Str::slug(pathinfo($originalName, PATHINFO_FILENAME)) . '.' . $extension;
 
         // Store file
-        $filePath = $file->storeAs('ketetapan', $filename, 'public');
+        $filePath = $file->storeAs('ketetapan_files', $filename, 'public');
 
         return [
             'file_path' => $filePath,
@@ -323,16 +418,18 @@ class KetetapanController extends Controller
     }
 
     /**
-     * Download file
+     * Export ketetapan data
      */
-    public function download(Ketetapan $ketetapan)
+    public function export(Request $request)
     {
-        if (!$ketetapan->file_path || !Storage::disk('public')->exists($ketetapan->file_path)) {
-            abort(404, 'File tidak ditemukan');
-        }
+        $ketetapans = Ketetapan::when($request->status, function($query) use ($request) {
+            $query->where('status', $request->status);
+        })->get();
 
-        $filePath = Storage::disk('public')->path($ketetapan->file_path);
-        $downloadName = $ketetapan->original_filename ?? 'ketetapan.' . $ketetapan->file_type;
-        return response()->download($filePath, $downloadName);
+        return response()->json([
+            'data' => $ketetapans,
+            'exported_at' => now(),
+            'total' => $ketetapans->count()
+        ]);
     }
 }

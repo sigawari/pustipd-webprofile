@@ -16,7 +16,6 @@ class Gallery extends Model
         'image',
         'event_date',
         'status',
-        'sort_order'
     ];
 
     protected $casts = [

@@ -4,12 +4,14 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>PUSTIPD | {{ $title }}</title>
 
         <!-- Vite Assets -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-        <link id="favicon" rel="shortcut icon" href="{{ asset('assets/img/logo/logo-uin-rfp.png') }}" type="image/x-icon">
+        <link id="favicon" rel="shortcut icon" href="{{ asset('assets/img/logo/logo-uin-rfp.png') }}"
+            type="image/x-icon">
 
         <!-- SEO Meta Tags -->
         <meta name="description" content="@yield('description', 'Sistem Manajemen Konten PUSTIPD UIN Raden Fatah Palembang')">

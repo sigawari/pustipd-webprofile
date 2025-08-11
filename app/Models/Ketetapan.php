@@ -1,4 +1,5 @@
 <?php
+// Di Model Ketetapan.php
 
 namespace App\Models;
 
@@ -7,8 +8,6 @@ use Illuminate\Support\Facades\Storage;
 
 class Ketetapan extends Model
 {
-    protected $table = 'ketetapans';
-    
     protected $fillable = [
         'title',
         'description', 
@@ -17,76 +16,100 @@ class Ketetapan extends Model
         'file_size',
         'file_type',
         'year_published',
-        'status',
-        // ❌ HAPUS: 'sort_order'
+        'status'
     ];
 
     protected $casts = [
-        'file_size' => 'integer',
-        'year_published' => 'integer',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
-    // Default scope untuk auto sorting
-    protected static function boot()
+    public function getFileExistsAttribute()
     {
-        parent::boot();
-
-        // Auto delete file saat model dihapus
-        static::deleting(function ($ketetapan) {
-            if ($ketetapan->file_path && Storage::disk('public')->exists($ketetapan->file_path)) {
-                Storage::disk('public')->delete($ketetapan->file_path);
-            }
-        });
+        return $this->file_path && Storage::disk('public')->exists($this->file_path);
     }
 
-    // Accessor untuk format file size
+    // ✅ TAMBAHKAN: Accessor untuk formatted file size
     public function getFormattedFileSizeAttribute()
     {
-        if (!$this->file_size) return null;
+        if (!$this->file_size) return '-';
         
         $bytes = $this->file_size;
         $units = ['B', 'KB', 'MB', 'GB'];
         
-        for ($i = 0; $bytes > 1024; $i++) {
+        for ($i = 0; $bytes > 1024 && $i < count($units) - 1; $i++) {
             $bytes /= 1024;
         }
         
         return round($bytes, 2) . ' ' . $units[$i];
     }
 
-    // Accessor untuk URL file
-    public function getFileUrlAttribute()
+    // ✅ TAMBAHKAN: Accessor untuk download URL
+    public function getDownloadUrlAttribute()
     {
-        if (!$this->file_path) return null;
-        return asset('storage/' . $this->file_path);
+        if (!$this->file_path || !$this->file_exists) {
+            return null;
+        }
+        
+        return route('ketetapan.download', $this->id);
     }
 
-    // Accessor untuk cek file exists
-    public function getFileExistsAttribute()
-    {
-        if (!$this->file_path) return false;
-        return Storage::disk('public')->exists($this->file_path);
-    }
-
-    // Scope untuk published
+    // ✅ TAMBAHKAN: Scope untuk published only
     public function scopePublished($query)
     {
         return $query->where('status', 'published');
     }
 
-    // Scope untuk active (published saja)
-    public function scopeActive($query)
-    {
-        return $query->where('status', 'published');
-    }
-
-    // Scope untuk search
+    // ✅ TAMBAHKAN: Scope untuk search
     public function scopeSearch($query, $search)
     {
         return $query->where(function($q) use ($search) {
-            $q->where('title', 'like', '%' . $search . '%')
-              ->orWhere('description', 'like', '%' . $search . '%')
-              ->orWhere('year_published', 'like', '%' . $search . '%');
+            $q->where('title', 'like', "%{$search}%")
+              ->orWhere('description', 'like', "%{$search}%");
         });
     }
+    public function download(Ketetapan $ketetapan)
+    {
+        // ✅ PERBAIKAN: Cek status published untuk akses public
+        if (!auth()->check()) {
+            // Jika user tidak login (akses public), cek status published
+            if ($ketetapan->status !== 'published') {
+                abort(404, 'Dokumen tidak tersedia untuk publik');
+            }
+        }
+
+        // Cek file exists
+        if (!$ketetapan->file_path || !Storage::disk('public')->exists($ketetapan->file_path)) {
+            abort(404, 'File tidak ditemukan');
+        }
+
+        $filePath = Storage::disk('public')->path($ketetapan->file_path);
+        $downloadName = $ketetapan->original_filename ?? ($ketetapan->title . '.' . $ketetapan->file_type);
+        
+        // ✅ TAMBAHKAN: Log download activity (optional)
+        \Log::info('File downloaded', [
+            'ketetapan_id' => $ketetapan->id,
+            'title' => $ketetapan->title,
+            'user_ip' => request()->ip(),
+            'user_agent' => request()->userAgent()
+        ]);
+        
+        return response()->download($filePath, $downloadName);
+    }
+    public function scopeDownloadable($query)
+    {
+        return $query->where('status', 'published')
+                    ->whereNotNull('file_path');
+    }
+
+    /**
+     * Check if file is downloadable
+     */
+    public function getIsDownloadableAttribute()
+    {
+        return $this->status === 'published' && 
+            $this->file_path && 
+            Storage::disk('public')->exists($this->file_path);
+    }
+
 }
