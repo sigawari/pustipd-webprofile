@@ -13,9 +13,8 @@ return new class extends Migration
     {
         Schema::create('faqs', function (Blueprint $table) {
             $table->id();
-            $table->text('question');          // Pertanyaan
-            $table->longText('answer');        // Jawaban (bisa panjang)
-            $table->integer('sort_order')->default(0); // Urutan tampil
+            $table->text('question');    // Pertanyaan
+            $table->longText('answer');  // Jawaban (bisa panjang)
             $table->enum('status', ['draft', 'published', 'archived'])->default('draft');
             $table->timestamps();
         });

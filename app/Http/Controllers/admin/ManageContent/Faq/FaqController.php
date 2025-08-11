@@ -75,58 +75,67 @@ class FaqController extends Controller
 
         // Render full view    
         return view('admin.manage-content.faq.index', compact('title', 'faqs'));
-    }    
-
-    /**
-     * CREATE : tampilkan form modal/page tambah
-     */
-    public function create()
-    {
-        $title = 'Tambah FAQ';
-        return view('admin.manage-content.faq.create', compact('title'));
     }
 
     /**
      * STORE : simpan FAQ baru
      */
-    public function store(StoreFaqRequest $request)
+    public function store(Request $request)
     {
-        $data = $request->validated();
-        
-        // Jika sort_order kosong, buat otomatis (nomor paling akhir + 1)
-        if (!isset($data['sort_order']) || $data['sort_order'] === null) {
-            $data['sort_order'] = (Faq::max('sort_order') ?? 0) + 1;
-        }
-        
-        Faq::create($data);
+        // dd($request->all());
 
+        // Validasi dan ambil data dari request
+        $request->validate([
+            'question' => 'required|string|max:255',
+            'answer' => 'required|string',
+            'status' => 'in:draft,published,archived',
+        ]);
+
+        // Siapkan data untuk disimpan
+        Faq::create([
+            'question' => $request->input('question'),
+            'answer' => $request->input('answer'),
+            'status' => $request->input('status', 'draft'), // Default ke draft
+        ]);
+
+        // Redirect ke halaman index dengan pesan sukses
         return redirect()
                ->route('admin.manage-content.faq.index')
                ->with('success', 'FAQ berhasil ditambahkan sebagai draft!');
     }
 
     /**
-     * EDIT : tampilkan form modal/page edit
-     */
-    public function edit(Faq $faq)
-    {
-        $title = 'Edit FAQ';
-        return view('admin.manage-content.faq.update', compact('title', 'faq'));
-    }
-
-    /**
      * UPDATE : perbarui FAQ
      */
-    public function update(UpdateFaqRequest $request, Faq $faq)
+    public function update(Request $request, string $id)
     {
-        $data = $request->validated();
-        
-        // Jika sort_order kosong, pertahankan yang lama atau buat baru
-        if (!isset($data['sort_order']) || $data['sort_order'] === null) {
-            $data['sort_order'] = $faq->sort_order ?: ((Faq::max('sort_order') ?? 0) + 1);
+        // dd($request->all()); // Untuk debug, bisa dihapus nanti
+
+        // Cari FAQ berdasarkan ID
+        $faq = Faq::findOrFail($id);
+
+        // Jika data tidak valid, kembalikan error
+        if (!$faq) {
+            return redirect()
+                   ->route('admin.manage-content.faq.index')
+                   ->withErrors(['error' => 'FAQ tidak ditemukan.']);
         }
-        
-        $faq->update($data);
+
+        // Validasi data yang diterima
+        $request->validate([
+            'question' => 'required|string|max:255',
+            'answer' => 'required|string',
+            'status' => 'in:draft,published,archived',
+        ]);
+
+        // Update data FAQ
+        $faq->update([
+            'question' => $request->input('question'),
+            'answer' => $request->input('answer'),
+            'status' => $request->input('status', 'draft'), // Default ke draft
+        ]);
+
+        // Redirect ke halaman index dengan pesan sukses
 
         return redirect()
                ->route('admin.manage-content.faq.index')
@@ -136,14 +145,33 @@ class FaqController extends Controller
     /**
      * DESTROY : hapus satu FAQ (soft delete ke archived)
      */
-    public function destroy(Faq $faq)
+    public function destroy($id)
     {
-        $faq->update(['status' => 'archived']);
-
+        dd($id); // uncomment untuk debug
+        // Cari data berdasarkan ID
+        $faq = Faq::findOrFail($id);
+        // Jika data tidak valid, kembalikan error
+        if (!$faq) {
+            return redirect()
+                   ->route('admin.manage-content.faq.index')
+                   ->withErrors(['error' => 'FAQ tidak ditemukan.']);
+        }
+        // Delete FAQ
+        $faq->delete();
+        // Redirect ke halaman index dengan pesan sukses
         return redirect()
                ->route('admin.manage-content.faq.index')
                ->with('success', 'FAQ berhasil diarsipkan!');
     }
+    
+    // public function destroy(Faq $faq)
+    // {
+    //     $faq->update(['status' => 'archived']);
+
+    //     return redirect()
+    //            ->route('admin.manage-content.faq.index')
+    //            ->with('success', 'FAQ berhasil diarsipkan!');
+    // }
 
     /**
      * BULK ACTION : publish / draft / archived / delete / permanent_delete

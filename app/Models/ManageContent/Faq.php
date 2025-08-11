@@ -20,15 +20,7 @@ class Faq extends Model
     protected $fillable = [
         'question',
         'answer',
-        'sort_order',
         'status'
-    ];
-
-    /**
-     * Cast tipe data
-     */
-    protected $casts = [
-        'sort_order' => 'integer',
     ];
 
     /**
@@ -37,13 +29,5 @@ class Faq extends Model
     public function scopePublished($query)
     {
         return $query->where('status', 'published');
-    }
-
-    /**
-     * Scope untuk urutan FAQ
-     */
-    public function scopeOrdered($query)
-    {
-        return $query->orderBy('sort_order', 'asc');
     }
 }
