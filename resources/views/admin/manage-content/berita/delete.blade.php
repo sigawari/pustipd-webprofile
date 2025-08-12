@@ -15,7 +15,9 @@
             <p class="text-gray-600 mb-4">Apakah Anda yakin ingin menghapus {{ $title }} berikut?</p>
 
             <blockquote class="border-l-4 border-blue-500 pl-4 italic mb-6 text-gray-700 bg-gray-50 p-3 rounded">
-                "{{ $berita->name }}"
+                {{ $berita->name }}
+                <br>
+                "{{ $berita->slug }}"
             </blockquote>
 
             <form method="POST" action="{{ route('admin.manage-content.berita.kelolaberita.destroy', $berita->id) }}">

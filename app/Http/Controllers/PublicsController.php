@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Announcement;
+use Illuminate\Http\Request;
 use App\Models\ManageContent\Faq; 
-use App\Models\ManageContent\AboutUs\VisiMisi;
-use App\Models\ManageContent\AboutUs\Gallery;
-use App\Models\ManageContent\AppLayanan;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\File;
+use App\Models\StrukturOrganisasi;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+use App\Models\ManageContent\AppLayanan;
+use App\Models\ManageContent\AboutUs\Gallery;
+use App\Models\ManageContent\AboutUs\VisiMisi;
 
 class PublicsController extends Controller
 {

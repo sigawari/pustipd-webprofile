@@ -22,9 +22,12 @@ return new class extends Migration
                 'research_development',
                 'other'
             ]);
-            $table->string('name');
-            $table->text('description');
-            $table->string('link');
+            $table->string('name'); // Judul berita
+            $table->string('slug')->unique();
+            $table->string('tags')->nullable();
+            $table->dateTime('publish_date')->nullable();
+            $table->string('image')->nullable(); // path gambar thumbnail
+            $table->longText('content'); // isi berita
             $table->enum('status', ['draft', 'published', 'archived'])->default('draft');
             $table->timestamps();
         });

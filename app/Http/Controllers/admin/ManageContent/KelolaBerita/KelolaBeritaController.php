@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Admin\ManageContent\KelolaBerita;
 
-use App\Models\ManageContent\KelolaBerita\KelolaBerita;
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Pagination\LengthAwarePaginator;
+use App\Models\ManageContent\KelolaBerita\KelolaBerita;
 
 class KelolaBeritaController extends Controller
 {
@@ -89,22 +89,35 @@ class KelolaBeritaController extends Controller
     public function store(Request $request)
     {
         // dd($request->all()); // Hapus ini setelah testing
+
         // Validasi input
         $request->validate([
-            'category'    => 'required|in:academic_services,library_resources,student_information_system,administration,communication,research_development,other',
-            'name'        => 'required|string|max:255',
-            'description' => 'required|string',
-            'link'        => 'required|url|max:255',
-            'status'      => 'required|in:draft,published,archived',
+            'category'     => 'required|in:academic_services,library_resources,student_information_system,administration,communication,research_development,other',
+            'name'         => 'required|string|max:255',
+            'slug'         => 'required|string|max:255|unique:kelola_beritas,slug',
+            'tags'         => 'nullable|string|max:255',
+            'publish_date' => 'nullable|date',
+            'status'       => 'required|in:draft,published,archived',
+            'image'        => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'content'      => 'required|string',
         ]);
 
-        // Simpan ke database
+        // Simpan gambar jika ada
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('berita_images', 'public');
+        }
+        
+       
         KelolaBerita::create([
-            'category'    => $request->category,
-            'name'        => $request->name,
-            'description' => $request->description,
-            'link'        => $request->link,
-            'status'      => $request->status,
+            'category'     => $request->category,
+            'name'         => $request->name,
+            'slug'         => $request->slug, // Jika slug tidak ada, ambil dari nama
+            'tags'         => $request->tags,
+            'publish_date' => $request->publish_date,
+            'status'       => $request->status,
+            'image'        => $imagePath,
+            'content'      => $request->input('content'),
         ]);
 
         // Redirect atau tampilkan pesan sukses

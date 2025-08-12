@@ -145,7 +145,7 @@ class FaqController extends Controller
      */
     public function destroy($id)
     {
-        dd($id); // uncomment untuk debug
+        // dd($id); // uncomment untuk debug
         // Cari data berdasarkan ID
         $faq = Faq::findOrFail($id);
         // Jika data tidak valid, kembalikan error

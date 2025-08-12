@@ -12,8 +12,12 @@ class KelolaBerita extends Model
     protected $fillable = [
         'category',
         'name',
-        'description',
-        'link',
+        'slug',
+        'tags',
+        'publish_date',
         'status',
+        'image',
+        'content',
     ];
+
 }

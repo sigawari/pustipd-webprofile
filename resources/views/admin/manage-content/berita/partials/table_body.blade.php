@@ -9,7 +9,7 @@
     <td class="px-6 py-4 whitespace-nowrap">
         {{ $kelolaBeritas->firstItem() + $key }}
     </td>
-    
+
     @php
         $kategoriLabels = [
             'academic_services' => 'Layanan Akademik',
@@ -36,35 +36,45 @@
         </div>
     </td>
 
-    <!-- Deskripsi -->
+    <!-- Konten Singkat -->
     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
         <div class="text-sm font-medium text-gray-900 max-w-xs">
-            {{ Str::limit(strip_tags($berita->description), 50, '...') }}
+            {{ Str::limit(strip_tags($berita->content), 50, '...') }}
         </div>
     </td>
 
-    <!-- Link Akses -->
+    <!-- Gambar Thumbnail -->
     <td class="px-6 py-4 whitespace-nowrap">
-        <div class="text-sm font-medium text-gray-900 max-w-xs">
-            <a href="{{ $berita->link }}" target="_blank" class="text-blue-500 hover:underline">
-                {{ Str::limit($berita->link, 30) }}
-            </a>
-        </div>
+        @if($berita->image)
+            <img src="{{ asset('storage/'.$berita->image) }}" alt="{{ $berita->name }}" 
+                class="w-12 h-12 object-cover rounded">
+        @else
+            <span class="text-gray-400">-</span>
+        @endif
     </td>
-    
+
     <!-- Status -->
     <td class="px-6 py-4 whitespace-nowrap">
         <span
-        @class([ 'inline-flex px-2 py-1 text-xs font-semibold rounded-full' , 'bg-green-300 text-green-800'=> $berita->status === 'published',
-            'bg-yellow-300 text-yellow-800' => $berita->status === 'draft',
-            'bg-gray-300 text-gray-800' => $berita->status === 'archived',
+            @class([
+                'inline-flex px-2 py-1 text-xs font-semibold rounded-full',
+                'bg-green-300 text-green-800' => $berita->status === 'published',
+                'bg-yellow-300 text-yellow-800' => $berita->status === 'draft',
+                'bg-gray-300 text-gray-800' => $berita->status === 'archived',
             ])
-            >
+        >
             {{ ucfirst($berita->status) }}
         </span>
     </td>
-    
-    <!-- Tanggal -->
+
+    <!-- Jadwal Publish -->
+    <td class="px-6 py-4 whitespace-nowrap">
+        <div class="text-sm font-medium text-gray-900 max-w-xs">
+            {{ $berita->publish_date ? \Carbon\Carbon::parse($berita->publish_date)->format('d M Y H:i') : '-' }}
+        </div>
+    </td>
+
+    <!-- Dibuat Pada -->
     <td class="px-6 py-4 whitespace-nowrap">
         <div class="text-sm font-medium text-gray-900 max-w-xs">
             {{ $berita->created_at->format('d M Y') }}
