@@ -141,7 +141,6 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
                 Route::post('/gallery/bulk-action', 'bulk')->name('gallery.bulk');
             });
 
-
             // Di routes - yang BENAR
             Route::controller(VisiMisiController::class)->group(function(){
                 Route::get('/visi-misi', 'index')->name('visi-misi.index');
@@ -153,7 +152,6 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
                 Route::get('/visi-misi/{index}/delete', 'delete')->name('visi-misi.delete'); 
                 Route::delete('/visi-misi/{index}', 'deleteMisi')->name('visi-misi.destroy'); // ← INI untuk hapus misi
             });
-
 
             // Oranization Routes
             Route::controller(OranizationController::class)->group(function(){
@@ -167,24 +165,18 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
             });
         });
             
-            // Route::get('/visi-misi', [ManageContentController::class, 'tentangVisiMisi'])->name('visi-misi');
-            // Route::put('/visi-misi', [ManageContentController::class, 'tentangVisiMisiUpdate'])->name('visi-misi.update');
-            
-            // Route::get('/organisasi', [ManageContentController::class, 'tentangOrganisasi'])->name('organisasi');
-            // Route::put('/organisasi', [ManageContentController::class, 'tentangOrganisasiUpdate'])->name('organisasi.update');
-
-            Route::prefix('applayanan')->as('applayanan.')->group(function () {
-                Route::controller(AppLayananController::class)->group(function () {
-                    Route::get('/', 'index')->name('index');
-                    Route::get('/create', 'create')->name('create');
-                    Route::post('/', 'store')->name('store');
-                    Route::get('/{applayanan}/edit', 'edit')->name('edit');
-                    Route::put('/{applayanan}', 'update')->name('update');
-                    Route::delete('/{applayanan}', 'destroy')->name('destroy');
-                    Route::post('/bulk-action', 'bulk')->name('bulk');
-                    Route::get('/{applayanan}/delete', 'delete')->name('delete');
-                });
+        Route::prefix('applayanan')->name('applayanan.')->group(function () {
+            Route::controller(AppLayananController::class)->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::get('/create', 'create')->name('create');
+                Route::post('/', 'store')->name('store');
+                Route::get('/{appLayanan}/edit', 'edit')->name('edit');
+                Route::put('/{appLayanan}', 'update')->name('update');
+                Route::delete('/{appLayanan}', 'destroy')->name('destroy');
+                Route::post('/bulk-action', 'bulk')->name('bulk');
+                Route::get('/{appLayanan}/delete', 'delete')->name('delete');
             });
+        });
 
         Route::prefix('berita')->as('berita.')->group(function () {
            //Berita
@@ -343,7 +335,7 @@ Route::prefix('/')->group(function () {
     Route::get('/tentang', [PublicsController::class, 'index'])->name('about');
     Route::get('/visi-misi', [PublicsController::class, 'index'])->name('vision');
     Route::get('/struktur', [PublicsController::class, 'index'])->name('structure');
-    Route::get('/layanan', [PublicsController::class, 'index'])->name('services');
+    Route::get('/applayanan', [PublicsController::class, 'index'])->name('applayanan');
     Route::get('/berita/contohberita', [PublicsController::class, 'index'])->name('contohberita');
     Route::get('/pengumuman/contohpengumuman', [PublicsController::class, 'index'])->name('contohpengumuman');
     Route::get('/tutorial/contohtutorial', [PublicsController::class, 'index'])->name('contohtutorial');

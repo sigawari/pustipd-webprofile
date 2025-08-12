@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateAppLayananRequest;
 use App\Models\ManageContent\AppLayanan;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Log;
 
 class AppLayananController extends Controller
 {
@@ -16,7 +17,7 @@ class AppLayananController extends Controller
      */
     public function index(Request $request)
     {
-        $title = 'AppLayanan';
+        $title = 'Aplikasi Layanan';
         $search = $request->input('search', '');
         $filter = $request->query('filter', 'all');
         $perPage = $request->input('perPage', 10);
@@ -25,15 +26,16 @@ class AppLayananController extends Controller
         $keywords = !empty($search) ? preg_split('/\s+/', (string) $search) : [];
 
         // Query builder awal
-        $applayananQuery = AppLayanan::query();
+        $appLayananQuery = AppLayanan::query();
 
-        // Apply search jika ada
+        // Apply search dengan field yang benar
         if ($search) {
-            $applayananQuery->where(function ($q) use ($keywords) {
+            $appLayananQuery->where(function ($q) use ($keywords) {
                 foreach ($keywords as $word) {
                     $q->where(function ($q) use ($word) {
-                        $q->where('question', 'like', "%{$word}%")
-                          ->orWhere('answer', 'like', "%{$word}%");
+                        $q->where('appname', 'like', "%{$word}%")
+                          ->orWhere('description', 'like', "%{$word}%")
+                          ->orWhere('category', 'like', "%{$word}%");
                     });
                 }
             });
@@ -41,108 +43,141 @@ class AppLayananController extends Controller
 
         // Filter status
         if ($filter && $filter !== 'all') {
-            $applayananQuery->where('status', $filter);
+            $appLayananQuery->where('status', $filter);
         }
 
-        // Merge results
-        $merged = $applayananQuery->get();
+        // ✅ SIMPLIFIED: Sorting berdasarkan created_at (terbaru dulu)
+        $appLayananQuery->orderBy('created_at', 'desc');
 
-        // Per-page validation
+        // Pagination
         if ($perPage === 'all') {
-            $perPage = max($merged->count(), 1); // Kalau 0, set jadi 1
+            $appLayanans = $appLayananQuery->get();
+            $perPage = max($appLayanans->count(), 1);
+            
+            // Manual pagination untuk 'all'
+            $currentPage = LengthAwarePaginator::resolveCurrentPage();
+            $currentItems = $appLayanans->slice(($currentPage - 1) * $perPage, $perPage)->values();
+            
+            $appLayanans = new LengthAwarePaginator(
+                $currentItems,
+                $appLayanans->count(),
+                $perPage,
+                $currentPage,
+                ['path' => LengthAwarePaginator::resolveCurrentPath()]
+            );
         } else {
-            $perPage = (int) $perPage;
-            if ($perPage < 1) {
-                $perPage = 1;
-            }
+            $perPage = max((int) $perPage, 1);
+            $appLayanans = $appLayananQuery->paginate($perPage);
         }
 
-        $currentPage = LengthAwarePaginator::resolveCurrentPage();
-        $currentItems = $merged->slice(($currentPage - 1) * $perPage, $perPage)->values();
-
-        $applayanans = new LengthAwarePaginator(
-            $currentItems,
-            $merged->count(),
-            $perPage,
-            $currentPage,
-            ['path' => LengthAwarePaginator::resolveCurrentPath()]
-        );
-
-        // AJAX Response di controller
+        // AJAX Response
         if ($request->ajax()) {
-            return view('admin.manage-content.AppLayanan.partials.table_body', compact('title', 'AppLayanans'))->render();
-        } 
+            return view('admin.manage-content.applayanan.partials.table_body', compact('title', 'appLayanans'))->render();
+        }
 
-        // Render full view    
-        return view('admin.manage-content.AppLayanan.index', compact('title', 'AppLayanans'));
-    }    
+        return view('admin.manage-content.applayanan.index', compact('title', 'appLayanans'));
+    }
 
     /**
      * CREATE : tampilkan form modal/page tambah
      */
     public function create()
     {
-        $title = 'Tambah AppLayanan';
-        return view('admin.manage-content.AppLayanan.create', compact('title'));
+        $title = 'Tambah Aplikasi Layanan';
+        
+        $categories = [
+            'akademik' => 'Akademik',
+            'pegawai' => 'Pegawai', 
+            'pembelajaran' => 'Pembelajaran',
+            'administrasi' => 'Administrasi'
+        ];
+        
+        return view('admin.manage-content.applayanan.create', compact('title', 'categories'));
     }
 
     /**
      * STORE : simpan AppLayanan baru
      */
+   // Di AppLayananController.php
     public function store(StoreAppLayananRequest $request)
     {
-        $data = $request->validated();
-        
-        // Jika sort_order kosong, buat otomatis (nomor paling akhir + 1)
-        if (!isset($data['sort_order']) || $data['sort_order'] === null) {
-            $data['sort_order'] = (AppLayanan::max('sort_order') ?? 0) + 1;
+        try {
+            // ✅ FORCE: Status selalu draft untuk create
+            $data = $request->validated();
+            $data['status'] = 'draft'; // Override apapun input user
+            
+            $appLayanan = AppLayanan::create($data);
+            
+            return redirect()
+                ->route('admin.manage-content.applayanan.index')
+                ->with('success', 'Aplikasi berhasil ditambahkan sebagai Draft.');
+                
+        } catch (\Exception $e) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', 'Gagal menambahkan aplikasi: ' . $e->getMessage());
         }
-        
-        AppLayanan::create($data);
-
-        return redirect()
-               ->route('admin.manage-content.AppLayanan.index')
-               ->with('success', 'AppLayanan berhasil ditambahkan sebagai draft!');
     }
 
     /**
      * EDIT : tampilkan form modal/page edit
      */
-    public function edit(AppLayanan $applayanan)
+    public function edit(AppLayanan $appLayanan)
     {
-        $title = 'Edit AppLayanan';
-        return view('admin.manage-content.AppLayanan.update', compact('title', 'AppLayanan'));
+        $title = 'Edit Aplikasi Layanan';
+        
+        $categories = [
+            'akademik' => 'Akademik',
+            'pegawai' => 'Pegawai',
+            'pembelajaran' => 'Pembelajaran', 
+            'administrasi' => 'Administrasi'
+        ];
+        
+        return view('admin.manage-content.applayanan.edit', compact('title', 'appLayanan', 'categories'));
     }
 
     /**
      * UPDATE : perbarui AppLayanan
      */
-    public function update(UpdateAppLayananRequest $request, AppLayanan $applayanan)
+    public function update(UpdateAppLayananRequest $request, AppLayanan $appLayanan)
     {
-        $data = $request->validated();
-        
-        // Jika sort_order kosong, pertahankan yang lama atau buat baru
-        if (!isset($data['sort_order']) || $data['sort_order'] === null) {
-            $data['sort_order'] = $applayanan->sort_order ?: ((AppLayanan::max('sort_order') ?? 0) + 1);
-        }
-        
-        $applayanan->update($data);
+        try {
+            $data = $request->validated();
+            
+            $appLayanan->update($data);
 
-        return redirect()
-               ->route('admin.manage-content.AppLayanan.index')
-               ->with('success', 'AppLayanan berhasil diperbarui!');
+            return redirect()
+                   ->route('admin.manage-content.applayanan.index')
+                   ->with('success', 'Aplikasi Layanan berhasil diperbarui!');
+                   
+        } catch (\Exception $e) {
+            Log::error('Error updating AppLayanan: ' . $e->getMessage());
+            return redirect()
+                   ->back()
+                   ->with('error', 'Gagal memperbarui aplikasi layanan: ' . $e->getMessage())
+                   ->withInput();
+        }
     }
 
     /**
      * DESTROY : hapus satu AppLayanan (soft delete ke archived)
      */
-    public function destroy(AppLayanan $applayanan)
+    public function destroy(AppLayanan $appLayanan)
     {
-        $applayanan->update(['status' => 'archived']);
+        try {
+            $appLayanan->update(['status' => 'archived']);
 
-        return redirect()
-               ->route('admin.manage-content.AppLayanan.index')
-               ->with('success', 'AppLayanan berhasil diarsipkan!');
+            return redirect()
+                   ->route('admin.manage-content.applayanan.index')
+                   ->with('success', 'Aplikasi Layanan berhasil diarsipkan!');
+                   
+        } catch (\Exception $e) {
+            Log::error('Error archiving AppLayanan: ' . $e->getMessage());
+            return redirect()
+                   ->back()
+                   ->with('error', 'Gagal mengarsipkan aplikasi layanan.');
+        }
     }
 
     /**
@@ -150,6 +185,12 @@ class AppLayananController extends Controller
      */
     public function bulk(Request $request)
     {
+        $request->validate([
+            'action' => 'required|in:published,draft,archived,delete,permanent_delete',
+            'ids' => 'required|array',
+            'ids.*' => 'exists:applayanans,id'
+        ]);
+
         $ids = $request->input('ids', []);
         $action = $request->input('action');
 
@@ -157,47 +198,67 @@ class AppLayananController extends Controller
             return back()->with('error', 'Data atau aksi tidak valid.');
         }
 
-        $count = count($ids);
-        $message = '';
-        
-        switch ($action) {
-            case 'permanent_delete':
-                // Hard delete: hapus dari database
-                $deletedCount = AppLayanan::whereIn('id', $ids)->delete();
-                $message = "{$deletedCount} AppLayanan berhasil dihapus permanen.";
-                break;
-                
-            case 'delete':
-                // Soft delete: ubah status ke archived
-                $archivedCount = AppLayanan::whereIn('id', $ids)->update(['status' => 'archived']);
-                $message = "{$archivedCount} AppLayanan berhasil diarsipkan.";
-                break;
-                
-            case 'published':
-            case 'draft':
-            case 'archived':
-                $updatedCount = AppLayanan::whereIn('id', $ids)->update(['status' => $action]);
-                $statusText = match($action) {
-                    'published' => 'Published',
-                    'draft' => 'Draft',
-                    'archived' => 'Archived'
-                };
-                $message = "{$updatedCount} AppLayanan berhasil diubah ke status {$statusText}.";
-                break;
-                
-            default:
-                return back()->with('error', 'Aksi tidak valid.');
-        }
+        try {
+            $count = count($ids);
+            $message = '';
+            
+            Log::info('Bulk action AppLayanan', [
+                'action' => $action,
+                'ids' => $ids,
+                'count' => $count
+            ]);
+            
+            switch ($action) {
+                case 'permanent_delete':
+                    $deletedCount = AppLayanan::whereIn('id', $ids)->delete();
+                    $message = "{$deletedCount} Aplikasi Layanan berhasil dihapus permanen.";
+                    break;
+                    
+                case 'delete':
+                    $archivedCount = AppLayanan::whereIn('id', $ids)->update(['status' => 'archived']);
+                    $message = "{$archivedCount} Aplikasi Layanan berhasil diarsipkan.";
+                    break;
+                    
+                case 'published':
+                case 'draft':
+                case 'archived':
+                    $updatedCount = AppLayanan::whereIn('id', $ids)->update(['status' => $action]);
+                    $statusText = match($action) {
+                        'published' => 'Published',
+                        'draft' => 'Draft',
+                        'archived' => 'Archived'
+                    };
+                    $message = "{$updatedCount} Aplikasi Layanan berhasil diubah ke status {$statusText}.";
+                    break;
+                    
+                default:
+                    return back()->with('error', 'Aksi tidak valid.');
+            }
 
-        return back()->with('success', $message);
+            return back()->with('success', $message);
+            
+        } catch (\Exception $e) {
+            Log::error('Error bulk action AppLayanan: ' . $e->getMessage());
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Show detail AppLayanan
+     */
+    public function show(AppLayanan $appLayanan)
+    {
+        $title = 'Detail Aplikasi Layanan';
+        return view('admin.manage-content.applayanan.show', compact('title', 'appLayanan'));
     }
 
     /**
      * OPTIONAL : halaman/partial konfirmasi delete
      */
-    public function delete(AppLayanan $applayanan)
+    public function delete(AppLayanan $appLayanan)
     {
-        $title = 'Hapus AppLayanan';
-        return view('admin.manage-content.AppLayanan.delete', compact('title', 'AppLayanan'));
+        $title = 'Hapus Aplikasi Layanan';
+        return view('admin.manage-content.applayanan.delete', compact('title', 'appLayanan'));
     }
 }
+

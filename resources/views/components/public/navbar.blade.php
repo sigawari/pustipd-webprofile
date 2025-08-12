@@ -110,7 +110,7 @@
                         </div>
 
                         <div>
-                            <a href="/layanan">
+                            <a href="/applayanan">
                                 <button class="text-white  transition focus:outline-none">
                                     <h3 class="navbar-menu hover:text-custom-blue">Layanan</h3>
                                 </button>
@@ -245,7 +245,8 @@
         </div>
 
         <div class="relative">
-            <a href="/layanan" class="block px-0 py-2 text-left focus:outline-none hover:text-custom-blue transition">
+            <a href="/applayanan"
+                class="block px-0 py-2 text-left focus:outline-none hover:text-custom-blue transition">
                 <span>Layanan</span>
             </a>
         </div>

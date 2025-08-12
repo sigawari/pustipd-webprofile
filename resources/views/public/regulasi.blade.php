@@ -222,94 +222,157 @@
                     </div>
                 </div>
 
-                <!-- Mobile Cards -->
-                <div class="lg:hidden space-y-4">
-                    @forelse($regulasis as $index => $regulasi)
-                        <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-lg">
-                            <div class="flex items-start justify-between mb-3">
-                                <!-- Checkbox dan Number -->
-                                <div class="flex items-center space-x-3">
-                                    @if ($regulasi->file_path && file_exists(storage_path('app/public/' . $regulasi->file_path)))
-                                        <input type="checkbox"
-                                            class="file-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500 focus:border-blue-500 cursor-pointer"
-                                            value="{{ $regulasi->id }}" data-id="{{ $regulasi->id }}"
-                                            onchange="updateBulkDownloadButton()">
-                                    @else
-                                        <span class="w-4 h-4 inline-block"></span>
-                                    @endif
-                                    <span class="text-sm font-medium text-secondary">
-                                        {{ ($regulasis->currentPage() - 1) * $regulasis->perPage() + $index + 1 }}.
-                                    </span>
-                                </div>
+                <!-- Mobile Table - Mengganti Cards dengan Table Responsif -->
+                <div class="lg:hidden">
+                    <div class="bg-white rounded-xl border border-gray-200 shadow-lg overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full min-w-[640px]">
+                                <!-- Mobile Table Header -->
+                                <thead>
+                                    <tr class="bg-secondary border-b border-blue-600">
+                                        <!-- Checkbox Header -->
+                                        <th class="px-3 py-3 text-center w-10">
+                                            <input type="checkbox" id="mobile-header-checkbox"
+                                                class="rounded border-gray-300 text-blue-600 focus:ring-blue-500 focus:border-blue-500 cursor-pointer"
+                                                onchange="toggleAllCheckboxes(this)" title="Pilih/Batal Semua">
+                                        </th>
+                                        <!-- No. -->
+                                        <th
+                                            class="px-3 py-3 text-left text-xs font-semibold text-white uppercase tracking-wider w-12">
+                                            No.
+                                        </th>
+                                        <!-- Nama regulasi -->
+                                        <th
+                                            class="px-3 py-3 text-left text-xs font-semibold text-white uppercase tracking-wider">
+                                            Nama{{ $title }}
+                                        </th>
+                                        <!-- Tahun -->
+                                        <th
+                                            class="px-3 py-3 text-center text-xs font-semibold text-white uppercase tracking-wider w-16">
+                                            Tahun
+                                        </th>
+                                        <!-- Download -->
+                                        <th
+                                            class="px-3 py-3 text-center text-xs font-semibold text-white uppercase tracking-wider w-20">
+                                            Download
+                                        </th>
+                                    </tr>
+                                </thead>
 
-                                <!-- Year Badge -->
-                                @if ($regulasi->year_published || $regulasi->created_at)
-                                    <div
-                                        class="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
-                                        {{ $regulasi->year_published ?? $regulasi->created_at->format('Y') }}
-                                    </div>
-                                @endif
-                            </div>
+                                <!-- Mobile Table Body -->
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    @forelse($regulasis as $index => $regulasi)
+                                        <tr class="hover:bg-gray-50 transition-colors duration-150">
+                                            <!-- Checkbox -->
+                                            <td class="px-3 py-3 text-center">
+                                                @if ($regulasi->file_path && file_exists(storage_path('app/public/' . $regulasi->file_path)))
+                                                    <input type="checkbox"
+                                                        class="file-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500 focus:border-blue-500 cursor-pointer"
+                                                        value="{{ $regulasi->id }}" data-id="{{ $regulasi->id }}"
+                                                        onchange="updateBulkDownloadButton()">
+                                                @else
+                                                    <span class="w-4 h-4 inline-block"></span>
+                                                @endif
+                                            </td>
 
-                            <!-- Title -->
-                            <h3 class="font-semibold text-secondary text-base mb-2 leading-tight">
-                                {{ $regulasi->title }}
-                            </h3>
+                                            <!-- Number -->
+                                            <td class="px-3 py-3 text-xs font-medium text-secondary">
+                                                {{ ($regulasis->currentPage() - 1) * $regulasis->perPage() + $index + 1 }}.
+                                            </td>
 
-                            <!-- Description -->
-                            <p class="text-sm text-secondary mb-3 leading-relaxed opacity-80">
-                                {{ Str::limit(strip_tags($regulasi->description), 100) }}
-                            </p>
+                                            <!-- Title dengan Description dan File Size -->
+                                            <td class="px-3 py-3">
+                                                <div class="min-w-0">
+                                                    <!-- Title -->
+                                                    <div
+                                                        class="font-semibold text-secondary text-sm mb-1 leading-tight">
+                                                        {{ Str::limit($regulasi->title, 60) }}
+                                                    </div>
 
-                            <!-- File Info & Download -->
-                            <div class="flex items-center justify-between">
-                                @if ($regulasi->formatted_file_size)
-                                    <div
-                                        class="inline-flex items-center px-2 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded">
-                                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                        </svg>
-                                        {{ $regulasi->formatted_file_size }}
-                                    </div>
-                                @else
-                                    <div></div>
-                                @endif
+                                                    <!-- Description -->
+                                                    <div class="text-xs text-secondary/70 mb-2 leading-relaxed">
+                                                        {{ Str::limit(strip_tags($regulasi->description), 80) }}
+                                                    </div>
 
-                                <!-- Download Button -->
-                                @if ($regulasi->file_path && file_exists(storage_path('app/public/' . $regulasi->file_path)))
-                                    <a href="{{ route('ketetapan.download', $regulasi->id) }}"
-                                        class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg 
-                                               hover:bg-blue-700 transition-colors text-sm font-medium shadow-sm"
-                                        title="Download {{ $regulasi->title }}" target="_blank">
-                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                        </svg>
-                                        Download
-                                    </a>
-                                @else
-                                    <span
-                                        class="inline-flex items-center px-4 py-2 bg-gray-500 text-gray-300 rounded-lg text-sm font-medium cursor-not-allowed">
-                                        N/A
-                                    </span>
-                                @endif
-                            </div>
+                                                    <!-- File Size Badge -->
+                                                    @if ($regulasi->formatted_file_size)
+                                                        <div
+                                                            class="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
+                                                            <svg class="w-3 h-3 mr-1" fill="none"
+                                                                stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2"
+                                                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                                            </svg>
+                                                            {{ $regulasi->formatted_file_size }}
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                            </td>
+
+                                            <!-- Year -->
+                                            <td class="px-3 py-3 text-center">
+                                                <div class="text-xs font-semibold text-secondary">
+                                                    @if ($regulasi->year_published)
+                                                        {{ $regulasi->year_published }}
+                                                    @elseif($regulasi->created_at)
+                                                        {{ $regulasi->created_at->format('Y') }}
+                                                    @else
+                                                        <span class="text-gray-400">-</span>
+                                                    @endif
+                                                </div>
+                                            </td>
+
+                                            <!-- Download Button -->
+                                            <td class="px-3 py-3 text-center">
+                                                @if ($regulasi->file_path && file_exists(storage_path('app/public/' . $regulasi->file_path)))
+                                                    <a href="{{ route('regulasi.download', $regulasi->id) }}"
+                                                        class="inline-flex items-center justify-center w-8 h-8 bg-blue-600 text-white rounded-lg 
+                                               hover:bg-blue-700 transition-colors shadow-sm"
+                                                        title="Download {{ $regulasi->title }}" target="_blank">
+                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                                            viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2"
+                                                                d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                                        </svg>
+                                                    </a>
+                                                @else
+                                                    <span
+                                                        class="inline-flex items-center justify-center w-8 h-8 bg-gray-400 text-gray-200 rounded-lg cursor-not-allowed">
+                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                                            viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                        </svg>
+                                                    </span>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <!-- Empty State -->
+                                        <tr>
+                                            <td colspan="5" class="px-3 py-8 text-center bg-white">
+                                                <div class="text-center">
+                                                    <svg class="w-10 h-10 mx-auto mb-3 text-gray-400" fill="none"
+                                                        stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="1.5"
+                                                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                                    </svg>
+                                                    <p class="text-sm font-medium text-gray-900 mb-1">Belum ada
+                                                        regulasi
+                                                        tersedia</p>
+                                                    <p class="text-xs text-gray-600">regulasi akan segera ditambahkan
+                                                        oleh admin</p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
                         </div>
-                    @empty
-                        <!-- Empty State Mobile -->
-                        <div class="bg-white rounded-xl border border-gray-200 p-8 text-center shadow-lg">
-                            <svg class="w-12 h-12 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                            </svg>
-                            <p class="text-lg font-medium text-gray-900 mb-2">Belum ada ketetapan tersedia</p>
-                            <p class="text-gray-600">Ketetapan akan segera ditambahkan oleh admin</p>
-                        </div>
-                    @endforelse
+                    </div>
                 </div>
 
                 <!-- Pagination -->
