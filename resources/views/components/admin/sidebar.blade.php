@@ -147,7 +147,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('admin.manage-content.tentang.organisasi') }}"
+                                    <a href="{{ route('admin.manage-content.tentang.struktur-organisasi.index') }}"
                                         class="block py-2 px-4 text-sm text-gray-500 hover:text-indigo-600 hover:bg-indigo-25 rounded-lg transition-colors duration-200">
                                         Struktur Organisasi
                                     </a>

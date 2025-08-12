@@ -67,13 +67,18 @@ class PublicsController extends Controller
             return view('public.vision', compact('title', 'description', 'keywords', 'visiMisi'));
         }
 
-        // Route: Struktur
+        //Struktur
         if ($request->is('struktur')) {
-            $title = 'Struktur Organisasi PUSTIPD UIN Raden Fatah Palembang';
-            $description = 'Struktur organisasi PUSTIPD UIN Raden Fatah Palembang yang mengelola teknologi informasi dan data.';
+            $title = 'Struktur Organisasi PUSTIPD';
+            $description = 'Struktur organisasi PUSTIPD UIN Raden Fatah Palembang';
             $keywords = 'struktur, organisasi, pustipd';
-
-            return view('public.structure', compact('title', 'description', 'keywords'));
+            
+            // ✅ Data untuk tree structure
+            $strukturData = StrukturOrganisasi::getTreeStructure();
+            
+            return view('public.structure', compact(
+                'title', 'description', 'keywords', 'strukturData'
+            ));
         }
 
         // Route: AppLayanan/Layanan Digital

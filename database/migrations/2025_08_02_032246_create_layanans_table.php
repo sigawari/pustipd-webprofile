@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('layanans', function (Blueprint $table) {
             $table->id();
+            $table->text('name');    // Nama Layanan
+            $table->longText('description');  // Deskripsi Layanan (Ga terlalu panjang)
+            $table->enum('status', ['draft', 'published', 'archived'])->default('draft');
             $table->timestamps();
         });
     }

@@ -19,7 +19,6 @@ use App\Http\Controllers\admin\ManageContent\Beranda\LayananController;
 use App\Http\Controllers\admin\ManageContent\Dokumen\PanduanController;
 
 use App\Http\Controllers\admin\ManageContent\Tentang\GalleryController;
-
 use App\Http\Controllers\admin\ManageContent\Tentang\ProfileController;
 use App\Http\Controllers\admin\ManageContent\Dokumen\RegulasiController;
 use App\Http\Controllers\admin\ManageContent\Tentang\VisiMisiController;
@@ -28,7 +27,7 @@ use App\Http\Controllers\admin\ManageContent\Dokumen\KetetapanController;
 use App\Http\Controllers\admin\ManageContent\Tutorial\TutorialController;
 
 use App\Http\Controllers\admin\ManageContent\Beranda\PencapaianController;
-use App\Http\Controllers\admin\ManageContent\Tentang\OranizationController;
+use App\Http\Controllers\admin\ManageContent\Tentang\StrukturOrganisasiController;
 use App\Http\Controllers\admin\ManageContent\AppLayanan\AppLayananController;
 use App\Http\Controllers\admin\ManageContent\Pengumuman\PengumumanController;
 
@@ -153,15 +152,17 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
                 Route::delete('/visi-misi/{index}', 'deleteMisi')->name('visi-misi.destroy'); // ← INI untuk hapus misi
             });
 
-            // Oranization Routes
-            Route::controller(OranizationController::class)->group(function(){
-                Route::get('/organisasi', 'index')->name('organisasi');
-                Route::get('/organisasi/create', 'create')->name('organisasi.create');
-                Route::post('/organisasi', 'store')->name('organisasi.store');
-                Route::get('/organisasi/{organisasi}/edit', 'edit')->name('organisasi.store');
-                Route::put('/organisasi/{organisasi}', 'update')->name('organisasi.update');
-                Route::delete('/organisasi/{organisasi}', 'destroy')->name('organisasi.destroy');
-                Route::get('/organisasi/export', 'export')->name('organisasi.export');
+            // Struktur Routes
+            Route::controller(StrukturOrganisasiController::class)->group(function(){
+                Route::prefix('struktur-organisasi')->name('struktur-organisasi.')->group(function () {
+                    Route::get('/', [StrukturOrganisasiController::class, 'index'])->name('index');
+                    Route::get('/create', [StrukturOrganisasiController::class, 'create'])->name('create');
+                    Route::post('/', [StrukturOrganisasiController::class, 'store'])->name('store');
+                    Route::get('/{strukturOrganisasi}/edit', [StrukturOrganisasiController::class, 'edit'])->name('edit');
+                    Route::put('/{strukturOrganisasi}', [StrukturOrganisasiController::class, 'update'])->name('update');
+                    Route::delete('/{strukturOrganisasi}', [StrukturOrganisasiController::class, 'destroy'])->name('destroy');
+                    Route::post('/reorder', [StrukturOrganisasiController::class, 'reorder'])->name('reorder');
+                });
             });
         });
             
