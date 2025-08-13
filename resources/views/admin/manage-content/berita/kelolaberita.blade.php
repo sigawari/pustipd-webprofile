@@ -61,8 +61,7 @@
                 <button onclick="bulkAction('published')"
                     class="px-3 py-2 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700">
                     <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M5 13l4 4L19 7"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                     </svg>
                     Publish
                 </button>
@@ -99,8 +98,8 @@
                 <button onclick="bulkAction('permanent_delete')"
                     class="px-3 py-2 text-sm bg-red-600 text-white rounded-lg hover:bg-red-700">
                     <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M6 18L18 6M6 6l12 12"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
                     </svg>
                     Hapus Permanen
                 </button>
@@ -159,7 +158,8 @@
                                     <input type="checkbox" id="selectAll"
                                         class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
                                 </th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     No
                                 </th>
                                 <th
@@ -208,7 +208,8 @@
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4 pt-4">
             <!-- Info jumlah data -->
             <div class="text-sm text-gray-500 text-center sm:text-left">
-                Menampilkan {{ $kelolaBeritas->firstItem() }} sampai {{ $kelolaBeritas->lastItem() }} dari {{ $kelolaBeritas->total() }}
+                Menampilkan {{ $kelolaBeritas->firstItem() }} sampai {{ $kelolaBeritas->lastItem() }} dari
+                {{ $kelolaBeritas->total() }}
                 {{ strtolower($title) }}
             </div>
 

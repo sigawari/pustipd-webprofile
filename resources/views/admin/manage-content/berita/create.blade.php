@@ -1,12 +1,13 @@
 <!-- Modal Tambah Berita Lengkap -->
 <div id="AddModal"
     class="hidden fixed inset-0 z-50 bg-black/50 items-center justify-center px-4 transition-opacity duration-300">
-    <div class="bg-white rounded-2xl shadow-xl w-full max-w-4xl p-6 relative transform scale-95 transition-all duration-300 max-h-[90vh] overflow-y-auto md:max-h-none md:overflow-visible">
+    <div
+        class="bg-white rounded-2xl shadow-xl w-full max-w-4xl p-6 relative transform scale-95 transition-all duration-300 max-h-[90vh] overflow-y-auto md:max-h-none md:overflow-visible">
 
         <!-- Header -->
         <div class="flex items-center mb-4">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-blue-400 mr-2" fill="none"
-                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-blue-400 mr-2" fill="none" viewBox="0 0 24 24"
+                stroke-width="1.5" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round"
                     d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 0 1-2.25 2.25M16.5 7.5V18a2.25 2.25 0 0 0 2.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 0 0 2.25 2.25h13.5M6 7.5h3v3H6v-3Z" />
             </svg>
@@ -28,8 +29,8 @@
                 </div>
 
                 <!-- Slug -->
-                 <script>
-                    document.addEventListener("DOMContentLoaded", function () {
+                <script>
+                    document.addEventListener("DOMContentLoaded", function() {
                         if (window.autoSlug) {
                             window.autoSlug("#name", "#slug");
                         }
@@ -67,7 +68,8 @@
 
                 <!-- Jadwal Publish -->
                 <div>
-                    <label for="publish_date" class="block text-sm font-medium text-gray-700 mb-2">Jadwal Publish</label>
+                    <label for="publish_date" class="block text-sm font-medium text-gray-700 mb-2">Jadwal
+                        Publish</label>
                     <input type="datetime-local" id="publish_date" name="publish_date"
                         class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500">
                 </div>
@@ -96,12 +98,10 @@
                     </div>
 
                     <!-- Icon Upload -->
-                    <div id="upload-icon"
-                        style="width:150px; height:150px; border-radius: 0.5rem;"
+                    <div id="upload-icon" style="width:150px; height:150px; border-radius: 0.5rem;"
                         class="mb-3 flex items-center justify-center border-2 border-dashed border-gray-300 bg-gray-50 text-gray-400 hover:border-gray-400">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 4v16m8-8H4" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                         </svg>
                     </div>
 
@@ -114,10 +114,10 @@
                 <!-- Konten Berita -->
                 <div class="col-span-2">
                     <label for="content" class="block text-sm font-medium text-gray-700 mb-2">Konten Berita</label>
-                    
+
                     {{-- Editor Quill --}}
                     <div id="editor" style="height: 200px;"></div>
-                    
+
                     {{-- Hidden textarea untuk form submit --}}
                     <textarea id="content" name="content" class="hidden"></textarea>
                 </div>

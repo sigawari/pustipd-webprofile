@@ -14,22 +14,22 @@ use App\Http\Controllers\admin\ManageContent\Faq\FaqController;
 use App\Http\Controllers\admin\ManageContent\Dokumen\SopController;
 use App\Http\Controllers\admin\ManageContent\Beranda\MitraController;
 
-use App\Http\Controllers\Admin\ManageContent\KelolaBerita\KelolaBeritaController;
 use App\Http\Controllers\admin\ManageContent\Beranda\LayananController;
 use App\Http\Controllers\admin\ManageContent\Dokumen\PanduanController;
-
 use App\Http\Controllers\admin\ManageContent\Tentang\GalleryController;
+
 use App\Http\Controllers\admin\ManageContent\Tentang\ProfileController;
 use App\Http\Controllers\admin\ManageContent\Dokumen\RegulasiController;
 use App\Http\Controllers\admin\ManageContent\Tentang\VisiMisiController;
 use App\Http\Controllers\admin\ManageContent\Dokumen\KetetapanController;
-
 use App\Http\Controllers\admin\ManageContent\Tutorial\TutorialController;
 
 use App\Http\Controllers\admin\ManageContent\Beranda\PencapaianController;
-use App\Http\Controllers\admin\ManageContent\Tentang\StrukturOrganisasiController;
+
 use App\Http\Controllers\admin\ManageContent\AppLayanan\AppLayananController;
-use App\Http\Controllers\admin\ManageContent\Pengumuman\PengumumanController;
+use App\Http\Controllers\Admin\ManageContent\KelolaBerita\KelolaBeritaController;
+use App\Http\Controllers\admin\ManageContent\Tentang\StrukturOrganisasiController;
+use App\Http\Controllers\Admin\ManageContent\KelolaPengumuman\KelolaPengumumanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -193,9 +193,15 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
 
         Route::prefix('pengumuman')->as('pengumuman.')->group(function () {
            //pengumuman
-            Route::controller(PengumumanController::class)->group(function(){
-                Route::get('/kelolapengumuman', 'index')->name('kelolapengumuman'); 
-        });       
+           //Berita
+           Route::controller(KelolaPengumumanController::class)->group(function(){
+                Route::get('/kelolapengumuman', 'index')->name('kelolapengumuman');
+                Route::post('/kelolapengumuman', 'store')->name('kelolapengumuman.store');
+                Route::put('/kelolapengumuman/{kelolapengumuman}', 'update')->name('kelolapengumuman.update');
+                Route::delete('/kelolapengumuman/{kelolapengumuman}', 'destroy')->name('kelolapengumuman.destroy');
+                Route::get('/kelolapengumuman/export', 'export')->name('kelolapengumuman.export');
+                Route::post('/kelolapengumuman/bulk-action', 'bulk')->name('kelolapengumuman.bulk');
+            });
         });
 
         Route::prefix('tutorial')->as('tutorial.')->group(function () {

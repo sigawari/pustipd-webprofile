@@ -22,17 +22,17 @@ import "./components/public/bulk-download";
 // import "./components/public/pagination";
 // import "./components/public/modal-public";
 
-import Quill from 'quill';
-import 'quill/dist/quill.snow.css';
+import Quill from "quill";
+import "quill/dist/quill.snow.css";
 
 document.addEventListener("DOMContentLoaded", function () {
-    const quill = new Quill('#editor', {
-        theme: 'snow',
-        placeholder: 'Tulis isi berita di sini...',
+    const quill = new Quill("#editor", {
+        theme: "snow",
+        placeholder: "Tulis isi konten di sini...",
     });
 
     // Sync ke textarea hidden
-    quill.on('text-change', function () {
-        document.querySelector('#content').value = quill.root.innerHTML;
+    quill.on("text-change", function () {
+        document.querySelector("#content").value = quill.root.innerHTML;
     });
 });
