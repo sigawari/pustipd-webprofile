@@ -100,46 +100,54 @@ class KelolaPengumumanController extends Controller
         ]);
 
         return redirect()
-            ->route('admin.InformasiTerkini.Pengumuman.index')
+            ->route('admin.informasi-terkini.kelola-pengumuman.index')
             ->with('success', 'Pengumuman berhasil ditambahkan!');
     }
 
-    public function update(Request $request, KelolaPengumuman $kelolaPengumuman, string $id)
+    public function update(Request $request, $id)
     {
+        dd('Update pengumuman dengan ID: ' . $id);
+        $pengumuman = KelolaPengumuman::findOrFail($id);
+
         // Validasi input
         $request->validate([
-            'category'     => 'required|in:maintenance,layanan,infrastruktur,administrasi,darurat',
-            'urgency'      => 'required|in:normal,penting',
-            'title'        => 'required|string|max:255',
-            'slug'         => "required|string|max:255|unique:kelola_pengumumans,slug,{$kelolaPengumuman->id}",
-            'date'         => 'required|date',
-            'valid_until'  => 'nullable|date|after:date',
+            'category'     => 'required|in:maintenance,layanan,infrastruktur,administrasi,darurat', 
+            'urgency'      => 'required|in:normal,penting',                      
+            'title'        => 'required|string|max:255',                                             
+            'slug'         => 'required|string|max:255|unique:kelola_pengumumans,slug,' . $id,
+            'date'         => 'required|date',                                                       
+            'valid_until'  => 'nullable|date|after:date',                                          
             'status'       => 'required|in:draft,published',
             'content'      => 'required|string',
-            'contact_email'=> 'nullable|email',
+            'contact_email'=> 'nullable|email',                                                   
         ]);
 
-        try {
-            $kelolaPengumuman = KelolaPengumuman::findOrFail($id);
-
-        } catch (\Exception $e) {
-            return redirect()
-                ->route('admin.InformasiTerkini.Pengumuman.index')
-                ->withErrors(['error' => 'Pengumuman tidak ditemukan.']);
-        }
+        // Update data
+        $pengumuman->update([
+            'title'        => $request->title,          
+            'content'      => $request->input('content'),
+            'category'     => $request->category,
+            'urgency'      => $request->urgency,        
+            'slug'         => $request->slug,
+            'date'         => $request->date,          
+            'valid_until'  => $request->valid_until,   
+            'status'       => $request->status,
+            'contact_email'=> $request->contact_email,  
+        ]);
 
         return redirect()
-            ->route('admin.InformasiTerkini.Pengumuman.index')
+            ->route('admin.informasi-terkini.kelola-pengumuman.index')
             ->with('success', 'Pengumuman berhasil diperbarui!');
     }
 
-    public function destroy(KelolaPengumuman $kelolaPengumuman)
+    public function destroy($id)
     {
-        // ✅ ADDED: Delete method
-        $kelolaPengumuman->delete();
+        // dd('Hapus pengumuman dengan ID: ' . $id);
+        $pengumuman = KelolaPengumuman::findOrFail($id);
+        $pengumuman->delete();
 
         return redirect()
-            ->route('admin.InformasiTerkini.Pengumuman.index')
+            ->route('admin.informasi-terkini.kelola-pengumuman.index')
             ->with('success', 'Pengumuman berhasil dihapus!');
     }
 

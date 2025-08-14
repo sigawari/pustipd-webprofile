@@ -17,110 +17,109 @@
             </div>
 
             <!-- Form -->
-            <form id="editForm" method="POST"
+            <form id="editForm-{{ $pengumuman->id }}" method="POST"
                 action="{{ route('admin.informasi-terkini.kelola-pengumuman.update', $pengumuman->id) }}"
                 class="space-y-4">
                 @csrf
                 @method('PUT')
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <!-- Nama pengumuman -->
+                    <!-- Judul Pengumuman -->
                     <div>
-                        <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Judul
-                            Pengumuman</label>
-                        <input type="text" id="name" name="name" required
+                        <label for="title" class="block text-sm font-medium text-gray-700 mb-2">
+                            Judul Pengumuman <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" id="title" name="title" required
+                            value="{{ old('title', $pengumuman->title) }}"
                             class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500"
-                            value="{{ old('name', $pengumuman->name) }}">
+                            placeholder="Contoh: Maintenance Server SIMAK Terjadwal"
+                            onkeyup="autoSlug('#title', '#slug')">
                     </div>
 
                     <!-- Slug -->
-                    <script>
-                        document.addEventListener("DOMContentLoaded", function() {
-                            if (window.autoSlug) {
-                                window.autoSlug("#name", "#slug");
-                            }
-                        });
-                    </script>
                     <div>
-                        <label for="slug" class="block text-sm font-medium text-gray-700 mb-2">Slug</label>
-                        <input type="text" id="slug" name="slug" readonly
-                            class="w-full px-3 py-2 border border-gray-200 rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500"
-                            value="{{ old('slug', $pengumuman->slug) }}">
+                        <label for="slug" class="block text-sm font-medium text-gray-700 mb-2">Slug URL</label>
+                        <input type="text" id="slug" name="slug"
+                            value="{{ old('slug', $pengumuman->slug) }}"
+                            readonly
+                            class="w-full px-3 py-2 border border-gray-200 rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500">
                     </div>
 
                     <!-- Kategori -->
                     <div>
-                        <label for="category" class="block text-sm font-medium text-gray-700 mb-2">Kategori
-                            Pengumuman</label>
+                        <label for="category" class="block text-sm font-medium text-gray-700 mb-2">
+                            Kategori <span class="text-red-500">*</span>
+                        </label>
                         <select id="category" name="category" required
                             class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500">
                             <option value="">Pilih Kategori</option>
-                            <option value="academic_services" @selected($pengumuman->category == 'academic_services')>Layanan Akademik</option>
-                            <option value="library_resources" @selected($pengumuman->category == 'library_resources')>Perpustakaan</option>
-                            <option value="student_information_system" @selected($pengumuman->category == 'student_information_system')>SIM</option>
-                            <option value="administration" @selected($pengumuman->category == 'administration')>Administrasi</option>
-                            <option value="communication" @selected($pengumuman->category == 'communication')>Komunikasi</option>
-                            <option value="research_development" @selected($pengumuman->category == 'research_development')>Penelitian</option>
-                            <option value="other" @selected($pengumuman->category == 'other')>Lainnya</option>
+                            <option value="maintenance" {{ old('category', $pengumuman->category) == 'maintenance' ? 'selected' : '' }}>🔧 Maintenance</option>
+                            <option value="layanan" {{ old('category', $pengumuman->category) == 'layanan' ? 'selected' : '' }}>💡 Layanan IT</option>
+                            <option value="infrastruktur" {{ old('category', $pengumuman->category) == 'infrastruktur' ? 'selected' : '' }}>🌐 Infrastruktur</option>
+                            <option value="administrasi" {{ old('category', $pengumuman->category) == 'administrasi' ? 'selected' : '' }}>📋 Administrasi</option>
+                            <option value="darurat" {{ old('category', $pengumuman->category) == 'darurat' ? 'selected' : '' }}>🚨 Darurat</option>
                         </select>
                     </div>
 
-                    <!-- Tags -->
+                    <!-- Urgency -->
                     <div>
-                        <label for="tags" class="block text-sm font-medium text-gray-700 mb-2">Tags</label>
-                        <input type="text" id="tags" name="tags"
-                            class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500"
-                            value="{{ old('tags', $pengumuman->tags) }}">
+                        <label for="urgency" class="block text-sm font-medium text-gray-700 mb-2">
+                            Prioritas <span class="text-red-500">*</span>
+                        </label>
+                        <select id="urgency" name="urgency" required
+                            class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500">
+                            <option value="normal" {{ old('urgency', $pengumuman->urgency) == 'normal' ? 'selected' : '' }}>📢 Normal</option>
+                            <option value="penting" {{ old('urgency', $pengumuman->urgency) == 'penting' ? 'selected' : '' }}>⚠️ Penting</option>
+                        </select>
                     </div>
 
-                    <!-- Jadwal Publish -->
+                    <!-- Tanggal -->
                     <div>
-                        <label for="publish_date" class="block text-sm font-medium text-gray-700 mb-2">Jadwal
-                            Publish</label>
-                        <input type="datetime-local" id="publish_date" name="publish_date"
-                            class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500"
-                            value="{{ $pengumuman->publish_date ? date('Y-m-d\TH:i', strtotime($pengumuman->publish_date)) : '' }}">
+                        <label for="date" class="block text-sm font-medium text-gray-700 mb-2">
+                            Tanggal <span class="text-red-500">*</span>
+                        </label>
+                        <input type="date" id="date" name="date" required
+                            value="{{ old('date', $pengumuman->date) }}"
+                            class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500">
+                    </div>
+
+                    <!-- Berlaku Sampai -->
+                    <div>
+                        <label for="valid_until" class="block text-sm font-medium text-gray-700 mb-2">
+                            Berlaku Sampai
+                        </label>
+                        <input type="datetime-local" id="valid_until" name="valid_until"
+                            value="{{ old('valid_until', $pengumuman->valid_until ? \Carbon\Carbon::parse($pengumuman->valid_until)->format('Y-m-d\TH:i') : '') }}"
+                            class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500">
+                        <p class="text-xs text-gray-500 mt-1">Opsional - kosongkan jika permanen</p>
                     </div>
 
                     <!-- Status -->
                     <div>
-                        <label for="status" class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                        <label for="status" class="block text-sm font-medium text-gray-700 mb-2">
+                            Status <span class="text-red-500">*</span>
+                        </label>
                         <select id="status" name="status" required
                             class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500">
-                            <option value="draft" @selected($pengumuman->status == 'draft')>Draft</option>
-                            <option value="published" @selected($pengumuman->status == 'published')>Published</option>
+                            <option value="draft" {{ old('status', $pengumuman->status) == 'draft' ? 'selected' : '' }}>📝 Draft</option>
+                            <option value="published" {{ old('status', $pengumuman->status) == 'published' ? 'selected' : '' }}>✅ Published</option>
+                            <option value="archived" {{ old('status', $pengumuman->status) == 'archived' ? 'selected' : '' }}>📦 Archived</option>
                         </select>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <!-- Thumbnail -->
-                    <!-- Preview Gambar Lama -->
-                    <div class="col-span-1">
-                        <label>Gambar Lama</label>
-                        @if ($pengumuman->image)
-                            <img src="{{ asset('storage/' . $pengumuman->image) }}" alt="Preview"
-                                class="w-36 h-36 object-cover rounded-lg mb-2">
-                        @else
-                            <p class="text-gray-500">Tidak ada gambar</p>
-                        @endif
-
-                        <!-- Upload Gambar Baru -->
-                        <input type="file" name="image" accept="image/*"
-                            class="w-full px-3 py-2 border rounded-lg text-sm">
-                        <small class="text-gray-500">Kosongkan jika tidak ingin ganti</small>
-                    </div>
-
-                    <!-- Konten pengumuman -->
-                    <div class="col-span-2">
-                        <label for="content" class="block text-sm font-medium text-gray-700 mb-2">Konten
-                            pengumuman</label>
+                <!-- Content Editor -->
+                <div class="grid grid-cols-1 md:grid-cols-1 gap-4 mt-6">
+                    <div>
+                        <label for="content" class="block text-sm font-medium text-gray-700 mb-2">
+                            Konten Pengumuman <span class="text-red-500">*</span>
+                        </label>
 
                         {{-- Editor Quill --}}
-                        <div id="editor" style="height: 200px;">{{ $pengumuman->content }}</div>
+                        <div id="editor" style="height: 200px;">{!! old('content', $pengumuman->content) !!}</div>
 
-                        {{-- Hidden textarea untuk form submit --}}
-                        <textarea id="content" name="content" class="hidden">{{ $pengumuman->content }}</textarea>
+                        {{-- Hidden textarea untuk submit --}}
+                        <textarea id="content" name="content" class="hidden" required>{!! old('content', $pengumuman->content) !!}</textarea>
                     </div>
                 </div>
 
@@ -146,7 +145,7 @@
             </form>
 
             <!-- Tombol X -->
-            <button onclick="closeUpdateModal()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600">
+            <button onclick="closeUpdateModal('{{ $pengumuman->id }}')" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
