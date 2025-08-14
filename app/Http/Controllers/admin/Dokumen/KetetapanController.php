@@ -70,16 +70,6 @@ class KetetapanController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('admin.Dokumen.Ketetapan.create', [
-            'title' => 'Tambah Ketetapan'
-        ]);
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
@@ -134,48 +124,49 @@ class KetetapanController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Ketetapan $ketetapan)
-    {
-        return response()->json([
-            'ketetapan' => $ketetapan,
-            'title' => 'Edit Ketetapan'
-        ]);
-    }
-
-    /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Ketetapan $ketetapan)
+    public function update(Request $request, $id)
     {
-        // Validasi input (file opsional saat update)
+        // dd($id);
+        $ketetapan = Ketetapan::findOrFail($id);
+
+        // Validasi input
         $request->validate([
             'title'          => 'required|string|max:255',
             'description'    => 'required|string',
-            'file'           => 'nullable|file|mimes:pdf,doc,docx|max:10240', // opsional
+            'file'           => 'nullable|file|mimes:pdf,doc,docx|max:10240', // opsional saat update
             'year_published' => 'nullable|digits:4|integer|min:1900|max:' . (date('Y') + 1),
             'status'         => 'required|in:published,draft,archived'
         ]);
 
         try {
-            // Cek apakah ada file baru diupload
+            $fileData = [
+                'file_path'         => $ketetapan->file_path,
+                'original_filename' => $ketetapan->original_filename,
+                'file_size'         => $ketetapan->file_size,
+                'file_type'         => $ketetapan->file_type,
+            ];
+
+            // Jika ada file baru, hapus file lama dan simpan file baru
             if ($request->hasFile('file')) {
-                $fileData = $this->handleFileUpload($request->file('file'), $ketetapan->file_path);
-                
-                $ketetapan->file_path = $fileData['file_path'];
-                $ketetapan->original_filename = $fileData['original_filename'];
-                $ketetapan->file_size = $fileData['file_size'];
-                $ketetapan->file_type = $fileData['file_type'];
+                if ($ketetapan->file_path && Storage::disk('public')->exists($ketetapan->file_path)) {
+                    Storage::disk('public')->delete($ketetapan->file_path);
+                }
+                $fileData = $this->handleFileUpload($request->file('file'));
             }
 
-            // Update field lainnya
-            $ketetapan->title = $request->input('title');
-            $ketetapan->description = $request->input('description');
-            $ketetapan->year_published = $request->input('year_published') ?? null;
-            $ketetapan->status = $request->input('status');
-
-            $ketetapan->save();
+            // Update data
+            $ketetapan->update([
+                'title'             => $request->input('title'),
+                'description'       => $request->input('description'),
+                'file_path'         => $fileData['file_path'],
+                'original_filename' => $fileData['original_filename'],
+                'file_size'         => $fileData['file_size'],
+                'file_type'         => $fileData['file_type'],
+                'year_published'    => $request->input('year_published') ?? null,
+                'status'            => $request->input('status'),
+            ]);
 
             return redirect()
                 ->back()
@@ -193,15 +184,19 @@ class KetetapanController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Ketetapan $ketetapan)
+    public function destroy($id)
     {
+        // dd($id);
+        // Temukan ketetapan berdasarkan ID
+        $ketetapan = Ketetapan::findOrFail($id);
+
         try {
-            // Hapus file di storage kalau ada
+            // Hapus file dari storage jika ada
             if ($ketetapan->file_path && Storage::disk('public')->exists($ketetapan->file_path)) {
                 Storage::disk('public')->delete($ketetapan->file_path);
             }
 
-            // Hapus data dari database
+            // Hapus record dari database
             $ketetapan->delete();
 
             return redirect()
