@@ -507,7 +507,7 @@ class PublicsController extends Controller
      */
     private function createZipDownload($ketetapans)
     {
-        $zip = new \ZipArchive();
+        $zip = new ZipArchive();
         $zipFileName = 'ketetapan_' . date('Y-m-d_H-i-s') . '.zip';
         $zipPath = storage_path('app/temp/' . $zipFileName);
         
@@ -515,7 +515,7 @@ class PublicsController extends Controller
             File::makeDirectory(storage_path('app/temp'), 0755, true);
         }
 
-        if ($zip->open($zipPath, \ZipArchive::CREATE) === TRUE) {
+        if ($zip->open($zipPath, ZipArchive::CREATE) === TRUE) {
             $fileCount = 0;
             
             foreach ($ketetapans as $ketetapan) {
