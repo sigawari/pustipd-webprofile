@@ -51,7 +51,7 @@ class ProfilController extends Controller
 
         $profil->save();
 
-        return redirect()->route('admin.TentangKami.Profil.index')->with('success', 'Profil berhasil disimpan.');
+        return redirect()->route('admin.tentang-kami.profil.index')->with('success', 'Profil berhasil disimpan.');
     }
 
     public function update(Request $request, $id = null)
@@ -91,7 +91,7 @@ class ProfilController extends Controller
         // Simpan data
         $profil->save();
 
-        return redirect()->route('admin.TentangKami.Profil.index')->with('success', 'Profil berhasil diperbarui.');
+        return redirect()->route('admin.tentang-kami.profil.index')->with('success', 'Profil berhasil diperbarui.');
     }
 
     public function destroy($id)
@@ -101,7 +101,7 @@ class ProfilController extends Controller
         $profil->delete();
 
         return redirect()
-            ->route('admin.TentangKami.Profil.index')
+            ->route('admin.tentang-kami.profil.index')
             ->with('success', 'Profil berhasil dihapus.');
     }
 }
