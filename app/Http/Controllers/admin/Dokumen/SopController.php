@@ -19,7 +19,7 @@ class SopController extends Controller
      */
     public function index(Request $request)
     {
-        $title = 'Sop';
+        $title = 'SOP';
         $search = $request->get('search');
         $filter = $request->get('filter', 'all');
         $perPage = $request->get('perPage', 10);
@@ -67,16 +67,6 @@ class SopController extends Controller
 
         // Render full view
         return view('admin.Dokumen.Sop.index', compact('title', 'sops'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('admin.Dokumen.Sop.create', [
-            'title' => 'Tambah SOP'
-        ]);
     }
 
     /**
@@ -134,58 +124,58 @@ class SopController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Sop $sop)
-    {
-        return response()->json([
-            'Sop' => $sop,
-            'title' => 'Edit Sop'
-        ]);
-    }
-
-    /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Sop $sop)
+    public function update(Request $request, $id)
     {
-        // Validasi input (file opsional saat update)
+        // dd($id);
+        $sop = Sop::findOrFail($id);
+
         $request->validate([
             'title'          => 'required|string|max:255',
             'description'    => 'required|string',
-            'file'           => 'nullable|file|mimes:pdf,doc,docx|max:10240', // opsional
+            'file'           => 'nullable|file|mimes:pdf,doc,docx|max:10240', // opsional saat update
             'year_published' => 'nullable|digits:4|integer|min:1900|max:' . (date('Y') + 1),
             'status'         => 'required|in:published,draft,archived'
         ]);
 
         try {
-            // Cek apakah ada file baru diupload
+            $fileData = [
+                'file_path'         => $sop->file_path,
+                'original_filename' => $sop->original_filename,
+                'file_size'         => $sop->file_size,
+                'file_type'         => $sop->file_type,
+            ];
+
+            // Jika ada file baru, hapus file lama lalu upload baru
             if ($request->hasFile('file')) {
-                $fileData = $this->handleFileUpload($request->file('file'), $sop->file_path);
-                
-                $sop->file_path = $fileData['file_path'];
-                $sop->original_filename = $fileData['original_filename'];
-                $sop->file_size = $fileData['file_size'];
-                $sop->file_type = $fileData['file_type'];
+                if ($sop->file_path && Storage::disk('public')->exists($sop->file_path)) {
+                    Storage::disk('public')->delete($sop->file_path);
+                }
+                $fileData = $this->handleFileUpload($request->file('file'));
             }
 
-            // Update field lainnya
-            $sop->title = $request->input('title');
-            $sop->description = $request->input('description');
-            $sop->year_published = $request->input('year_published') ?? null;
-            $sop->status = $request->input('status');
-
-            $sop->save();
+            // Update data
+            $sop->update([
+                'title'             => $request->input('title'),
+                'description'       => $request->input('description'),
+                'file_path'         => $fileData['file_path'],
+                'original_filename' => $fileData['original_filename'],
+                'file_size'         => $fileData['file_size'],
+                'file_type'         => $fileData['file_type'],
+                'year_published'    => $request->input('year_published') ?? null,
+                'status'            => $request->input('status'),
+            ]);
 
             return redirect()
                 ->back()
-                ->with('success', 'Sop berhasil diperbarui.');
+                ->with('success', 'SOP berhasil diperbarui.');
 
         } catch (\Exception $e) {
-            Log::error('Error updating Sop: ' . $e->getMessage());
+            Log::error('Error updating SOP: ' . $e->getMessage());
             return redirect()
                 ->back()
-                ->with('error', 'Gagal memperbarui Sop: ' . $e->getMessage())
+                ->with('error', 'Gagal memperbarui SOP: ' . $e->getMessage())
                 ->withInput();
         }
     }
@@ -193,26 +183,28 @@ class SopController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Sop $sop)
+    public function destroy($id)
     {
+        // dd($id);
+        $sop = Sop::findOrFail($id);
+
         try {
-            // Hapus file di storage kalau ada
+            // Hapus file dari storage jika ada
             if ($sop->file_path && Storage::disk('public')->exists($sop->file_path)) {
                 Storage::disk('public')->delete($sop->file_path);
             }
 
-            // Hapus data dari database
             $sop->delete();
 
             return redirect()
                 ->back()
-                ->with('success', 'Sop berhasil dihapus.');
+                ->with('success', 'SOP berhasil dihapus.');
 
         } catch (\Exception $e) {
-            Log::error('Error deleting Sop: ' . $e->getMessage());
+            Log::error('Error deleting SOP: ' . $e->getMessage());
             return redirect()
                 ->back()
-                ->with('error', 'Gagal menghapus Sop: ' . $e->getMessage());
+                ->with('error', 'Gagal menghapus SOP: ' . $e->getMessage());
         }
     }
 
