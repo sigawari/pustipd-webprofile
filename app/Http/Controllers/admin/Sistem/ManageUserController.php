@@ -118,7 +118,7 @@ class ManageUserController extends Controller
         ]);
 
         // Redirect ke halaman Manage User
-        return redirect()->route('admin.Sistem.Manage-users.index')->with('success', 'Pengguna baru berhasil ditambahkan!');
+        return redirect()->route('admin.sistem.manage-users.index')->with('success', 'Pengguna baru berhasil ditambahkan!');
     }
 
     /**
@@ -178,7 +178,7 @@ class ManageUserController extends Controller
         $user->save();
 
         // Redirect kembali dengan pesan sukses
-        return redirect()->route('admin.Sistem.Manage-users.index')->with('success', 'Data pengguna berhasil diperbaharui.');
+        return redirect()->route('admin.sistem.manage-users.index')->with('success', 'Data pengguna berhasil diperbaharui.');
 
     }
 
@@ -192,11 +192,11 @@ class ManageUserController extends Controller
         $user = User::findOrFail($id);
         // Jika data tidak ditemukan, kembalikan dengan pesan error
         if (!$user) {
-            return redirect()->route('admin.Sistem.Manage-users.index')->with('error', 'Data tidak ditemukan.');
+            return redirect()->route('admin.sistem.manage-users.index')->with('error', 'Data tidak ditemukan.');
         }
         // Hapus data Pengguna
         $user->delete();
         // Redirect kembali dengan pesan sukses
-        return redirect()->route('admin.Sistem.Manage-users.index')->with('success', 'Data berhasil dihapus.');
+        return redirect()->route('admin.sistem.manage-users.index')->with('success', 'Data berhasil dihapus.');
     }
 }
