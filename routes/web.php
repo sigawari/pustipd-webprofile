@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\Admin\AppLayanan\AppLayananController as AppLayananAppLayananController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PublicsController;
+use App\Http\Controllers\public\PublicsController;
 
 // ==========================
 // Auths
