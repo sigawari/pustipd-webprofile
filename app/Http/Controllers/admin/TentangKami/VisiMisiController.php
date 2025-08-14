@@ -31,6 +31,7 @@ class VisiMisiController extends Controller
 
     public function store(Request $request)
     {
+        // dd($request->all()); // Debug - hapus setelah selesai
         $validated = $request->validate([
             'description' => 'required|string|min:10|max:1000'
         ]);
@@ -40,7 +41,7 @@ class VisiMisiController extends Controller
             $visiMisi->addMisi($validated['description']);
 
             return redirect()
-                ->route('admin.TentangKami.Visi-misi.index') // ← PERBAIKI
+                ->route('admin.tentang-kami.visi-misi.index') // ← PERBAIKI
                 ->with('success', 'Misi berhasil ditambahkan!');
 
         } catch (\Exception $e) {
@@ -64,7 +65,7 @@ class VisiMisiController extends Controller
         
         if (!isset($visiMisi->misi[$index])) {
             return redirect()
-                ->route('admin.TentangKami.Visi-misi.index')
+                ->route('admin.tentang-kami.visi-misi.index')
                 ->with('error', 'Misi tidak ditemukan!');
         }
     
@@ -88,7 +89,7 @@ class VisiMisiController extends Controller
             $visiMisi->update(['visi' => $validated['visi']]);
 
             return redirect()
-                ->route('admin.TentangKami.Visi-misi.index') // ← PERBAIKI
+                ->route('admin.tentang-kami.visi-misi.index') // ← PERBAIKI
                 ->with('success', 'Visi berhasil diperbarui!');
 
         } catch (\Exception $e) {
@@ -110,7 +111,7 @@ class VisiMisiController extends Controller
             $visiMisi->updateMisi($index, $validated['description']);
 
             return redirect()
-                ->route('admin.TentangKami.Visi-misi.index') // ← PERBAIKI
+                ->route('admin.tentang-kami.visi-misi.index') // ← PERBAIKI
                 ->with('success', 'Misi berhasil diperbarui!');
 
         } catch (\Exception $e) {
@@ -127,7 +128,7 @@ class VisiMisiController extends Controller
         
         if (!isset($visiMisi->misi[$index])) {
             return redirect()
-                ->route('admin.TentangKami.Visi-misi.index') 
+                ->route('admin.tentang-kami.visi-misi.index') 
                 ->with('error', 'Misi tidak ditemukan!');
         }
 
@@ -146,14 +147,14 @@ class VisiMisiController extends Controller
             
             if (!isset($visiMisi->misi[$index])) {
                 return redirect()
-                    ->route('admin.TentangKami.Visi-misi.index') // ← PERBAIKI
+                    ->route('admin.tentang-kami.visi-misi.index') // ← PERBAIKI
                     ->with('error', 'Misi tidak ditemukan!');
             }
 
             $visiMisi->deleteMisi($index);
 
             return redirect()
-                ->route('admin.TentangKami.Visi-misi.index') // ← PERBAIKI
+                ->route('admin.tentang-kami.visi-misi.index') // ← PERBAIKI
                 ->with('success', 'Misi berhasil dihapus!');
 
         } catch (\Exception $e) {
