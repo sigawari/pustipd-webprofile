@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\InformasiTerkini;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
 use App\Models\InformasiTerkini\KelolaTutorial;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -136,38 +137,41 @@ class KelolaTutorialController extends Controller
                 'content_blocks' => json_encode($contentBlocks)
             ]);
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Tutorial berhasil disimpan!',
-                'redirect' => route('admin.InformasiTerkini.Tutorial.index')
-            ]);
+            return redirect()
+                ->back()
+                ->with('success', 'Tutorial berhasil dibuat.');
 
         } catch (\Exception $e) {
             Log::error('Error storing tutorial:', ['error' => $e->getMessage()]);
             
-            return response()->json([
-                'success' => false,
-                'message' => 'Terjadi kesalahan saat menyimpan tutorial: ' . $e->getMessage()
-            ], 500);
+            return redirect()
+                ->back()
+                ->with('error', 'Gagal membuat Tutorial: ' . $e->getMessage());
         }
     }
 
-    public function update(Request $request, KelolaTutorial $kelolaTutorial)
+    public function update(Request $request, $id)
     {
-        // ✅ PERBAIKI: Update method sesuai struktur database tutorial
+        // dd('Update tutorial dengan ID: ' . $id);
+        $tutorial = KelolaTutorial::findOrFail($id);
+
         $request->validate([
             'title' => 'required|string|max:255',
-            'slug' => 'required|string|max:255|unique:kelola_tutorials,slug,' . $kelolaTutorial->id,
+            'slug' => 'required|string|unique:kelola_tutorials,slug,' . $tutorial->id,
             'category' => 'required|in:web_development,database,server_management,security,technology,academic_services,library_resources',
             'published_at' => 'required|date',
             'status' => 'required|in:draft,published',
             'description' => 'nullable|string',
             'content_blocks' => 'required|array|min:1',
+            'content_blocks.*.type' => 'required|in:step,tip',
+            'content_blocks.*.title' => 'required_if:content_blocks.*.type,step|string',
+            'content_blocks.*.content' => 'required|string',
+            'content_blocks.*.tip_type' => 'required_if:content_blocks.*.type,tip|string',
+            'content_blocks.*.image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         try {
-            // Update tutorial utama
-            $kelolaTutorial->update([
+            $tutorial->update([
                 'title' => $request->title,
                 'slug' => $request->slug,
                 'description' => $request->description,
@@ -176,8 +180,8 @@ class KelolaTutorialController extends Controller
                 'status' => $request->status,
             ]);
 
-            // Update content blocks
             $contentBlocks = [];
+
             foreach ($request->content_blocks as $blockId => $block) {
                 $contentBlock = [
                     'id' => $blockId,
@@ -188,56 +192,76 @@ class KelolaTutorialController extends Controller
                     'tip_type' => $block['tip_type'] ?? null,
                 ];
 
-                // Handle image upload untuk update
+                // Handle image upload
                 if (isset($block['image']) && $request->hasFile("content_blocks.{$blockId}.image")) {
+                    // Hapus file lama jika ada
+                    if (!empty($tutorial->content_blocks)) {
+                        $oldBlocks = json_decode($tutorial->content_blocks, true);
+                        if (isset($oldBlocks[$blockId]['image']) && File::exists(public_path($oldBlocks[$blockId]['image']))) {
+                            File::delete(public_path($oldBlocks[$blockId]['image']));
+                        }
+                    }
+
                     $image = $request->file("content_blocks.{$blockId}.image");
                     $imageName = time() . '_' . $blockId . '.' . $image->getClientOriginalExtension();
                     $image->move(public_path('uploads/tutorial-images'), $imageName);
                     $contentBlock['image'] = 'uploads/tutorial-images/' . $imageName;
+                } else if (!empty($tutorial->content_blocks)) {
+                    // Pertahankan gambar lama jika tidak diupload baru
+                    $oldBlocks = json_decode($tutorial->content_blocks, true);
+                    if (isset($oldBlocks[$blockId]['image'])) {
+                        $contentBlock['image'] = $oldBlocks[$blockId]['image'];
+                    }
                 }
 
                 $contentBlocks[] = $contentBlock;
             }
 
-            $kelolaTutorial->update([
+            $tutorial->update([
                 'content_blocks' => json_encode($contentBlocks)
             ]);
 
             return redirect()
-                ->route('admin.InformasiTerkini.Tutorial.index')
-                ->with('success', 'Tutorial berhasil diperbarui!');
+                ->back()
+                ->with('success', 'Tutorial berhasil diupdate.');
 
         } catch (\Exception $e) {
+            Log::error('Error updating tutorial:', ['error' => $e->getMessage()]);
+
             return redirect()
                 ->back()
-                ->with('error', 'Terjadi kesalahan saat memperbarui tutorial: ' . $e->getMessage())
-                ->withInput();
+                ->with('error', 'Gagal meng-update tutorial: ' . $e->getMessage());
         }
     }
 
-    public function destroy(KelolaTutorial $kelolaTutorial)
+    public function destroy($id)
     {
+        // dd('Hapus tutorial dengan ID: ' . $id);
+        $tutorial = KelolaTutorial::findOrFail($id);
+
         try {
-            // Hapus gambar-gambar tutorial jika ada
-            if ($kelolaTutorial->content_blocks) {
-                $contentBlocks = json_decode($kelolaTutorial->content_blocks, true);
-                foreach ($contentBlocks as $block) {
-                    if (isset($block['image']) && file_exists(public_path($block['image']))) {
-                        unlink(public_path($block['image']));
+            // Hapus semua image content blocks
+            if (!empty($tutorial->content_blocks)) {
+                $blocks = json_decode($tutorial->content_blocks, true);
+                foreach ($blocks as $block) {
+                    if (!empty($block['image']) && File::exists(public_path($block['image']))) {
+                        File::delete(public_path($block['image']));
                     }
                 }
             }
 
-            $kelolaTutorial->delete();
+            $tutorial->delete();
 
-            return redirect()
-                ->route('admin.InformasiTerkini.Tutorial.index')
-                ->with('success', 'Tutorial berhasil dihapus!');
-
-        } catch (\Exception $e) {
             return redirect()
                 ->back()
-                ->with('error', 'Terjadi kesalahan saat menghapus tutorial: ' . $e->getMessage());
+                ->with('success', 'Tutorial berhasil dihapus.');
+
+        } catch (\Exception $e) {
+            Log::error('Error deleting tutorial:', ['error' => $e->getMessage()]);
+
+            return redirect()
+                ->back()
+                ->with('error', 'Gagal menghapus tutorial: ' . $e->getMessage());
         }
     }
 
