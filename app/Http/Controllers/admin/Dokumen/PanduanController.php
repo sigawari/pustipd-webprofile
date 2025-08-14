@@ -70,20 +70,11 @@ class PanduanController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('admin.Dokumen.Panduan.create', [
-            'title' => 'Tambah Panduan'
-        ]);
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
+        // dd($request->all());
         // Validasi input
         $request->validate([
             'title'          => 'required|string|max:255',
@@ -134,48 +125,48 @@ class PanduanController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Panduan $panduan)
-    {
-        return response()->json([
-            'panduan' => $panduan,
-            'title' => 'Edit Panduan'
-        ]);
-    }
-
-    /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Panduan $panduan)
+    public function update(Request $request, $id)
     {
-        // Validasi input (file opsional saat update)
+        // dd($request->all());
+        $panduan = Panduan::findOrFail($id);
+
         $request->validate([
             'title'          => 'required|string|max:255',
             'description'    => 'required|string',
-            'file'           => 'nullable|file|mimes:pdf,doc,docx|max:10240', // opsional
+            'file'           => 'nullable|file|mimes:pdf,doc,docx|max:10240', // opsional saat update
             'year_published' => 'nullable|digits:4|integer|min:1900|max:' . (date('Y') + 1),
             'status'         => 'required|in:published,draft,archived'
         ]);
 
         try {
-            // Cek apakah ada file baru diupload
+            $fileData = [
+                'file_path'         => $panduan->file_path,
+                'original_filename' => $panduan->original_filename,
+                'file_size'         => $panduan->file_size,
+                'file_type'         => $panduan->file_type,
+            ];
+
+            // Jika ada file baru, hapus file lama lalu upload baru
             if ($request->hasFile('file')) {
-                $fileData = $this->handleFileUpload($request->file('file'), $panduan->file_path);
-                
-                $panduan->file_path = $fileData['file_path'];
-                $panduan->original_filename = $fileData['original_filename'];
-                $panduan->file_size = $fileData['file_size'];
-                $panduan->file_type = $fileData['file_type'];
+                if ($panduan->file_path && Storage::disk('public')->exists($panduan->file_path)) {
+                    Storage::disk('public')->delete($panduan->file_path);
+                }
+                $fileData = $this->handleFileUpload($request->file('file'));
             }
 
-            // Update field lainnya
-            $panduan->title = $request->input('title');
-            $panduan->description = $request->input('description');
-            $panduan->year_published = $request->input('year_published') ?? null;
-            $panduan->status = $request->input('status');
-
-            $panduan->save();
+            // Update data
+            $panduan->update([
+                'title'             => $request->input('title'),
+                'description'       => $request->input('description'),
+                'file_path'         => $fileData['file_path'],
+                'original_filename' => $fileData['original_filename'],
+                'file_size'         => $fileData['file_size'],
+                'file_type'         => $fileData['file_type'],
+                'year_published'    => $request->input('year_published') ?? null,
+                'status'            => $request->input('status'),
+            ]);
 
             return redirect()
                 ->back()
@@ -193,15 +184,17 @@ class PanduanController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Panduan $panduan)
+    public function destroy($id)
     {
+        // dd($id);
+        $panduan = Panduan::findOrFail($id);
+
         try {
-            // Hapus file di storage kalau ada
+            // Hapus file dari storage jika ada
             if ($panduan->file_path && Storage::disk('public')->exists($panduan->file_path)) {
                 Storage::disk('public')->delete($panduan->file_path);
             }
 
-            // Hapus data dari database
             $panduan->delete();
 
             return redirect()

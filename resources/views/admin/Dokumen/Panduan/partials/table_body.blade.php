@@ -147,7 +147,7 @@
 
                 {{-- Download Button --}}
                 @if ($panduan->file_path && $panduan->file_exists)
-                    <a href="{{ route('admin.manage-content.dokumen.panduan.download', $panduan->id) }}"
+                    <a href="{{ route('admin.dokumen.panduan.download', $panduan->id) }}"
                         class="p-1 text-purple-600 rounded hover:text-purple-900 hover:bg-purple-50"
                         title="Download {{ $panduan->original_filename }}" target="_blank">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

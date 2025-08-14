@@ -5,7 +5,7 @@
     <div class="bg-white rounded-xl shadow-lg w-full max-w-md p-6 relative">
         <h2 class="text-lg font-semibold text-gray-800 mb-4">Hapus {{ $title }}</h2>
 
-        <p class="text-gray-600 mb-4">Apakah Anda yakin ingin mengarsipkan ketetapan berikut?</p>
+        <p class="text-gray-600 mb-4">Apakah Anda yakin ingin Menghapus ketetapan berikut?</p>
 
         <div class="border-l-4 border-blue-500 pl-4 mb-6 bg-gray-50 p-3 rounded">
             <h4 class="font-semibold text-gray-700" id="deleteKetetapanTitle">{{$ketetapan->title}}</h4>
@@ -23,7 +23,7 @@
                         d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z">
                     </path>
                 </svg>
-                <p class="text-sm text-yellow-800">Ketetapan akan di hapus dan Tidak bisa di-restore kembali.</p>
+                <p class="text-sm text-yellow-800">Ketetapan akan dihapus dan Tidak bisa di-restore kembali.</p>
             </div>
         </div>
 
