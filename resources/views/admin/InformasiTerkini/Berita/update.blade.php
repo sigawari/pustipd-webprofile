@@ -54,8 +54,8 @@
                         class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500">
                         <option value="">Pilih Kategori</option>
                         <option value="academic_services" @selected($berita->category == 'academic_services')>Layanan Akademik</option>
-                        <option value="library_resources" @selected($berita->category == 'library_resources')>Perpustakaan</option>
-                        <option value="student_information_system" @selected($berita->category == 'student_information_system')>SIM</option>
+                        <option value="library_resources" @selected($berita->category == 'library_resources')>Perpustakaan & Sumber Daya</option>
+                        <option value="student_information_system" @selected($berita->category == 'student_information_system')>Sistem Informasi Mahasiswa</option>
                         <option value="administration" @selected($berita->category == 'administration')>Administrasi</option>
                         <option value="communication" @selected($berita->category == 'communication')>Komunikasi</option>
                         <option value="research_development" @selected($berita->category == 'research_development')>Penelitian</option>
@@ -141,7 +141,7 @@
         </form>
 
         <!-- Tombol X -->
-        <button onclick="closeUpdateModal()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600">
+        <button onclick="closeUpdateModal('{{ $berita->id }}')" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>

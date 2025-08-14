@@ -63,11 +63,6 @@ use App\Http\Controllers\admin\Sistem\ReportsController;
 |--------------------------------------------------------------------------
 */
 
-// Public Routes
-Route::get('/', function () {
-    return view('welcome');
-});
-
 // Auth Routes
 Route::prefix('auth')->group(function () {
     Route::get('/login', [LoginController::class, 'login'])->name('login')->middleware('guest');

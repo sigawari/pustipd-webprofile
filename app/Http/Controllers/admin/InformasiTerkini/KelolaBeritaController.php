@@ -4,8 +4,9 @@ namespace App\Http\Controllers\Admin\InformasiTerkini;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Storage;
 use App\Models\InformasiTerkini\KelolaBerita;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class KelolaBeritaController extends Controller
 {
@@ -121,7 +122,7 @@ class KelolaBeritaController extends Controller
         ]);
 
         // Redirect atau tampilkan pesan sukses
-        return redirect()->route('admin.InformasiTerkini.Berita.index')->with('success', 'Berita berhasil ditambahkan!');
+        return redirect()->route('admin.informasi-terkini.kelola-berita.index')->with('success', 'Berita berhasil ditambahkan!');
     }
 
     /**
@@ -132,27 +133,68 @@ class KelolaBeritaController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(KelolaBerita $kelolaBerita)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, KelolaBerita $kelolaBerita)
+    public function update(Request $request, $id)
     {
-        //
+        // dd($request->all()); // Hapus ini setelah testing
+        $kelolaBerita = KelolaBerita::findOrFail($id);
+
+        // Validasi input
+        $request->validate([
+            'category'     => 'required|in:academic_services,library_resources,student_information_system,administration,communication,research_development,other',
+            'name'         => 'required|string|max:255',
+            'slug'         => 'required|string|max:255|unique:kelola_beritas,slug,' . $kelolaBerita->id,
+            'tags'         => 'nullable|string|max:255',
+            'publish_date' => 'nullable|date',
+            'status'       => 'required|in:draft,published,archived',
+            'image'        => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'content'      => 'required|string',
+        ]);
+
+        // Update gambar jika ada file baru
+        if ($request->hasFile('image')) {
+            // Hapus gambar lama jika ada
+            if ($kelolaBerita->image && Storage::disk('public')->exists($kelolaBerita->image)) {
+                Storage::disk('public')->delete($kelolaBerita->image);
+            }
+            $imagePath = $request->file('image')->store('berita_images', 'public');
+        } else {
+            $imagePath = $kelolaBerita->image;
+        }
+
+        // Update data
+        $kelolaBerita->update([
+            'category'     => $request->category,
+            'name'         => $request->name,
+            'slug'         => $request->slug,
+            'tags'         => $request->tags,
+            'publish_date' => $request->publish_date,
+            'status'       => $request->status,
+            'image'        => $imagePath,
+            'content'      => $request->input('content'),
+        ]);
+
+        return redirect()->route('admin.informasi-terkini.kelola-berita.index')->with('success', 'Berita berhasil diperbarui!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(KelolaBerita $kelolaBerita)
+    public function destroy($id)
     {
-        //
+        // dd($id); // Hapus ini setelah testing
+        $kelolaBerita = KelolaBerita::findOrFail($id);
+
+        // Hapus gambar jika ada
+        if ($kelolaBerita->image && Storage::disk('public')->exists($kelolaBerita->image)) {
+            Storage::disk('public')->delete($kelolaBerita->image);
+        }
+
+        $kelolaBerita->delete();
+
+        return redirect()->route('admin.informasi-terkini.kelola-berita.index')->with('success', 'Berita berhasil dihapus!');
     }
 }
