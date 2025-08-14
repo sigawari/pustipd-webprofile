@@ -5,7 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\ManageSOP>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Dokumen\Sop>
  */
 class ManageSOPFactory extends Factory
 {

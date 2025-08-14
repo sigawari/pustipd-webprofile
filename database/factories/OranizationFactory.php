@@ -5,7 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\ManageContent\AboutUs\Oranization>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\TentangKami\StrukturOrganisasi>
  */
 class OranizationFactory extends Factory
 {
