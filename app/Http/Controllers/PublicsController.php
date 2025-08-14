@@ -2,16 +2,25 @@
 
 namespace App\Http\Controllers;
 
+
+
+use ZipArchive;
+
+use App\Models\Faq;
+use App\Models\AppLayanan;
+use App\Models\Dokumen\Sop;
 use App\Models\Announcement;
 use Illuminate\Http\Request;
-use App\Models\ManageContent\Faq; 
-use App\Models\StrukturOrganisasi;
+use App\Models\Dokumen\Panduan;
+use App\Models\Dokumen\Regulasi;
+use App\Models\Dokumen\Ketetapan;
+use App\Models\TentangKami\Gallery;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use App\Models\TentangKami\VisiMisi;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
-use App\Models\ManageContent\AppLayanan;
-use App\Models\ManageContent\AboutUs\Gallery;
-use App\Models\ManageContent\AboutUs\VisiMisi;
+use App\Models\TentangKami\StrukturOrganisasi;
 
 class PublicsController extends Controller
 {
@@ -276,7 +285,7 @@ class PublicsController extends Controller
             $perPage = 10;
         }
 
-        $query = \App\Models\Ketetapan::where('status', 'published')
+        $query = Ketetapan::where('status', 'published')
                                     ->whereNotNull('file_path')
                                     ->orderBy('year_published', 'desc')
                                     ->orderBy('created_at', 'desc');
@@ -291,7 +300,7 @@ class PublicsController extends Controller
         $ketetapans = $query->paginate($perPage);
         $ketetapans->appends(request()->query());
 
-        $totalDownloadableFiles = \App\Models\Ketetapan::where('status', 'published')
+        $totalDownloadableFiles = Ketetapan::where('status', 'published')
                                                        ->whereNotNull('file_path')
                                                        ->count();
 
@@ -321,7 +330,7 @@ class PublicsController extends Controller
             $perPage = 10;
         }
 
-        $query = \App\Models\Panduan::where('status', 'published')
+        $query = Panduan::where('status', 'published')
                                    ->whereNotNull('file_path')
                                    ->orderBy('year_published', 'desc')
                                    ->orderBy('created_at', 'desc');
@@ -336,7 +345,7 @@ class PublicsController extends Controller
         $panduans = $query->paginate($perPage);
         $panduans->appends(request()->query());
 
-        $totalDownloadableFiles = \App\Models\Panduan::where('status', 'published')
+        $totalDownloadableFiles = Panduan::where('status', 'published')
                                                      ->whereNotNull('file_path')
                                                      ->count();
 
@@ -366,7 +375,7 @@ class PublicsController extends Controller
             $perPage = 10;
         }
 
-        $query = \App\Models\Regulasi::where('status', 'published')
+        $query = Regulasi::where('status', 'published')
                                     ->whereNotNull('file_path')
                                     ->orderBy('year_published', 'desc')
                                     ->orderBy('created_at', 'desc');
@@ -381,7 +390,7 @@ class PublicsController extends Controller
         $regulasis = $query->paginate($perPage);
         $regulasis->appends(request()->query());
 
-        $totalDownloadableFiles = \App\Models\Regulasi::where('status', 'published')
+        $totalDownloadableFiles = Regulasi::where('status', 'published')
                                                       ->whereNotNull('file_path')
                                                       ->count();
 
@@ -411,7 +420,7 @@ class PublicsController extends Controller
             $perPage = 10;
         }
 
-        $query = \App\Models\Sop::where('status', 'published')
+        $query = Sop::where('status', 'published')
                                 ->whereNotNull('file_path')
                                 ->orderBy('year_published', 'desc')
                                 ->orderBy('created_at', 'desc');
@@ -426,7 +435,7 @@ class PublicsController extends Controller
         $sops = $query->paginate($perPage);
         $sops->appends(request()->query());
 
-        $totalDownloadableFiles = \App\Models\Sop::where('status', 'published')
+        $totalDownloadableFiles = Sop::where('status', 'published')
                                                  ->whereNotNull('file_path')
                                                  ->count();
 
@@ -442,7 +451,7 @@ class PublicsController extends Controller
     /**
      * Download Ketetapan file
      */
-    public function downloadKetetapan(\App\Models\Ketetapan $ketetapan)
+    public function downloadKetetapan(Ketetapan $ketetapan)
     {
         if ($ketetapan->status !== 'published') {
             abort(404, 'Dokumen tidak tersedia untuk publik');
@@ -477,7 +486,7 @@ class PublicsController extends Controller
 
         $ids = $request->input('ids');
         
-        $ketetapans = \App\Models\Ketetapan::where('status', 'published')
+        $ketetapans = Ketetapan::where('status', 'published')
                                            ->whereIn('id', $ids)
                                            ->whereNotNull('file_path')
                                            ->get();

@@ -25,6 +25,7 @@
                 </h3>
 
                 <ul class="flex flex-col gap-2 mb-2">
+                    <!-- Dashboard -->
                     <li>
                         <a href="{{ route('admin.dashboard.index') }}" @click="selected = 'Dashboard'"
                             class="group relative flex items-center gap-3 rounded-xl px-4 py-3 font-medium text-gray-600 duration-300 ease-in-out hover:bg-blue-50 hover:text-blue-600"
@@ -74,20 +75,23 @@
                         <div class="overflow-hidden transition-all duration-300 ease-in-out"
                             :class="(selected === 'Beranda') ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'">
                             <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'" class="flex flex-col gap-1 mt-2 pl-12">
+                                <!-- Pencapaian -->
                                 <li>
-                                    <a href="{{ route('admin.manage-content.beranda.pencapaian') }}"
+                                    <a href="{{ route('admin.beranda.pencapaian.index') }}"
                                         class="block py-2 px-4 text-sm text-gray-500 hover:text-secondary hover:bg-indigo-25 rounded-lg transition-colors duration-200">
                                         Pencapaian
                                     </a>
                                 </li>
+                                <!-- Mitra -->
                                 <li>
-                                    <a href="{{ route('admin.manage-content.beranda.mitra.index') }}"
+                                    <a href="{{ route('admin.beranda.mitra.index') }}"
                                         class="block py-2 px-4 text-sm text-gray-500 hover:text-secondary hover:bg-indigo-25 rounded-lg transition-colors duration-200">
                                         Mitra
                                     </a>
                                 </li>
+                                <!-- Layanan -->
                                 <li>
-                                    <a href="{{ route('admin.manage-content.beranda.layanan.index') }}"
+                                    <a href="{{ route('admin.beranda.layanan.index') }}"
                                         class="block py-2 px-4 text-sm text-gray-500 hover:text-secondary hover:bg-indigo-25 rounded-lg transition-colors duration-200">
                                         Layanan
                                     </a>
@@ -98,7 +102,7 @@
                 </ul>
             </div>
 
-            <!-- TENTANG KAMI SECTION - DIPERBAIKI -->
+            <!-- TENTANG KAMI SECTION -->
             <div class="py-2 border-t border-gray-100">
                 <h3 class="mb-4 text-xs uppercase leading-[20px] text-gray-400 font-semibold tracking-wider">
                     <span class="menu-group-title" :class="sidebarToggle ? 'lg:hidden' : ''">TENTANG KAMI</span>
@@ -124,30 +128,34 @@
                             </svg>
                         </a>
 
-                        <!-- Dropdown Menu - PERBAIKAN UTAMA DI SINI! -->
+                        <!-- Dropdown Menu -->
                         <div class="overflow-hidden transition-all duration-300 ease-in-out"
                             :class="(selected === 'Tentang') ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'">
                             <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'" class="flex flex-col gap-1 mt-2 pl-12">
+                                <!-- Profil -->
                                 <li>
-                                    <a href="{{ route('admin.manage-content.tentang.profil') }}"
+                                    <a href="{{ route('admin.tentang-kami.profil.index') }}"
                                         class="block py-2 px-4 text-sm text-gray-500 hover:text-indigo-600 hover:bg-indigo-25 rounded-lg transition-colors duration-200">
                                         Profil
                                     </a>
                                 </li>
+                                <!-- Galeri -->
                                 <li>
-                                    <a href="{{ route('admin.manage-content.tentang.gallery.index') }}"
+                                    <a href="{{ route('admin.tentang-kami.gallery.index') }}"
                                         class="block py-2 px-4 text-sm text-gray-500 hover:text-indigo-600 hover:bg-indigo-25 rounded-lg transition-colors duration-200">
                                         Galeri
                                     </a>
                                 </li>
+                                <!-- Visi & Misi -->
                                 <li>
-                                    <a href="{{ route('admin.manage-content.tentang.visi-misi.index') }}"
+                                    <a href="{{ route('admin.tentang-kami.visi-misi.index') }}"
                                         class="block py-2 px-4 text-sm text-gray-500 hover:text-indigo-600 hover:bg-indigo-25 rounded-lg transition-colors duration-200">
                                         Visi & Misi
                                     </a>
                                 </li>
+                                <!-- Struktur Organisasi -->
                                 <li>
-                                    <a href="{{ route('admin.manage-content.tentang.struktur-organisasi.index') }}"
+                                    <a href="{{ route('admin.tentang-kami.struktur-organisasi.index') }}"
                                         class="block py-2 px-4 text-sm text-gray-500 hover:text-indigo-600 hover:bg-indigo-25 rounded-lg transition-colors duration-200">
                                         Struktur Organisasi
                                     </a>
@@ -158,16 +166,18 @@
                 </ul>
             </div>
 
-            <!-- APP LAYANAN SECTION - DIPERBAIKI -->
+            <!-- APP LAYANAN SECTION -->
             <div class="py-4">
                 <h3 class="mb-4 text-xs uppercase leading-[20px] text-gray-400 font-semibold tracking-wider">
-                    <span class="menu-group-title" :class="sidebarToggle ? 'lg:hidden' : ''">APLIKASI DAN
-                        LAYANAN</span>
+                    <span class="menu-group-title" :class="sidebarToggle ? 'lg:hidden' : ''">
+                        APLIKASI DAN LAYANAN
+                    </span>
                 </h3>
 
                 <ul class="flex flex-col gap-2 mb-2">
+                    <!-- Aplikasi dan Layanan -->
                     <li>
-                        <a href="{{ route('admin.manage-content.applayanan.index') }}"
+                        <a href="{{ route('admin.app-layanan.index') }}"
                             @click.stop="selected = (selected === 'Services' ? '' : 'Services')"
                             class="group relative flex items-center gap-3 rounded-xl px-4 py-3 font-medium text-gray-600 duration-300 ease-in-out hover:bg-orange-50 hover:text-orange-600 cursor-pointer"
                             :class="(selected === 'Services') ? 'bg-orange-50 text-orange-600' : ''"
@@ -201,8 +211,9 @@
                 </h3>
 
                 <ul class="flex flex-col gap-2 mb-2">
+                    <!-- Kelola Berita -->
                     <li>
-                        <a href="{{ route('admin.manage-content.berita.kelolaberita') }}" @click="selected = 'News'"
+                        <a href="{{ route('admin.informasi-terkini.kelola-berita.index') }}" @click="selected = 'News'"
                             class="group relative flex items-center gap-3 rounded-xl px-4 py-3 font-medium text-gray-600 duration-300 ease-in-out hover:bg-green-50 hover:text-green-600"
                             :class="(selected === 'News') ? 'bg-green-50 text-green-600' : ''">
                             <svg :class="(selected === 'News') ? 'fill-green-600' : 'fill-gray-500 group-hover:fill-green-600'"
@@ -214,9 +225,9 @@
                             <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">Berita</span>
                         </a>
                     </li>
-
+                    <!-- Kelola Pengumuman -->
                     <li>
-                        <a href="{{ route('admin.manage-content.pengumuman.kelolapengumuman') }}"
+                        <a href="{{ route('admin.informasi-terkini.kelola-pengumuman.index') }}"
                             @click="selected = 'Announcements'"
                             class="group relative flex items-center gap-3 rounded-xl px-4 py-3 font-medium text-gray-600 duration-300 ease-in-out hover:bg-red-50 hover:text-red-600"
                             :class="(selected === 'Announcements') ? 'bg-red-50 text-red-600' : ''">
@@ -229,9 +240,9 @@
                             <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">Pengumuman</span>
                         </a>
                     </li>
-
+                    <!-- Kelola Tutorial -->
                     <li>
-                        <a href="{{ route('admin.manage-content.tutorial.kelolatutorial') }}"
+                        <a href="{{ route('admin.informasi-terkini.kelola-tutorial.index') }}"
                             @click="selected = 'Tutorials'"
                             class="group relative flex items-center gap-3 rounded-xl px-4 py-3 font-medium text-gray-600 duration-300 ease-in-out hover:bg-blue-50 hover:text-blue-600"
                             :class="(selected === 'Tutorials') ? 'bg-blue-50 text-blue-600' : ''">
@@ -278,26 +289,30 @@
                         <div class="overflow-hidden transition-all duration-300 ease-in-out"
                             :class="(selected === 'Documents') ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'">
                             <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'" class="flex flex-col gap-1 mt-2 pl-12">
+                                <!-- Ketetapan -->
                                 <li>
-                                    <a href="{{ route('admin.manage-content.dokumen.ketetapan.index') }}"
+                                    <a href="{{ route('admin.dokumen.ketetapan.index') }}"
                                         class="block py-2 px-4 text-sm text-gray-500 hover:text-teal-600 hover:bg-teal-25 rounded-lg transition-colors duration-200">
                                         Ketetapan
                                     </a>
                                 </li>
+                                <!-- Panduan -->
                                 <li>
-                                    <a href="{{ route('admin.manage-content.dokumen.panduan.index') }}"
+                                    <a href="{{ route('admin.dokumen.panduan.index') }}"
                                         class="block py-2 px-4 text-sm text-gray-500 hover:text-teal-600 hover:bg-teal-25 rounded-lg transition-colors duration-200">
                                         Panduan
                                     </a>
                                 </li>
+                                <!-- Regulasi -->
                                 <li>
-                                    <a href="{{ route('admin.manage-content.dokumen.regulasi.index') }}"
+                                    <a href="{{ route('admin.dokumen.regulasi.index') }}"
                                         class="block py-2 px-4 text-sm text-gray-500 hover:text-teal-600 hover:bg-teal-25 rounded-lg transition-colors duration-200">
                                         Regulasi
                                     </a>
                                 </li>
+                                <!-- SOP -->
                                 <li>
-                                    <a href="{{ route('admin.manage-content.dokumen.sop.index') }}"
+                                    <a href="{{ route('admin.dokumen.sop.index') }}"
                                         class="block py-2 px-4 text-sm text-gray-500 hover:text-teal-600 hover:bg-teal-25 rounded-lg transition-colors duration-200">
                                         SOP
                                     </a>
@@ -316,7 +331,7 @@
 
                 <ul class="flex flex-col gap-2 mb-2">
                     <li>
-                        <a href="{{ route('admin.manage-content.faq.index') }}" @click="selected = 'FAQ'"
+                        <a href="{{ route('admin.faq.index') }}" @click="selected = 'FAQ'"
                             class="group relative flex items-center gap-3 rounded-xl px-4 py-3 font-medium text-gray-600 duration-300 ease-in-out hover:bg-amber-50 hover:text-amber-600"
                             :class="(selected === 'FAQ') ? 'bg-amber-50 text-amber-600' : ''">
                             <svg :class="(selected === 'FAQ') ? 'fill-amber-600' : 'fill-gray-500 group-hover:fill-amber-600'"
@@ -338,8 +353,9 @@
                 </h3>
 
                 <ul class="flex flex-col gap-2 mb-2">
+                    <!-- Manage Users -->
                     <li>
-                        <a href="{{ route('admin.sistem.users.index') }}" @click="selected = 'Users'"
+                        <a href="{{ route('admin.sistem.manage-users.index') }}" @click="selected = 'Users'"
                             class="group relative flex items-center gap-3 rounded-xl px-4 py-3 font-medium text-gray-600 duration-300 ease-in-out hover:bg-violet-50 hover:text-violet-600"
                             :class="(selected === 'Users') ? 'bg-violet-50 text-violet-600' : ''">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
@@ -357,7 +373,7 @@
                                 User</span>
                         </a>
                     </li>
-
+                    <!-- Reports -->
                     <li>
                         <a href="{{ route('admin.sistem.reports.index') }}" @click="selected = 'Reports'"
                             class="group relative flex items-center gap-3 rounded-xl px-4 py-3 font-medium text-gray-600 duration-300 ease-in-out hover:bg-emerald-50 hover:text-emerald-600"

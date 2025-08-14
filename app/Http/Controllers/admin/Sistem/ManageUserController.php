@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\admin\Sistem;
 
 use App\Models\Sistem\User;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -74,11 +75,11 @@ class ManageUserController extends Controller
 
         // AJAX response
         if ($request->ajax()){
-            return view('admin.manage-users.partials.table_body', compact('title', 'admins', 'user_publics', 'users', 'keywords', 'filter'))->render();
+            return view('admin.Sistem.Manage-users.partials.table_body', compact('title', 'admins', 'user_publics', 'users', 'keywords', 'filter'))->render();
         }
 
         // View Utama
-        return view('admin.manage-users.index', compact('title', 'users'));
+        return view('admin.Sistem.Manage-users.index', compact('title', 'users'));
     }
 
     /**
@@ -117,7 +118,7 @@ class ManageUserController extends Controller
         ]);
 
         // Redirect ke halaman Manage User
-        return redirect()->route('admin.sistem.users.index')->with('success', 'Pengguna baru berhasil ditambahkan!');
+        return redirect()->route('admin.Sistem.Manage-users.index')->with('success', 'Pengguna baru berhasil ditambahkan!');
     }
 
     /**
@@ -177,7 +178,7 @@ class ManageUserController extends Controller
         $user->save();
 
         // Redirect kembali dengan pesan sukses
-        return redirect()->route('admin.sistem.users.index')->with('success', 'Data pengguna berhasil diperbaharui.');
+        return redirect()->route('admin.Sistem.Manage-users.index')->with('success', 'Data pengguna berhasil diperbaharui.');
 
     }
 
@@ -191,11 +192,11 @@ class ManageUserController extends Controller
         $user = User::findOrFail($id);
         // Jika data tidak ditemukan, kembalikan dengan pesan error
         if (!$user) {
-            return redirect()->route('admin.sistem.users.index')->with('error', 'Data tidak ditemukan.');
+            return redirect()->route('admin.Sistem.Manage-users.index')->with('error', 'Data tidak ditemukan.');
         }
         // Hapus data Pengguna
         $user->delete();
         // Redirect kembali dengan pesan sukses
-        return redirect()->route('admin.sistem.users.index')->with('success', 'Data berhasil dihapus.');
+        return redirect()->route('admin.Sistem.Manage-users.index')->with('success', 'Data berhasil dihapus.');
     }
 }

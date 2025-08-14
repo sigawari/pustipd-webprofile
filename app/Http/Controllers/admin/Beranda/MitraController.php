@@ -1,22 +1,22 @@
 <?php
 
-namespace App\Http\Controllers\admin\Sistem;
+namespace App\Http\Controllers\admin\Beranda;
 
-use App\Models\Sistem\Reports;
+use App\Models\Beranda\Mitra;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreMitraRequest;
+use App\Http\Requests\UpdateMitraRequest;
 
-use Illuminate\Http\Request;
-
-class ReportsController extends Controller
+class MitraController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $title = "Laporan dan Analisis";
+        $title = "Mitra";
 
-        return view('admin.Sistem.Reports.index', compact('title'));
+        return view('admin.Beranda.Mitra.index', compact('title'));
     }
 
     /**
@@ -30,7 +30,7 @@ class ReportsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreMitraRequest $request)
     {
         //
     }
@@ -38,7 +38,7 @@ class ReportsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Reports $reports)
+    public function show(Mitra $mitra)
     {
         //
     }
@@ -46,7 +46,7 @@ class ReportsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Reports $reports)
+    public function edit(Mitra $mitra)
     {
         //
     }
@@ -54,7 +54,7 @@ class ReportsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Reports $reports)
+    public function update(UpdateMitraRequest $request, Mitra $mitra)
     {
         //
     }
@@ -62,7 +62,7 @@ class ReportsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Reports $reports)
+    public function destroy(Mitra $mitra)
     {
         //
     }
