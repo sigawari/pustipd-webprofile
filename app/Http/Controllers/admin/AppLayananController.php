@@ -79,104 +79,80 @@ class AppLayananController extends Controller
     }
 
     /**
-     * CREATE : tampilkan form modal/page tambah
-     */
-    public function create()
-    {
-        $title = 'Tambah Aplikasi Layanan';
-        
-        $categories = [
-            'akademik' => 'Akademik',
-            'pegawai' => 'Pegawai', 
-            'pembelajaran' => 'Pembelajaran',
-            'administrasi' => 'Administrasi'
-        ];
-        
-        return view('admin.AppLayanan.create', compact('title', 'categories'));
-    }
-
-    /**
      * STORE : simpan AppLayanan baru
      */
    // Di AppLayananController.php
-    public function store(StoreAppLayananRequest $request)
+     public function store(Request $request)
     {
+        // dd($request->all());
+        // Validasi data
+        $validated = $request->validate([
+            'appname'     => 'required|string|max:255',
+            'category'    => 'required|in:akademik,pegawai,pembelajaran,administrasi',
+            'description' => 'required|string',
+            'applink'     => 'nullable|url|max:500',
+            'status'      => 'required|in:draft,published,archived',
+        ]);
+
         try {
-            // ✅ FORCE: Status selalu draft untuk create
-            $data = $request->validated();
-            $data['status'] = 'draft'; // Override apapun input user
-            
-            $appLayanan = AppLayanan::create($data);
-            
+            AppLayanan::create($validated);
+
             return redirect()
-                ->route('admin.AppLayanan.index')
-                ->with('success', 'Aplikasi berhasil ditambahkan sebagai Draft.');
-                
+                ->route('admin.app-layanan.index')
+                ->with('success', 'Aplikasi berhasil ditambahkan.');
         } catch (\Exception $e) {
             return redirect()
-                ->back()
-                ->withInput()
-                ->with('error', 'Gagal menambahkan aplikasi: ' . $e->getMessage());
+                ->route('admin.app-layanan.index')
+                ->with('error', 'Terjadi kesalahan saat menyimpan aplikasi: ' . $e->getMessage());
         }
-    }
-
-    /**
-     * EDIT : tampilkan form modal/page edit
-     */
-    public function edit(AppLayanan $appLayanan)
-    {
-        $title = 'Edit Aplikasi Layanan';
-        
-        $categories = [
-            'akademik' => 'Akademik',
-            'pegawai' => 'Pegawai',
-            'pembelajaran' => 'Pembelajaran', 
-            'administrasi' => 'Administrasi'
-        ];
-        
-        return view('admin.AppLayanan.edit', compact('title', 'appLayanan', 'categories'));
     }
 
     /**
      * UPDATE : perbarui AppLayanan
      */
-    public function update(UpdateAppLayananRequest $request, AppLayanan $appLayanan)
+    public function update(Request $request, $id)
     {
+        // dd($request->all());
+        // Validasi data
+        $validated = $request->validate([
+            'appname'     => 'required|string|max:255',
+            'category'    => 'required|in:akademik,pegawai,pembelajaran,administrasi',
+            'description' => 'required|string',
+            'applink'     => 'nullable|url|max:500',
+            'status'      => 'required|in:draft,published,archived',
+        ]);
+
         try {
-            $data = $request->validated();
-            
-            $appLayanan->update($data);
+            $appLayanan = AppLayanan::findOrFail($id);
+            $appLayanan->update($validated);
 
             return redirect()
-                   ->route('admin.AppLayanan.index')
-                   ->with('success', 'Aplikasi Layanan berhasil diperbarui!');
-                   
+                ->route('admin.app-layanan.index')
+                ->with('success', 'Aplikasi berhasil diperbarui.');
         } catch (\Exception $e) {
-            Log::error('Error updating AppLayanan: ' . $e->getMessage());
             return redirect()
-                   ->back()
-                   ->with('error', 'Gagal memperbarui aplikasi layanan: ' . $e->getMessage())
-                   ->withInput();
+                ->route('admin.app-layanan.index')
+                ->with('error', 'Terjadi kesalahan saat memperbarui aplikasi: ' . $e->getMessage());
         }
     }
 
     /**
      * DESTROY : hapus satu AppLayanan (soft delete ke archived)
      */
-    public function destroy(AppLayanan $appLayanan)
+    public function destroy($id)
     {
+        // dd($id);
         try {
-            $appLayanan->update(['status' => 'archived']);
+            $appLayanan = AppLayanan::findOrFail($id);
+            $appLayanan->delete();
 
             return redirect()
-                   ->route('admin.AppLayanan.index')
-                   ->with('success', 'Aplikasi Layanan berhasil diarsipkan!');
-                   
+                ->route('admin.app-layanan.index')
+                ->with('success', 'Aplikasi berhasil dihapus.');
         } catch (\Exception $e) {
-            Log::error('Error archiving AppLayanan: ' . $e->getMessage());
             return redirect()
-                   ->back()
-                   ->with('error', 'Gagal mengarsipkan aplikasi layanan.');
+                ->route('admin.app-layanan.index')
+                ->with('error', 'Terjadi kesalahan saat menghapus aplikasi: ' . $e->getMessage());
         }
     }
 

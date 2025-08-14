@@ -47,8 +47,8 @@
                     <div class="text-sm">
                         <p class="font-medium text-yellow-800">Peringatan!</p>
                         <p class="text-yellow-700">
-                            Aplikasi akan diarsipkan, bukan dihapus permanen.
-                            Anda masih bisa memulihkannya dari arsip.
+                            Aplikasi akan dihapus permanen.
+                            Anda tidak bisa memulihkannya.
                         </p>
                     </div>
                 </div>
@@ -75,7 +75,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M5 8l6 6m0 0l6-6m-6 6V3"></path>
                         </svg>
-                        Arsipkan
+                        Hapus
                     </button>
                 </div>
             </form>
