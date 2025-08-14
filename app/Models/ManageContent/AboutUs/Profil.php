@@ -5,9 +5,9 @@ namespace App\Models\ManageContent\AboutUs;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Profile extends Model
+class Profil extends Model
 {
-    /** @use HasFactory<\Database\Factories\ProfileFactory> */
+    /** @use HasFactory<\Database\Factories\ProfilFactory> */
     use HasFactory;
     protected $fillable = [
         'organization_name',
@@ -17,7 +17,7 @@ class Profile extends Model
         'instagram_url',
         'facebook_url',
         'youtube_url',
-        'profile_photo',
+        'profil_photo',
         'applications',
         'institutions',
         'universities',

@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('profiles', function (Blueprint $table) {
+        Schema::create('profils', function (Blueprint $table) {
             $table->id();
             $table->string('organization_name')->default('PUSTIPD');
             $table->text('description')->nullable();
@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('instagram_url')->nullable();
             $table->string('facebook_url')->nullable();
             $table->string('youtube_url')->nullable();
-            $table->string('profile_photo')->nullable();
+            $table->string('profil_photo')->nullable();
             $table->json('applications')->nullable(); // array link aplikasi
             $table->json('institutions')->nullable(); // array link lembaga
             $table->json('universities')->nullable(); // array link fakultas
@@ -33,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('profiles');
+        Schema::dropIfExists('profils');
     }
 };

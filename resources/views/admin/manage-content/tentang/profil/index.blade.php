@@ -1,21 +1,19 @@
-<!-- resources/views/admin/manage-content/about/profile.blade.php -->
+<!-- resources/views/admin/manage-content/about/profil.blade.php -->
 <x-admin.layouts>
     <x-slot:title>{{ $title }}</x-slot:title>
 
     <!-- Content Form -->
     <div class="bg-white rounded-xl border border-gray-200 p-6 m-6 shadow-sm">
-        <form 
-        action="{{ isset($profileData) 
-                ? route('admin.manage-content.tentang.profile.update', $profileData->id) 
-                : route('admin.manage-content.tentang.profile.store') }}" 
-            method="POST" 
-            enctype="multipart/form-data"
-            >
+        <form
+            action="{{ isset($profilData)
+                ? route('admin.manage-content.tentang.profil.update', $profilData->id)
+                : route('admin.manage-content.tentang.profil.store') }}"
+            method="POST" enctype="multipart/form-data">
             @csrf
-            @if (isset($profileData))
-            @method('PUT')
+            @if (isset($profilData))
+                @method('PUT')
             @endif
-            
+
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <!-- Left Column -->
                 <div class="space-y-6">
@@ -25,7 +23,7 @@
                             Nama Organisasi
                         </label>
                         <input type="text" name="organization_name"
-                            value="{{ old('organization_name', $profileData->organization_name ?? 'PUSTIPD') }}"
+                            value="{{ old('organization_name', $profilData->organization_name ?? 'PUSTIPD') }}"
                             class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                             placeholder="Contoh: PUSTIPD, PPID, dll">
                     </div>
@@ -33,11 +31,11 @@
                     <!-- Description -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">
-                            Deskripsi untuk Halaman {{$title}}
+                            Deskripsi untuk Halaman {{ $title }}
                         </label>
                         <textarea name="description" rows="4"
                             class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            placeholder="Deskripsi organisasi yang akan ditampilkan di halaman {{$title}} website...">{{ old('description', $profileData->description ?? '') }}</textarea>
+                            placeholder="Deskripsi organisasi yang akan ditampilkan di halaman {{ $title }} website...">{{ old('description', $profilData->description ?? '') }}</textarea>
                     </div>
 
                     <!-- Address -->
@@ -47,7 +45,7 @@
                         </label>
                         <textarea name="address" rows="3"
                             class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            placeholder="Alamat lengkap organisasi...">{{ old('address', $profileData->address ?? '') }}</textarea>
+                            placeholder="Alamat lengkap organisasi...">{{ old('address', $profilData->address ?? '') }}</textarea>
                     </div>
 
                     <!-- Contact Information -->
@@ -57,7 +55,7 @@
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
                                 <input type="email" name="email"
-                                    value="{{ old('email', $profileData->email ?? '') }}"
+                                    value="{{ old('email', $profilData->email ?? '') }}"
                                     class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                     placeholder="email@example.com">
                             </div>
@@ -66,7 +64,7 @@
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Instagram</label>
                                     <input type="url" name="instagram_url"
-                                        value="{{ old('instagram_url', $profileData->instagram_url ?? '') }}"
+                                        value="{{ old('instagram_url', $profilData->instagram_url ?? '') }}"
                                         class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                         placeholder="https://instagram.com/username">
                                 </div>
@@ -74,7 +72,7 @@
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Facebook</label>
                                     <input type="url" name="facebook_url"
-                                        value="{{ old('facebook_url', $profileData->facebook_url ?? '') }}"
+                                        value="{{ old('facebook_url', $profilData->facebook_url ?? '') }}"
                                         class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                         placeholder="https://facebook.com/pagename">
                                 </div>
@@ -82,7 +80,7 @@
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">YouTube</label>
                                     <input type="url" name="youtube_url"
-                                        value="{{ old('youtube_url', $profileData->youtube_url ?? '') }}"
+                                        value="{{ old('youtube_url', $profilData->youtube_url ?? '') }}"
                                         class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                         placeholder="https://youtube.com/channel">
                                 </div>
@@ -96,13 +94,13 @@
                     <!-- Profile Photo Upload -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">
-                            Foto {{$title}} untuk Beranda
+                            Foto {{ $title }} untuk Beranda
                         </label>
 
                         <!-- Current Photo Preview -->
-                        @if (isset($profileData->profile_photo) && $profileData->profile_photo)
+                        @if (isset($profilData->profil_photo) && $profilData->profil_photo)
                             <div class="mb-4">
-                                <img src="{{ Storage::url($profileData->profile_photo) }}" alt="Current Photo"
+                                <img src="{{ Storage::url($profilData->profil_photo) }}" alt="Current Photo"
                                     class="w-full h-48 object-cover rounded-lg border border-gray-200">
                                 <p class="text-xs text-gray-500 mt-1">Foto saat ini</p>
                             </div>
@@ -123,13 +121,13 @@
                             <div class="mt-4">
                                 <label for="profile-photo-upload" class="cursor-pointer">
                                     <span class="mt-2 block text-sm font-medium text-gray-900">
-                                        {{ isset($profileData->profile_photo) ? 'Ganti foto profile' : 'Upload foto profile' }}
+                                        {{ isset($profilData->profil_photo) ? 'Ganti foto profile' : 'Upload foto profile' }}
                                     </span>
                                     <span class="mt-1 block text-xs text-gray-500">
                                         PNG, JPG up to 5MB (disarankan 1200x800px)
                                     </span>
                                 </label>
-                                <input id="profile-photo-upload" name="profile_photo" type="file" class="sr-only"
+                                <input id="profile-photo-upload" name="profil_photo" type="file" class="sr-only"
                                     accept="image/*" onchange="previewImage(this)">
                             </div>
                         </div>
@@ -138,32 +136,17 @@
                     <!-- Lists Section -->
                     <div>
                         <h3 class="text-md font-medium text-gray-900 mb-3">Daftar Links</h3>
-                        <x-admin.link_list 
-                            label="Daftar Aplikasi"
-                            type="applications"
-                            placeholderName="Nama Aplikasi"
-                            placeholderUrl="https://link-aplikasi.com"
-                            :items="$profileData->applications ?? []"
-                            emptyText="Belum ada aplikasi. Klik 'Tambah' untuk menambahkan."
-                        />
+                        <x-admin.link_list label="Daftar Aplikasi" type="applications" placeholderName="Nama Aplikasi"
+                            placeholderUrl="https://link-aplikasi.com" :items="$profilData->applications ?? []"
+                            emptyText="Belum ada aplikasi. Klik 'Tambah' untuk menambahkan." />
 
-                        <x-admin.link_list 
-                            label="Daftar Lembaga"
-                            type="institutions"
-                            placeholderName="Nama Lembaga"
-                            placeholderUrl="https://link-lembaga.com"
-                            :items="$profileData->institutions ?? []"
-                            emptyText="Belum ada lembaga. Klik 'Tambah' untuk menambahkan."
-                        />
+                        <x-admin.link_list label="Daftar Lembaga" type="institutions" placeholderName="Nama Lembaga"
+                            placeholderUrl="https://link-lembaga.com" :items="$profilData->institutions ?? []"
+                            emptyText="Belum ada lembaga. Klik 'Tambah' untuk menambahkan." />
 
-                        <x-admin.link_list 
-                            label="Daftar Fakultas Universitas"
-                            type="universities"
-                            placeholderName="Nama Fakultas"
-                            placeholderUrl="https://fakultas.univ.ac.id"
-                            :items="$profileData->universities ?? []"
-                            emptyText="Belum ada fakultas. Klik 'Tambah' untuk menambahkan."
-                        />
+                        <x-admin.link_list label="Daftar Fakultas Universitas" type="universities"
+                            placeholderName="Nama Fakultas" placeholderUrl="https://fakultas.univ.ac.id"
+                            :items="$profilData->universities ?? []" emptyText="Belum ada fakultas. Klik 'Tambah' untuk menambahkan." />
                     </div>
                 </div>
             </div>

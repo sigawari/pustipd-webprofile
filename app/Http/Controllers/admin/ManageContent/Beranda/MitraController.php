@@ -16,7 +16,7 @@ class MitraController extends Controller
     {
         $title = "Mitra";
 
-        return view('admin.manage-content.beranda.mitra.mitra', compact('title'));
+        return view('admin.manage-content.beranda.mitra.index', compact('title'));
     }
 
     /**

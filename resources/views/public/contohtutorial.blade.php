@@ -3,17 +3,6 @@
     <x-slot:title>Tutorial Terbaru</x-slot:title>
 
     <style>
-        .underline-animate::after {
-            content: '';
-            position: absolute;
-            bottom: -1rem;
-            left: 0;
-            height: 4px;
-            width: 0;
-            background-color: #062749;
-            transition: width 0.4s ease;
-        }
-
         .group:hover .underline-animate::after {
             width: 100%;
         }

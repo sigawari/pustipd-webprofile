@@ -66,36 +66,8 @@
                             </svg>
                             Draft
                         </button>
-                        <button onclick="bulkAction('archived')"
-                            class="px-3 py-2 text-sm bg-gray-600 text-white rounded-lg hover:bg-gray-700">
-                            <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 8l6 6m0 0l6-6m-6 6V3"></path>
-                            </svg>
-                            Archive
-                        </button>
                     </div>
 
-                    <!-- Actions untuk archived items -->
-                    <div id="archivedActions" class="hidden">
-                        <button onclick="bulkAction('draft')"
-                            class="px-3 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                            <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
-                                </path>
-                            </svg>
-                            Restore
-                        </button>
-                        <button onclick="bulkAction('permanent_delete')"
-                            class="px-3 py-2 text-sm bg-red-600 text-white rounded-lg hover:bg-red-700">
-                            <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M6 18L18 6M6 6l12 12"></path>
-                            </svg>
-                            Hapus Permanen
-                        </button>
-                    </div>
                 </div>
             </div>
         </div>
@@ -123,12 +95,10 @@
                     <option value="published" {{ request('filter') == 'published' ? 'selected' : '' }}>Published
                     </option>
                     <option value="draft" {{ request('filter') == 'draft' ? 'selected' : '' }}>Draft</option>
-                    <option value="archived" {{ request('filter') == 'archived' ? 'selected' : '' }}>Archived</option>
                 </select>
 
                 <select id="perpage-select" name="perPage"
-                    data-url="{{ route('admin.manage-content.beranda.layanan.index') }}"
-                    data-target="layananTableBody"
+                    data-url="{{ route('admin.manage-content.beranda.layanan.index') }}" data-target="layananTableBody"
                     class="flex-1 sm:flex-none px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
                     <option value="all" {{ request('perPage') == 'all' ? 'selected' : '' }}>-- Semua
                         {{ $title }} --</option>
@@ -160,11 +130,11 @@
                                 </th>
                                 <th
                                     class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Pertanyaan
+                                    Nama Layanan
                                 </th>
                                 <th
                                     class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Jawaban
+                                    Deskripsi Layanan
                                 </th>
                                 <th
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">

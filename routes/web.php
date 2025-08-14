@@ -18,7 +18,7 @@ use App\Http\Controllers\admin\ManageContent\Beranda\LayananController;
 use App\Http\Controllers\admin\ManageContent\Dokumen\PanduanController;
 use App\Http\Controllers\admin\ManageContent\Tentang\GalleryController;
 
-use App\Http\Controllers\admin\ManageContent\Tentang\ProfileController;
+use App\Http\Controllers\admin\ManageContent\Tentang\ProfilController;
 use App\Http\Controllers\admin\ManageContent\Dokumen\RegulasiController;
 use App\Http\Controllers\admin\ManageContent\Tentang\VisiMisiController;
 use App\Http\Controllers\admin\ManageContent\Dokumen\KetetapanController;
@@ -109,25 +109,26 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
 
             // Layanan
             Route::controller(LayananController::class)->group(function(){
-                Route::get('/layanan', 'index')->name('layanan');
+                Route::get('/layanan', 'index')->name('layanan.index'); // ✅ UBAH INI
                 Route::get('/layanan/create', 'create')->name('layanan.create');
                 Route::post('/layanan', 'store')->name('layanan.store');
                 Route::get('/layanan/{layanan}/edit', 'edit')->name('layanan.edit');
                 Route::put('/layanan/{layanan}', 'update')->name('layanan.update');
                 Route::delete('/layanan/{layanan}', 'destroy')->name('layanan.destroy');
                 Route::get('/layanan/export', 'export')->name('layanan.export');
+                Route::post('/layanan/bulk', 'bulk')->name('layanan.bulk');
             });
         });
 
         // tentang Section Routes - PERBAIKAN DI SINI
         Route::prefix('tentang')->as('tentang.')->group(function () {
             // Profile Routes
-            Route::controller(ProfileController::class)->group(function(){
-                Route::get('/profile', 'index')->name('profile');
-                Route::post('/profile', 'store')->name('profile.store');
-                Route::put('/profile/{profile}', 'update')->name('profile.update');
-                Route::delete('/profile/{profile}', 'destroy')->name('profile.destroy');
-                Route::get('/profile/export', 'export')->name('profile.export');
+            Route::controller(ProfilController::class)->group(function(){
+                Route::get('/profil', 'index')->name('profil');
+                Route::post('/profil', 'store')->name('profil.store');
+                Route::put('/profil/{profil}', 'update')->name('profil.update');
+                Route::delete('/profil/{profil}', 'destroy')->name('profil.destroy');
+                Route::get('/profil/export', 'export')->name('profil.export');
             });
 
             // Gallery Routes

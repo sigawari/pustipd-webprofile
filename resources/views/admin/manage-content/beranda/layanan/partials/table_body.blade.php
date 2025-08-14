@@ -12,11 +12,11 @@
         </td>
         <!-- Pertanyaan -->
         <td class="px-6 py-4 text-left">
-            <div class="text-sm font-medium text-gray-900 max-w-xs">{{ Str::limit($layanan->question, 60) }}</div>
+            <div class="text-sm font-medium text-gray-900 max-w-xs">{{ Str::limit($layanan->name, 60) }}</div>
         </td>
         <!-- Jawaban -->
         <td class="px-6 py-4 text-left">
-            <div class="text-sm text-gray-600 max-w-xs">{{ Str::limit(strip_tags($layanan->answer), 80) }}</div>
+            <div class="text-sm text-gray-600 max-w-xs">{{ Str::limit(strip_tags($layanan->description), 80) }}</div>
         </td>
         <!-- Status -->
         <td class="px-6 py-4 whitespace-nowrap">
@@ -24,7 +24,6 @@
                 'inline-flex px-2 py-1 text-xs font-semibold rounded-full',
                 'bg-green-300 text-green-800' => $layanan->status === 'published',
                 'bg-yellow-300 text-yellow-800' => $layanan->status === 'draft',
-                'bg-gray-300 text-gray-800' => $layanan->status === 'archived',
             ])>
                 {{ ucfirst($layanan->status) }}
             </span>

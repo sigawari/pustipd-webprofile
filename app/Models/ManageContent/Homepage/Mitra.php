@@ -5,15 +5,15 @@ namespace App\Models\ManageContent\Homepage;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Layanan extends Model
+class Mitra extends Model
 {
     use HasFactory;
 
-    protected $table = 'layanans';
+    protected $table = 'mitras';
 
     protected $fillable = [
         'name',
-        'description',
+        'image',
         'status',
     ];
 
