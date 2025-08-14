@@ -22,7 +22,7 @@ use App\Http\Controllers\admin\ManageContent\Tentang\ProfileController;
 use App\Http\Controllers\admin\ManageContent\Dokumen\RegulasiController;
 use App\Http\Controllers\admin\ManageContent\Tentang\VisiMisiController;
 use App\Http\Controllers\admin\ManageContent\Dokumen\KetetapanController;
-use App\Http\Controllers\admin\ManageContent\Tutorial\TutorialController;
+use App\Http\Controllers\admin\ManageContent\KelolaTutorial\KelolaTutorialController;
 
 use App\Http\Controllers\admin\ManageContent\Beranda\PencapaianController;
 
@@ -206,9 +206,13 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
 
         Route::prefix('tutorial')->as('tutorial.')->group(function () {
            //pengumuman
-            Route::controller(TutorialController::class)->group(function(){
-                Route::get('/kelolatutorial', 'index')->name('kelolatutorial'); 
-        });       
+            Route::controller(KelolaTutorialController::class)->group(function(){
+                Route::get('/kelolatutorial', 'index')->name('kelolatutorial');
+                Route::post('/kelolatutorial', 'store')->name('kelolatutorial.store');
+                Route::put('/kelolatutorial/{kelolatutorial}', 'update')->name('kelolatutorial.update');
+                Route::delete('/kelolatutorial/{kelolatutorial}', 'destroy')->name('kelolatutorial.destroy');
+                Route::get('/kelolatutorial/export', 'export')->name('kelolatutorial.export');
+                Route::post('/kelolatutorial/bulk-action', 'bulk')->name('kelolatutorial.bulk');        });       
         });
 
         // Beranda Section Routes

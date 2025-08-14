@@ -13,6 +13,7 @@ import "./components/admin/toggleVisibility";
 import "./components/admin/bulk-actions";
 import "./components/admin/ketetapan-action";
 import "./components/admin/slug";
+import "./components/admin/tutorialblock";
 
 // Import komponem public
 import "./components/public/bulk-download";
