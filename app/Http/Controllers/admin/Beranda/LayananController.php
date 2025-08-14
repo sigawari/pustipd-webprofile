@@ -98,7 +98,7 @@ class LayananController extends Controller
             $statusMessage = $request->input('status') === 'published' ? 'dipublish' : 'disimpan sebagai draft';
 
             return redirect()
-                   ->route('admin.Beranda.Layanan.index')
+                   ->route('admin.beranda.layanan.index')
                    ->with('success', "Layanan berhasil {$statusMessage}!");
 
         } catch (\Exception $e) {
@@ -134,7 +134,7 @@ class LayananController extends Controller
             $statusMessage = $request->input('status') === 'published' ? 'dipublish' : 'disimpan sebagai draft';
 
             return redirect()
-                   ->route('admin.Beranda.Layanan.index')
+                   ->route('admin.beranda.layanan.index')
                    ->with('success', "Layanan berhasil diperbarui dan {$statusMessage}!");
 
         } catch (\Exception $e) {
@@ -155,7 +155,7 @@ class LayananController extends Controller
             $layanan->delete();
 
             return redirect()
-                ->route('admin.Beranda.Layanan.index')
+                ->route('admin.beranda.layanan.index')
                 ->with('success', 'Layanan berhasil dihapus permanen!');
 
         } catch (\Exception $e) {
