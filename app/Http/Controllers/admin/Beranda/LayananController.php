@@ -78,36 +78,40 @@ class LayananController extends Controller
      * STORE : simpan Layanan baru
      */
     public function store(Request $request)
-    {
-        try {
-            // Validasi
-            $request->validate([
-                'name' => 'required|string|max:255',
-                'description' => 'required|string',
-                'status' => 'required|in:draft,published',
-            ]);
+{
+    try {
+        // Ambil status dari input, kalau kosong default jadi draft
+        $status = $request->input('status', 'draft');
 
-            // Simpan data
-            Layanan::create([
-                'name' => $request->input('name'),
-                'description' => $request->input('description'),
-                'status' => $request->input('status'),
-            ]);
+        // Validasi
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'status' => 'in:draft,published', // tidak perlu required
+        ]);
 
-            // Pesan sukses
-            $statusMessage = $request->input('status') === 'published' ? 'dipublish' : 'disimpan sebagai draft';
+        // Simpan data
+        Layanan::create([
+            'name' => $request->input('name'),
+            'description' => $request->input('description'),
+            'status' => $status,
+        ]);
 
-            return redirect()
-                   ->route('admin.beranda.layanan.index')
-                   ->with('success', "Layanan berhasil {$statusMessage}!");
+        // Pesan sukses
+        $statusMessage = $status === 'published' ? 'dipublish' : 'disimpan sebagai draft';
 
-        } catch (\Exception $e) {
-            return redirect()
-                   ->back()
-                   ->withInput()
-                   ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
-        }
+        return redirect()
+            ->route('admin.beranda.layanan.index')
+            ->with('success', "Layanan berhasil {$statusMessage}!");
+
+    } catch (\Exception $e) {
+        return redirect()
+            ->back()
+            ->withInput()
+            ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
     }
+    }
+
 
     /**
      * UPDATE : perbarui Layanan

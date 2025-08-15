@@ -118,15 +118,17 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
             Route::put('/mitra/{mitra}', 'update')->name('mitra.update');
             Route::delete('/mitra/{mitra}', 'destroy')->name('mitra.destroy');
             Route::get('/mitra/export', 'export')->name('mitra.export');
+            Route::post('/mitra/bulk', 'bulk')->name('mitra.bulk');
         });
 
         // Pencapaian Routes
         Route::controller(PencapaianController::class)->group(function () {
             Route::get('/pencapaian', 'index')->name('pencapaian.index');
             Route::post('/pencapaian', 'store')->name('pencapaian.store');
-            Route::put('/pencapaian/{pencapaian}', 'update')->name('pencapaian.update');
-            Route::delete('/pencapaian/{pencapaian}', 'destroy')->name('pencapaian.destroy');
+            Route::put('/pencapaian/{mitra}', 'update')->name('pencapaian.update');
+            Route::delete('/pencapaian/{mitra}', 'destroy')->name('pencapaian.destroy');
             Route::get('/pencapaian/export', 'export')->name('pencapaian.export');
+            Route::post('/pencapaian/bulk', 'bulk')->name('pencapaian.bulk');
         });
 
     });

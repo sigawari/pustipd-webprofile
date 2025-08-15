@@ -87,8 +87,8 @@
                     class="block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
             </div>
             <div class="flex flex-col sm:flex-row gap-2">
-                <select id="filter-select" name="filter"
-                    data-url="{{ route('admin.beranda.layanan.index') }}" data-target="layananTableBody"
+                <select id="filter-select" name="filter" data-url="{{ route('admin.beranda.layanan.index') }}"
+                    data-target="layananTableBody"
                     class="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
                     <option value="all" {{ request('filter') == 'all' ? 'selected' : '' }}>-- Semua Status --
                     </option>
@@ -97,8 +97,8 @@
                     <option value="draft" {{ request('filter') == 'draft' ? 'selected' : '' }}>Draft</option>
                 </select>
 
-                <select id="perpage-select" name="perPage"
-                    data-url="{{ route('admin.beranda.layanan.index') }}" data-target="layananTableBody"
+                <select id="perpage-select" name="perPage" data-url="{{ route('admin.beranda.layanan.index') }}"
+                    data-target="layananTableBody"
                     class="flex-1 sm:flex-none px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
                     <option value="all" {{ request('perPage') == 'all' ? 'selected' : '' }}>-- Semua
                         {{ $title }} --</option>
@@ -237,7 +237,7 @@
     </div>
 
     <!-- Modal untuk Tambah, Edit, Hapus -->
-    @include('admin.Beranda.Layanan.create')
-    @include('admin.Beranda.Layanan.update')
-    @include('admin.Beranda.Layanan.delete')
+    @include('admin.beranda.layanan.create')
+    @include('admin.beranda.layanan.update')
+    @include('admin.beranda.layanan.delete')
 </x-admin.layouts>

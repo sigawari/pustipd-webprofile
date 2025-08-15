@@ -14,8 +14,7 @@
         </div>
 
         <!-- Form -->
-        <form id="addForm" method="POST" action="{{ route('admin.beranda.layanan.store') }}"
-            class="space-y-4">
+        <form id="addForm" method="POST" action="{{ route('admin.beranda.layanan.store') }}" class="space-y-4">
             @csrf
 
             <!-- Nama Layanan -->

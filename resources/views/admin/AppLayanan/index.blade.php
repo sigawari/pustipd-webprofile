@@ -138,8 +138,8 @@
                     class="block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
             </div>
             <div class="flex flex-col sm:flex-row gap-2">
-                <select id="category-select" name="category"
-                    data-url="{{ route('admin.app-layanan.index') }}" data-target="appLayananTableBody"
+                <select id="category-select" name="category" data-url="{{ route('admin.app-layanan.index') }}"
+                    data-target="appLayananTableBody"
                     class="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
                     <option value="" {{ request('category') == '' ? 'selected' : '' }}>-- Semua Kategori --
                     </option>
@@ -152,8 +152,8 @@
                         Administrasi</option>
                 </select>
 
-                <select id="filter-select" name="filter"
-                    data-url="{{ route('admin.app-layanan.index') }}" data-target="appLayananTableBody"
+                <select id="filter-select" name="filter" data-url="{{ route('admin.app-layanan.index') }}"
+                    data-target="appLayananTableBody"
                     class="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
                     <option value="all" {{ request('filter') == 'all' ? 'selected' : '' }}>-- Semua Status --
                     </option>
@@ -163,8 +163,8 @@
                     <option value="archived" {{ request('filter') == 'archived' ? 'selected' : '' }}>Archived</option>
                 </select>
 
-                <select id="perpage-select" name="perPage"
-                    data-url="{{ route('admin.app-layanan.index') }}" data-target="appLayananTableBody"
+                <select id="perpage-select" name="perPage" data-url="{{ route('admin.app-layanan.index') }}"
+                    data-target="appLayananTableBody"
                     class="flex-1 sm:flex-none px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
                     <option value="all" {{ request('perPage') == 'all' ? 'selected' : '' }}>-- Semua
                         {{ $title }} --</option>

@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('pencapaians', function (Blueprint $table) {
             $table->id();
+            $table->text('name');    // Nama pencapaian
+            $table->longText('description');  // Deskripsi pencapaian (Ga terlalu panjang)
+            $table->enum('status', ['draft', 'published'])->default('draft');
             $table->timestamps();
         });
     }

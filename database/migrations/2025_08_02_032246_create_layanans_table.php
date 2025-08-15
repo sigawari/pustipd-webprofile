@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->text('name');    // Nama Layanan
             $table->longText('description');  // Deskripsi Layanan (Ga terlalu panjang)
-            $table->enum('status', ['draft', 'published', 'archived'])->default('draft');
+            $table->enum('status', ['draft', 'published'])->default('draft');
             $table->timestamps();
         });
     }

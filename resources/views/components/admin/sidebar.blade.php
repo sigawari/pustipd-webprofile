@@ -213,7 +213,8 @@
                 <ul class="flex flex-col gap-2 mb-2">
                     <!-- Kelola Berita -->
                     <li>
-                        <a href="{{ route('admin.informasi-terkini.kelola-berita.index') }}" @click="selected = 'News'"
+                        <a href="{{ route('admin.informasi-terkini.kelola-berita.index') }}"
+                            @click="selected = 'News'"
                             class="group relative flex items-center gap-3 rounded-xl px-4 py-3 font-medium text-gray-600 duration-300 ease-in-out hover:bg-green-50 hover:text-green-600"
                             :class="(selected === 'News') ? 'bg-green-50 text-green-600' : ''">
                             <svg :class="(selected === 'News') ? 'fill-green-600' : 'fill-gray-500 group-hover:fill-green-600'"

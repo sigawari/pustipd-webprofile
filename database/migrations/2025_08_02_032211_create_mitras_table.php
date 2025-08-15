@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('mitras', function (Blueprint $table) {
             $table->id();
+            $table->string('name', 255);
+            $table->string('image')->nullable();
+            $table->enum('status', ['draft', 'published'])->default('draft');
             $table->timestamps();
         });
     }

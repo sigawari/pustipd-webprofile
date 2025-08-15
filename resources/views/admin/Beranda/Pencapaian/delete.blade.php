@@ -1,6 +1,6 @@
-<!-- Modal Hapus Mitra -->
-@foreach ($mitras as $mitra)
-    <div id="DeleteModal-{{ $mitra->id }}"
+<!-- Modal Hapus Pencapaian -->
+@foreach ($pencapaians as $pencapaian)
+    <div id="DeleteModal-{{ $pencapaian->id }}"
         class="hidden fixed inset-0 z-50 bg-black/50 items-center justify-center px-4">
         <div class="bg-white rounded-xl shadow-lg w-full max-w-md p-6 relative">
             <h2 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
@@ -15,15 +15,15 @@
             <p class="text-gray-600 mb-4">Apakah Anda yakin ingin menghapus {{ $title }} berikut</p>
 
             <blockquote class="border-l-4 border-blue-500 pl-4 italic mb-6 text-gray-700 bg-gray-50 p-3 rounded">
-                "{{ $mitra->name }}"
+                "{{ $pencapaian->name }}"
             </blockquote>
 
-            <form method="POST" action="{{ route('admin.beranda.mitra.destroy', $mitra->id) }}">
+            <form method="POST" action="{{ route('admin.beranda.pencapaian.destroy', $pencapaian->id) }}">
                 @csrf
                 @method('DELETE')
 
                 <div class="flex justify-end space-x-2">
-                    <button type="button" onclick="closeDeleteModal('{{ $mitra->id }}')"
+                    <button type="button" onclick="closeDeleteModal('{{ $pencapaian->id }}')"
                         class="px-4 py-2 text-sm text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 flex items-center gap-1">
                         <!-- Icon X -->
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -46,7 +46,7 @@
             </form>
 
             <!-- Tombol X di pojok -->
-            <button onclick="closeDeleteModal('{{ $mitra->id }}')"
+            <button onclick="closeDeleteModal('{{ $pencapaian->id }}')"
                 class="absolute top-3 right-3 text-gray-400 hover:text-gray-600">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
