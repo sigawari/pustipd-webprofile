@@ -305,10 +305,70 @@
         </div>
     </section>
 
-    <!-- Berita & Informasi Section yang Diperbaiki -->
+    @php
+        // Dummy data berita
+        $berita = collect([
+            (object) [
+                'title' => 'Peluncuran Sistem Informasi Terbaru PUSTIPD',
+                'excerpt' =>
+                    'Sistem informasi baru telah diluncurkan untuk meningkatkan pelayanan digital dan efisiensi operasional.',
+                'date' => '23 Juli 2025',
+                'category' => 'Teknologi',
+                'link' => '#',
+                'image' => asset('assets/img/placeholder/dummy.png'),
+            ],
+            (object) [
+                'title' => 'Workshop Digital Transformation untuk UMKM',
+                'excerpt' => 'Program pelatihan komprehensif untuk meningkatkan kemampuan digital UMKM di era modern.',
+                'date' => '20 Juli 2025',
+                'category' => 'Pelatihan',
+                'link' => '#',
+                'image' => asset('assets/img/placeholder/dummy.png'),
+            ],
+            (object) [
+                'title' => 'Kerjasama Strategis dengan Universitas Terkemuka',
+                'excerpt' =>
+                    'Penandatanganan MoU dengan beberapa universitas untuk pengembangan riset teknologi informasi.',
+                'date' => '18 Juli 2025',
+                'category' => 'Kerjasama',
+                'link' => '#',
+                'image' => asset('assets/img/placeholder/dummy.png'),
+            ],
+        ]);
+
+        // Dummy data pengumuman
+        $pengumuman = collect([
+            (object) [
+                'title' => 'Maintenance Server Terjadwal - 25 Juli 2025',
+                'excerpt' =>
+                    'Maintenance server untuk upgrade sistem pada Kamis, 25 Juli 2025 pukul 01:00 - 05:00 WIB.',
+                'date' => '23 Juli 2025',
+                'category' => 'Maintenance',
+                'link' => '#',
+                'priority' => 'urgent',
+            ],
+            (object) [
+                'title' => 'Pembukaan Pendaftaran Program Magang Teknologi',
+                'excerpt' => 'Kesempatan magang untuk mahasiswa jurusan IT dengan durasi 3-6 bulan.',
+                'date' => '22 Juli 2025',
+                'category' => 'Rekrutmen',
+                'link' => '#',
+                'priority' => 'normal',
+            ],
+            (object) [
+                'title' => 'Update Kebijakan Keamanan Data Terbaru',
+                'excerpt' => 'Pembaruan kebijakan keamanan data untuk compliance dengan standar internasional.',
+                'date' => '21 Juli 2025',
+                'category' => 'Kebijakan',
+                'link' => '#',
+                'priority' => 'urgent',
+            ],
+        ]);
+    @endphp
+
     <section id="informasi" class="py-20 bg-primary">
         <div class="container mx-auto px-6">
-            <!-- Header Section -->
+            {{-- Header Section --}}
             <div class="text-center mb-10 group">
                 <h2 class="text-3xl md:text-4xl font-bold text-secondary mb-4 relative inline-block underline-animate">
                     Berita dan Informasi
@@ -318,10 +378,10 @@
                 </h3>
             </div>
 
-            <!-- Content Container -->
+            {{-- Content Container --}}
             <div class="max-w-7xl mx-auto">
 
-                <!-- Berita Section dengan Gambar -->
+                {{-- Berita Section --}}
                 <div class="mb-16">
                     <div class="flex items-center justify-between mb-8">
                         <h3 class="text-2xl font-bold text-secondary">Berita Terbaru</h3>
@@ -336,26 +396,42 @@
                         </a>
                     </div>
 
-                    <!-- Berita Cards Grid - STRUKTUR YANG BENAR -->
-                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 news-grid">
-                        <x-news-card title="Peluncuran Sistem Informasi Terbaru PUSTIPD"
-                            excerpt="Sistem informasi baru telah diluncurkan untuk meningkatkan pelayanan digital dan efisiensi operasional. Fitur-fitur terbaru mencakup dashboard interaktif dan analytics real-time."
-                            date="23 Juli 2025" category="Teknologi" link="/berita/peluncuran-sistem-informasi"
-                            image="{{ asset('assets/img/placeholder/dummy.png') }}" />
+                    {{-- Mobile Section --}}
+                    <div class="lg:hidden space-y-4">
+                        {{-- Berita pertama: card dengan gambar --}}
+                        <x-news-card title="{{ $berita[0]->title }}" excerpt="{{ $berita[0]->excerpt }}"
+                            date="{{ $berita[0]->date }}" category="{{ $berita[0]->category }}"
+                            link="{{ $berita[0]->link }}" image="{{ $berita[0]->image }}" />
 
-                        <x-news-card title="Workshop Digital Transformation untuk UMKM"
-                            excerpt="Program pelatihan komprehensif untuk meningkatkan kemampuan digital UMKM di era modern. Peserta akan mendapat sertifikat dan pendampingan berkelanjutan."
-                            date="20 Juli 2025" category="Pelatihan" link="/berita/workshop-digital-transformation"
-                            image="{{ asset('assets/img/placeholder/dummy.png') }}" />
+                        {{-- Sisanya: card kecil tanpa gambar, hanya judul, excerpt, tombol --}}
+                        @foreach ($berita->slice(1) as $news)
+                            <div class="bg-white rounded-lg border border-gray-200 p-3">
+                                <div class="font-bold text-gray-900 mb-1 text-sm truncate">{{ $news->title }}</div>
+                                <div class="text-gray-600 text-xs mb-2 line-clamp-2">{{ $news->excerpt }}</div>
+                                <a href="{{ $news->link }}"
+                                    class="text-blue-600 font-semibold text-xs flex items-center">
+                                    Selanjutnya
+                                    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </a>
+                            </div>
+                        @endforeach
+                    </div>
 
-                        <x-news-card title="Kerjasama Strategis dengan Universitas Terkemuka"
-                            excerpt="Penandatanganan MoU dengan beberapa universitas untuk pengembangan riset teknologi informasi dan transfer knowledge kepada mahasiswa."
-                            date="18 Juli 2025" category="Kerjasama" link="/berita/kerjasama-universitas"
-                            image="{{ asset('assets/img/placeholder/dummy.png') }}" />
+                    {{-- Desktop Section --}}
+                    <div class="hidden lg:grid grid-cols-2 lg:grid-cols-3 gap-8 news-grid">
+                        @foreach ($berita as $news)
+                            <x-news-card title="{{ $news->title }}" excerpt="{{ $news->excerpt }}"
+                                date="{{ $news->date }}" category="{{ $news->category }}"
+                                link="{{ $news->link }}" image="{{ $news->image }}" />
+                        @endforeach
                     </div>
                 </div>
 
-                <!-- Pengumuman Section -->
+                {{-- Pengumuman Section --}}
                 <div>
                     <div class="flex items-center justify-between mb-8">
                         <h3 class="text-2xl font-bold text-secondary">Pengumuman Penting</h3>
@@ -370,29 +446,39 @@
                         </a>
                     </div>
 
-                    <!-- Pengumuman Cards Grid -->
-                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 announcement-grid">
+                    {{-- Mobile Section --}}
+                    <div class="lg:hidden space-y-3">
+                        @foreach ($pengumuman as $item)
+                            <div
+                                class="flex justify-between items-center bg-white rounded-lg border border-gray-200 p-3">
+                                <div class="font-medium text-gray-900 text-sm truncate">{{ $item->title }}</div>
+                                <a href="{{ $item->link }}"
+                                    class="ml-4 text-custom-blue font-semibold text-sm flex items-center">
+                                    <span class="sr-only">Lihat Detail</span>
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </a>
+                            </div>
+                        @endforeach
+                    </div>
 
-                        <x-announcement-card title="Maintenance Server Terjadwal - 25 Juli 2025"
-                            excerpt="Akan dilakukan maintenance server untuk upgrade sistem pada Kamis, 25 Juli 2025 pukul 01:00 - 05:00 WIB. Mohon maklum atas ketidaknyamanan yang terjadi."
-                            date="23 Juli 2025" category="Maintenance" link="/pengumuman/maintenance-server"
-                            priority="urgent" />
-
-                        <x-announcement-card title="Pembukaan Pendaftaran Program Magang Teknologi"
-                            excerpt="Kesempatan magang untuk mahasiswa jurusan IT dengan durasi 3-6 bulan. Dapatkan pengalaman kerja di lingkungan teknologi terdepan dengan mentor berpengalaman."
-                            date="22 Juli 2025" category="Rekrutmen" link="/pengumuman/program-magang"
-                            priority="normal" />
-
-                        <x-announcement-card title="Update Kebijakan Keamanan Data Terbaru"
-                            excerpt="Pembaruan kebijakan keamanan data untuk compliance dengan standar internasional. Semua pengguna diminta untuk memperbarui password dan mengaktifkan 2FA."
-                            date="21 Juli 2025" category="Kebijakan" link="/pengumuman/update-keamanan"
-                            priority="urgent" />
-
+                    {{-- Desktop Section --}}
+                    <div class="hidden lg:grid grid-cols-2 lg:grid-cols-3 gap-8 announcement-grid">
+                        @foreach ($pengumuman as $item)
+                            <x-announcement-card title="{{ $item->title }}" excerpt="{{ $item->excerpt }}"
+                                date="{{ $item->date }}" category="{{ $item->category }}"
+                                link="{{ $item->link }}" priority="{{ $item->priority }}" />
+                        @endforeach
                     </div>
                 </div>
+
             </div>
         </div>
     </section>
+
+
 
     <!-- Tim Section dengan Infinite Carousel -->
     <section id="tentang" class="py-20 bg-white overflow-hidden">
@@ -541,6 +627,4 @@
 
         </div>
     </section>
-
-
 </x-public.layouts>

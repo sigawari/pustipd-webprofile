@@ -1,4 +1,4 @@
-<!-- Modal Hapus FAQ -->
+<!-- Modal Hapus Layanan -->
 @foreach ($layanans as $layanan)
     <div id="DeleteModal-{{ $layanan->id }}"
         class="hidden fixed inset-0 z-50 bg-black/50 items-center justify-center px-4">
