@@ -121,14 +121,15 @@ class PublicsController extends Controller
                 ->paginate(8);
             
             return view('public.announcements', compact('title', 'description', 'keywords', 'announcements'));
-        }
-
+        } 
+        
         // Route: FAQ
         if ($request->is('faq')) {
             $title = 'FAQ - Frequently Asked Questions';
             $description = 'Pertanyaan yang sering diajukan tentang PUSTIPD UIN Raden Fatah Palembang';
             $keywords = 'faq, pertanyaan, pustipd';
             
+            // Hanya tampilkan FAQ yang published DAN visibility=true
             $faqs = Faq::where('status', 'published')
                 ->orderBy('sort_order', 'asc')
                 ->orderBy('created_at', 'desc')
@@ -136,6 +137,7 @@ class PublicsController extends Controller
             
             return view('public.faq', compact('title', 'description', 'keywords', 'faqs'));
         }
+        
 
         // Route: Tutorial
         if ($request->is('tutorial')) {

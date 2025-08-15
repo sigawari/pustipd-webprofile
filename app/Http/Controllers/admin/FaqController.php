@@ -43,6 +43,8 @@ class FaqController extends Controller
             $faqQuery->where('status', $filter);
         }
 
+        // $faqQuery->where('visibility', true);
+
         // Merge results
         $merged = $faqQuery->get();
 
@@ -226,5 +228,17 @@ class FaqController extends Controller
     {
         $title = 'Hapus FAQ';
         return view('admin.faq.delete', compact('title', 'faq'));
+    } 
+    public function updateVisibility(Request $request)
+    {
+        $id = $request->input('id');
+        $visibility = filter_var($request->input('visibility'), FILTER_VALIDATE_BOOLEAN);
+    
+        $faq = Faq::findOrFail($id);
+        // Update visibility tanpa mengubah status
+        $faq->visibility = $visibility;
+        $faq->save();
+    
+        return redirect()->back()->with('success', 'Visibility FAQ berhasil diperbarui!');
     }
 }

@@ -275,7 +275,7 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
         });
 
     });
-
+    
     // FAQ
     Route::prefix('faq')->as('faq.')->controller(FaqController::class)->group(function () {
         Route::get('/', 'index')->name('index');
@@ -285,6 +285,7 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
         Route::put('/{faq}', 'update')->name('update');
         Route::delete('/{faq}', 'destroy')->name('destroy');
         Route::post('/bulk', 'bulk')->name('bulk');
+        Route::put('/update-visibility', 'updateVisibility')->name('updateVisibility');  // Ubah jadi PUT
     });
 
 
