@@ -1016,6 +1016,19 @@
             });
         </script>
 
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                setTimeout(function() {
+                    document.getElementById('newsModal').classList.remove('hidden');
+                }, 500); // tampilkan modal 0.5 detik setelah masuk halaman (sesuaikan kebutuhan)
+            });
+
+            function closeNewsModal() {
+                document.getElementById('newsModal').classList.add('hidden');
+            }
+        </script>
+
+
     </body>
 
 </html>

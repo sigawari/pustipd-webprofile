@@ -2,6 +2,7 @@
     <x-slot:title>{{ $title }}</x-slot:title>
 
     <!-- Hero Section -->
+    <x-modalnews />
     <section id="beranda"
         class="relative bg-blue-950 text-amber-50 min-h-screen flex items-center justify-center overflow-hidden">
         <!-- Background Image -->
