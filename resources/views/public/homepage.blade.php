@@ -14,7 +14,8 @@
 
         <div class="relative z-10 text-center px-4 sm:px-6 w-full max-w-2xl">
             <h1 class="text-2xl sm:text-6xl font-extrabold mb-3 leading-snug sm:leading-tight">
-                PUSAT TEKNOLOGI INFORMASI DAN PANGKALAN DATA
+                {{-- PUSAT TEKNOLOGI INFORMASI DAN PANGKALAN DATA --}}
+                {{ $profil->organization_name ?? '-' }}
             </h1>
 
             <!-- h2 with logo -->

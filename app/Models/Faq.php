@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Publics;
 
 class Faq extends Model
 {
@@ -29,5 +30,9 @@ class Faq extends Model
     public function scopePublished($query)
     {
         return $query->where('status', 'published');
+    }
+
+    public function publics () {
+        return $this->belongsTo(Publics::class);
     }
 }

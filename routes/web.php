@@ -332,7 +332,7 @@ Route::prefix('/')->group(function () {
     Route::get('/regulasi', [PublicsController::class, 'index'])->name('regulasi');
     Route::get('/sop', [PublicsController::class, 'index'])->name('sop');
     Route::get('/tutorial', [PublicsController::class, 'index'])->name('tutorial');
-    Route::get('/faq', [PublicsController::class, 'index'])->name('faq');
+    Route::get('/faq', [PublicsController::class, 'faqs'])->name('faqs');
 
     // Add more public routes here
 });

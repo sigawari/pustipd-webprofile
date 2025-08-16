@@ -2,8 +2,9 @@
 
 namespace App\Models\Beranda;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Publics;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Pencapaian extends Model
 {
@@ -25,5 +26,10 @@ class Pencapaian extends Model
     public function scopeDraft($query)
     {
         return $query->where('status', 'draft');
+    }
+
+    public function publics()
+    {
+        return $this->belongsTo(Publics::class);
     }
 }

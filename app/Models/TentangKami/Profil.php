@@ -2,8 +2,9 @@
 
 namespace App\Models\TentangKami;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Publics;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Profil extends Model
 {
@@ -28,4 +29,9 @@ class Profil extends Model
         'institutions' => 'array',
         'universities' => 'array',
     ];
+
+    //Relationships
+    public function publics () {
+        return $this->belongsTo(Publics::class);
+    }
 }

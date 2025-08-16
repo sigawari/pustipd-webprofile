@@ -13,6 +13,21 @@ return new class extends Migration
     {
         Schema::create('publics', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('profils_id')->constrained()->onDelete('cascade');
+            $table->foreignId('pencapaians_id')->constrained()->onDelete('cascade');
+            $table->foreignId('layanans_id')->constrained()->onDelete('cascade');
+            $table->foreignId('kelola_beritas_id')->constrained()->onDelete('cascade');
+            $table->foreignId('kelola_pengumumans_id')->constrained()->onDelete('cascade');
+            $table->foreignId('struktur_organisasis_id')->constrained()->onDelete('cascade');
+            $table->foreignId('mitras_id')->constrained()->onDelete('cascade');
+            $table->foreignId('galleris_id')->constrained()->onDelete('cascade');
+            $table->foreignId('visi_misi_id')->constrained()->onDelete('cascade');
+            $table->foreignId('kelola_tutorials_id')->constrained()->onDelete('cascade');
+            $table->foreignId('ketetapans_id')->constrained()->onDelete('cascade');
+            $table->foreignId('panduans_id')->constrained()->onDelete('cascade');
+            $table->foreignId('regulasis_id')->constrained()->onDelete('cascade');
+            $table->foreignId('sops_id')->constrained()->onDelete('cascade');
+            $table->foreignId('faq_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

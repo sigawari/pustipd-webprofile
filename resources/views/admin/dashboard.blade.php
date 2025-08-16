@@ -3,7 +3,7 @@
     @section('description', 'Dashboard admin untuk sistem manajemen konten PUSTIPD UIN Raden Fatah Palembang')
     @section('keywords', 'dashboard, admin, PUSTIPD, CMS, UIN Raden Fatah') -->
 
-    <x-slot:title>{{$title}}</x-slot:title>
+    <x-slot:title>{{ $title }}</x-slot:title>
 
     <div class="p-6 space-y-6">
         <!-- Statistics Cards -->
@@ -23,7 +23,7 @@
                     </div>
                     <div class="ml-4">
                         <p class="text-sm font-medium text-gray-600">Total Berita</p>
-                        <p class="text-2xl font-bold text-gray-900">245</p>
+                        <p class="text-2xl font-bold text-gray-900">{{ $totalBerita }}</p>
                         <p class="text-sm text-green-600">+12 minggu ini</p>
                     </div>
                 </div>

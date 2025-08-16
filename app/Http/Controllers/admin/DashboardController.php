@@ -3,9 +3,15 @@
 namespace App\Http\Controllers\admin;
 
 use App\Models\Dashboard;
+use App\Models\Dokumen\Sop;
 use Illuminate\Http\Request;
+use App\Models\Dokumen\Panduan;
+use App\Models\Dokumen\Regulasi;
+use App\Models\Dokumen\Ketetapan;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Models\InformasiTerkini\KelolaBerita;
+use App\Models\InformasiTerkini\KelolaPengumuman;
 
 class DashboardController extends Controller
 {
@@ -16,7 +22,17 @@ class DashboardController extends Controller
     {
         $title = 'Dashboard';
 
-        return view('admin.dashboard', compact('title'));
+        // Total
+        $totalBerita = KelolaBerita::count();
+        $totalKetetapan = Ketetapan::count();
+        $totalRegulasi = Regulasi::count();
+        $totalPanduan = Panduan::count();
+        $totalSop = Sop::count();
+        // Total Dokumen
+        $totalDokumen = Panduan::count() + Regulasi::count() + Ketetapan::count() + Sop::count();
+        $totalPengumuman = KelolaPengumuman::count();
+
+        return view('admin.dashboard', compact('title', 'totalBerita', 'totalKetetapan', 'totalRegulasi', 'totalPanduan', 'totalSop', 'totalPengumuman', 'totalDokumen'));
     }
 
     /**

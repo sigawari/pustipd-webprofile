@@ -2,6 +2,7 @@
 
 namespace App\Models\InformasiTerkini;
 
+use App\Models\Dashboard;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -20,4 +21,8 @@ class KelolaBerita extends Model
         'content',
     ];
 
+    public function dashboard()
+    {
+        return $this->belongsTo(Dashboard::class);
+    }
 }
