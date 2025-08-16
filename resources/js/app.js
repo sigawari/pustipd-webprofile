@@ -17,6 +17,17 @@ import "./components/admin/tutorialblock";
 
 // Import komponem public
 import "./components/public/bulk-download";
+import {
+    initShareButtons,
+    shareTo,
+    copyBeritaLink,
+} from "./components/public/share.js";
+
+// Pastikan fungsi share tersedia di global window scope:
+window.shareTo = shareTo;
+window.copyBeritaLink = copyBeritaLink;
+initShareButtons();
+import "./components/public/share.js";
 // import "./components/admin/rencana_dummyJS";
 // Import future public components
 // import "./components/public/search";

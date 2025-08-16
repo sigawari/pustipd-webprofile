@@ -37,8 +37,14 @@ class PublicsController extends Controller
 
         $profil = Profil::latest()->first(); 
 
+        $query = KelolaBerita::where('status', 'published');
+    
+        $newsList = $query->orderBy('publish_date', 'desc')
+                  ->paginate(3)
+                  ->withQueryString();
+
         return view('public.homepage', compact(
-            'title', 'description', 'keywords', 'profil',
+            'title', 'description', 'keywords', 'profil', 'newsList',
         ));
     }
 
@@ -156,19 +162,46 @@ class PublicsController extends Controller
             'getCategoryIcon'
         ));
     }
-    public function berita()
+
+    public function berita(Request $request)
     {
         $title = 'Berita';
         $description = 'Semua berita terbaru PUSTIPD UIN Raden Fatah Palembang';
         $keywords = 'berita, news, pustipd';
     
-        $news = KelolaBerita::where('category', 'Berita')
-            ->where('status', 'published')
-            ->orderBy('date', 'desc')
-            ->paginate(8);
+        $search = $request->query('search', '');
     
-        return view('public.news', compact('title', 'description', 'keywords', 'news'));
+        $query = KelolaBerita::where('status', 'published');
+    
+        // Search by title or content
+        if ($search) {
+            $query->where(function($q) use ($search){
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('content', 'like', "%{$search}%");
+            });
+        }
+    
+        $newsList = $query->orderBy('publish_date', 'desc')
+                          ->paginate(6)
+                          ->withQueryString();
+    
+        return view('public.news', compact('title', 'description', 'keywords', 'newsList', 'search'));
     }
+    
+
+    public function newsDetail($slug)
+    {
+        $news = KelolaBerita::where('status', 'published')
+            ->where('slug', $slug)
+            ->firstOrFail();
+
+        $title = $news->name;
+        $description = \Str::limit(strip_tags($news->content), 155);
+        $keywords = $news->tags ?? 'berita, pustipd';
+
+        return view('public.news-detail', compact('news', 'title', 'description', 'keywords'));
+    }
+
     
     public function pengumuman()
     {

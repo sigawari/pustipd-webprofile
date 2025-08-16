@@ -308,36 +308,6 @@
     </section>
 
     @php
-        // Dummy data berita
-        $berita = collect([
-            (object) [
-                'title' => 'Peluncuran Sistem Informasi Terbaru PUSTIPD',
-                'excerpt' =>
-                    'Sistem informasi baru telah diluncurkan untuk meningkatkan pelayanan digital dan efisiensi operasional.',
-                'date' => '23 Juli 2025',
-                'category' => 'Teknologi',
-                'link' => '#',
-                'image' => asset('assets/img/placeholder/dummy.png'),
-            ],
-            (object) [
-                'title' => 'Workshop Digital Transformation untuk UMKM',
-                'excerpt' => 'Program pelatihan komprehensif untuk meningkatkan kemampuan digital UMKM di era modern.',
-                'date' => '20 Juli 2025',
-                'category' => 'Pelatihan',
-                'link' => '#',
-                'image' => asset('assets/img/placeholder/dummy.png'),
-            ],
-            (object) [
-                'title' => 'Kerjasama Strategis dengan Universitas Terkemuka',
-                'excerpt' =>
-                    'Penandatanganan MoU dengan beberapa universitas untuk pengembangan riset teknologi informasi.',
-                'date' => '18 Juli 2025',
-                'category' => 'Kerjasama',
-                'link' => '#',
-                'image' => asset('assets/img/placeholder/dummy.png'),
-            ],
-        ]);
-
         // Dummy data pengumuman
         $pengumuman = collect([
             (object) [
@@ -382,7 +352,6 @@
 
             {{-- Content Container --}}
             <div class="max-w-7xl mx-auto">
-
                 {{-- Berita Section --}}
                 <div class="mb-16">
                     <div class="flex items-center justify-between mb-8">
@@ -400,17 +369,22 @@
 
                     {{-- Mobile Section --}}
                     <div class="lg:hidden space-y-4">
-                        {{-- Berita pertama: card dengan gambar --}}
-                        <x-news-card title="{{ $berita[0]->title }}" excerpt="{{ $berita[0]->excerpt }}"
-                            date="{{ $berita[0]->date }}" category="{{ $berita[0]->category }}"
-                            link="{{ $berita[0]->link }}" image="{{ $berita[0]->image }}" />
+                        @if ($newsList->count() > 0)
+                            @php $firstNews = $newsList->first(); @endphp
+                            <x-news-card title="{{ $firstNews->name }}"
+                                excerpt="{{ \Illuminate\Support\Str::limit(strip_tags($firstNews->content), 140) }}"
+                                date="{{ $firstNews->publish_date ? \Carbon\Carbon::parse($firstNews->publish_date)->format('d F Y') : '-' }}"
+                                category="{{ ucfirst(str_replace('_', ' ', $firstNews->category)) }}"
+                                link="{{ route('news.detail', $firstNews->slug) }}"
+                                image="{{ $firstNews->image ? asset('storage/' . $firstNews->image) : asset('assets/img/placeholder/dummy.png') }}" />
+                        @endif
 
-                        {{-- Sisanya: card kecil tanpa gambar, hanya judul, excerpt, tombol --}}
-                        @foreach ($berita->slice(1) as $news)
+                        @foreach ($newsList->slice(1) as $news)
                             <div class="bg-white rounded-lg border border-gray-200 p-3">
-                                <div class="font-bold text-gray-900 mb-1 text-sm truncate">{{ $news->title }}</div>
-                                <div class="text-gray-600 text-xs mb-2 line-clamp-2">{{ $news->excerpt }}</div>
-                                <a href="{{ $news->link }}"
+                                <div class="font-bold text-gray-900 mb-1 text-sm truncate">{{ $news->name }}</div>
+                                <div class="text-gray-600 text-xs mb-2 line-clamp-2">
+                                    {{ \Illuminate\Support\Str::limit(strip_tags($news->content), 100) }}</div>
+                                <a href="{{ route('news.detail', $news->slug) }}"
                                     class="text-blue-600 font-semibold text-xs flex items-center">
                                     Selanjutnya
                                     <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor"
@@ -425,11 +399,18 @@
 
                     {{-- Desktop Section --}}
                     <div class="hidden lg:grid grid-cols-2 lg:grid-cols-3 gap-8 news-grid">
-                        @foreach ($berita as $news)
-                            <x-news-card title="{{ $news->title }}" excerpt="{{ $news->excerpt }}"
-                                date="{{ $news->date }}" category="{{ $news->category }}"
-                                link="{{ $news->link }}" image="{{ $news->image }}" />
-                        @endforeach
+                        @forelse ($newsList as $news)
+                            <x-news-card title="{{ $news->name }}"
+                                excerpt="{{ \Illuminate\Support\Str::limit(strip_tags($news->content), 140) }}"
+                                date="{{ $news->publish_date ? \Carbon\Carbon::parse($news->publish_date)->format('d F Y') : '-' }}"
+                                category="{{ ucfirst(str_replace('_', ' ', $news->category)) }}"
+                                link="{{ route('news.detail', $news->slug) }}"
+                                image="{{ $news->image ? asset('storage/' . $news->image) : asset('assets/img/placeholder/dummy.png') }}" />
+                        @empty
+                            <div class="col-span-1 md:col-span-2 lg:col-span-3 text-center py-10 text-gray-600">
+                                Tidak ada berita ditemukan.
+                            </div>
+                        @endforelse
                     </div>
                 </div>
 
