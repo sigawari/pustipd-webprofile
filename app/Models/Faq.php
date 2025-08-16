@@ -33,6 +33,6 @@ class Faq extends Model
     }
 
     public function publics () {
-        return $this->belongsTo(Publics::class);
+        return $this->hasMany(Publics::class);
     }
 }
