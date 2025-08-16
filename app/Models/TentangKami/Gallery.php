@@ -40,4 +40,8 @@ class Gallery extends Model
     {
         return $query->where('status', 'published');
     }
+
+    public function publics () {
+        return $this->belongsTo(Publics::class);
+    }
 }

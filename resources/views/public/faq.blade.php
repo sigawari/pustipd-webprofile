@@ -1,5 +1,3 @@
-{{-- Hapus bagian @php $faq = [...] @endphp --}}
-
 <x-public.layouts title="{{ $title }}" description="{{ $description }}" keywords="{{ $keywords }}">
     <x-slot:title>{{ $title }}</x-slot:title>
 
