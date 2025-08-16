@@ -4,26 +4,26 @@
     <!-- @section('page-title', 'Struktur Organisasi PUSTIPD')
     @section('page-description', 'Kelola Struktur Organisasi PUSTIPD')
     @section('breadcrumb')
-                                <li>
-                                    <div class="flex items-center">
-                                        <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd"
-                                                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 111.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                                clip-rule="evenodd"></path>
-                                        </svg>
-                                        <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2">Kelola Konten</span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="flex items-center">
-                                        <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd"
-                                                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 111.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                                clip-rule="evenodd"></path>
-                                        </svg>
-                                        <span class="ml-1 text-sm font-medium text-gray-700 md:ml-2">Struktur Organisasi PUSTIPD</span>
-                                    </div>
-                                </li>
+                                            <li>
+                                                <div class="flex items-center">
+                                                    <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd"
+                                                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 111.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                                            clip-rule="evenodd"></path>
+                                                    </svg>
+                                                    <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2">Kelola Konten</span>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="flex items-center">
+                                                    <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd"
+                                                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 111.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                                            clip-rule="evenodd"></path>
+                                                    </svg>
+                                                    <span class="ml-1 text-sm font-medium text-gray-700 md:ml-2">Struktur Organisasi PUSTIPD</span>
+                                                </div>
+                                            </li>
     @endsection -->
 
     <!-- Content Form -->
@@ -906,28 +906,34 @@
                     // Generate carousel items
                     allMembers.forEach(member => {
                         const memberCard = document.createElement('div');
-                        memberCard.className =
-                            'flex-shrink-0 w-64 bg-white rounded-xl shadow-lg border border-gray-200 p-6 mx-2';
+                        memberCard.className = 'team-carousel-card flex-shrink-0';
 
                         memberCard.innerHTML = `
-                            <div class="text-center">
-                                <div class="w-24 h-24 mx-auto mb-4 rounded-full overflow-hidden bg-gray-200">
-                                    ${member.photo ? 
-                                        `<img src="${member.photo}" alt="${member.name}" class="w-full h-full object-cover">` :
-                                        `<div class="w-full h-full flex items-center justify-center">
-                                                                            <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                                                                            </svg>
-                                                                        </div>`
-                                    }
-                                </div>
-                                <h4 class="text-lg font-semibold text-gray-900 mb-1">${member.name}</h4>
-                                <p class="text-sm text-blue-600 font-medium mb-1">${member.position}</p>
-                                <p class="text-xs text-gray-500 mb-2">${member.division}</p>
-                                ${member.email ? `<p class="text-xs text-gray-400">${member.email}</p>` : ''}
+                        <div class="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden hover:shadow-xl hover:border-primary/30 transition-all duration-300 transform hover:-translate-y-2 group w-56 sm:w-64 md:w-72">
+                            <!-- Image Container -->
+                            <div class="relative w-full h-48 sm:h-56 md:h-70 overflow-hidden">
+                                ${
+                                    member.photo
+                                        ? `<img src="${member.photo}" alt="${member.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">`
+                                        : `<div class="w-full h-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center">
+                                                        <span class="text-4xl sm:text-5xl md:text-6xl font-bold text-white">${
+                                                                (member.name || '')
+                                                                    .split(' ')
+                                                                    .map(n => n[0])
+                                                                    .join('')
+                                                            }</span>
+                                                    </div>`
+                                }
+                                <div class="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                             </div>
-                        `;
 
+                            <!-- Content Container -->
+                            <div class="p-2 text-center h-20 sm:h-24 md:h-30 flex flex-col justify-center">
+                                <h3 class="text-lg sm:text-xl font-bold text-secondary mb-1 group-hover:text-custom-blue transition-colors duration-300">${member.name}</h3>
+                                <h4 class="text-sm sm:text-base text-secondary font-medium mb-2 sm:mb-3">${member.position}</h4>
+                            </div>
+                        </div>
+                    `;
                         carouselContent.appendChild(memberCard);
                     });
 
@@ -959,10 +965,10 @@
                                 ${formData.head.photo ? 
                                     `<img src="${formData.head.photo}" alt="${formData.head.name}" class="w-full h-full object-cover">` :
                                     `<div class="w-full h-full flex items-center justify-center">
-                                                                        <svg class="w-10 h-10 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                                                                        </svg>
-                                                                    </div>`
+                                                                                    <svg class="w-10 h-10 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                                                                    </svg>
+                                                                                </div>`
                                 }
                             </div>
                             <h3 class="text-lg font-bold mb-1">${formData.head.name}</h3>
@@ -1023,10 +1029,10 @@
                                             ${staff.photo ? 
                                                 `<img src="${staff.photo}" alt="${staff.name}" class="w-full h-full object-cover">` :
                                                 `<div class="w-full h-full flex items-center justify-center">
-                                                                                    <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                                                                                    </svg>
-                                                                                </div>`
+                                                                                                <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                                                                                </svg>
+                                                                                            </div>`
                                             }
                                         </div>
                                         <h5 class="text-sm font-medium text-gray-900 mb-1">${staff.name}</h5>
