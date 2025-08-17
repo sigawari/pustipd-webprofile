@@ -9,7 +9,6 @@
                     <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                     </svg>
-                    Prev
                 </span>
             @else
                 <a href="{{ $paginator->previousPageUrl() }}"
@@ -17,7 +16,6 @@
                     <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                     </svg>
-                    Prev
                 </a>
             @endif
 
@@ -40,14 +38,12 @@
             @if ($paginator->hasMorePages())
                 <a href="{{ $paginator->nextPageUrl() }}"
                     class="px-5 py-3 text-custom-blue bg-white border-2 border-blue-300 rounded-md hover:bg-blue-50 hover:border-custom-blue transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
-                    Next
                     <svg class="w-4 h-4 inline ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                     </svg>
                 </a>
             @else
                 <span class="px-5 py-3 text-gray-400 rounded-md border-2 border-gray-200 bg-gray-50 shadow-sm">
-                    Next
                     <svg class="w-4 h-4 inline ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                     </svg>
