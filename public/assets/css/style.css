@@ -694,6 +694,7 @@
     color: #9ca3af;
     font-style: italic;
 }
+
 /* Hide pagination result info + arrows text */
 nav[role="navigation"] > div:first-child,
 nav[role="navigation"] .pagination > .page-prev,

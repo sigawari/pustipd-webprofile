@@ -170,6 +170,9 @@ class PublicsController extends Controller
         $keywords = 'berita, news, pustipd';
     
         $search = $request->query('search', '');
+        $shareText = "Baca Berita Terbaru dari PUSTIPD UIN RF Palembang - Berita Terbaru";
+        $url = url()->current();
+
     
         $query = KelolaBerita::where('status', 'published');
     
@@ -185,8 +188,8 @@ class PublicsController extends Controller
                           ->paginate(6)
                           ->withQueryString();
     
-        return view('public.news', compact('title', 'description', 'keywords', 'newsList', 'search'));
-    }
+            return view('public.news', compact('title', 'description', 'keywords', 'newsList', 'search', 'shareText', 'url'));
+        }
     
 
     public function newsDetail($slug)
@@ -198,8 +201,9 @@ class PublicsController extends Controller
         $title = $news->name;
         $description = \Str::limit(strip_tags($news->content), 155);
         $keywords = $news->tags ?? 'berita, pustipd';
-
-        return view('public.news-detail', compact('news', 'title', 'description', 'keywords'));
+        $url = url()->current();
+        $shareText = "Baca Berita Terbaru dari PUSTIPD UIN RF Palembang - " . $news->name . " " . $url;
+        return view('public.news-detail', compact('title', 'description', 'keywords', 'news', 'url', 'shareText'));
     }
 
     

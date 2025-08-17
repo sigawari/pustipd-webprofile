@@ -128,11 +128,22 @@ class KelolaBeritaController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(KelolaBerita $kelolaBerita)
+    public function show($id)
     {
-        //
-    }
+        $news = KelolaBerita::where('status', 'published')->findOrFail($id);
 
+        $title = $news->name;
+        $description = $news->description ?? '';
+        $keywords = 'berita, news, pustipd';
+
+        $url = url()->current(); // Dapatkan link halaman detail
+        $shareText = "Baca Berita Terbaru dari PUSTIPD UIN RF Palembang - " . $title . " " . $url;
+
+        return view('public.news-detail', compact(
+            'title', 'description', 'keywords',
+            'news', 'url', 'shareText'
+        ));
+    }
 
     /**
      * Update the specified resource in storage.

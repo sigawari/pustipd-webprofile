@@ -1,66 +1,52 @@
-// share.js
+export function initShareButtons() {
+    const mainBtn = document.getElementById("mainShareBtn");
+    const shareChoices = document.getElementById("shareChoices");
 
-function initShareButtons() {
-    document.addEventListener("DOMContentLoaded", function () {
-        const mainBtn = document.getElementById("mainShareBtn");
-        const shareChoices = document.getElementById("shareChoices");
-        let opened = false;
+    let opened = false;
+    if (mainBtn && shareChoices) {
+        mainBtn.addEventListener("click", function () {
+            shareChoices.style.display = opened ? "none" : "flex";
+            opened = !opened;
+            if (opened) shareChoices.focus();
+        });
 
-        if (mainBtn && shareChoices) {
-            mainBtn.addEventListener("click", function () {
-                shareChoices.classList.toggle("active");
-                opened = !opened;
-                if (opened) shareChoices.focus();
-            });
+        document.addEventListener("click", function (e) {
+            if (
+                opened &&
+                !mainBtn.contains(e.target) &&
+                !shareChoices.contains(e.target)
+            ) {
+                shareChoices.style.display = "none";
+                opened = false;
+            }
+        });
 
-            document.addEventListener("click", function (e) {
-                if (
-                    opened &&
-                    !mainBtn.contains(e.target) &&
-                    !shareChoices.contains(e.target)
-                ) {
-                    shareChoices.classList.remove("active");
-                    opened = false;
-                }
-            });
-
-            shareChoices.addEventListener("keydown", function (e) {
-                if (e.key === "Escape") {
-                    shareChoices.classList.remove("active");
-                    opened = false;
-                    mainBtn.blur();
-                }
-            });
-        }
-    });
+        shareChoices.querySelectorAll(".choice-btn").forEach((btn) => {
+            // Copy
+            if (btn.id === "copyBtn") {
+                btn.addEventListener("click", copyContentLink);
+            } else {
+                btn.addEventListener("click", () => {
+                    const platform = btn.dataset.platform;
+                    const shareText = btn.dataset.shareText;
+                    const shareUrl = btn.dataset.shareUrl;
+                    shareTo(platform, shareUrl, shareText);
+                });
+            }
+        });
+    }
 }
 
-function getShareTitle() {
-    const titleElem = document.getElementById("judul-berita");
-    return titleElem ? titleElem.innerText : document.title;
-}
-
-function shareTo(platform) {
-    const title = getShareTitle();
-    const url = window.location.href;
-    const shareText = `Baca Berita Terbaru dari PUSTIPD UIN RF Palembang - ${title} ${url}`;
-
+export function shareTo(platform, url, shareText) {
+    const text = `${shareText} ${url}`;
     if (platform === "wa") {
         window.open(
-            "https://wa.me/?text=" + encodeURIComponent(shareText),
+            "https://wa.me/?text=" + encodeURIComponent(text),
             "_blank"
         );
     } else if (platform === "fb") {
         window.open(
             "https://www.facebook.com/sharer/sharer.php?u=" +
-                encodeURIComponent(url) +
-                "&quote=" +
-                encodeURIComponent(shareText),
-            "_blank"
-        );
-    } else if (platform === "ig") {
-        window.open(
-            "https://www.instagram.com/sharer/sharer.php?u=" +
                 encodeURIComponent(url) +
                 "&quote=" +
                 encodeURIComponent(shareText),
@@ -77,13 +63,35 @@ function shareTo(platform) {
     }
 }
 
-function copyBeritaLink() {
-    const title = getShareTitle();
-    const url = window.location.href;
-    const textToCopy = `Baca Berita Terbaru dari PUSTIPD UIN RF Palembang - ${title} ${url}`;
-    navigator.clipboard.writeText(textToCopy).then(function () {
-        alert("Link berita telah disalin!");
-    });
-}
+export function copyContentLink() {
+    const copySuccessDiv = document.getElementById("copySuccess");
+    const linkToCopy = window.location.href;
 
-export { initShareButtons, shareTo, copyBeritaLink };
+    if (
+        navigator.clipboard &&
+        typeof navigator.clipboard.writeText === "function"
+    ) {
+        navigator.clipboard.writeText(linkToCopy).then(() => {
+            if (copySuccessDiv) {
+                copySuccessDiv.style.display = "block";
+                setTimeout(() => {
+                    copySuccessDiv.style.display = "none";
+                }, 2000);
+            }
+        });
+    } else {
+        // Fallback untuk browser lama (execCommand)
+        const tempInput = document.createElement("input");
+        tempInput.value = linkToCopy;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        document.execCommand("copy");
+        document.body.removeChild(tempInput);
+        if (copySuccessDiv) {
+            copySuccessDiv.style.display = "block";
+            setTimeout(() => {
+                copySuccessDiv.style.display = "none";
+            }, 2000);
+        }
+    }
+}
