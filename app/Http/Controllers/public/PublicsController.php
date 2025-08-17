@@ -184,9 +184,7 @@ class PublicsController extends Controller
             });
         }
     
-        $newsList = $query->orderBy('publish_date', 'desc')
-                          ->paginate(6)
-                          ->withQueryString();
+        $newsList = $query->orderBy('publish_date', 'desc')->paginate(6)->withQueryString();
     
             return view('public.news', compact('title', 'description', 'keywords', 'newsList', 'search', 'shareText', 'url'));
         }

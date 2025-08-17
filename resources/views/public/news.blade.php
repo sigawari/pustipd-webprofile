@@ -50,10 +50,8 @@
                     @endforelse
                 </div>
 
-                <!-- Pagination -->
-                <div class="flex justify-center items-center gap-2 mt-8 md:mt-12 select-none pagination-wrapper">
-                    {{ $newsList->links() }}
-                </div>
+                <x-pagination :paginator="$newsList" />
+
             </div>
         </div>
     </section>
