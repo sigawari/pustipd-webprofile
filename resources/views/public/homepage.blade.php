@@ -290,7 +290,6 @@
         </div>
     </section>
 
-
     <section id="informasi" class="py-20 bg-primary">
         <div class="container mx-auto px-6">
             {{-- Header Section --}}
@@ -424,8 +423,6 @@
         </div>
     </section>
 
-
-
     <!-- Tim Section dengan Infinite Carousel -->
     <section id="tentang" class="py-20 bg-white overflow-hidden">
         <div class="container mx-auto px-4 sm:px-6">
@@ -496,9 +493,9 @@
         </div>
     </section>
 
-    <!-- Mitra Section dengan Carousel -->
+    <!-- Mitra Section dengan Grid -->
     <section id="mitra" class="py-20 bg-gray-100">
-        <div class="container mx-auto px-6">
+        <div class="container mx-auto px-6 max-w-7xl">
             <!-- Judul -->
             <div class="text-center mb-10 group">
                 <h2 class="text-3xl md:text-4xl font-bold text-secondary mb-4 relative inline-block underline-animate">
@@ -506,71 +503,24 @@
                 </h2>
             </div>
 
-            <!-- Carousel -->
-            <div class="relative max-w-7xl mx-auto">
-                <div class="overflow-hidden" id="partnersCarousel">
-                    <div id="partnersWrapper" class="flex transition-transform duration-300 ease-in-out space-x-6">
-                        <!-- Partner Cards -->
-                        <x-partner-card name="Universitas Indonesia"
-                            logo="{{ asset('assets/img/placeholder/dummy.png') }}" link="https://ui.ac.id" />
-                        <x-partner-card name="Institut Teknologi Bandung"
-                            logo="{{ asset('assets/img/placeholder/dummy.png') }}" link="https://itb.ac.id" />
-                        <x-partner-card name="Kementerian Komunikasi dan Informatika"
-                            logo="{{ asset('assets/img/placeholder/dummy.png') }}" link="https://kominfo.go.id" />
-                        <x-partner-card name="PT. Telkom Indonesia"
-                            logo="{{ asset('assets/img/placeholder/dummy.png') }}" link="https://telkom.co.id" />
-                        <x-partner-card name="Microsoft Indonesia"
-                            logo="{{ asset('assets/img/placeholder/dummy.png') }}"
-                            link="https://microsoft.com/id-id" />
-                        <x-partner-card name="Google Indonesia"
-                            logo="{{ asset('assets/img/placeholder/dummy.png') }}" link="https://google.co.id" />
-                        <x-partner-card name="Amazon Web Services"
-                            logo="{{ asset('assets/img/placeholder/dummy.png') }}" link="https://aws.amazon.com" />
-                        <x-partner-card name="Oracle Indonesia"
-                            logo="{{ asset('assets/img/placeholder/dummy.png') }}" link="https://oracle.com/id" />
-                        <x-partner-card name="Cisco Systems" logo="{{ asset('assets/img/placeholder/dummy.png') }}"
-                            link="https://cisco.com" />
-                        <x-partner-card name="IBM Indonesia" logo="{{ asset('assets/img/placeholder/dummy.png') }}"
-                            link="https://ibm.com/id" />
-                        <x-partner-card name="SAP Indonesia" logo="{{ asset('assets/img/placeholder/dummy.png') }}"
-                            link="https://sap.com/indonesia" />
-                        <x-partner-card name="VMware Indonesia"
-                            logo="{{ asset('assets/img/placeholder/dummy.png') }}" link="https://vmware.com" />
-                    </div>
+            @if ($partners && $partners->count() > 0)
+                <!-- Satu baris grid, selalu center, tetap pakai animate-infinite-scroll -->
+                <div class="grid grid-flow-col auto-cols-max gap-3 justify-center animate-infinite-scroll">
+                    @foreach ($partners as $mitra)
+                        <x-partner-card :name="$mitra->name" :logo="$mitra->image
+                            ? Storage::url($mitra->image)
+                            : asset('assets/img/placeholder/dummy.png')" />
+                    @endforeach
                 </div>
-
-                <!-- Navigasi Carousel -->
-                <div class="flex justify-center items-center mt-8 space-x-4">
-                    <button id="partnersPrevBtn"
-                        class="p-2 text-custom-blue hover:text-white transition disabled:opacity-50">
-                        <!-- Panah Kiri (Tanpa Komponen Icon) -->
-                        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                            <path d="M15 18l-6-6 6-6" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" />
-                        </svg>
-                    </button>
-
-                    <div id="partnersIndicators" class="flex space-x-2"></div>
-
-                    <button id="partnersNextBtn"
-                        class="p-2 text-custom-blue hover:text-white transition disabled:opacity-50">
-                        <!-- Panah Kanan -->
-                        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                            <path d="M9 6l6 6-6 6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                    </button>
+            @else
+                <div class="text-center py-12">
+                    <p class="text-gray-500 text-lg">Belum ada mitra yang dipublikasikan.</p>
                 </div>
-
-                <!-- Progress Bar -->
-                <div class="mt-6">
-                    <div class="w-full bg-gray-600 rounded-full h-1">
-                        <div id="partnersProgressBar"
-                            class="bg-white h-1 rounded-full transition-all duration-300 ease-out"
-                            style="width: 16.67%"></div>
-                    </div>
-                </div>
-            </div>
+            @endif
 
         </div>
     </section>
+
+
+
 </x-public.layouts>
