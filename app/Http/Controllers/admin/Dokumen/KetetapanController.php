@@ -246,7 +246,6 @@ class KetetapanController extends Controller
                 $message = match($action) {
                     'published' => 'Ketetapan berhasil dipublish ke halaman publik',
                     'draft' => 'Ketetapan berhasil disembunyikan dari halaman publik',
-                    'archived' => 'Ketetapan berhasil diarsipkan'
                 };
             }
 

@@ -126,7 +126,7 @@ class FaqController extends Controller
         $request->validate([
             'question' => 'required|string|max:255',
             'answer' => 'required|string',
-            'status' => 'in:draft,published,archived',
+            'status' => 'in:draft,published',
         ]);
 
         // Update data FAQ

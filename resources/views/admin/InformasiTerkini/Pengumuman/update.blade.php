@@ -119,9 +119,6 @@
                             <option value="published"
                                 {{ old('status', $pengumuman->status) == 'published' ? 'selected' : '' }}>✅ Published
                             </option>
-                            <option value="archived"
-                                {{ old('status', $pengumuman->status) == 'archived' ? 'selected' : '' }}>📦 Archived
-                            </option>
                         </select>
                     </div>
                 </div>

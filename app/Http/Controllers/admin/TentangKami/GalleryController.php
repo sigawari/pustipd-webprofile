@@ -158,12 +158,7 @@ class GalleryController extends Controller
         try {
             switch ($action) {
                 case 'published':
-                case 'draft':
-                case 'archived':
-                    $affected = Gallery::whereIn('id', $ids)->update(['status' => $action]);
-                    $message = "Berhasil mengubah status {$affected} gallery ke {$action}";
-                    break;
-                    
+                case 'draft':                  
                 case 'permanent_delete':
                     $galleries = Gallery::whereIn('id', $ids)->get();
                     $deletedCount = 0;

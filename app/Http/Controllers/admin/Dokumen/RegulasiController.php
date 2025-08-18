@@ -242,7 +242,6 @@ class RegulasiController extends Controller
                 $message = match($action) {
                     'published' => 'Regulasi berhasil dipublish ke halaman publik',
                     'draft' => 'Regulasi berhasil disembunyikan dari halaman publik',
-                    'archived' => 'Regulasi berhasil diarsipkan'
                 };
             }
 

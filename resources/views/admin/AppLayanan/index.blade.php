@@ -160,7 +160,6 @@
                     <option value="published" {{ request('filter') == 'published' ? 'selected' : '' }}>Published
                     </option>
                     <option value="draft" {{ request('filter') == 'draft' ? 'selected' : '' }}>Draft</option>
-                    <option value="archived" {{ request('filter') == 'archived' ? 'selected' : '' }}>Archived</option>
                 </select>
 
                 <select id="perpage-select" name="perPage" data-url="{{ route('admin.app-layanan.index') }}"

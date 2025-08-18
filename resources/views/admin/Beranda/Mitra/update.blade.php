@@ -42,8 +42,6 @@
                         <option value="draft" {{ $mitra->status == 'draft' ? 'selected' : '' }}>Draft</option>
                         <option value="published" {{ $mitra->status == 'published' ? 'selected' : '' }}>Published
                         </option>
-                        <option value="archived" {{ $mitra->status == 'archived' ? 'selected' : '' }}>Archived
-                        </option>
                     </select>
                 </div>
 

@@ -244,7 +244,6 @@ class PanduanController extends Controller
                 $message = match($action) {
                     'published' => 'Panduan berhasil dipublish ke halaman publik',
                     'draft' => 'Panduan berhasil disembunyikan dari halaman publik',
-                    'archived' => 'Panduan berhasil diarsipkan'
                 };
             }
 

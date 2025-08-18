@@ -51,11 +51,11 @@ class ArchiveExpiredAnnouncements extends Command
         $count = 0;
         foreach ($expiredAnnouncements as $announcement) {
             $this->info("Archiving: {$announcement->title} (expired: {$announcement->valid_until})");
-            $announcement->update(['status' => 'archived']);
+            $announcement->update(['status' => 'draft']);
             $count++;
         }
 
-        $this->info("Successfully archived {$count} expired announcements.");
+        $this->info("Successfully draft {$count} expired announcements.");
         return 0;
     }
 }

@@ -233,7 +233,6 @@ class SopController extends Controller
                 $message = match($action) {
                     'published' => 'Sop berhasil dipublish ke halaman publik',
                     'draft' => 'Sop berhasil disembunyikan dari halaman publik',
-                    'archived' => 'Sop berhasil diarsipkan'
                 };
             }
 

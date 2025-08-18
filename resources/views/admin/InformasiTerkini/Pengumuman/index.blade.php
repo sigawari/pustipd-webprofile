@@ -73,14 +73,6 @@
                     </svg>
                     Draft
                 </button>
-                <button onclick="bulkAction('archived')"
-                    class="px-3 py-2 text-sm bg-gray-600 text-white rounded-lg hover:bg-gray-700">
-                    <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M5 8l6 6m0 0l6-6m-6 6V3"></path>
-                    </svg>
-                    Archive
-                </button>
             </div>
 
             <!-- Actions untuk archived items -->
