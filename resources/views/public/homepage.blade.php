@@ -14,7 +14,6 @@
 
         <div class="relative z-10 text-center px-4 sm:px-6 w-full max-w-2xl">
             <h1 class="text-2xl sm:text-6xl font-extrabold mb-3 leading-snug sm:leading-tight">
-                {{-- PUSAT TEKNOLOGI INFORMASI DAN PANGKALAN DATA --}}
                 {{ $profil->organization_name ?? 'Pusat Teknologi Informasi dan Pangkalan Data' }}
             </h1>
 
@@ -137,99 +136,96 @@
                 </h3>
             </div>
 
-            @php
-                $achievements = [
-                    ['subtitle' => 'Juara 1', 'title' => 'Jaringan'],
-                    ['subtitle' => 'Juara 1', 'title' => 'Pengembangan Aplikasi'],
-                    ['subtitle' => 'Juara 1', 'title' => 'Pangkalan Data'],
-                    ['subtitle' => 'Juara 1', 'title' => 'Keamanan'],
-                    ['subtitle' => 'Juara 1', 'title' => 'Pengujian'],
-                    ['subtitle' => 'Juara 1', 'title' => 'Infrastruktur'],
-                    ['subtitle' => 'Juara 1', 'title' => 'Analitik'],
-                    ['subtitle' => 'Juara 1', 'title' => 'Desain'],
-                    ['subtitle' => 'Juara 1', 'title' => 'Manajemen'],
-                    ['subtitle' => 'Juara 1', 'title' => 'Support'],
-                ];
+            @if ($achievements && $achievements->count() > 0)
+                @php
+                    // Konversi collection ke array untuk processing
+                    $achievementsArray = $achievements
+                        ->map(function ($achievement) {
+                            return [
+                                'title' => $achievement->name,
+                                'description' => $achievement->description ?: 'Tidak ada deskripsi', // Fallback jika kosong
+                            ];
+                        })
+                        ->toArray();
 
-                $slidesDesktop = array_chunk($achievements, 5);
-                $slidesMobile = array_chunk($achievements, 1);
-            @endphp
+                    // Debug hasil mapping - uncomment untuk cek
+                    // dd($achievementsArray);
 
-            <!-- Achievement Carousel Container -->
-            <div class="achievement-carousel max-w-6xl mx-auto" data-total-slides-desktop="{{ count($slidesDesktop) }}"
-                data-total-slides-mobile="{{ count($slidesMobile) }}" data-duration="4000">
+                    $slidesDesktop = array_chunk($achievementsArray, 5);
+                    $slidesMobile = array_chunk($achievementsArray, 1);
+                @endphp
 
-                <div class="relative overflow-hidden">
-                    <!-- Desktop Carousel Track -->
-                    <div
-                        class="achievement-carousel-track-desktop hidden lg:flex transition-transform duration-500 ease-in-out">
-                        @foreach ($slidesDesktop as $slideIndex => $slideCards)
-                            <div class="w-full flex-shrink-0">
-                                <div class="grid grid-cols-5 gap-6">
-                                    @foreach ($slideCards as $achievement)
-                                        <div class="achievement-card-wrapper">
-                                            <x-achievement-card :subtitle="$achievement['subtitle']" :title="$achievement['title']" />
-                                        </div>
-                                    @endforeach
+                <!-- Achievement Carousel Container -->
+                <div class="achievement-carousel max-w-6xl mx-auto"
+                    data-total-slides-desktop="{{ count($slidesDesktop) }}"
+                    data-total-slides-mobile="{{ count($slidesMobile) }}" data-duration="4000">
 
-                                    {{-- Fill empty slots --}}
-                                    @if (count($slideCards) < 5)
-                                        @for ($i = count($slideCards); $i < 5; $i++)
-                                            <div class="achievement-card-wrapper opacity-0 pointer-events-none">
-                                                <div class="invisible">
-                                                    <x-achievement-card subtitle="Placeholder" title="Placeholder" />
-                                                </div>
+                    <div class="relative overflow-hidden">
+                        <!-- Desktop Carousel Track -->
+                        <div
+                            class="achievement-carousel-track-desktop hidden lg:flex transition-transform duration-500 ease-in-out">
+                            @foreach ($slidesDesktop as $slideIndex => $slideCards)
+                                <div class="w-full flex-shrink-0">
+                                    <div class="flex flex-wrap justify-center gap-6">
+                                        @foreach ($slideCards as $achievement)
+                                            <div class="achievement-card-wrapper">
+                                                <x-achievement-card :title="$achievement['title']" :description="$achievement['description'] ?? ''" />
                                             </div>
-                                        @endfor
-                                    @endif
+                                        @endforeach
+                                    </div>
                                 </div>
-                            </div>
+                            @endforeach
+                        </div>
+
+                        <!-- Mobile Carousel Track -->
+                        <div
+                            class="achievement-carousel-track-mobile flex lg:hidden transition-transform duration-500 ease-in-out">
+                            @foreach ($slidesMobile as $slideIndex => $slideCards)
+                                <div class="w-full flex-shrink-0">
+                                    <div class="flex justify-center">
+                                        @foreach ($slideCards as $achievement)
+                                            <div class="achievement-card-wrapper w-full max-w-xs">
+                                                <x-achievement-card :title="$achievement['title']" :description="$achievement['description'] ?? ''" />
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <!-- Desktop Indicators -->
+                    <div class="hidden lg:flex justify-center mt-8 space-x-3">
+                        @foreach ($slidesDesktop as $index => $slide)
+                            <button
+                                class="achievement-indicator-desktop w-3 h-3 rounded-full transition-all duration-300 bg-secondary hover:bg-custom-blue hover:scale-110">
+                            </button>
                         @endforeach
                     </div>
 
-                    <!-- Mobile Carousel Track - 1 card per slide -->
-                    <div
-                        class="achievement-carousel-track-mobile flex lg:hidden transition-transform duration-500 ease-in-out">
-                        @foreach ($slidesMobile as $slideIndex => $slideCards)
-                            <div class="w-full flex-shrink-0">
-                                <div class="flex justify-center">
-                                    @foreach ($slideCards as $achievement)
-                                        <div class="achievement-card-wrapper w-full max-w-xs">
-                                            <x-achievement-card :subtitle="$achievement['subtitle']" :title="$achievement['title']" />
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </div>
+                    <!-- Mobile Indicators -->
+                    <div class="flex lg:hidden justify-center mt-8 space-x-3">
+                        @foreach ($slidesMobile as $index => $slide)
+                            <button
+                                class="achievement-indicator-mobile w-3 h-3 rounded-full transition-all duration-300 bg-secondary hover:bg-custom-blue hover:scale-110">
+                            </button>
                         @endforeach
                     </div>
-                </div>
 
-                <!-- Desktop Indicators -->
-                <div class="hidden lg:flex justify-center mt-8 space-x-3">
-                    @foreach ($slidesDesktop as $index => $slide)
-                        <button
-                            class="achievement-indicator-desktop w-3 h-3 rounded-full transition-all duration-300 bg-secondary hover:bg-custom-blue hover:scale-110">
-                        </button>
-                    @endforeach
+                    <!-- Progress Bar -->
+                    <div class="w-full bg-gray-200 rounded-full h-1 mt-4 overflow-hidden">
+                        <div class="achievement-progress-bar bg-secondary h-1 rounded-full transition-all duration-100 ease-linear"
+                            style="width: 0%"></div>
+                    </div>
                 </div>
-
-                <!-- Mobile Indicators -->
-                <div class="flex lg:hidden justify-center mt-8 space-x-3">
-                    @foreach ($slidesMobile as $index => $slide)
-                        <button
-                            class="achievement-indicator-mobile w-3 h-3 rounded-full transition-all duration-300 bg-secondary hover:bg-custom-blue hover:scale-110">
-                        </button>
-                    @endforeach
+            @else
+                <div class="text-center py-12">
+                    <p class="text-gray-500 text-lg">Belum ada pencapaian yang dipublikasikan.</p>
                 </div>
-
-                <!-- Progress Bar -->
-                <div class="w-full bg-gray-200 rounded-full h-1 mt-4 overflow-hidden">
-                    <div class="achievement-progress-bar bg-secondary h-1 rounded-full transition-all duration-100 ease-linear"
-                        style="width: 0%"></div>
-                </div>
-            </div>
+            @endif
         </div>
     </section>
+
 
 
     <!-- Layanan Section -->

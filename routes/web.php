@@ -310,7 +310,6 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
         });
     });
 
-    // Add more admin routes here
 });
 
 

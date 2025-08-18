@@ -39,13 +39,10 @@ class PencapaianController extends Controller
             $pencapaianQuery->where('status', $filter);
         }
 
-        // Order by latest
-        $pencapaianQuery->orderBy('created_at', 'desc');
-
-        // Merge results
+        // Get results
         $merged = $pencapaianQuery->get();
 
-        // Per-page validation
+        // Pagination logic (sama seperti sebelumnya)
         if ($perPage === 'all') {
             $perPage = max($merged->count(), 1);
         } else {
@@ -74,54 +71,45 @@ class PencapaianController extends Controller
         return view('admin.Beranda.Pencapaian.index', compact('title', 'pencapaians'));
     }
 
-    /**
-     * STORE : simpan Pencapaian baru
-     */
     public function store(Request $request)
-{
-    try {
-        // Ambil status dari input, kalau kosong default jadi draft
-        $status = $request->input('status', 'draft');
+    {
+        try {
+            $status = $request->input('status', 'draft');
 
-        // Validasi
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'required|string',
-            'status' => 'in:draft,published', // tidak perlu required
-        ]);
+            // Validasi dengan field baru
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'description' => 'required|string',
+                'status' => 'in:draft,published',
+            ]);
 
-        // Simpan data
-        Pencapaian::create([
-            'name' => $request->input('name'),
-            'description' => $request->input('description'),
-            'status' => $status,
-        ]);
+            // Simpan data
+            Pencapaian::create([
+                'name' => $request->input('name'),
+                'description' => $request->input('description'),
+                'status' => $status,
+            ]);
 
-        // Pesan sukses
-        $statusMessage = $status === 'published' ? 'dipublish' : 'disimpan sebagai draft';
+            $statusMessage = $status === 'published' ? 'dipublish' : 'disimpan sebagai draft';
 
-        return redirect()
-            ->route('admin.beranda.pencapaian.index')
-            ->with('success', "Pencapaian berhasil {$statusMessage}!");
+            return redirect()
+                ->route('admin.beranda.pencapaian.index')
+                ->with('success', "Pencapaian berhasil {$statusMessage}!");
 
-    } catch (\Exception $e) {
-        return redirect()
-            ->back()
-            ->withInput()
-            ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
-    }
+        } catch (\Exception $e) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
 
-
-    /**
-     * UPDATE : perbarui Pencapaian
-     */
     public function update(Request $request, string $id)
     {
         try {
             $pencapaian = Pencapaian::findOrFail($id);
 
-            // Validasi
+            // Validasi dengan field baru
             $request->validate([
                 'name' => 'required|string|max:255',
                 'description' => 'required|string',
@@ -149,19 +137,14 @@ class PencapaianController extends Controller
         }
     }
 
-    /**
-     * DESTROY : hapus permanen
-     */
-   // Di controller, ganti method jadi:
+    // Method destroy dan bulk tetap sama
     public function destroy(Pencapaian $pencapaian)
     {
         try {
             $pencapaian->delete();
-
             return redirect()
                 ->route('admin.beranda.pencapaian.index')
                 ->with('success', 'Pencapaian berhasil dihapus permanen!');
-
         } catch (\Exception $e) {
             return redirect()
                 ->back()
@@ -169,9 +152,6 @@ class PencapaianController extends Controller
         }
     }
 
-    /**
-     * BULK ACTION
-     */
     public function bulk(Request $request)
     {
         try {

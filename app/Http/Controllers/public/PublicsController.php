@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use App\Models\Dokumen\Panduan;
 use App\Models\Dokumen\Regulasi;
 use App\Models\Dokumen\Ketetapan;
+use App\Models\Beranda\Pencapaian;
 use App\Models\TentangKami\Profil;
 use App\Models\TentangKami\Gallery;
 use Illuminate\Support\Facades\Log;
@@ -37,28 +38,31 @@ class PublicsController extends Controller
         $keywords = 'pustipd, uin raden fatah, teknologi informasi';
 
         $profil = Profil::latest()->first(); 
+        
+        // Perbaiki pencapaian - hilangkan ";" dan tambahkan ()
+        $achievements = Pencapaian::published()
+                                ->orderBy('created_at', 'desc')
+                                ->get();
 
         // Query berita dengan pagination
         $query = KelolaBerita::where('status', 'published');
         $newsList = $query->orderBy('publish_date', 'desc')
-                ->paginate(3)
-                ->withQueryString();
+                        ->paginate(3)
+                        ->withQueryString();
         
-        // Query pengumuman - PILIH SALAH SATU:
-        
-        // OPSI 1: Untuk homepage - gunakan limit dengan get() (recommended untuk homepage)
+        // Query pengumuman
         $announcementsList = KelolaPengumuman::where('status', 'published')
-                ->valid() // Hanya yang masih berlaku
-                ->orderByRaw("CASE WHEN urgency = 'penting' THEN 1 WHEN urgency = 'normal' THEN 2 ELSE 3 END")
-                ->orderBy('date', 'desc')
-                ->limit(3)
-                ->get();
+                                            ->valid() 
+                                            ->orderByRaw("CASE WHEN urgency = 'penting' THEN 1 WHEN urgency = 'normal' THEN 2 ELSE 3 END")
+                                            ->orderBy('date', 'desc')
+                                            ->limit(3)
+                                            ->get();
 
-        
         return view('public.homepage', compact(
-            'title', 'description', 'keywords', 'profil', 'newsList', 'announcementsList'
+            'title', 'description', 'keywords', 'profil', 'newsList', 'announcementsList', 'achievements'
         ));
     }
+
 
     public function tentang(){
         $title = 'Tentang PUSTIPD';

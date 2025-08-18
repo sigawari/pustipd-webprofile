@@ -6,16 +6,16 @@ use Illuminate\View\Component;
 
 class AchievementCard extends Component
 {
-    public $subtitle;
+    public $description;
     public $title;
     public $icon;
 
     /**
      * Create a new component instance.
      */
-    public function __construct($subtitle = '', $title = '', $icon = null)
+    public function __construct($description = '', $title = '', $icon = null)
     {
-        $this->subtitle = $subtitle;
+        $this->description = $description;
         $this->title = $title;
         $this->icon = $icon;
     }
