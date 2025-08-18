@@ -1,4 +1,4 @@
-<!-- resources/views/public/applayanan.blade.php - Updated Version -->
+<!-- resources/views/public/applayanan.blade.php - Enhanced Card Version -->
 <x-public.layouts title="{{ $title }}" description="{{ $description }}" keywords="{{ $keywords }}">
     <x-slot:title>{{ $title }}</x-slot:title>
 
@@ -95,26 +95,31 @@
             @endif
 
             @if ($appLayanans->count() > 0)
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-5 mb-12">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
                     @foreach ($appLayanans as $appLayanan)
                         @php
                             $iconData = $getCategoryIcon($appLayanan->category);
                         @endphp
+                        <!-- ✅ SIDE-BY-SIDE LAYOUT CARD DESIGN -->
                         <div class="group relative">
-                            <!-- ✅ UPDATED: Compact Card Background -->
+                            <!-- Card Background with Enhanced Shadow -->
                             <div
-                                class="absolute inset-0 bg-white rounded-lg shadow-sm group-hover:shadow-md transition-all duration-300 transform group-hover:-translate-y-0.5">
+                                class="absolute inset-0 bg-white rounded-xl border border-gray-100 shadow-lg 
+                                       group-hover:shadow-2xl group-hover:border-gray-200 
+                                       transition-all duration-300 transform group-hover:-translate-y-1">
                             </div>
 
-                            <!-- ✅ UPDATED: Compact Card Content -->
                             <a href="{{ $appLayanan->applink }}" target="_blank" rel="noopener noreferrer"
-                                class="relative block p-4 rounded-lg overflow-hidden transition-all duration-300 cursor-pointer h-full"
+                                class="relative block p-5 rounded-xl overflow-hidden transition-all duration-300 
+                                       cursor-pointer h-full min-h-[160px] flex flex-col"
                                 title="Buka {{ $appLayanan->appname }}">
 
-                                <!-- ✅ UPDATED: Smaller Category Badge -->
+                                <!-- Category Badge with Enhanced Style -->
                                 <div
-                                    class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-gray-100 text-gray-600 mb-3">
-                                    <span class="mr-1 text-xs">
+                                    class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold 
+                                           bg-gradient-to-r from-gray-100 to-gray-50 text-gray-700 mb-3 
+                                           border border-gray-200 shadow-sm self-start">
+                                    <span class="mr-1 text-sm">
                                         @switch($appLayanan->category)
                                             @case('akademik')
                                                 🎓
@@ -139,35 +144,45 @@
                                     {{ ucfirst($appLayanan->category) }}
                                 </div>
 
-                                <!-- ✅ UPDATED: Smaller Icon Container -->
-                                <div
-                                    class="flex items-center justify-center w-10 h-10 bg-gradient-to-br {{ $iconData['color'] }} rounded-lg mb-3 group-hover:scale-105 transition-all duration-300 shadow-sm">
-                                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor"
-                                        stroke-width="2" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="{{ $iconData['icon'] }}" />
-                                    </svg>
+                                <!-- Icon and Title Side by Side -->
+                                <div class="flex items-center mb-3">
+                                    <!-- Icon Container -->
+                                    <div
+                                        class="flex items-center justify-center w-12 h-12 bg-gradient-to-br {{ $iconData['color'] }} 
+                                               rounded-xl mr-3 group-hover:scale-105 transition-all duration-300 shadow-lg
+                                               border border-white/20 flex-shrink-0">
+                                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor"
+                                            stroke-width="2" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="{{ $iconData['icon'] }}" />
+                                        </svg>
+                                    </div>
+
+                                    <!-- Title -->
+                                    <h3
+                                        class="text-lg font-bold text-gray-900 group-hover:text-blue-600 
+                                               transition-colors duration-300 leading-tight line-clamp-2 flex-1">
+                                        {{ $appLayanan->appname }}
+                                    </h3>
                                 </div>
 
-                                <!-- ✅ UPDATED: Compact Title -->
-                                <h3
-                                    class="text-base font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors duration-300 leading-tight line-clamp-2">
-                                    {{ $appLayanan->appname }}
-                                </h3>
-
-                                <!-- ✅ UPDATED: Shorter Description -->
-                                <p class="text-gray-600 leading-relaxed mb-3 text-xs line-clamp-2">
-                                    {{ Str::limit($appLayanan->description, 80) }}
+                                <!-- Description -->
+                                <p class="text-gray-600 leading-relaxed mb-4 text-sm line-clamp-3 flex-grow">
+                                    {{ Str::limit($appLayanan->description, 100) }}
                                 </p>
 
-                                <!-- ✅ UPDATED: Compact Access Indicator -->
-                                <div class="flex items-center justify-between mt-auto">
+                                <!-- Access Button -->
+                                <div
+                                    class="flex items-center justify-center mt-auto pt-3 border-t border-gray-100 w-full">
                                     <div
-                                        class="flex items-center text-blue-600 font-medium text-xs group-hover:text-blue-700 transition-colors duration-300">
-                                        <span>Akses</span>
+                                        class="flex items-center text-blue-600 font-semibold text-sm 
+                                               group-hover:text-blue-700 transition-colors duration-300">
+                                        <span>Akses Aplikasi</span>
                                         <div
-                                            class="ml-1 w-4 h-4 rounded-full bg-blue-50 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
-                                            <svg class="w-2.5 h-2.5 transform group-hover:translate-x-0.5 transition-transform duration-300"
+                                            class="ml-2 w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center 
+                                                   group-hover:bg-blue-600 group-hover:text-white 
+                                                   transition-all duration-300 shadow-sm">
+                                            <svg class="w-4 h-4 transform group-hover:translate-x-0.5 transition-transform duration-300"
                                                 fill="none" stroke="currentColor" stroke-width="2"
                                                 viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -175,6 +190,12 @@
                                             </svg>
                                         </div>
                                     </div>
+                                </div>
+
+                                <!-- Subtle Hover Overlay -->
+                                <div
+                                    class="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-blue-50/0 
+                                           group-hover:to-blue-50/20 transition-all duration-300 rounded-xl pointer-events-none">
                                 </div>
                             </a>
                         </div>
@@ -235,7 +256,7 @@
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
                                     </svg>
-                                </span>
+                                    </a>
                             @endif
                         </nav>
                     </div>

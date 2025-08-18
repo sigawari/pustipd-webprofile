@@ -115,7 +115,7 @@
 @empty
     <tr class="hover:bg-gray-50">
         <!-- ✅ FIXED: colspan="9" untuk 9 kolom total -->
-        <td colspan="9" class="px-6 py-4 text-center text-gray-500 italic">
+        <td colspan="11" class="px-6 py-4 text-center text-gray-500 italic">
             <div class="flex flex-col items-center justify-center text-sm text-gray-500 space-y-1">
                 @if ($kelolaTutorials->isEmpty() && !request()->filled('search') && !request()->filled('filter'))
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
