@@ -31,20 +31,31 @@ class PublicsController extends Controller
      */
     public function index()
     {
-        $title = 'PUSTIPD UIN Raden Fatah Palembang';
+        $title = 'UIN Raden Fatah Palembang';
         $description = 'Pusat Sistem dan Teknologi Informasi dan Pangkalan Data UIN Raden Fatah Palembang';
         $keywords = 'pustipd, uin raden fatah, teknologi informasi';
 
         $profil = Profil::latest()->first(); 
 
+        // Query berita dengan pagination
         $query = KelolaBerita::where('status', 'published');
-    
         $newsList = $query->orderBy('publish_date', 'desc')
-                  ->paginate(3)
-                  ->withQueryString();
+                ->paginate(3)
+                ->withQueryString();
+        
+        // Query pengumuman - PILIH SALAH SATU:
+        
+        // OPSI 1: Untuk homepage - gunakan limit dengan get() (recommended untuk homepage)
+        $announcementsList = \App\Models\InformasiTerkini\KelolaPengumuman::where('status', 'published')
+                ->valid() // Hanya yang masih berlaku
+                ->orderByRaw("CASE WHEN urgency = 'penting' THEN 1 WHEN urgency = 'normal' THEN 2 ELSE 3 END")
+                ->orderBy('date', 'desc')
+                ->limit(3)
+                ->get();
 
+        
         return view('public.homepage', compact(
-            'title', 'description', 'keywords', 'profil', 'newsList',
+            'title', 'description', 'keywords', 'profil', 'newsList', 'announcementsList'
         ));
     }
 

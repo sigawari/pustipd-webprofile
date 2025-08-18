@@ -15,7 +15,7 @@
         <div class="relative z-10 text-center px-4 sm:px-6 w-full max-w-2xl">
             <h1 class="text-2xl sm:text-6xl font-extrabold mb-3 leading-snug sm:leading-tight">
                 {{-- PUSAT TEKNOLOGI INFORMASI DAN PANGKALAN DATA --}}
-                {{ $profil->organization_name ?? '-' }}
+                {{ $profil->organization_name ?? 'Pusat Teknologi Informasi dan Pangkalan Data' }}
             </h1>
 
             <!-- h2 with logo -->
@@ -307,37 +307,6 @@
         </div>
     </section>
 
-    @php
-        // Dummy data pengumuman
-        $pengumuman = collect([
-            (object) [
-                'title' => 'Maintenance Server Terjadwal - 25 Juli 2025',
-                'excerpt' =>
-                    'Maintenance server untuk upgrade sistem pada Kamis, 25 Juli 2025 pukul 01:00 - 05:00 WIB.',
-                'date' => '23 Juli 2025',
-                'category' => 'Maintenance',
-                'link' => '#',
-                'priority' => 'urgent',
-            ],
-            (object) [
-                'title' => 'Pembukaan Pendaftaran Program Magang Teknologi',
-                'excerpt' => 'Kesempatan magang untuk mahasiswa jurusan IT dengan durasi 3-6 bulan.',
-                'date' => '22 Juli 2025',
-                'category' => 'Rekrutmen',
-                'link' => '#',
-                'priority' => 'normal',
-            ],
-            (object) [
-                'title' => 'Update Kebijakan Keamanan Data Terbaru',
-                'excerpt' => 'Pembaruan kebijakan keamanan data untuk compliance dengan standar internasional.',
-                'date' => '21 Juli 2025',
-                'category' => 'Kebijakan',
-                'link' => '#',
-                'priority' => 'urgent',
-            ],
-        ]);
-    @endphp
-
     <section id="informasi" class="py-20 bg-primary">
         <div class="container mx-auto px-6">
             {{-- Header Section --}}
@@ -418,7 +387,7 @@
                 <div>
                     <div class="flex items-center justify-between mb-8">
                         <h3 class="text-2xl font-bold text-secondary">Pengumuman Penting</h3>
-                        <a href="/pengumuman"
+                        <a href="{{ route('announcements') }}"
                             class="text-secondary hover:text-custom-blue font-medium flex items-center group">
                             Lihat Semua Pengumuman
                             <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform duration-300"
@@ -431,11 +400,12 @@
 
                     {{-- Mobile Section --}}
                     <div class="lg:hidden space-y-3">
-                        @foreach ($pengumuman as $item)
+                        @forelse ($announcementsList as $announcement)
                             <div
                                 class="flex justify-between items-center bg-white rounded-lg border border-gray-200 p-3">
-                                <div class="font-medium text-gray-900 text-sm truncate">{{ $item->title }}</div>
-                                <a href="{{ $item->link }}"
+                                <div class="font-medium text-gray-900 text-sm truncate">{{ $announcement->title }}
+                                </div>
+                                <a href="{{ route('announcements-detail', $announcement->slug) }}"
                                     class="ml-4 text-custom-blue font-semibold text-sm flex items-center">
                                     <span class="sr-only">Lihat Detail</span>
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -444,18 +414,27 @@
                                     </svg>
                                 </a>
                             </div>
-                        @endforeach
+                        @empty
+                            <div class="text-center py-8 text-gray-500">
+                                Tidak ada pengumuman tersedia.
+                            </div>
+                        @endforelse
                     </div>
 
                     {{-- Desktop Section --}}
                     <div class="hidden lg:grid grid-cols-2 lg:grid-cols-3 gap-8 announcement-grid">
-                        @foreach ($pengumuman as $item)
-                            <x-announcement-card title="{{ $item->title }}" excerpt="{{ $item->excerpt }}"
-                                date="{{ $item->date }}" category="{{ $item->category }}"
-                                link="{{ $item->link }}" priority="{{ $item->priority }}" />
-                        @endforeach
+                        @forelse ($announcementsList as $announcement)
+                            <x-announcement-card :urgency="$announcement->urgency" :category="$announcement->category" :title="$announcement->title" :excerpt="$announcement->excerpt ??
+                                \Illuminate\Support\Str::limit(strip_tags($announcement->content), 140)"
+                                :date="$announcement->date ? $announcement->date->format('d F Y') : '-'" :link="route('announcements-detail', $announcement->slug)" />
+                        @empty
+                            <div class="col-span-full text-center py-10 text-gray-600">
+                                Tidak ada pengumuman tersedia.
+                            </div>
+                        @endforelse
                     </div>
                 </div>
+
 
             </div>
         </div>
