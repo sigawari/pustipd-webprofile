@@ -330,7 +330,8 @@ class PublicsController extends Controller
             : []; // fallback kosong
 
         // Bagikan URL untuk sharing yang dipakai di view
-        $shareUrl = url()->current();
+        $url = url()->current();
+        $shareText = "Baca Tutorial dari PUSTIPD UIN RF Palembang - " . $tutorial->name . " " . $url;
 
         // Pastikan file view yang dipanggil benar (lihat jawaban sebelumnya)
         return view('public.tutorials-detail', compact(
@@ -340,7 +341,8 @@ class PublicsController extends Controller
             'metaKeywords',
             'contentBlocks',
             'dateFormatted',
-            'shareUrl'
+            'url',
+            'shareText'
         ));
     }
 

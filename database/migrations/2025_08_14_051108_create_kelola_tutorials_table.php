@@ -42,7 +42,7 @@ return new class extends Migration
 
             // Publishing
             $table->enum('status', ['draft', 'published'])->default('draft');
-            $table->date('created_at')->nullable(); // Tanggal tutorial
+            $table->date('date')->nullable(); // Tanggal tutorial
 
             // Analytics
             $table->integer('view_count')->default(0);

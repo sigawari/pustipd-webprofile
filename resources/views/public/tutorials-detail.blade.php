@@ -24,18 +24,12 @@
                 </div>
 
                 {{-- Share Buttons --}}
-                <div class="flex justify-center space-x-3 mb-10">
-                    <a href="https://wa.me/?text={{ urlencode($title . ' ' . $shareUrl) }}" target="_blank"
-                        class="btn-share btn-whatsapp" title="Share to WhatsApp">WhatsApp</a>
-                    <a href="https://facebook.com/sharer/sharer.php?u={{ urlencode($shareUrl) }}" target="_blank"
-                        class="btn-share btn-facebook" title="Share to Facebook">Facebook</a>
-                    {{-- Tambahkan media sosial lain sesuai kebutuhan --}}
-                </div>
+                <x-share-buttons :url="$url" :share-text="$shareText" />
 
                 {{-- Content blocks --}}
                 @foreach ($contentBlocks as $block)
                     @if ($block['type'] === 'step')
-                        <div class="step-block mb-10 p-6 border-2 rounded-xl bg-gradient-to-r from-blue-50 to-blue-100">
+                        <div class="step-block mb-10 p-8 border-2 rounded-xl bg-gradient-to-r from-blue-50 to-blue-100">
                             <h4 class="font-bold text-xl mb-3 flex items-center gap-3">
                                 <span
                                     class="inline-block rounded-full bg-blue-600 text-white w-8 h-8 flex items-center justify-center">
@@ -69,9 +63,6 @@
                         </div>
                     @endif
                 @endforeach
-
-                <!-- Tambah bagian lain jika perlu -->
-
             </div>
         </div>
     </section>
