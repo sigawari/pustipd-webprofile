@@ -9,7 +9,7 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('visi_misis', function (Blueprint $table) {
+        Schema::create('visi_misi', function (Blueprint $table) {
             $table->id();
             $table->text('visi')->nullable();
             $table->json('misi')->nullable(); // Menyimpan array misi dalam JSON
