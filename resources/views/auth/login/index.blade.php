@@ -6,6 +6,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Login - PUSTIPD UIN Raden Fatah</title>
         @vite('resources/css/app.css')
+
+        <link id="favicon" rel="shortcut icon" href="{{ asset('assets/img/logo/logo-uin-rfp.png') }}" type="image/x-icon">
     </head>
 
     <body class="bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center min-h-screen">
