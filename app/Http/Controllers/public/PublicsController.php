@@ -67,7 +67,7 @@ class PublicsController extends Controller
     
         $galleries = Gallery::where('status', 'published')
                             ->orderBy('sort_order', 'asc')
-                            ->orderBy('created_at', 'desc')
+                            ->orderBy('date', 'desc')
                             ->get();
     
         $galleriesData = $galleries->map(function ($gallery) {

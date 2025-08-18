@@ -46,7 +46,7 @@ class KelolaTutorialController extends Controller
         }
 
         // Order by created_at desc
-        $kelolaTutorialQuery->orderBy('created_at', 'desc');
+        $kelolaTutorialQuery->orderBy('date', 'desc');
 
         $merged = $kelolaTutorialQuery->get();
 
@@ -86,7 +86,7 @@ class KelolaTutorialController extends Controller
             'title' => 'required|string|max:400',
             'slug' => 'required|string|unique:kelola_tutorials,slug',
             'category' => 'required|in:sistem_informasi_akademik,e_learning,layanan_digital_mahasiswa,pengelolaan_data_akun,jaringan_konektivitas,software_aplikasi,keamanan_digital,penelitian_akademik,layanan_publik',
-            'created_at' => 'required|date', // Ubah dari published_at ke date
+            'date' => 'required|date', // Ubah dari published_at ke date
             'status' => 'required|in:draft,published',
             'excerpt' => 'nullable|string', // Ubah dari description ke excerpt
             'tags' => 'nullable|array',

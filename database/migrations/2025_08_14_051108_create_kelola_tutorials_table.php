@@ -20,6 +20,8 @@ return new class extends Migration
             $table->longText('content')->nullable();
             $table->text('excerpt')->nullable();
             $table->json('content_blocks')->nullable();
+            $table->boolean('is_hidden')->default(false);
+
 
             // Category - sesuai dengan analisis PUSTIPD
             $table->enum('category', [
@@ -40,7 +42,7 @@ return new class extends Migration
 
             // Publishing
             $table->enum('status', ['draft', 'published'])->default('draft');
-            $table->date('date')->nullable(); // Tanggal tutorial
+            $table->date('created_at')->nullable(); // Tanggal tutorial
 
             // Analytics
             $table->integer('view_count')->default(0);

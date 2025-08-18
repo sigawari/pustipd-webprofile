@@ -327,7 +327,7 @@ Route::prefix('/')->group(function () {
     Route::get('/pengumuman', [PublicsController::class, 'pengumuman'])->name('announcements');
     Route::get('/pengumuman/{slug}', [PublicsController::class, 'announcementsDetail'])->name('announcements-detail');
     Route::get('/tutorial', [PublicsController::class, 'tutorial'])->name('tutorials');
-    Route::get('/tutorial/tutorials-detail', [PublicsController::class, 'tutorialsDetail'])->name('tutorials-detail');
+    Route::get('/tutorial/{slug}', [PublicsController::class, 'tutorialsDetail'])->name('tutorials-detail');
     
     // PublicsController routes
     Route::get('/ketetapan', [PublicsController::class, 'ketetapan'])->name('ketetapan');
