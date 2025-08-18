@@ -495,7 +495,7 @@
 
     <!-- Mitra Section dengan Grid -->
     <section id="mitra" class="py-20 bg-gray-100">
-        <div class="container mx-auto px-6 max-w-7xl">
+        <div class="container mx-auto px-6 max-w-8-full">
             <!-- Judul -->
             <div class="text-center mb-10 group">
                 <h2 class="text-3xl md:text-4xl font-bold text-secondary mb-4 relative inline-block underline-animate">
@@ -504,13 +504,19 @@
             </div>
 
             @if ($partners && $partners->count() > 0)
-                <!-- Satu baris grid, selalu center, tetap pakai animate-infinite-scroll -->
-                <div class="grid grid-flow-col auto-cols-max gap-3 justify-center animate-infinite-scroll">
-                    @foreach ($partners as $mitra)
-                        <x-partner-card :name="$mitra->name" :logo="$mitra->image
-                            ? Storage::url($mitra->image)
-                            : asset('assets/img/placeholder/dummy.png')" />
-                    @endforeach
+                <div class="relative overflow-hidden w-full">
+                    <div class="flex animate-infinite-scroll gap-2" id="mitraCarousel">
+                        @foreach ($partners as $mitra)
+                            <x-partner-card :name="$mitra->name" :logo="$mitra->image
+                                ? Storage::url($mitra->image)
+                                : asset('assets/img/placeholder/dummy.png')" />
+                        @endforeach
+                        @foreach ($partners as $mitra)
+                            <x-partner-card :name="$mitra->name" :logo="$mitra->image
+                                ? Storage::url($mitra->image)
+                                : asset('assets/img/placeholder/dummy.png')" />
+                        @endforeach
+                    </div>
                 </div>
             @else
                 <div class="text-center py-12">
