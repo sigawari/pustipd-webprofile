@@ -306,27 +306,34 @@ class PublicsController extends Controller
     {
         // Ambil tutorial yang dipublikasikan dan tidak di-hidden
         $tutorial = KelolaTutorial::where('status', 'published')
-                    ->where('slug', $slug)
-                    ->where('is_hidden', false)  // Pastikan hanya tampilkan yang tidak di-hidden
-                    ->firstOrFail();
+            ->where('slug', $slug)
+            ->where('is_hidden', false) // Pastikan hanya tampilkan yang tidak di-hidden
+            ->firstOrFail();
 
-        // Dapatkan data utama
-        $title = $tutorial->title;
-        $description = $tutorial->excerpt ?: \Illuminate\Support\Str::limit(strip_tags($tutorial->content), 155);
-        $keywords = $tutorial->tags ? implode(',', $tutorial->tags) : 'tutorial, pustipd';
-        $dateFormatted = $tutorial->date ? $tutorial->date->format('d M Y') : null;
+        // Dapatkan data utama (safe null handling)
+        $title = $tutorial->title ?? 'Tutorial';
+        $description = $tutorial->excerpt ?: \Illuminate\Support\Str::limit(strip_tags($tutorial->content ?? ''), 155);
+        $keywords = (is_array($tutorial->tags) && count($tutorial->tags) > 0)
+            ? implode(', ', $tutorial->tags)
+            : 'tutorial, pustipd';
+        $dateFormatted = $tutorial->date
+            ? \Carbon\Carbon::parse($tutorial->date)->format('d M Y')
+            : null;
 
         // Untuk SEO / metadata
         $metaDescription = $description;
         $metaKeywords = $keywords;
 
         // Bagian content blocks siap disiapkan untuk view
-        $contentBlocks = $tutorial->getContentBlocks(); // array of blocks
+        $contentBlocks = method_exists($tutorial, 'getContentBlocks')
+            ? $tutorial->getContentBlocks()
+            : []; // fallback kosong
 
         // Bagikan URL untuk sharing yang dipakai di view
         $shareUrl = url()->current();
 
-        return view('public.tutorial-detail', compact(
+        // Pastikan file view yang dipanggil benar (lihat jawaban sebelumnya)
+        return view('public.tutorials-detail', compact(
             'tutorial',
             'title',
             'metaDescription',
@@ -336,6 +343,7 @@ class PublicsController extends Controller
             'shareUrl'
         ));
     }
+
 
 
 

@@ -67,10 +67,8 @@
                             <option value="pengelolaan_data_akun">🔑 Pengelolaan Data Akun</option>
                             <option value="jaringan_konektivitas">🌐 Jaringan & Konektivitas</option>
                             <option value="software_aplikasi">🛠️ Software & Aplikasi</option>
-                            <option value="keamanan_digital">🔒 Keamanan Digital</option>
                             <option value="penelitian_akademik">📖 Penelitian Akademik</option>
                             <option value="layanan_publik">🏛️ Layanan Publik</option>
-                            <option value="mobile_responsive">📱 Mobile Responsive</option>
                         </select>
                     </div>
 

@@ -271,7 +271,7 @@ class TutorialBlockBuilder {
             block.remove();
             this.updateStepNumbers();
             this.updateBlockOrders();
-            this.updateMoveButtons(); // ✅ TAMBAH: Update move buttons
+            this.updateMoveButtons();
         }
     }
 
