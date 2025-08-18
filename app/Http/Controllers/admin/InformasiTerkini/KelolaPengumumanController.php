@@ -26,8 +26,8 @@ class KelolaPengumumanController extends Controller
             $kelolaPengumumanQuery->where(function ($q) use ($keywords) {
                 foreach ($keywords as $word) {
                     $q->where(function ($q) use ($word) {
-                        $q->where('title', 'like', "%{$word}%")          // title bukan name
-                          ->orWhere('content', 'like', "%{$word}%")       // content bukan description
+                        $q->where('title', 'like', "%{$word}%")          // FIXED: title bukan name
+                          ->orWhere('content', 'like', "%{$word}%")       // FIXED: content bukan description
                           ->orWhere('category', 'like', "%{$word}%");
                     });
                 }

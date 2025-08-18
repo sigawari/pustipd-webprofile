@@ -42,7 +42,7 @@
                 <x-share-buttons :url="$url" :share-text="$shareText" />
 
                 <!-- Announcement Content -->
-                <div class="announcement-article-content pt-8">
+                <div class="announcement-article-content class=pt-8">
                     {!! $announcement->content !!}
                 </div>
 
