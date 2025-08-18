@@ -79,8 +79,10 @@ class PublicsController extends Controller
                 'event_date' => $gallery->event_date ? $gallery->event_date->format('d M Y') : null,
             ];
         });
+
+        $profil = Profil::latest()->first(); 
     
-        return view('public.about', compact('title', 'description', 'keywords', 'galleries', 'galleriesData'));
+        return view('public.about', compact('title', 'description', 'keywords', 'galleries', 'galleriesData', 'profil'));
     }
 
     public function visi_misi(){

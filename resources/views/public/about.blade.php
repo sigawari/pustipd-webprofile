@@ -223,18 +223,15 @@
             <div class="flex flex-col lg:flex-row items-center lg:items-start gap-12 max-w-5xl mx-auto">
                 <!-- Image left -->
                 <div class="flex-shrink-0 w-full lg:w-2/5">
-                    <img src="{{ asset('assets/img/placeholder/dummy.png') }}" alt="Banner Tentang PUSTIPD"
+                    <img src="{{ Storage::url($profil->profil_photo) ?? asset('assets/img/placeholder/dummy.png') }}"
+                        alt="Foto PUSTIPD"
                         class="w-full h-full rounded-xl object-cover aspect-[2/1] shadow-md bg-gray-100" />
                 </div>
 
                 <!-- Text right -->
                 <div class="content-about text-secondary text-lg w-full lg:w-3/5 text-justify">
                     <p>
-                        Pusat Teknologi Informasi dan Pangkalan Data (PUSTIPD) berkedudukan di bawah koordinasi dan
-                        bertanggung jawab kepada Rektor melalui Wakil Rektor II. PUSTIPD berfungsi sebagai perencana,
-                        pengelola, dan pemelihara infrastruktur sistem teknologi informasi dan komunikasi serta
-                        mengkoordinasi pengembangan dan integrasi aplikasi dan sistem informasi di lingkungan UIN Raden
-                        Fatah Palembang serta pelaporan data ke ForlapDikti
+                        {{ $profil->description ?? 'Pusat Teknologi Informasi dan Pangkalan Data' }}
                     </p>
                 </div>
             </div>

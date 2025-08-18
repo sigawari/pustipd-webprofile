@@ -126,7 +126,6 @@
                     <option value="">Semua Status</option>
                     <option value="published">Published</option>
                     <option value="draft">Draft</option>
-                    <option value="archived">Archived</option>
                 </select>
                 <select id="perPage"
                     class="flex-1 sm:flex-none px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
