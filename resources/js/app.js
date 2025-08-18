@@ -14,6 +14,7 @@ import "./components/admin/bulk-actions";
 import "./components/admin/ketetapan-action";
 import "./components/admin/slug";
 import "./components/admin/tutorialblock";
+import "./components/admin/tutorialfeatured.js";
 
 // Import komponem public
 import "./components/public/bulk-download";

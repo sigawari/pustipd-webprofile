@@ -255,7 +255,6 @@ class PublicsController extends Controller
         ));
     }
 
-
     public function announcementsDetail($slug)
     {
         $announcement = KelolaPengumuman::where('status', 'published')
@@ -284,6 +283,24 @@ class PublicsController extends Controller
 
         return view('public.tutorial', compact('title', 'description', 'keywords', 'tutorials'));
     }
+
+    public function tutorialsDetail($slug)
+    {
+        $tutorial = KelolaTutorial::where('status', 'published')
+            ->where('slug', $slug)
+            ->firstOrFail();
+    
+        $title = $tutorial->title;
+        $description = \Str::limit(strip_tags($tutorial->content), 155);
+        $keywords = $tutorial->tags ?? 'tutorial, pustipd';
+        $url = url()->current();
+        $shareText = "Baca Tutorial dari PUSTIPD UIN RF Palembang - " . $tutorial->name . " " . $url;
+    
+        return view('public.tutorials-detail', compact(
+            'title', 'description', 'keywords', 'tutorial', 'url', 'shareText'
+        ));
+    } 
+
     public function ketetapan(Request $request)
     {
         $title = 'Ketetapan';

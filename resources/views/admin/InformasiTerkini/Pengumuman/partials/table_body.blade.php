@@ -126,17 +126,16 @@
         </td>
     </tr>
 @empty
-    <tr class="hover:bg-gray-50">
-        <!-- ✅ FIXED: colspan="9" untuk 9 kolom total -->
-        <td colspan="9" class="px-6 py-4 text-center text-gray-500 italic">
+    <tr class="hover:bg-gray-50 max-w-full">
+        <td colspan="9" class="px-9 py-4 text-center text-gray-500 italic">
             <div class="flex flex-col items-center justify-center text-sm text-gray-500 space-y-1">
                 @if ($kelolaPengumumans->isEmpty() && !request()->filled('search') && !request()->filled('filter'))
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="size-6 text-blue-400 mb-1"">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 0 1-2.25 2.25M16.5 7.5V18a2.25 2.25 0 0 0 2.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 0 0 2.25 2.25h13.5M6 7.5h3v3H6v-3Z" />
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-400 mb-1" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                            d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    <span class="text-blue-500 font-medium">Belum ada {{ $title }} yang tersedia.</span>
+                    <span class="text-blue-500 font-medium">Belum ada Pengumuman yang tersedia.</span>
                 @elseif ($kelolaPengumumans->isEmpty() && request()->filled('search'))
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-400 mb-1" fill="none"
                         viewBox="0 0 24 24" stroke="currentColor">

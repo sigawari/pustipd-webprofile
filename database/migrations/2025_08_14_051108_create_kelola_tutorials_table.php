@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -13,38 +13,50 @@ return new class extends Migration
     {
         Schema::create('kelola_tutorials', function (Blueprint $table) {
             $table->id();
-            
-            // ✅ Basic Tutorial Info
+
+            // Basic Info
             $table->string('title');
             $table->string('slug')->unique();
-            $table->text('description')->nullable(); // untuk excerpt di list & meta description
-            
-            // ✅ Tutorial Category
+            $table->longText('content')->nullable();
+            $table->text('excerpt')->nullable();
+            $table->json('content_blocks')->nullable();
+
+            // Category - sesuai dengan analisis PUSTIPD
             $table->enum('category', [
-                'web_development',     // Web Development
-                'database',           // Database
-                'server_management',  // Server Management  
-                'security',          // Security
-                'technology',        // Teknologi (general)
-                'academic_services', // Layanan Akademik
-                'library_resources' // Sumber Daya Perpustakaan
+                'sistem_informasi_akademik',
+                'e_learning',
+                'layanan_digital_mahasiswa', 
+                'pengelolaan_data_akun',
+                'jaringan_konektivitas',
+                'software_aplikasi',
+                'keamanan_digital',
+                'penelitian_akademik',
+                'layanan_publik',
+                'mobile_responsive'
             ]);
-            
-            // ✅ Status & Publishing
+
+            // Tags untuk flexible categorization
+            $table->json('tags')->nullable();
+
+            // Publishing
             $table->enum('status', ['draft', 'published'])->default('draft');
-            $table->date('published_at')->nullable(); // untuk display tanggal di halaman publik
-            
-            // ✅ Simple Analytics
+            $table->date('date')->nullable(); // Tanggal tutorial
+
+            // Analytics
             $table->integer('view_count')->default(0);
-            $table->timestamp('last_viewed_at')->nullable();
-            
-            // ✅ Timestamps
+
+            // Featured flag
+            $table->boolean('is_featured')->default(false);
+
             $table->timestamps();
-            
-            // ✅ Indexes
+
+            // Indexes untuk performance
             $table->index(['category', 'status']);
-            $table->index(['status', 'published_at']);
+            $table->index(['status', 'date']);
             $table->index('slug');
+            $table->index('view_count');
+            $table->index('is_featured');
+            $table->index(['status', 'is_featured']);
         });
     }
 

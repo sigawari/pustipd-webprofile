@@ -18,12 +18,14 @@ class KelolaTutorial extends Model
         'title',           
         'content',         
         'excerpt',         
+        'content_blocks',  // NEW: Support untuk blocks
         'category',       
-        'urgency',         
+        'tags',           
         'slug',           
         'date',           
-        'valid_until',    
-        'status',             
+        'status',
+        'view_count',     
+        'is_featured',    
     ];
 
     /**
@@ -31,67 +33,91 @@ class KelolaTutorial extends Model
      */
     protected $casts = [
         'date' => 'date',
-        'valid_until' => 'datetime',
-        'last_viewed_at' => 'datetime',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+        'tags' => 'array',           
+        'content_blocks' => 'array', 
+        'is_featured' => 'boolean',   
+        'view_count' => 'integer',    
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     */
-    protected $hidden = [];
+    protected $primaryKey = 'tutorial_id'; // atau kolom sebenarnya
+    public $incrementing = true;
+    protected $keyType = 'int'; 
+
+
+    // ... existing scopes and methods ...
 
     // ================================
-    // SCOPES
+    // CONTENT BLOCKS METHODS
     // ================================
 
     /**
-     * Scope untuk tutorial yang published.
+     * Get content blocks with proper structure.
      */
-    public function scopePublished(Builder $query): Builder
+    public function getContentBlocks(): array
     {
-        return $query->where('status', 'published');
+        return $this->content_blocks ?? [];
     }
 
     /**
-     * Scope untuk tutorial yang draft.
+     * Get only step blocks.
      */
-    public function scopeDraft(Builder $query): Builder
+    public function getStepBlocks(): array
     {
-        return $query->where('status', 'draft');
+        return collect($this->getContentBlocks())
+            ->where('type', 'step')
+            ->sortBy('order')
+            ->values()
+            ->toArray();
     }
 
     /**
-     * Scope untuk tutorial yang masih valid (belum expired).
+     * Get only tip blocks.
      */
-    public function scopeValid(Builder $query): Builder
+    public function getTipBlocks(): array
     {
-        return $query->where(function($q) {
-            $q->whereNull('valid_until')
-              ->orWhere('valid_until', '>=', now());
-        });
+        return collect($this->getContentBlocks())
+            ->where('type', 'tip')
+            ->sortBy('order')
+            ->values()
+            ->toArray();
     }
 
     /**
-     * Scope untuk filter berdasarkan kategori.
+     * Count steps in tutorial.
      */
-    public function scopeCategory(Builder $query, string $category): Builder
+    public function getStepCount(): int
     {
-        return $query->where('category', $category);
+        return count($this->getStepBlocks());
     }
 
     /**
-     * Scope untuk filter berdasarkan urgency.
+     * Count tips in tutorial.
      */
-    public function scopeUrgency(Builder $query, string $urgency): Builder
+    public function getTipCount(): int
     {
-        return $query->where('urgency', $urgency);
+        return count($this->getTipBlocks());
     }
 
     /**
-     * Scope untuk search functionality.
+     * Generate content from blocks for search/display.
      */
+    public function getContentFromBlocks(): string
+    {
+        $content = '';
+        foreach ($this->getContentBlocks() as $block) {
+            if (isset($block['title'])) {
+                $content .= $block['title'] . ' ';
+            }
+            if (isset($block['content'])) {
+                $content .= $block['content'] . ' ';
+            }
+        }
+        return trim($content);
+    }
+
+    // Update search scope untuk include content blocks
     public function scopeSearch(Builder $query, string $search): Builder
     {
         return $query->where(function($q) use ($search) {
@@ -99,11 +125,31 @@ class KelolaTutorial extends Model
             foreach ($keywords as $word) {
                 $q->where(function($q) use ($word) {
                     $q->where('title', 'like', "%{$word}%")
+                      ->orWhere('excerpt', 'like', "%{$word}%")
                       ->orWhere('content', 'like', "%{$word}%")
-                      ->orWhere('category', 'like', "%{$word}%");
+                      ->orWhere('category', 'like', "%{$word}%")
+                      ->orWhereJsonContains('tags', $word)
+                      ->orWhereRaw('JSON_EXTRACT(content_blocks, "$[*].title") LIKE ?', ["%{$word}%"])
+                      ->orWhereRaw('JSON_EXTRACT(content_blocks, "$[*].content") LIKE ?', ["%{$word}%"]);
                 });
             }
         });
+    }
+
+    /**
+     * Scope untuk tutorial populer berdasarkan views.
+     */
+    public function scopePopular(Builder $query, int $limit = 10): Builder
+    {
+        return $query->orderByDesc('view_count')->limit($limit);
+    }
+
+    /**
+     * Scope untuk tutorial dengan view count minimum.
+     */
+    public function scopeMinViews(Builder $query, int $minViews): Builder
+    {
+        return $query->where('view_count', '>=', $minViews);
     }
 
     // ================================
@@ -111,66 +157,68 @@ class KelolaTutorial extends Model
     // ================================
 
     /**
-     * Get kategori data untuk display.
+     * Get kategori data untuk display berdasarkan analisis PUSTIPD.
      */
     public function getCategoryDataAttribute(): array
     {
         $categories = [
-            'maintenance' => [
-                'label' => 'Maintenance & Gangguan',
-                'icon' => '🔧',
-                'color' => 'bg-orange-100 text-orange-800'
-            ],
-            'layanan' => [
-                'label' => 'Layanan IT',
-                'icon' => '💡',
+            'sistem_informasi_akademik' => [
+                'label' => 'Sistem Informasi Akademik',
+                'icon' => '🎓',
                 'color' => 'bg-blue-100 text-blue-800'
             ],
-            'infrastruktur' => [
-                'label' => 'Infrastruktur & Jaringan',
-                'icon' => '🌐',
+            'e_learning' => [
+                'label' => 'E-Learning & Pembelajaran Daring',
+                'icon' => '💻',
                 'color' => 'bg-green-100 text-green-800'
             ],
-            'administrasi' => [
-                'label' => 'Administrasi PUSTIPD',
-                'icon' => '📋',
+            'layanan_digital_mahasiswa' => [
+                'label' => 'Layanan Digital Mahasiswa',
+                'icon' => '👨‍🎓',
                 'color' => 'bg-purple-100 text-purple-800'
             ],
-            'darurat' => [
-                'label' => 'Darurat & Penting',
-                'icon' => '🚨',
+            'pengelolaan_data_akun' => [
+                'label' => 'Pengelolaan Data & Akun',
+                'icon' => '🔐',
+                'color' => 'bg-orange-100 text-orange-800'
+            ],
+            'jaringan_konektivitas' => [
+                'label' => 'Jaringan & Konektivitas',
+                'icon' => '🌐',
+                'color' => 'bg-cyan-100 text-cyan-800'
+            ],
+            'software_aplikasi' => [
+                'label' => 'Software & Aplikasi',
+                'icon' => '📱',
+                'color' => 'bg-indigo-100 text-indigo-800'
+            ],
+            'keamanan_digital' => [
+                'label' => 'Keamanan Digital',
+                'icon' => '🔒',
                 'color' => 'bg-red-100 text-red-800'
-            ]
+            ],
+            'penelitian_akademik' => [
+                'label' => 'Penelitian & Akademik',
+                'icon' => '📚',
+                'color' => 'bg-yellow-100 text-yellow-800'
+            ],
+            'layanan_publik' => [
+                'label' => 'Layanan Publik',
+                'icon' => '🏛️',
+                'color' => 'bg-gray-100 text-gray-800'
+            ],
+            'mobile_responsive' => [
+                'label' => 'Mobile & Responsive',
+                'icon' => '📲',
+                'color' => 'bg-pink-100 text-pink-800'
+            ],
         ];
         
         return $categories[$this->category] ?? [
-            'label' => ucfirst($this->category),
+            'label' => ucfirst(str_replace('_', ' ', $this->category)),
             'icon' => '📄',
             'color' => 'bg-gray-100 text-gray-800'
         ];
-    }
-
-    /**
-     * Get urgency data untuk display.
-     */
-    public function getUrgencyDataAttribute(): array
-    {
-        $urgencies = [
-            'normal' => [
-                'label' => 'Normal',
-                'icon' => '📢',
-                'color' => 'bg-gray-100 text-gray-800',
-                'priority' => 1
-            ],
-            'penting' => [
-                'label' => 'Penting',
-                'icon' => '⚠️',
-                'color' => 'bg-yellow-100 text-yellow-800',
-                'priority' => 2
-            ],
-        ];
-        
-        return $urgencies[$this->urgency] ?? $urgencies['normal'];
     }
 
     /**
@@ -198,18 +246,36 @@ class KelolaTutorial extends Model
     }
 
     /**
+     * Get view count in human readable format.
+     */
+    public function getViewCountHumanAttribute(): string
+    {
+        if ($this->view_count < 1000) {
+            return $this->view_count . ' views';
+        }
+        
+        if ($this->view_count < 1000000) {
+            return round($this->view_count / 1000, 1) . 'K views';
+        }
+        
+        return round($this->view_count / 1000000, 1) . 'M views';
+    }
+
+    /**
      * Get share URLs untuk social media.
      */
     public function getShareUrlsAttribute(): array
     {
-        $url = route('pengumuman.show', $this->slug);
-        $title = urlencode($this->title);
+        $url = route('tutorial.show', $this->slug);
+        $title = urlencode("Tutorial PUSTIPD: " . $this->title);
         $excerpt = urlencode($this->excerpt ?: Str::limit(strip_tags($this->content), 100));
         
         return [
             'whatsapp' => "https://wa.me/?text={$title}%20{$url}",
-            'facebook' => "https://www.facebook.com/sharer/sharer.php?u={$url}",
+            'facebook' => "https://www.facebook.com/sharer/sharer.php?u={$url}&quote={$title}",
             'telegram' => "https://t.me/share/url?url={$url}&text={$title}",
+            'twitter' => "https://twitter.intent/tweet?text={$title}&url={$url}",
+            'linkedin' => "https://www.linkedin.com/sharing/share-offsite/?url={$url}",
             'copy' => $url
         ];
     }
@@ -219,19 +285,11 @@ class KelolaTutorial extends Model
     // ================================
 
     /**
-     * Check apakah tutorial masih valid.
-     */
-    public function isValid(): bool
-    {
-        return !$this->valid_until || $this->valid_until->isFuture();
-    }
-
-    /**
-     * Check apakah tutorial aktif (published dan valid).
+     * Check apakah tutorial aktif (published).
      */
     public function isActive(): bool
     {
-        return $this->status === 'published' && $this->isValid();
+        return $this->status === 'published';
     }
 
     /**
@@ -240,7 +298,14 @@ class KelolaTutorial extends Model
     public function incrementView(): void
     {
         $this->increment('view_count');
-        $this->update(['last_viewed_at' => now()]);
+    }
+
+    /**
+     * Reset view count.
+     */
+    public function resetViewCount(): void
+    {
+        $this->update(['view_count' => 0]);
     }
 
     /**
@@ -256,30 +321,48 @@ class KelolaTutorial extends Model
         return Str::limit($stripped, $length);
     }
 
+    /**
+     * Get reading time estimation.
+     */
+    public function getReadingTime(): int
+    {
+        $wordCount = str_word_count(strip_tags($this->content));
+        return ceil($wordCount / 200); // Asumsi 200 kata per menit
+    }
+
+    /**
+     * Check if tutorial is popular based on view count.
+     */
+    public function isPopular(int $threshold = 100): bool
+    {
+        return $this->view_count >= $threshold;
+    }
+
     // ================================
     // STATIC METHODS
     // ================================
 
     /**
-     * Get available categories untuk PUSTIPD.
+     * Get available categories untuk PUSTIPD berdasarkan analisis.
      */
     public static function getCategories(): array
     {
         return [
-            'maintenance' => 'Maintenance & Gangguan',
-            'layanan' => 'Layanan IT',
-            'infrastruktur' => 'Infrastruktur & Jaringan',
-            'administrasi' => 'Administrasi PUSTIPD',
-            'darurat' => 'Darurat & Penting'
+            'sistem_informasi_akademik' => 'Sistem Informasi Akademik',
+            'e_learning' => 'E-Learning & Pembelajaran Daring',
+            'layanan_digital_mahasiswa' => 'Layanan Digital Mahasiswa',
+            'pengelolaan_data_akun' => 'Pengelolaan Data & Akun',
+            'jaringan_konektivitas' => 'Jaringan & Konektivitas',
+            'software_aplikasi' => 'Software & Aplikasi',
+            'keamanan_digital' => 'Keamanan Digital',
+            'penelitian_akademik' => 'Penelitian & Akademik',
+            'layanan_publik' => 'Layanan Publik',
+            'mobile_responsive' => 'Mobile & Responsive',
         ];
     }
 
     /**
-     * Get available urgencies.
-     */
-
-    /**
-     * Get available statuses.
+     * Get available statuses (hanya draft dan published).
      */
     public static function getStatuses(): array
     {
@@ -292,15 +375,136 @@ class KelolaTutorial extends Model
     /**
      * Get tutorial untuk public display.
      */
-    public static function getPublicAnnouncements()
+    public static function getPublicTutorials()
     {
         return static::published()
-                    ->valid()
                     ->orderByDesc('date');
     }
 
     /**
-     * Get tutorial urgent untuk alert.
+     * Get featured tutorials.
      */
-}
+    public static function getFeaturedTutorials(int $limit = 5)
+    {
+        return static::published()
+                    ->featured()
+                    ->orderByDesc('view_count')
+                    ->limit($limit);
+    }
 
+    /**
+     * Get popular tutorials berdasarkan views.
+     */
+    public static function getPopularTutorials(int $limit = 10)
+    {
+        return static::published()
+                    ->popular($limit)
+                    ->get();
+    }
+
+    /**
+     * Get tutorials dengan view count tertinggi.
+     */
+    public static function getMostViewedTutorials(int $limit = 5)
+    {
+        return static::published()
+                    ->orderByDesc('view_count')
+                    ->limit($limit)
+                    ->get();
+    }
+
+    /**
+     * Get recent tutorials.
+     */
+    public static function getRecentTutorials(int $limit = 10)
+    {
+        return static::published()
+                    ->orderByDesc('created_at')
+                    ->limit($limit)
+                    ->get();
+    }
+
+    /**
+     * Get tutorials by category dengan pagination.
+     */
+    public static function getTutorialsByCategory(string $category, int $perPage = 10)
+    {
+        return static::published()
+                    ->category($category)
+                    ->orderByDesc('date')
+                    ->paginate($perPage);
+    }
+
+    /**
+     * Get statistics untuk dashboard.
+     */
+    public static function getStatistics(): array
+    {
+        return [
+            'total' => static::count(),
+            'published' => static::published()->count(),
+            'draft' => static::draft()->count(),
+            'featured' => static::featured()->count(),
+            'total_views' => static::sum('view_count'),
+            'most_viewed' => static::published()->orderByDesc('view_count')->first(),
+            'recent_count' => static::published()->where('created_at', '>=', now()->subDays(7))->count(),
+            'popular_threshold' => static::published()->where('view_count', '>=', 100)->count(),
+        ];
+    }
+
+    /**
+     * Get category statistics.
+     */
+    public static function getCategoryStatistics(): array
+    {
+        $categories = static::getCategories();
+        $stats = [];
+        
+        foreach ($categories as $key => $name) {
+            $stats[$key] = [
+                'name' => $name,
+                'count' => static::published()->category($key)->count(),
+                'total_views' => static::published()->category($key)->sum('view_count'),
+                'most_viewed' => static::published()->category($key)->orderByDesc('view_count')->first()
+            ];
+        }
+        
+        return $stats;
+    }
+
+    /**
+     * Search tutorials dengan advanced filtering.
+     */
+    public static function searchTutorials(array $filters = [])
+    {
+        $query = static::published();
+        
+        if (!empty($filters['search'])) {
+            $query->search($filters['search']);
+        }
+        
+        if (!empty($filters['category'])) {
+            $query->category($filters['category']);
+        }
+        
+        if (!empty($filters['featured'])) {
+            $query->featured();
+        }
+        
+        if (!empty($filters['min_views'])) {
+            $query->minViews($filters['min_views']);
+        }
+        
+        if (!empty($filters['tags'])) {
+            foreach ($filters['tags'] as $tag) {
+                $query->whereJsonContains('tags', $tag);
+            }
+        }
+        
+        // Default ordering
+        $orderBy = $filters['order_by'] ?? 'date';
+        $orderDirection = $filters['order_direction'] ?? 'desc';
+        
+        return $query->orderBy($orderBy, $orderDirection);
+    }
+}

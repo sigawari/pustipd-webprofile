@@ -10,5 +10,5 @@ class Announcement extends Model
     use HasFactory;
 
     // Isi fillable, guarded, relasi jika ada
-    protected $fillable = ['title', 'excerpt', 'date', 'category', 'slug', 'priority', 'image'];
+    protected $fillable = ['title', 'excerpt', 'date', 'category', 'slug', 'urgency'];
 }

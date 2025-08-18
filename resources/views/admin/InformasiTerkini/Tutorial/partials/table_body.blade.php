@@ -12,52 +12,86 @@
             {{ $kelolaTutorials->firstItem() + $key }}
         </td>
 
-        <!-- Kategori PUSTIPD -->
+        <!-- Kategori PUSTIPD - Updated dengan kategori yang benar -->
         <td class="px-6 py-4 whitespace-nowrap">
             @php
-                $pustipd_categories = [
-                    'maintenance' => [
-                        'label' => 'Maintenance & Gangguan',
-                        'icon' => '🔧',
-                        'color' => 'bg-orange-100 text-orange-800',
-                    ],
-                    'layanan' => ['label' => 'Layanan IT', 'icon' => '💡', 'color' => 'bg-blue-100 text-blue-800'],
-                    'infrastruktur' => [
-                        'label' => 'Infrastruktur & Jaringan',
-                        'icon' => '🌐',
-                        'color' => 'bg-green-100 text-green-800',
-                    ],
-                    'administrasi' => [
-                        'label' => 'Administrasi PUSTIPD',
-                        'icon' => '📋',
-                        'color' => 'bg-purple-100 text-purple-800',
-                    ],
-                    'darurat' => ['label' => 'Darurat & Penting', 'icon' => '🚨', 'color' => 'bg-red-100 text-red-800'],
-                ];
-                $cat_data = $pustipd_categories[$tutorial->category] ?? [
-                    'label' => $tutorial->category,
-                    'icon' => '📄',
-                    'color' => 'bg-gray-100 text-gray-800',
-                ];
+                $categoryData = $tutorial->category_data;
             @endphp
             <span
-                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $cat_data['color'] }}">
-                {{ $cat_data['icon'] }} {{ $cat_data['label'] }}
+                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $categoryData['color'] }}">
+                {{ $categoryData['icon'] }} {{ $categoryData['label'] }}
             </span>
         </td>
 
+        <!-- Title -->
         <td class="px-6 py-4 whitespace-nowrap">
             <div class="text-sm font-medium text-gray-900 max-w-xs">
                 {{ $tutorial->title }}
             </div>
         </td>
 
+        <!-- Content Preview - Updated untuk content blocks -->
         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
             <div class="text-sm font-medium text-gray-900 max-w-xs">
-                {{ Str::limit(strip_tags($tutorial->content), 50, '...') }}
+                @if ($tutorial->excerpt)
+                    {{ Str::limit($tutorial->excerpt, 50, '...') }}
+                @elseif($tutorial->content_blocks && count($tutorial->content_blocks) > 0)
+                    @php
+                        $firstBlock = collect($tutorial->content_blocks)->first();
+                        $previewContent = '';
+                        if (isset($firstBlock['title'])) {
+                            $previewContent = $firstBlock['title'];
+                        } elseif (isset($firstBlock['content'])) {
+                            $previewContent = strip_tags($firstBlock['content']);
+                        }
+                    @endphp
+                    {{ Str::limit($previewContent, 50, '...') }}
+                @elseif($tutorial->content)
+                    {{ Str::limit(strip_tags($tutorial->content), 50, '...') }}
+                @else
+                    <span class="text-gray-400 italic">Tidak ada konten</span>
+                @endif
             </div>
         </td>
 
+        <!-- Content Structure Info - NEW: Menampilkan info steps dan tips -->
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+            @if ($tutorial->content_blocks && count($tutorial->content_blocks) > 0)
+                <div class="flex flex-col space-y-1">
+                    @php
+                        $steps = collect($tutorial->content_blocks)->where('type', 'step')->count();
+                        $tips = collect($tutorial->content_blocks)->where('type', 'tip')->count();
+                    @endphp
+                    @if ($steps > 0)
+                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-blue-100 text-blue-800">
+                            📋 {{ $steps }} langkah
+                        </span>
+                    @endif
+                    @if ($tips > 0)
+                        <span
+                            class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-yellow-100 text-yellow-800">
+                            💡 {{ $tips }} tips
+                        </span>
+                    @endif
+                </div>
+            @else
+                <span class="text-gray-400 italic">-</span>
+            @endif
+        </td>
+
+        <!-- View Count - NEW: Menampilkan jumlah views -->
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+            <div class="flex items-center justify-center">
+                <svg class="w-4 h-4 text-gray-400 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
+                    </path>
+                </svg>
+                {{ $tutorial->view_count_human }}
+            </div>
+        </td>
         <!-- Status -->
         <td class="px-6 py-4 whitespace-nowrap">
             <span @class([
@@ -69,10 +103,10 @@
             </span>
         </td>
 
-        <!-- ✅ FIXED: date bukan publish_date -->
+        <!-- Date -->
         <td class="px-6 py-4 whitespace-nowrap">
             <div class="text-sm font-medium text-gray-900 max-w-xs">
-                {{ \Carbon\Carbon::parse($tutorial->date)->format('d M Y') }}
+                {{ $tutorial->formatted_date ?: '-' }}
             </div>
         </td>
 
@@ -114,16 +148,16 @@
     </tr>
 @empty
     <tr class="hover:bg-gray-50">
-        <!-- ✅ FIXED: colspan="9" untuk 9 kolom total -->
+        <!-- Updated colspan untuk jumlah kolom yang baru (11 kolom) -->
         <td colspan="11" class="px-6 py-4 text-center text-gray-500 italic">
             <div class="flex flex-col items-center justify-center text-sm text-gray-500 space-y-1">
                 @if ($kelolaTutorials->isEmpty() && !request()->filled('search') && !request()->filled('filter'))
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="size-6 text-blue-400 mb-1"">
+                        stroke="currentColor" class="size-6 text-blue-400 mb-1">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 0 1-2.25 2.25M16.5 7.5V18a2.25 2.25 0 0 0 2.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 0 0 2.25 2.25h13.5M6 7.5h3v3H6v-3Z" />
                     </svg>
-                    <span class="text-blue-500 font-medium">Belum ada {{ $title }} yang tersedia.</span>
+                    <span class="text-blue-500 font-medium">Belum ada {{ $title ?? 'Tutorial' }} yang tersedia.</span>
                 @elseif ($kelolaTutorials->isEmpty() && request()->filled('search'))
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-400 mb-1" fill="none"
                         viewBox="0 0 24 24" stroke="currentColor">

@@ -218,9 +218,9 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
             Route::put('/kelola-tutorial/{kelolatutorial}', 'update')->name('kelola-tutorial.update');
             Route::delete('/kelola-tutorial/{kelolatutorial}', 'destroy')->name('kelola-tutorial.destroy');
             Route::get('/kelola-tutorial/export', 'export')->name('kelola-tutorial.export');
-            Route::post('/kelola-tutorial/bulk-action', 'bulk')->name('kelola-tutorial.bulk');
+            Route::post('/kelola-tutorial/bulk', 'bulk')->name('kelola-tutorial.bulk');
+            Route::post('/kelola-tutorial/{kelolatutorial}/featured', 'toggleFeatured')->name('kelola-tutorial.featured'); // ✅ Fixed method & parameter
         });
-
     });
 
     // Dokumen & Regulasi
@@ -323,10 +323,11 @@ Route::prefix('/')->group(function () {
     Route::get('/applayanan', [PublicsController::class, 'applayanan'])->name('applayanan');
     Route::get('/berita', [PublicsController::class, 'berita'])->name('news');
     Route::get('/pengumuman', [PublicsController::class, 'pengumuman'])->name('announcements');
-    Route::get('/tutorial', [PublicsController::class, 'tutorial'])->name('tutorial');
+    Route::get('/tutorial', [PublicsController::class, 'tutorial'])->name('tutorials');
     Route::get('/berita/{slug}', [PublicsController::class, 'newsDetail'])->name('news-detail');  
     Route::get('/pengumuman/{slug}', [PublicsController::class, 'announcementsDetail'])->name('announcements-detail');
-    Route::get('/tutorial/contohtutorial', [PublicsController::class, 'index'])->name('contohtutorial');
+    Route::get('/tutorial/tutorials-detail', [PublicsController::class, 'tutorialsDetail'])->name('tutorials-detail');
+    
     // PublicsController routes
     Route::get('/ketetapan', [PublicsController::class, 'ketetapan'])->name('ketetapan');
     Route::get('/panduan', [PublicsController::class, 'panduan'])->name('panduan');

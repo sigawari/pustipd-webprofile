@@ -75,7 +75,7 @@
             </div>
         </div>
 
-        <!-- Filter dan Search -->
+        <!-- Filter dan Search - Updated dengan kategori PUSTIPD -->
         <div class="flex flex-col gap-3 mb-4 sm:mb-6">
             <div class="relative">
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -88,22 +88,33 @@
                     class="block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
             </div>
             <div class="flex flex-col sm:flex-row gap-2">
+                <!-- Updated kategori sesuai dengan model -->
                 <select id="categoryFilter"
                     class="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
                     <option value="">Semua Kategori</option>
-                    <option value="web_development">Web Development</option>
-                    <option value="database">Database</option>
-                    <option value="server_management">Server Management</option>
-                    <option value="security">Security</option>
-                    <option value="technology">Teknologi</option>
-                    <option value="academic_services">Layanan Akademik</option>
-                    <option value="library_resources">Sumber Daya Perpustakaan</option>
+                    <option value="sistem_informasi_akademik">Sistem Informasi Akademik</option>
+                    <option value="e_learning">E-Learning & Pembelajaran Daring</option>
+                    <option value="layanan_digital_mahasiswa">Layanan Digital Mahasiswa</option>
+                    <option value="pengelolaan_data_akun">Pengelolaan Data & Akun</option>
+                    <option value="jaringan_konektivitas">Jaringan & Konektivitas</option>
+                    <option value="software_aplikasi">Software & Aplikasi</option>
+                    <option value="keamanan_digital">Keamanan Digital</option>
+                    <option value="penelitian_akademik">Penelitian & Akademik</option>
+                    <option value="layanan_publik">Layanan Publik</option>
+                    <option value="mobile_responsive">Mobile & Responsive</option>
                 </select>
                 <select id="statusFilter"
                     class="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
                     <option value="">Semua Status</option>
                     <option value="published">Published</option>
                     <option value="draft">Draft</option>
+                </select>
+                <!-- NEW: Featured filter -->
+                <select id="featuredFilter"
+                    class="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                    <option value="">Semua Tutorial</option>
+                    <option value="1">Tutorial Featured</option>
+                    <option value="0">Tutorial Biasa</option>
                 </select>
                 <select id="perPage"
                     class="flex-1 sm:flex-none px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
@@ -118,34 +129,67 @@
         <div class="overflow-x-auto -mx-3 sm:mx-0">
             <div class="min-w-full inline-block align-middle">
                 <div class="overflow-hidden border border-gray-200 sm:rounded-lg">
-                    <table class="min-w-full divide-y divide-gray-200" style="min-width: 900px;">
+                    <table class="min-w-full divide-y divide-gray-200" style="min-width: 1200px;">
+                        <!-- THEAD yang diperbaiki sesuai dengan table_body -->
                         <thead class="bg-gray-50">
                             <tr>
+                                <!-- 1. Checkbox -->
                                 <th
                                     class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     <input type="checkbox" id="selectAll"
                                         class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
                                 </th>
+                                <!-- 2. No -->
                                 <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     No
                                 </th>
+                                <!-- 3. Kategori -->
                                 <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Kategori
                                 </th>
+                                <!-- 4. Title -->
                                 <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Judul {{ $title }}
                                 </th>
+                                <!-- 5. Content Preview -->
                                 <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Preview Konten
+                                </th>
+                                <!-- 6. Content Structure (NEW) -->
+                                <th
+                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Struktur
+                                </th>
+                                <!-- 7. View Count (NEW) -->
+                                <th
+                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <div class="flex items-center justify-center">
+                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
+                                            </path>
+                                        </svg>
+                                        Views
+                                    </div>
+                                </th>
+                                <!-- 8. Status -->
+                                <th
+                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Status
                                 </th>
+                                <!-- 9. Date -->
                                 <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Tanggal Upload
+                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Tanggal
                                 </th>
+                                <!-- 10. Actions -->
                                 <th
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Aksi
@@ -236,4 +280,18 @@
         @include('admin.InformasiTerkini.Tutorial.update')
         @include('admin.InformasiTerkini.Tutorial.delete')
     </div>
+
+    <!-- Additional JavaScript for filters -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Featured filter functionality
+            const featuredFilter = document.getElementById('featuredFilter');
+            if (featuredFilter) {
+                featuredFilter.addEventListener('change', function() {
+                    // Add filter logic here
+                    console.log('Featured filter changed:', this.value);
+                });
+            }
+        });
+    </script>
 </x-admin.layouts>

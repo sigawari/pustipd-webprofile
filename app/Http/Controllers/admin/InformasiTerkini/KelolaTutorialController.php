@@ -21,18 +21,9 @@ class KelolaTutorialController extends Controller
         // Query builder awal
         $kelolaTutorialQuery = KelolaTutorial::query();
 
-        // ✅ FIXED: Search dengan field yang benar
+        // Search dengan field yang benar
         if ($search) {
-            $keywords = preg_split('/\s+/', trim($search));
-            $kelolaTutorialQuery->where(function ($q) use ($keywords) {
-                foreach ($keywords as $word) {
-                    $q->where(function ($q) use ($word) {
-                        $q->where('title', 'like', "%{$word}%")
-                          ->orWhere('description', 'like', "%{$word}%")  // ✅ PERBAIKI: gunakan description, bukan content
-                          ->orWhere('category', 'like', "%{$word}%");
-                    });
-                }
-            });
+            $kelolaTutorialQuery->search($search); // Gunakan scope search yang sudah diperbaiki
         }
 
         // Filter status
@@ -44,7 +35,7 @@ class KelolaTutorialController extends Controller
 
         $merged = $kelolaTutorialQuery->get();
 
-        // Per-page logic tetap sama
+        // Per-page logic
         if ($perPage === 'all') {
             $perPage = max($merged->count(), 1);
         } else {
@@ -73,19 +64,19 @@ class KelolaTutorialController extends Controller
         return view('admin.InformasiTerkini.Tutorial.index', compact('title', 'kelolaTutorials'));
     }
 
-    // ✅ PERBAIKI: Store method untuk tutorial dengan content blocks
     public function store(Request $request)
     {
-        // Debug untuk melihat data yang masuk
         Log::info('Tutorial store request:', $request->all());
 
         $request->validate([
             'title' => 'required|string|max:255',
             'slug' => 'required|string|unique:kelola_tutorials,slug',
-            'category' => 'required|in:web_development,database,server_management,security,technology,academic_services,library_resources',
-            'published_at' => 'required|date',
+            'category' => 'required|in:sistem_informasi_akademik,e_learning,layanan_digital_mahasiswa,pengelolaan_data_akun,jaringan_konektivitas,software_aplikasi,keamanan_digital,penelitian_akademik,layanan_publik,mobile_responsive',
+            'date' => 'required|date', // Ubah dari published_at ke date
             'status' => 'required|in:draft,published',
-            'description' => 'nullable|string',
+            'excerpt' => 'nullable|string', // Ubah dari description ke excerpt
+            'tags' => 'nullable|array',
+            'is_featured' => 'nullable|boolean',
             'content_blocks' => 'required|array|min:1',
             'content_blocks.*.type' => 'required|in:step,tip',
             'content_blocks.*.title' => 'required_if:content_blocks.*.type,step|string',
@@ -95,35 +86,23 @@ class KelolaTutorialController extends Controller
         ]);
 
         try {
-            // ✅ Simpan tutorial utama ke tabel kelola_tutorials
-            $kelolaTutorial = KelolaTutorial::create([
-                'title' => $request->title,
-                'slug' => $request->slug,
-                'description' => $request->description,
-                'category' => $request->category,
-                'published_at' => $request->published_at,
-                'status' => $request->status,
-                'view_count' => 0,
-            ]);
-
-            // ✅ Simpan content blocks (untuk sementara kita simpan sebagai JSON di field terpisah)
-            // Nanti bisa dipindah ke tabel terpisah jika dibutuhkan
+            // Process content blocks
             $contentBlocks = [];
             
-            foreach ($request->content_blocks as $blockId => $block) {
+            foreach ($request->content_blocks as $index => $block) {
                 $contentBlock = [
-                    'id' => $blockId,
+                    'id' => $index,
                     'type' => $block['type'],
-                    'order' => $block['order'] ?? count($contentBlocks) + 1,
+                    'order' => $block['order'] ?? $index + 1,
                     'title' => $block['title'] ?? null,
                     'content' => $block['content'],
                     'tip_type' => $block['tip_type'] ?? null,
                 ];
 
                 // Handle image upload jika ada
-                if (isset($block['image']) && $request->hasFile("content_blocks.{$blockId}.image")) {
-                    $image = $request->file("content_blocks.{$blockId}.image");
-                    $imageName = time() . '_' . $blockId . '.' . $image->getClientOriginalExtension();
+                if (isset($block['image']) && $request->hasFile("content_blocks.{$index}.image")) {
+                    $image = $request->file("content_blocks.{$index}.image");
+                    $imageName = time() . '_' . $index . '.' . $image->getClientOriginalExtension();
                     $image->move(public_path('uploads/tutorial-images'), $imageName);
                     $contentBlock['image'] = 'uploads/tutorial-images/' . $imageName;
                 }
@@ -131,10 +110,18 @@ class KelolaTutorialController extends Controller
                 $contentBlocks[] = $contentBlock;
             }
 
-            // Simpan content blocks sebagai JSON (sementara)
-            // Jika Anda ingin tabel terpisah, buat migration tutorial_contents
-            $kelolaTutorial->update([
-                'content_blocks' => json_encode($contentBlocks)
+            // Create tutorial
+            $kelolaTutorial = KelolaTutorial::create([
+                'title' => $request->title,
+                'slug' => $request->slug,
+                'excerpt' => $request->excerpt,
+                'category' => $request->category,
+                'date' => $request->date,
+                'status' => $request->status,
+                'tags' => $request->tags,
+                'is_featured' => $request->boolean('is_featured'),
+                'content_blocks' => $contentBlocks,
+                'view_count' => 0,
             ]);
 
             return redirect()
@@ -152,16 +139,17 @@ class KelolaTutorialController extends Controller
 
     public function update(Request $request, $id)
     {
-        // dd('Update tutorial dengan ID: ' . $id);
         $tutorial = KelolaTutorial::findOrFail($id);
 
         $request->validate([
             'title' => 'required|string|max:255',
             'slug' => 'required|string|unique:kelola_tutorials,slug,' . $tutorial->id,
-            'category' => 'required|in:web_development,database,server_management,security,technology,academic_services,library_resources',
-            'published_at' => 'required|date',
+            'category' => 'required|in:sistem_informasi_akademik,e_learning,layanan_digital_mahasiswa,pengelolaan_data_akun,jaringan_konektivitas,software_aplikasi,keamanan_digital,penelitian_akademik,layanan_publik,mobile_responsive',
+            'date' => 'required|date',
             'status' => 'required|in:draft,published',
-            'description' => 'nullable|string',
+            'excerpt' => 'nullable|string',
+            'tags' => 'nullable|array',
+            'is_featured' => 'nullable|boolean',
             'content_blocks' => 'required|array|min:1',
             'content_blocks.*.type' => 'required|in:step,tip',
             'content_blocks.*.title' => 'required_if:content_blocks.*.type,step|string',
@@ -171,46 +159,35 @@ class KelolaTutorialController extends Controller
         ]);
 
         try {
-            $tutorial->update([
-                'title' => $request->title,
-                'slug' => $request->slug,
-                'description' => $request->description,
-                'category' => $request->category,
-                'published_at' => $request->published_at,
-                'status' => $request->status,
-            ]);
-
             $contentBlocks = [];
 
-            foreach ($request->content_blocks as $blockId => $block) {
+            foreach ($request->content_blocks as $index => $block) {
                 $contentBlock = [
-                    'id' => $blockId,
+                    'id' => $index,
                     'type' => $block['type'],
-                    'order' => $block['order'] ?? count($contentBlocks) + 1,
+                    'order' => $block['order'] ?? $index + 1,
                     'title' => $block['title'] ?? null,
                     'content' => $block['content'],
                     'tip_type' => $block['tip_type'] ?? null,
                 ];
 
                 // Handle image upload
-                if (isset($block['image']) && $request->hasFile("content_blocks.{$blockId}.image")) {
+                if (isset($block['image']) && $request->hasFile("content_blocks.{$index}.image")) {
                     // Hapus file lama jika ada
-                    if (!empty($tutorial->content_blocks)) {
-                        $oldBlocks = json_decode($tutorial->content_blocks, true);
-                        if (isset($oldBlocks[$blockId]['image']) && File::exists(public_path($oldBlocks[$blockId]['image']))) {
-                            File::delete(public_path($oldBlocks[$blockId]['image']));
-                        }
+                    $oldBlocks = $tutorial->getContentBlocks();
+                    if (isset($oldBlocks[$index]['image']) && File::exists(public_path($oldBlocks[$index]['image']))) {
+                        File::delete(public_path($oldBlocks[$index]['image']));
                     }
 
-                    $image = $request->file("content_blocks.{$blockId}.image");
-                    $imageName = time() . '_' . $blockId . '.' . $image->getClientOriginalExtension();
+                    $image = $request->file("content_blocks.{$index}.image");
+                    $imageName = time() . '_' . $index . '.' . $image->getClientOriginalExtension();
                     $image->move(public_path('uploads/tutorial-images'), $imageName);
                     $contentBlock['image'] = 'uploads/tutorial-images/' . $imageName;
-                } else if (!empty($tutorial->content_blocks)) {
+                } else {
                     // Pertahankan gambar lama jika tidak diupload baru
-                    $oldBlocks = json_decode($tutorial->content_blocks, true);
-                    if (isset($oldBlocks[$blockId]['image'])) {
-                        $contentBlock['image'] = $oldBlocks[$blockId]['image'];
+                    $oldBlocks = $tutorial->getContentBlocks();
+                    if (isset($oldBlocks[$index]['image'])) {
+                        $contentBlock['image'] = $oldBlocks[$index]['image'];
                     }
                 }
 
@@ -218,7 +195,15 @@ class KelolaTutorialController extends Controller
             }
 
             $tutorial->update([
-                'content_blocks' => json_encode($contentBlocks)
+                'title' => $request->title,
+                'slug' => $request->slug,
+                'excerpt' => $request->excerpt,
+                'category' => $request->category,
+                'date' => $request->date,
+                'status' => $request->status,
+                'tags' => $request->tags,
+                'is_featured' => $request->boolean('is_featured'),
+                'content_blocks' => $contentBlocks,
             ]);
 
             return redirect()
@@ -234,28 +219,23 @@ class KelolaTutorialController extends Controller
         }
     }
 
-    public function destroy($id)
+    public function destroy(KelolaTutorial $kelolaTutorial)
     {
-        // dd('Hapus tutorial dengan ID: ' . $id);
-        $tutorial = KelolaTutorial::findOrFail($id);
-
         try {
             // Hapus semua image content blocks
-            if (!empty($tutorial->content_blocks)) {
-                $blocks = json_decode($tutorial->content_blocks, true);
-                foreach ($blocks as $block) {
+            if (is_array($kelolaTutorial->getContentBlocks())) {
+                foreach ($kelolaTutorial->getContentBlocks() as $block) {
                     if (!empty($block['image']) && File::exists(public_path($block['image']))) {
                         File::delete(public_path($block['image']));
                     }
                 }
             }
-
-            $tutorial->delete();
+            
+            $kelolaTutorial->delete();
 
             return redirect()
                 ->back()
                 ->with('success', 'Tutorial berhasil dihapus.');
-
         } catch (\Exception $e) {
             Log::error('Error deleting tutorial:', ['error' => $e->getMessage()]);
 
@@ -265,7 +245,7 @@ class KelolaTutorialController extends Controller
         }
     }
 
-    // ✅ PERBAIKI: Bulk action method
+
     public function bulk(Request $request)
     {
         $request->validate([
@@ -289,14 +269,11 @@ class KelolaTutorialController extends Controller
                     break;
                 case 'delete':
                     // Hapus gambar-gambar sebelum hapus tutorial
-                    $kelolaTutorials = KelolaTutorial::whereIn('id', $ids)->get();
-                    foreach ($kelolaTutorials as $tutorial) {
-                        if ($tutorial->content_blocks) {
-                            $contentBlocks = json_decode($tutorial->content_blocks, true);
-                            foreach ($contentBlocks as $block) {
-                                if (isset($block['image']) && file_exists(public_path($block['image']))) {
-                                    unlink(public_path($block['image']));
-                                }
+                    $tutorials = KelolaTutorial::whereIn('id', $ids)->get();
+                    foreach ($tutorials as $tutorial) {
+                        foreach ($tutorial->getContentBlocks() as $block) {
+                            if (isset($block['image']) && File::exists(public_path($block['image']))) {
+                                File::delete(public_path($block['image']));
                             }
                         }
                     }
