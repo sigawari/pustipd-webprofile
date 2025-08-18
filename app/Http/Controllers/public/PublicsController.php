@@ -184,14 +184,16 @@ class PublicsController extends Controller
             });
         }
     
-        $newsList = $query->orderBy('publish_date', 'desc')->paginate(6)->withQueryString();
+        $newsList = $query->orderBy('publish_date', 'desc')
+                          ->paginate(6)
+                          ->withQueryString();
     
-            return view('public.news', compact('title', 'description', 'keywords', 'newsList', 'search', 'shareText', 'url'));
-        }
+        return view('public.news', compact('title', 'description', 'keywords', 'newsList', 'search', 'shareText', 'url'));
+    }
     
 
     public function newsDetail($slug)
-    {
+    {   
         $news = KelolaBerita::where('status', 'published')
             ->where('slug', $slug)
             ->firstOrFail();
@@ -204,19 +206,61 @@ class PublicsController extends Controller
         return view('public.news-detail', compact('title', 'description', 'keywords', 'news', 'url', 'shareText'));
     }
 
-    
-    public function pengumuman()
+    public function pengumuman(Request $request)
     {
         $title = 'Pengumuman';
         $description = 'Semua pengumuman terbaru PUSTIPD UIN Raden Fatah Palembang';
         $keywords = 'pengumuman, announcements, pustipd';
-    
-        $announcements = KelolaPengumuman::where('status', 'published')
-            ->orderBy('date', 'desc')
-            ->paginate(8);
-    
-        return view('public.announcements', compact('title', 'description', 'keywords', 'announcements'));
+
+        $search = $request->query('search', '');
+        $shareText = "Baca Pengumuman Terbaru dari PUSTIPD UIN RF Palembang - Pengumuman Terbaru";
+        $url = url()->current();
+
+        $query = KelolaPengumuman::where('status', 'published');
+
+        // Search by title or content
+        if ($search) {
+            $query->where(function($q) use ($search){
+                $q->where('title', 'like', "%{$search}%")
+                ->orWhere('content', 'like', "%{$search}%")
+                ->orWhere('category', 'like', "%{$search}%");
+            });
+        }
+
+        // Urutkan berdasarkan prioritas urgency dulu, kemudian tanggal terbaru
+        $announcementsList = $query->orderByRaw("
+                                CASE 
+                                    WHEN urgency = 'penting' THEN 1
+                                    WHEN urgency = 'normal' THEN 2
+                                    ELSE 3
+                                END
+                            ")
+                            ->orderBy('date', 'desc')  // Atau 'created_at' jika pakai timestamp upload
+                            ->paginate(6)
+                            ->withQueryString();
+
+        return view('public.announcements', compact(
+            'title', 'description', 'keywords', 'announcementsList', 'search', 'shareText', 'url'
+        ));
     }
+
+
+    public function announcementsDetail($slug)
+    {
+        $announcement = KelolaPengumuman::where('status', 'published')
+            ->where('slug', $slug)
+            ->firstOrFail();
+    
+        $title = $announcement->title;
+        $description = \Str::limit(strip_tags($announcement->content), 155);
+        $keywords = $announcement->tags ?? 'pengumuman, pustipd';
+        $url = url()->current();
+        $shareText = "Baca Pengumuman dari PUSTIPD UIN RF Palembang - " . $announcement->name . " " . $url;
+    
+        return view('public.announcements-detail', compact(
+            'title', 'description', 'keywords', 'announcement', 'url', 'shareText'
+        ));
+    }    
 
     public function tutorial(){
         $title = 'Tutorial';

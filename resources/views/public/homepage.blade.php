@@ -375,7 +375,7 @@
                                 excerpt="{{ \Illuminate\Support\Str::limit(strip_tags($firstNews->content), 140) }}"
                                 date="{{ $firstNews->publish_date ? \Carbon\Carbon::parse($firstNews->publish_date)->format('d F Y') : '-' }}"
                                 category="{{ ucfirst(str_replace('_', ' ', $firstNews->category)) }}"
-                                link="{{ route('news.detail', $firstNews->slug) }}"
+                                link="{{ route('news-detail', $firstNews->slug) }}"
                                 image="{{ $firstNews->image ? asset('storage/' . $firstNews->image) : asset('assets/img/placeholder/dummy.png') }}" />
                         @endif
 
@@ -384,7 +384,7 @@
                                 <div class="font-bold text-gray-900 mb-1 text-sm truncate">{{ $news->name }}</div>
                                 <div class="text-gray-600 text-xs mb-2 line-clamp-2">
                                     {{ \Illuminate\Support\Str::limit(strip_tags($news->content), 100) }}</div>
-                                <a href="{{ route('news.detail', $news->slug) }}"
+                                <a href="{{ route('news-detail', $news->slug) }}"
                                     class="text-blue-600 font-semibold text-xs flex items-center">
                                     Selanjutnya
                                     <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor"
@@ -404,7 +404,7 @@
                                 excerpt="{{ \Illuminate\Support\Str::limit(strip_tags($news->content), 140) }}"
                                 date="{{ $news->publish_date ? \Carbon\Carbon::parse($news->publish_date)->format('d F Y') : '-' }}"
                                 category="{{ ucfirst(str_replace('_', ' ', $news->category)) }}"
-                                link="{{ route('news.detail', $news->slug) }}"
+                                link="{{ route('news-detail', $news->slug) }}"
                                 image="{{ $news->image ? asset('storage/' . $news->image) : asset('assets/img/placeholder/dummy.png') }}" />
                         @empty
                             <div class="col-span-1 md:col-span-2 lg:col-span-3 text-center py-10 text-gray-600">

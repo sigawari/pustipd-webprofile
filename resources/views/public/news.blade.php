@@ -41,7 +41,7 @@
                             excerpt="{{ \Illuminate\Support\Str::limit(strip_tags($news->content), 140) }}"
                             date="{{ date('d F Y', strtotime($news->publish_date)) }}"
                             category="{{ ucfirst(str_replace('_', ' ', $news->category)) }}"
-                            link="{{ route('news.detail', $news->slug) }}"
+                            link="{{ route('news-detail', $news->slug) }}"
                             image="{{ $news->image ? asset('storage/' . $news->image) : asset('assets/img/placeholder/dummy.png') }}" />
                     @empty
                         <div class="col-span-1 md:col-span-2 lg:col-span-3 text-center py-10 text-gray-600">

@@ -90,12 +90,13 @@ class KelolaPengumuman extends Model
     }
 
     /**
-     * Scope untuk pengumuman urgent (mendesak/darurat).
+     * Scope untuk pengumuman urgent (normal/penting).
      */
     public function scopeUrgent(Builder $query): Builder
     {
-        return $query->whereIn('urgency', ['mendesak', 'darurat']);
+        return $query->whereIn('urgency', ['penting']);
     }
+
 
     /**
      * Scope untuk search functionality.
@@ -231,8 +232,9 @@ class KelolaPengumuman extends Model
      */
     public function isUrgent(): bool
     {
-        return in_array($this->urgency, ['mendesak', 'darurat']);
+        return in_array($this->urgency, ['penting']);
     }
+
 
     /**
      * Check apakah pengumuman sudah expired.
@@ -306,8 +308,6 @@ class KelolaPengumuman extends Model
         return [
             'normal' => 'Normal',
             'penting' => 'Penting',
-            'mendesak' => 'Mendesak',
-            'darurat' => 'Darurat'
         ];
     }
 

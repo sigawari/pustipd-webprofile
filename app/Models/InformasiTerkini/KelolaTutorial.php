@@ -90,14 +90,6 @@ class KelolaTutorial extends Model
     }
 
     /**
-     * Scope untuk tutorial urgent (mendesak/darurat).
-     */
-    public function scopeUrgent(Builder $query): Builder
-    {
-        return $query->whereIn('urgency', ['mendesak', 'darurat']);
-    }
-
-    /**
      * Scope untuk search functionality.
      */
     public function scopeSearch(Builder $query, string $search): Builder
@@ -227,22 +219,6 @@ class KelolaTutorial extends Model
     // ================================
 
     /**
-     * Check apakah tutorial urgent.
-     */
-    public function isUrgent(): bool
-    {
-        return in_array($this->urgency, ['mendesak', 'darurat']);
-    }
-
-    /**
-     * Check apakah tutorial sudah expired.
-     */
-    public function isExpired(): bool
-    {
-        return $this->valid_until && $this->valid_until->isPast();
-    }
-
-    /**
      * Check apakah tutorial masih valid.
      */
     public function isValid(): bool
@@ -301,15 +277,6 @@ class KelolaTutorial extends Model
     /**
      * Get available urgencies.
      */
-    public static function getUrgencies(): array
-    {
-        return [
-            'normal' => 'Normal',
-            'penting' => 'Penting',
-            'mendesak' => 'Mendesak',
-            'darurat' => 'Darurat'
-        ];
-    }
 
     /**
      * Get available statuses.
@@ -329,20 +296,11 @@ class KelolaTutorial extends Model
     {
         return static::published()
                     ->valid()
-                    ->orderByDesc('urgency')
                     ->orderByDesc('date');
     }
 
     /**
      * Get tutorial urgent untuk alert.
      */
-    public static function getUrgentAnnouncements()
-    {
-        return static::published()
-                    ->valid()
-                    ->urgent()
-                    ->orderByDesc('date')
-                    ->take(5);
-    }
 }
 

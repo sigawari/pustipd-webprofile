@@ -23,8 +23,8 @@
         </div>
 
         <!-- Form -->
-        <form id="addForm" method="POST"
-            action="{{ route('admin.informasi-terkini.kelola-pengumuman.store') }}" class="space-y-4">
+        <form id="addForm" method="POST" action="{{ route('admin.informasi-terkini.kelola-pengumuman.store') }}"
+            class="space-y-4">
             @csrf
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -115,7 +115,7 @@
                     </label>
 
                     {{-- Editor Quill --}}
-                    <div id="editor" style="height: 200px;"></div>
+                    <div class="editor" style="height: 200px;"></div>
 
                     {{-- Hidden textarea untuk form submit --}}
                     <textarea id="content" name="content" class="hidden" required></textarea>

@@ -151,6 +151,22 @@ class KelolaPengumumanController extends Controller
             ->with('success', 'Pengumuman berhasil dihapus!');
     }
 
+    public function show($id){
+        $announcements = KelolaPengumuman::where('status', 'published')->findOrFail($id);
+
+        $title = $announcements->name;
+        $description = $announcements->description ?? '';
+        $keywords = 'berita, news, pustipd';
+
+        $url = url()->current(); // Dapatkan link halaman detail
+        $shareText = "Baca Pengumuman Terbaru dari PUSTIPD UIN RF Palembang - " . $title . " " . $url;
+
+        return view('public.announcements-detail', compact(
+            'title', 'description', 'keywords',
+            'announcements', 'url', 'shareText'
+        ));
+    }
+
     // ✅ ADDED: Bulk action method
     public function bulk(Request $request)
     {

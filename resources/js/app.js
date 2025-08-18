@@ -32,18 +32,20 @@ initShareButtons();
 // import "./components/public/search";
 // import "./components/public/pagination";
 // import "./components/public/modal-public";
-
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
 
 document.addEventListener("DOMContentLoaded", function () {
-    const quill = new Quill("#editor", {
-        theme: "snow",
-        placeholder: "Tulis isi konten di sini...",
-    });
+    document.querySelectorAll(".editor").forEach((editorElem) => {
+        const quill = new Quill(editorElem, {
+            theme: "snow",
+            placeholder: "Tulis isi konten di sini...",
+        });
 
-    // Sync ke textarea hidden
-    quill.on("text-change", function () {
-        document.querySelector("#content").value = quill.root.innerHTML;
+        // Sinkronisasi ke textarea terkait (diasumsikan textarea adalah sibling setelah editor)
+        const textarea = editorElem.nextElementSibling;
+        quill.on("text-change", function () {
+            textarea.value = quill.root.innerHTML;
+        });
     });
 });

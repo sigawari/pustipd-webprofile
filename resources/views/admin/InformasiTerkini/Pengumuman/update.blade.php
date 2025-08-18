@@ -39,8 +39,7 @@
                     <!-- Slug -->
                     <div>
                         <label for="slug" class="block text-sm font-medium text-gray-700 mb-2">Slug URL</label>
-                        <input type="text" id="slug" name="slug"
-                            value="{{ old('slug', $pengumuman->slug) }}"
+                        <input type="text" id="slug" name="slug" value="{{ old('slug', $pengumuman->slug) }}"
                             readonly
                             class="w-full px-3 py-2 border border-gray-200 rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500">
                     </div>
@@ -53,11 +52,21 @@
                         <select id="category" name="category" required
                             class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500">
                             <option value="">Pilih Kategori</option>
-                            <option value="maintenance" {{ old('category', $pengumuman->category) == 'maintenance' ? 'selected' : '' }}>🔧 Maintenance</option>
-                            <option value="layanan" {{ old('category', $pengumuman->category) == 'layanan' ? 'selected' : '' }}>💡 Layanan IT</option>
-                            <option value="infrastruktur" {{ old('category', $pengumuman->category) == 'infrastruktur' ? 'selected' : '' }}>🌐 Infrastruktur</option>
-                            <option value="administrasi" {{ old('category', $pengumuman->category) == 'administrasi' ? 'selected' : '' }}>📋 Administrasi</option>
-                            <option value="darurat" {{ old('category', $pengumuman->category) == 'darurat' ? 'selected' : '' }}>🚨 Darurat</option>
+                            <option value="maintenance"
+                                {{ old('category', $pengumuman->category) == 'maintenance' ? 'selected' : '' }}>🔧
+                                Maintenance</option>
+                            <option value="layanan"
+                                {{ old('category', $pengumuman->category) == 'layanan' ? 'selected' : '' }}>💡 Layanan
+                                IT</option>
+                            <option value="infrastruktur"
+                                {{ old('category', $pengumuman->category) == 'infrastruktur' ? 'selected' : '' }}>🌐
+                                Infrastruktur</option>
+                            <option value="administrasi"
+                                {{ old('category', $pengumuman->category) == 'administrasi' ? 'selected' : '' }}>📋
+                                Administrasi</option>
+                            <option value="darurat"
+                                {{ old('category', $pengumuman->category) == 'darurat' ? 'selected' : '' }}>🚨 Darurat
+                            </option>
                         </select>
                     </div>
 
@@ -68,8 +77,12 @@
                         </label>
                         <select id="urgency" name="urgency" required
                             class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500">
-                            <option value="normal" {{ old('urgency', $pengumuman->urgency) == 'normal' ? 'selected' : '' }}>📢 Normal</option>
-                            <option value="penting" {{ old('urgency', $pengumuman->urgency) == 'penting' ? 'selected' : '' }}>⚠️ Penting</option>
+                            <option value="normal"
+                                {{ old('urgency', $pengumuman->urgency) == 'normal' ? 'selected' : '' }}>📢 Normal
+                            </option>
+                            <option value="penting"
+                                {{ old('urgency', $pengumuman->urgency) == 'penting' ? 'selected' : '' }}>⚠️ Penting
+                            </option>
                         </select>
                     </div>
 
@@ -101,9 +114,14 @@
                         </label>
                         <select id="status" name="status" required
                             class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500">
-                            <option value="draft" {{ old('status', $pengumuman->status) == 'draft' ? 'selected' : '' }}>📝 Draft</option>
-                            <option value="published" {{ old('status', $pengumuman->status) == 'published' ? 'selected' : '' }}>✅ Published</option>
-                            <option value="archived" {{ old('status', $pengumuman->status) == 'archived' ? 'selected' : '' }}>📦 Archived</option>
+                            <option value="draft"
+                                {{ old('status', $pengumuman->status) == 'draft' ? 'selected' : '' }}>📝 Draft</option>
+                            <option value="published"
+                                {{ old('status', $pengumuman->status) == 'published' ? 'selected' : '' }}>✅ Published
+                            </option>
+                            <option value="archived"
+                                {{ old('status', $pengumuman->status) == 'archived' ? 'selected' : '' }}>📦 Archived
+                            </option>
                         </select>
                     </div>
                 </div>
@@ -116,7 +134,7 @@
                         </label>
 
                         {{-- Editor Quill --}}
-                        <div id="editor" style="height: 200px;">{!! old('content', $pengumuman->content) !!}</div>
+                        <div class="editor" style="height: 200px;">{!! old('content', $pengumuman->content) !!}</div>
 
                         {{-- Hidden textarea untuk submit --}}
                         <textarea id="content" name="content" class="hidden" required>{!! old('content', $pengumuman->content) !!}</textarea>
@@ -145,7 +163,8 @@
             </form>
 
             <!-- Tombol X -->
-            <button onclick="closeUpdateModal('{{ $pengumuman->id }}')" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600">
+            <button onclick="closeUpdateModal('{{ $pengumuman->id }}')"
+                class="absolute top-3 right-3 text-gray-400 hover:text-gray-600">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>

@@ -228,7 +228,7 @@
             </div>
         </div>
 
-        <!-- ✅ ADOPSI: Pagination yang lebih sederhana dan responsif -->
+        <!-- Pagination yang lebih sederhana dan responsif -->
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4 pt-4">
             <!-- Info jumlah data -->
             <div class="text-sm text-gray-500 text-center sm:text-left">
