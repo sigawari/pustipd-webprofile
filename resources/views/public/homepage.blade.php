@@ -226,8 +226,6 @@
         </div>
     </section>
 
-
-
     <!-- Layanan Section -->
     <section id="layanan" class="py-20 bg-[#E6F6FF]">
         <div class="max-w-7xl mx-auto px-6">
@@ -240,30 +238,19 @@
             <!-- Carousel Container -->
             <div class="relative isolate">
                 <div class="overflow-hidden relative" id="servicesCarousel">
-                    <div class="flex transition-transform duration-200 ease-in-out relative z-10" id="carouselWrapper">
-                        <x-service-card title="Pengembangan Web"
-                            description="Membangun website modern dengan teknologi terdepan seperti Laravel dan Tailwind CSS"
-                            link="/layanan/web-development" />
-
-                        <x-service-card title="Konsultasi IT"
-                            description="Memberikan saran strategis untuk transformasi digital perusahaan Anda dengan pendekatan terpersonalisasi"
-                            link="/layanan/konsultasi-it" />
-
-                        <x-service-card title="UI/UX Design"
-                            description="Menciptakan pengalaman pengguna yang intuitif dan menarik dengan desain yang user-centered"
-                            link="/layanan/ui-ux-design" />
-
-                        <x-service-card title="Mobile Development"
-                            description="Pengembangan aplikasi mobile native dan cross-platform untuk iOS dan Android"
-                            link="/layanan/mobile-development" />
-
-                        <x-service-card title="Cloud Solutions"
-                            description="Implementasi dan migrasi ke cloud infrastructure dengan keamanan dan skalabilitas tinggi"
-                            link="/layanan/cloud-solutions" />
-
-                        <x-service-card title="Data Analytics"
-                            description="Analisis data mendalam untuk insight bisnis dan pengambilan keputusan yang lebih baik"
-                            link="/layanan/data-analytics" />
+                    <!-- Ganti flex dengan justify-center untuk center alignment -->
+                    <div class="flex justify-center transition-transform duration-200 ease-in-out relative z-10"
+                        id="carouselWrapper">
+                        @if ($services && $services->count() > 0)
+                            @foreach ($services as $service)
+                                <x-service-card :title="$service->name" :description="$service->description" />
+                            @endforeach
+                        @else
+                            <!-- Fallback jika tidak ada data -->
+                            <div class="w-full text-center py-12">
+                                <p class="text-gray-500">Belum ada layanan yang tersedia.</p>
+                            </div>
+                        @endif
                     </div>
                 </div>
 
@@ -296,12 +283,13 @@
                 <div class="mt-6 relative z-0">
                     <div class="w-full bg-gray-200 rounded-full h-1">
                         <div class="bg-primary h-1 rounded-full transition-all duration-300 ease-out" id="progressBar"
-                            style="width: 16.67%"></div>
+                            style="width: {{ $services->count() > 0 ? 100 / $services->count() : 100 }}%"></div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+
 
     <section id="informasi" class="py-20 bg-primary">
         <div class="container mx-auto px-6">

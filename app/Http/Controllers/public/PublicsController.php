@@ -10,6 +10,8 @@ use App\Models\Dokumen\Sop;
 use Illuminate\Support\Str;
 use App\Models\Announcement;
 use Illuminate\Http\Request;
+use App\Models\Beranda\Mitra;
+use App\Models\Beranda\Layanan;
 use App\Models\Dokumen\Panduan;
 use App\Models\Dokumen\Regulasi;
 use App\Models\Dokumen\Ketetapan;
@@ -43,6 +45,14 @@ class PublicsController extends Controller
         $achievements = Pencapaian::published()
                                 ->orderBy('created_at', 'desc')
                                 ->get();
+        
+        $services = Layanan::published()
+                           ->orderBy('created_at', 'desc')
+                           ->get();
+
+        $partners = Mitra::published()
+                           ->orderBy('created_at', 'desc')
+                           ->get();
 
         // Query berita dengan pagination
         $query = KelolaBerita::where('status', 'published');
@@ -59,7 +69,7 @@ class PublicsController extends Controller
                                             ->get();
 
         return view('public.homepage', compact(
-            'title', 'description', 'keywords', 'profil', 'newsList', 'announcementsList', 'achievements'
+            'title', 'description', 'keywords', 'profil', 'newsList', 'announcementsList', 'achievements', 'services', 'partners'
         ));
     }
 
