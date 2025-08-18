@@ -1,11 +1,13 @@
 <?php
+
+use Illuminate\Foundation\Http\FormRequest;
 // app/Http/Requests/StoreKelolaPengumumanRequest.php
 
 class StoreKelolaPengumumanRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true; // ✅ FIXED: true untuk allow
+        return true; 
     }
 
     public function rules(): array

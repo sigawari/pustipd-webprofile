@@ -102,7 +102,7 @@ class PublicsController extends Controller
         $description = 'Struktur organisasi PUSTIPD UIN Raden Fatah Palembang';
         $keywords = 'struktur, organisasi, pustipd';
         
-        // ✅ Data untuk tree structure
+        // Data untuk tree structure
         $strukturData = StrukturOrganisasi::getTreeStructure();
         
         return view('public.structure', compact(

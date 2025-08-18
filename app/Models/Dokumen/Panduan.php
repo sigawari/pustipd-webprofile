@@ -30,7 +30,7 @@ class Panduan extends Model
         return $this->file_path && Storage::disk('public')->exists($this->file_path);
     }
 
-    // ✅ TAMBAHKAN: Accessor untuk formatted file size
+    // Accessor untuk formatted file size
     public function getFormattedFileSizeAttribute()
     {
         if (!$this->file_size) return '-';
@@ -45,7 +45,7 @@ class Panduan extends Model
         return round($bytes, 2) . ' ' . $units[$i];
     }
 
-    // ✅ TAMBAHKAN: Accessor untuk download URL
+    // Accessor untuk download URL
     public function getDownloadUrlAttribute()
     {
         if (!$this->file_path || !$this->file_exists) {
@@ -55,13 +55,13 @@ class Panduan extends Model
         return route('panduan.download', $this->id);
     }
 
-    // ✅ TAMBAHKAN: Scope untuk published only
+    // Scope untuk published only
     public function scopePublished($query)
     {
         return $query->where('status', 'published');
     }
 
-    // ✅ TAMBAHKAN: Scope untuk search
+    // Scope untuk search
     public function scopeSearch($query, $search)
     {
         return $query->where(function($q) use ($search) {
@@ -71,7 +71,7 @@ class Panduan extends Model
     }
     public function download(Panduan $panduan)
     {
-         // ✅ PERBAIKAN: Cek status published untuk akses public
+         // Cek status published untuk akses public
         if (!\Illuminate\Support\Facades\Auth::check()) {
             // Jika user tidak login (akses public), cek status published
             if ($panduan->status !== 'published') {
@@ -87,7 +87,7 @@ class Panduan extends Model
         $filePath = Storage::disk('public')->path($panduan->file_path);
         $downloadName = $panduan->original_filename ?? ($panduan->title . '.' . $panduan->file_type);
         
-        // ✅ TAMBAHKAN: Log download activity (optional)
+        // Log download activity (optional)
         Log::info('File downloaded', [
             'Panduan_id' => $panduan->id,
             'title' => $panduan->title,

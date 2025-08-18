@@ -4,7 +4,7 @@
 
     <!-- Hero Section -->
     <section class="py-16 mt-12 bg-primary" id="applayanan">
-        <!-- ✅ UPDATED: Container dengan margin yang lebih dalam untuk desktop -->
+        <!-- Container dengan margin yang lebih dalam untuk desktop -->
         <div class="container mx-auto px-4 sm:px-8 lg:px-16 xl:px-24">
             <!-- Header Section -->
             <div class="text-center mb-12">
@@ -100,7 +100,6 @@
                         @php
                             $iconData = $getCategoryIcon($appLayanan->category);
                         @endphp
-                        <!-- ✅ SIDE-BY-SIDE LAYOUT CARD DESIGN -->
                         <div class="group relative">
                             <!-- Card Background with Enhanced Shadow -->
                             <div

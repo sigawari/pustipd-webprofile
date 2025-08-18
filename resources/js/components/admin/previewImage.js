@@ -27,11 +27,13 @@ function previewImage(input) {
 
 function previewEditImage(event, id) {
     const file = event.target.files[0];
-    const previewContainer = document.getElementById(`currentImagePreview-${id}`);
+    const previewContainer = document.getElementById(
+        `currentImagePreview-${id}`
+    );
 
     if (file) {
         const reader = new FileReader();
-        reader.onload = function(e) {
+        reader.onload = function (e) {
             previewContainer.innerHTML = `<img src="${e.target.result}" 
                                               alt="Preview" 
                                               class="w-32 h-32 object-cover rounded">`;
@@ -42,7 +44,5 @@ function previewEditImage(event, id) {
     }
 }
 
-
-// ✅ Biar bisa dipanggil dari inline HTML
 window.previewImage = previewImage;
 window.previewEditImage = previewEditImage;

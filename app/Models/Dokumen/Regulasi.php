@@ -30,7 +30,7 @@ class Regulasi extends Model
         return $this->file_path && Storage::disk('public')->exists($this->file_path);
     }
 
-    // ✅ TAMBAHKAN: Accessor untuk formatted file size
+    // Accessor untuk formatted file size
     public function getFormattedFileSizeAttribute()
     {
         if (!$this->file_size) return '-';
@@ -45,7 +45,7 @@ class Regulasi extends Model
         return round($bytes, 2) . ' ' . $units[$i];
     }
 
-    // ✅ TAMBAHKAN: Accessor untuk download URL
+    // Accessor untuk download URL
     public function getDownloadUrlAttribute()
     {
         if (!$this->file_path || !$this->file_exists) {
@@ -55,13 +55,13 @@ class Regulasi extends Model
         return route('regulasi.download', $this->id);
     }
 
-    // ✅ TAMBAHKAN: Scope untuk published only
+    // Scope untuk published only
     public function scopePublished($query)
     {
         return $query->where('status', 'published');
     }
 
-    // ✅ TAMBAHKAN: Scope untuk search
+    // Scope untuk search
     public function scopeSearch($query, $search)
     {
         return $query->where(function($q) use ($search) {
@@ -71,7 +71,7 @@ class Regulasi extends Model
     }
     public function download(Regulasi $regulasi)
     {
-         // ✅ PERBAIKAN: Cek status published untuk akses public
+         // Cek status published untuk akses public
         if (!\Illuminate\Support\Facades\Auth::check()) {
             // Jika user tidak login (akses public), cek status published
             if ($regulasi->status !== 'published') {
@@ -87,7 +87,7 @@ class Regulasi extends Model
         $filePath = Storage::disk('public')->path($regulasi->file_path);
         $downloadName = $regulasi->original_filename ?? ($regulasi->title . '.' . $regulasi->file_type);
         
-        // ✅ TAMBAHKAN: Log download activity (optional)
+        // Log download activity (optional)
         Log::info('File downloaded', [
             'Regulasi_id' => $regulasi->id,
             'title' => $regulasi->title,

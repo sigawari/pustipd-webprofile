@@ -86,7 +86,7 @@
                             <!-- Table Header -->
                             <thead>
                                 <tr class="bg-secondary border-b border-blue-600">
-                                    <!-- ✅ FIXED: Header Checkbox with Proper Event Handler -->
+                                    <!-- Header Checkbox with Proper Event Handler -->
                                     <th class="px-4 py-4 text-center w-12">
                                         <input type="checkbox" id="header-checkbox"
                                             class="rounded border-gray-300 text-blue-600 focus:ring-blue-500 focus:border-blue-500 cursor-pointer"
@@ -119,7 +119,7 @@
                             <tbody class="bg-white divide-y divide-gray-200">
                                 @forelse($panduans as $index => $panduan)
                                     <tr class="hover:bg-gray-50 transition-colors duration-150">
-                                        <!-- ✅ FIXED: Body Checkbox with Proper Class and Event -->
+                                        <!-- Body Checkbox with Proper Class and Event -->
                                         <td class="px-4 py-4 text-center">
                                             @if ($panduan->file_path && file_exists(storage_path('app/public/' . $panduan->file_path)))
                                                 <input type="checkbox"
@@ -231,7 +231,7 @@
                                 <!-- Mobile Table Header -->
                                 <thead>
                                     <tr class="bg-secondary border-b border-blue-600">
-                                        <!-- ✅ FIXED: Unique ID untuk mobile header checkbox -->
+                                        <!-- Unique ID untuk mobile header checkbox -->
                                         <th class="px-3 py-3 text-center w-10">
                                             <input type="checkbox" id="mobile-header-checkbox"
                                                 class="header-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500 focus:border-blue-500 cursor-pointer"
@@ -261,7 +261,7 @@
                                 <tbody class="bg-white divide-y divide-gray-200">
                                     @forelse($panduans as $index => $panduan)
                                         <tr class="hover:bg-gray-50 transition-colors duration-150">
-                                            <!-- ✅ FIXED: Checkbox dengan proper styling dan event handling -->
+                                            <!-- Checkbox dengan proper styling dan event handling -->
                                             <td class="px-3 py-3 text-center" style="position: relative;">
                                                 @if ($panduan->file_path && file_exists(storage_path('app/public/' . $panduan->file_path)))
                                                     <input type="checkbox"
@@ -439,7 +439,7 @@
         </div>
     </section>
 
-    <!-- ✅ FIXED: Bulk Download Form -->
+    <!-- Bulk Download Form -->
     <form id="bulk-download-form" method="POST" action="{{ route('public.panduan.bulk-download') }}"
         style="display: none;">
         @csrf
@@ -448,7 +448,7 @@
 </x-public.layouts>
 
 
-<!-- ✅ FIXED: Updated Mobile Table with Proper JavaScript Integration -->
+<!-- Updated Mobile Table with Proper JavaScript Integration -->
 <div class="lg:hidden">
     <div class="bg-white rounded-xl border border-gray-200 shadow-lg overflow-hidden">
         <div class="overflow-x-auto">
@@ -456,7 +456,7 @@
                 <!-- Mobile Table Header -->
                 <thead>
                     <tr class="bg-secondary border-b border-blue-600">
-                        <!-- ✅ FIXED: Unique ID untuk mobile header checkbox -->
+                        <!-- Unique ID untuk mobile header checkbox -->
                         <th class="px-3 py-3 text-center w-10">
                             <input type="checkbox" id="mobile-header-checkbox"
                                 class="header-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500 focus:border-blue-500 cursor-pointer"
@@ -484,7 +484,7 @@
                 <tbody class="bg-white divide-y divide-gray-200">
                     @forelse($panduans as $index => $panduan)
                         <tr class="hover:bg-gray-50 transition-colors duration-150">
-                            <!-- ✅ FIXED: Checkbox dengan proper styling dan event handling -->
+                            <!-- Checkbox dengan proper styling dan event handling -->
                             <td class="px-3 py-3 text-center" style="position: relative;">
                                 @if ($panduan->file_path && file_exists(storage_path('app/public/' . $panduan->file_path)))
                                     <input type="checkbox"

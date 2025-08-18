@@ -46,7 +46,7 @@ class AppLayananController extends Controller
             $appLayananQuery->where('status', $filter);
         }
 
-        // ✅ SIMPLIFIED: Sorting berdasarkan created_at (terbaru dulu)
+        // SIMPLIFIED: Sorting berdasarkan created_at (terbaru dulu)
         $appLayananQuery->orderBy('created_at', 'desc');
 
         // Pagination

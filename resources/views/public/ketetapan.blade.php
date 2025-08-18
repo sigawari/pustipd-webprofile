@@ -18,7 +18,7 @@
                 @endif
             </div>
 
-            <!-- ✅ FIXED: Search & Bulk Actions Bar - SOLID WHITE BACKGROUND -->
+            <!-- Search & Bulk Actions Bar - SOLID WHITE BACKGROUND -->
             <div class="max-w-6xl mx-auto mb-8">
                 <div class="bg-white rounded-xl p-4 lg:p-6 border border-gray-200 shadow-lg">
                     <div class="flex flex-col space-y-4 lg:space-y-0 lg:flex-row lg:items-center lg:justify-between">
@@ -86,7 +86,7 @@
                             <!-- Table Header -->
                             <thead>
                                 <tr class="bg-secondary border-b border-blue-600">
-                                    <!-- ✅ FIXED: Header Checkbox with Proper Event Handler -->
+                                    <!-- Header Checkbox with Proper Event Handler -->
                                     <th class="px-4 py-4 text-center w-12">
                                         <input type="checkbox" id="header-checkbox"
                                             class="rounded border-gray-300 text-blue-600 focus:ring-blue-500 focus:border-blue-500 cursor-pointer"
@@ -119,7 +119,7 @@
                             <tbody class="bg-white divide-y divide-gray-200">
                                 @forelse($ketetapans as $index => $ketetapan)
                                     <tr class="hover:bg-gray-50 transition-colors duration-150">
-                                        <!-- ✅ FIXED: Body Checkbox with Proper Class and Event -->
+                                        <!-- Body Checkbox with Proper Class and Event -->
                                         <td class="px-4 py-4 text-center">
                                             @if ($ketetapan->file_path && file_exists(storage_path('app/public/' . $ketetapan->file_path)))
                                                 <input type="checkbox"
@@ -445,7 +445,7 @@
         </div>
     </section>
 
-    <!-- ✅ FIXED: Bulk Download Form -->
+    <!-- Bulk Download Form -->
     <form id="bulk-download-form" method="POST" action="{{ route('public.ketetapan.bulk-download') }}"
         style="display: none;">
         @csrf

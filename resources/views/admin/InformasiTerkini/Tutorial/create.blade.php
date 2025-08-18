@@ -96,7 +96,6 @@
                 </div>
             </div>
 
-
             <!-- Content Builder Section -->
             <div class="bg-blue-50 p-4 rounded-lg">
                 <h3 class="text-sm font-medium text-gray-700 mb-3 flex items-center">

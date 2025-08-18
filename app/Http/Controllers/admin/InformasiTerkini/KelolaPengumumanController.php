@@ -20,14 +20,14 @@ class KelolaPengumumanController extends Controller
         // Query builder awal
         $kelolaPengumumanQuery = KelolaPengumuman::query();
 
-        // ✅ FIXED: Search dengan field yang benar
+        // Search dengan field yang benar
         if ($search) {
             $keywords = preg_split('/\s+/', trim($search));
             $kelolaPengumumanQuery->where(function ($q) use ($keywords) {
                 foreach ($keywords as $word) {
                     $q->where(function ($q) use ($word) {
-                        $q->where('title', 'like', "%{$word}%")          // ✅ FIXED: title bukan name
-                          ->orWhere('content', 'like', "%{$word}%")       // ✅ FIXED: content bukan description
+                        $q->where('title', 'like', "%{$word}%")          // title bukan name
+                          ->orWhere('content', 'like', "%{$word}%")       // content bukan description
                           ->orWhere('category', 'like', "%{$word}%");
                     });
                 }
@@ -167,7 +167,7 @@ class KelolaPengumumanController extends Controller
         ));
     }
 
-    // ✅ ADDED: Bulk action method
+    // ADDED: Bulk action method
     public function bulk(Request $request)
     {
         $request->validate([

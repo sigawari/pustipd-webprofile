@@ -13,12 +13,12 @@
                 Edit {{ $title }}
             </h2>
 
-            {{-- ✅ FIXED: Route dan method yang benar --}}
+            {{-- Route dan method yang benar --}}
             <form method="POST" action="{{ route('admin.app-layanan.update', $appLayanan->id) }}">
                 @csrf
                 @method('PUT')
 
-                {{-- ✅ FIXED: Nama Aplikasi --}}
+                {{-- Nama Aplikasi --}}
                 <div class="mb-4">
                     <label for="appname-{{ $appLayanan->id }}" class="block text-sm font-medium text-gray-700 mb-2">
                         Nama Aplikasi <span class="text-red-500">*</span>
@@ -31,7 +31,7 @@
                     @enderror
                 </div>
 
-                {{-- ✅ FIXED: Kategori --}}
+                {{-- Kategori --}}
                 <div class="mb-4">
                     <label for="category-{{ $appLayanan->id }}" class="block text-sm font-medium text-gray-700 mb-2">
                         Kategori <span class="text-red-500">*</span>
@@ -61,7 +61,7 @@
                     @enderror
                 </div>
 
-                {{-- ✅ FIXED: Deskripsi --}}
+                {{-- Deskripsi --}}
                 <div class="mb-4">
                     <label for="description-{{ $appLayanan->id }}"
                         class="block text-sm font-medium text-gray-700 mb-2">
@@ -75,7 +75,7 @@
                     @enderror
                 </div>
 
-                {{-- ✅ FIXED: Link Aplikasi --}}
+                {{-- Link Aplikasi --}}
                 <div class="mb-4">
                     <label for="applink-{{ $appLayanan->id }}" class="block text-sm font-medium text-gray-700 mb-2">
                         Link Aplikasi
@@ -104,17 +104,13 @@
                             {{ old('status', $appLayanan->status) == 'published' ? 'selected' : '' }}>
                             ✅ Published - Tampil di halaman publik
                         </option>
-                        <option value="archived"
-                            {{ old('status', $appLayanan->status) == 'archived' ? 'selected' : '' }}>
-                            📦 Archived - Diarsipkan
-                        </option>
                     </select>
                     @error('status')
                         <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                     @enderror
                 </div>
 
-                {{-- ✅ IMPROVED: Status Info --}}
+                {{-- Status Info --}}
                 <div class="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
                     <div class="flex items-start">
                         <svg class="w-5 h-5 text-blue-600 mr-2 mt-0.5" fill="none" stroke="currentColor"

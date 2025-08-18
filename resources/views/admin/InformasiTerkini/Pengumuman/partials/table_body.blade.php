@@ -12,7 +12,6 @@
             {{ $kelolaPengumumans->firstItem() + $key }}
         </td>
 
-        <!-- ✅ FIXED: Kategori PUSTIPD -->
         <td class="px-6 py-4 whitespace-nowrap">
             @php
                 $pustipd_categories = [
@@ -82,7 +81,6 @@
             </span>
         </td>
 
-        <!-- ✅ FIXED: date bukan publish_date -->
         <td class="px-6 py-4 whitespace-nowrap">
             <div class="text-sm font-medium text-gray-900 max-w-xs">
                 {{ \Carbon\Carbon::parse($pengumuman->date)->format('d M Y') }}

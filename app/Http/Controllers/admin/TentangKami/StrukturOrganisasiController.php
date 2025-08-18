@@ -11,10 +11,10 @@ class StrukturOrganisasiController extends Controller
     {
         $title = 'Kelola Struktur Organisasi';
         
-        // ✅ Ambil semua data untuk ditampilkan di single page
+        // Ambil semua data untuk ditampilkan di single page
         $allStruktur = StrukturOrganisasi::getAllForManagement();
         
-        // ✅ Group by divisi untuk interface
+        // Group by divisi untuk interface
         $strukturByDivisi = $allStruktur->groupBy('divisi');
         
         return view('admin.TentangKami.Struktur-organisasi.index', compact(
@@ -26,7 +26,7 @@ class StrukturOrganisasiController extends Controller
     {
         $title = 'Tambah Anggota';
         
-        // ✅ Dynamic parent options based on level
+        // Dynamic parent options based on level
         $kepalas = StrukturOrganisasi::kepala()->active()->get();
         $divisis = StrukturOrganisasi::divisi()->active()->get();
         
@@ -49,7 +49,7 @@ class StrukturOrganisasiController extends Controller
 
         $data = $request->only(['nama', 'jabatan', 'level', 'parent_id', 'urutan', 'status']);
 
-        // ✅ Validation logic
+        // Validation logic
         if ($data['level'] === 'kepala' && $data['parent_id']) {
             return back()->withErrors(['parent_id' => 'Kepala tidak boleh memiliki parent']);
         }
@@ -69,7 +69,7 @@ class StrukturOrganisasiController extends Controller
                         ->with('success', 'Anggota berhasil ditambahkan');
     }
 
-    // ✅ Method untuk reorganize structure
+    // Method untuk reorganize structure
     public function reorder(Request $request)
     {
         $request->validate([

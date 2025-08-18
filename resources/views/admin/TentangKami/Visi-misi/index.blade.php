@@ -215,9 +215,9 @@
                 modal.classList.remove('hidden');
                 modal.classList.add('flex');
                 document.body.style.overflow = 'hidden';
-                console.log('✅ Create modal Opened');
+                console.log('Create modal Opened');
             } else {
-                console.error('❌ Create modal not found');
+                console.error('Create modal not found');
             }
         }
 

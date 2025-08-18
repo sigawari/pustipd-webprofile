@@ -14,7 +14,7 @@
         <form method="POST" action="{{ route('admin.app-layanan.store') }}" class="space-y-4">
             @csrf
 
-            {{-- ✅ HIDDEN: Status otomatis draft --}}
+            {{-- HIDDEN: Status otomatis draft --}}
             <input type="hidden" name="status" value="draft">
 
             <!-- Nama Aplikasi -->
@@ -76,7 +76,7 @@
                 @enderror
             </div>
 
-            {{-- ✅ INFO: Status workflow --}}
+            {{-- INFO: Status workflow --}}
             <div class="p-4 bg-blue-50 border border-blue-200 rounded-lg">
                 <div class="flex items-start">
                     <svg class="w-5 h-5 text-blue-600 mr-2 mt-0.5" fill="none" stroke="currentColor"

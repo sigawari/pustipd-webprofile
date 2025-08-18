@@ -17,8 +17,8 @@ class UpdateAppLayananRequest extends FormRequest
         return [
             'appname'     => 'required|string|max:255',
             'description' => 'required|string',
-            'status'      => 'required|in:draft,published,archived',
-            'category'    => 'required|in:akademik,pegawai,pembelajaran,administrasi', // ✅ Fixed syntax
+            'status'      => 'required|in:draft,published',
+            'category'    => 'required|in:akademik,pegawai,pembelajaran,administrasi', 
             'applink'     => 'nullable|url|max:500',
         ];
     }

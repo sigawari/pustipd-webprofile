@@ -44,7 +44,7 @@
             </button>
         </div>
 
-        <!-- ✅ CSRF Token dan Bulk Route -->
+        <!-- CSRF Token dan Bulk Route -->
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <script>
             window.bulkActionRoute = "{{ route('admin.app-layanan.bulk') }}";
@@ -55,7 +55,7 @@
             });
         </script>
 
-        <!-- ✅ ADOPSI: Bulk Actions Bar yang lebih intuitif -->
+        <!-- ADOPSI: Bulk Actions Bar yang lebih intuitif -->
         <div id="bulkActionsBar" class="hidden bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <div class="flex items-center gap-2">
@@ -68,7 +68,7 @@
                     </span>
                 </div>
 
-                <!-- ✅ Actions berdasarkan status yang dipilih -->
+                <!-- Actions berdasarkan status yang dipilih -->
                 <div class="flex flex-col sm:flex-row gap-2" id="bulkActionButtons">
                     <!-- Default actions (untuk draft/published) -->
                     <div id="defaultActions">
@@ -123,7 +123,7 @@
             </div>
         </div>
 
-        <!-- ✅ ADOPSI: Filter dan Search dengan AJAX -->
+        <!-- ADOPSI: Filter dan Search dengan AJAX -->
         <div class="flex flex-col gap-3 mb-4 sm:mb-6">
             <div class="relative">
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -178,7 +178,7 @@
             </div>
         </div>
 
-        <!-- ✅ ADOPSI: Table dengan checkbox dan AJAX loading -->
+        <!-- ADOPSI: Table dengan checkbox dan AJAX loading -->
         <div class="overflow-x-auto -mx-3 sm:mx-0">
             <div class="min-w-full inline-block align-middle">
                 <div class="overflow-hidden border border-gray-200 sm:rounded-lg">
@@ -305,7 +305,7 @@
         </div>
     </div>
 
-    <!-- ✅ ADOPSI: Modal untuk Tambah, Edit, Hapus -->
+    <!-- ADOPSI: Modal untuk Tambah, Edit, Hapus -->
     @include('admin.AppLayanan.create')
     @include('admin.AppLayanan.update')
     @include('admin.AppLayanan.delete')

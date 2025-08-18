@@ -18,7 +18,7 @@ class StrukturOrganisasi extends Model
         'status'
     ];
 
-    // ✅ Method untuk single entry management
+    // Method untuk single entry management
     public static function getAllForManagement()
     {
         return static::orderBy('divisi')->orderBy('urutan_index')->get();

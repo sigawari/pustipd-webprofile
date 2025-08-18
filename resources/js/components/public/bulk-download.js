@@ -50,7 +50,7 @@ class PublicBulkDownload {
         this.updateInfoDisplay();
         this.isInitialized = true;
 
-        console.log("✅ Public Bulk Download System initialized successfully");
+        console.log("Public Bulk Download System initialized successfully");
     }
 
     hasRequiredElements() {
@@ -135,7 +135,7 @@ class PublicBulkDownload {
                 selectedCount.textContent = checkedBoxes.length;
             }
 
-            console.log("✅ Bulk download button shown");
+            console.log("Bulk download button shown");
         } else {
             bulkBtn.classList.add("hidden");
             console.log("❌ Bulk download button hidden");
@@ -244,7 +244,7 @@ class PublicBulkDownload {
         // Submit form
         try {
             form.submit();
-            console.log(`✅ Form submitted successfully for ${this.pageType}`);
+            console.log(`Form submitted successfully for ${this.pageType}`);
 
             // Show success message
             setTimeout(() => {
@@ -302,7 +302,7 @@ class PublicBulkDownload {
             `🔗 Attaching listeners to ${checkboxes.length} checkboxes`
         );
 
-        // ✅ FIXED: Remove all existing listeners first
+        // Remove all existing listeners first
         checkboxes.forEach((checkbox) => {
             if (checkbox._publicBulkHandler) {
                 checkbox.removeEventListener(
@@ -313,7 +313,7 @@ class PublicBulkDownload {
             }
         });
 
-        // ✅ FIXED: Add new listeners with proper binding
+        // Add new listeners with proper binding
         checkboxes.forEach((checkbox, index) => {
             const handler = (event) => {
                 console.log(
@@ -332,7 +332,7 @@ class PublicBulkDownload {
         });
     }
 
-    // ✅ FIXED: Utility methods dengan selector yang benar
+    // Utility methods dengan selector yang benar
     getFileCheckboxes() {
         // Hanya ambil checkbox yang ada di dalam tbody atau mobile cards, TIDAK termasuk header
         const desktopCheckboxes = document.querySelectorAll(
@@ -370,7 +370,7 @@ class PublicBulkDownload {
         );
 
         console.log(
-            `✅ Found ${uniqueChecked.length} checked document checkboxes`
+            `Found ${uniqueChecked.length} checked document checkboxes`
         );
         return uniqueChecked;
     }

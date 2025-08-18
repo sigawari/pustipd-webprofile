@@ -4,14 +4,15 @@
 
 export function addListItem(listType, namePlaceholder, urlPlaceholder) {
     const container = document.getElementById(`${listType}-list`);
-    const emptyMessage = container.querySelector('.border-dashed');
+    const emptyMessage = container.querySelector(".border-dashed");
     if (emptyMessage) emptyMessage.remove();
 
     const index = container.children.length;
-    const nameField = listType === 'universities' ? 'faculty' : 'name';
+    const nameField = listType === "universities" ? "faculty" : "name";
 
-    const newItem = document.createElement('div');
-    newItem.className = 'flex flex-wrap items-center gap-2 p-3 bg-gray-50 rounded-lg';
+    const newItem = document.createElement("div");
+    newItem.className =
+        "flex flex-wrap items-center gap-2 p-3 bg-gray-50 rounded-lg";
     newItem.innerHTML = `
         <input type="text" name="${listType}[${index}][${nameField}]" placeholder="${namePlaceholder}"
             class="flex-1 min-w-[200px] px-3 py-2 border border-gray-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -26,8 +27,7 @@ export function addListItem(listType, namePlaceholder, urlPlaceholder) {
     `;
 
     container.appendChild(newItem);
-    newItem.querySelector('input').focus();
+    newItem.querySelector("input").focus();
 }
 
-// ✅ Biar bisa dipanggil dari inline HTML
 window.addListItem = addListItem;

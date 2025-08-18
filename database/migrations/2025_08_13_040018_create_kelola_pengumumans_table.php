@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('kelola_pengumumans', function (Blueprint $table) {
             $table->id();
             
-            // ✅ Core Content Fields
+            // Core Content Fields
             $table->string('title');
             $table->text('content');
             $table->text('excerpt')->nullable();
             
-            // ✅ PUSTIPD Kategori - sesuai dengan controller
+            // PUSTIPD Kategori - sesuai dengan controller
             $table->enum('category', [
                 'maintenance',      // Maintenance & Gangguan Sistem
                 'layanan',         // Layanan & Fasilitas IT
@@ -28,7 +28,7 @@ return new class extends Migration
                 'darurat'          // Darurat & Penting
             ]);
             
-            // ✅ Tingkat Urgency/Prioritas
+            // Tingkat Urgency/Prioritas
             $table->enum('urgency', [
                 'normal',          // Pengumuman biasa
                 'penting',         // Penting - perlu perhatian

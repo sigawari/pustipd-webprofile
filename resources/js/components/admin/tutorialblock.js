@@ -43,7 +43,7 @@ class TutorialBlockBuilder {
             }
         });
 
-        // ✅ TAMBAH: Event delegation untuk tombol move up/down
+        // Event delegation untuk tombol move up/down
         document.addEventListener("click", (e) => {
             if (e.target.closest(".move-up-btn")) {
                 e.preventDefault();
@@ -61,7 +61,7 @@ class TutorialBlockBuilder {
         });
     }
 
-    // ✅ TAMBAH: Method untuk pindah block ke atas
+    // Method untuk pindah block ke atas
     moveBlockUp(blockId) {
         const block = document.querySelector(`[data-id="${blockId}"]`);
         if (block && block.previousElementSibling) {
@@ -72,7 +72,7 @@ class TutorialBlockBuilder {
         }
     }
 
-    // ✅ TAMBAH: Method untuk pindah block ke bawah
+    // Method untuk pindah block ke bawah
     moveBlockDown(blockId) {
         const block = document.querySelector(`[data-id="${blockId}"]`);
         if (block && block.nextElementSibling) {
@@ -83,7 +83,7 @@ class TutorialBlockBuilder {
         }
     }
 
-    // ✅ TAMBAH: Update status tombol move berdasarkan posisi
+    // Update status tombol move berdasarkan posisi
     updateMoveButtons() {
         const blocks = document.querySelectorAll(".content-block");
 
@@ -142,7 +142,7 @@ class TutorialBlockBuilder {
         this.container.insertAdjacentHTML("beforeend", blockHtml);
         this.updateStepNumbers();
         this.updateBlockOrders();
-        this.updateMoveButtons(); // ✅ TAMBAH: Update move buttons
+        this.updateMoveButtons(); // Update move buttons
     }
 
     createStepBlock(blockId) {
@@ -159,7 +159,6 @@ class TutorialBlockBuilder {
                         <span class="text-sm font-medium text-gray-700">Langkah Tutorial</span>
                     </div>
                     <div class="flex items-center gap-1">
-                        <!-- ✅ GANTI: Tombol Up/Down menggantikan drag handle -->
                         <button type="button" class="move-up-btn text-gray-500 hover:text-blue-600 p-1" data-block-id="${blockId}" title="Pindah ke atas">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />

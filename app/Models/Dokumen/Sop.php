@@ -30,7 +30,7 @@ class Sop extends Model
         return $this->file_path && Storage::disk('public')->exists($this->file_path);
     }
 
-    // ✅ TAMBAHKAN: Accessor untuk formatted file size
+    // Accessor untuk formatted file size
     public function getFormattedFileSizeAttribute()
     {
         if (!$this->file_size) return '-';
@@ -45,7 +45,7 @@ class Sop extends Model
         return round($bytes, 2) . ' ' . $units[$i];
     }
 
-    // ✅ TAMBAHKAN: Accessor untuk download URL
+    // Accessor untuk download URL
     public function getDownloadUrlAttribute()
     {
         if (!$this->file_path || !$this->file_exists) {
@@ -55,13 +55,13 @@ class Sop extends Model
         return route('sop.download', $this->id);
     }
 
-    // ✅ TAMBAHKAN: Scope untuk published only
+    // Scope untuk published only
     public function scopePublished($query)
     {
         return $query->where('status', 'published');
     }
 
-    // ✅ TAMBAHKAN: Scope untuk search
+    // Scope untuk search
     public function scopeSearch($query, $search)
     {
         return $query->where(function($q) use ($search) {
@@ -71,7 +71,7 @@ class Sop extends Model
     }
     public function download(Sop $sop)
     {
-        // ✅ PERBAIKAN: Cek status published untuk akses public
+        // Cek status published untuk akses public
         if (!\Illuminate\Support\Facades\Auth::check()) {
             // Jika user tidak login (akses public), cek status published
             if ($sop->status !== 'published') {
@@ -87,7 +87,7 @@ class Sop extends Model
         $filePath = Storage::disk('public')->path($sop->file_path);
         $downloadName = $sop->original_filename ?? ($sop->title . '.' . $sop->file_type);
         
-        // ✅ TAMBAHKAN: Log download activity (optional)
+        // Log download activity (optional)
         Log::info('File downloaded', [
             'Sop_id' => $sop->id,
             'title' => $sop->title,

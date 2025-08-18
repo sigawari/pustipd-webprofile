@@ -180,7 +180,7 @@ class GalleryController extends Controller
                     break;
             }
     
-            // ✅ PERBAIKAN: Support both AJAX and regular form submission
+            // Support both AJAX and regular form submission
             if ($request->expectsJson()) {
                 return response()->json([
                     'success' => true,
@@ -193,7 +193,7 @@ class GalleryController extends Controller
                    ->with('success', $message);
                    
         } catch (\Exception $e) {
-            // ✅ PERBAIKAN: Error handling
+            // Error handling
             if ($request->expectsJson()) {
                 return response()->json([
                     'success' => false,

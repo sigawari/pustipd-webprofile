@@ -26,13 +26,12 @@ return new class extends Migration
             ])->default('draft');
             $table->timestamps();
             
-            // ✅ CUKUP: Regular indexes untuk performance
+            // Regular indexes untuk performance
             $table->index('status');
             $table->index('category');
             $table->index(['status', 'category']);
         });
         
-        // ✅ HAPUS: Bagian fulltext index tidak diperlukan
     }
 
     public function down(): void

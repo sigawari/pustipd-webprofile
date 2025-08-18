@@ -12,7 +12,6 @@
             {{ $appLayanans->firstItem() + $key }}
         </td>
 
-        <!-- ✅ FIXED: Kategori dengan Icon -->
         <td class="px-6 py-4 whitespace-nowrap text-center">
             @php
                 $categoryData = $appLayanan->category_icon;
@@ -24,21 +23,21 @@
             </span>
         </td>
 
-        <!-- ✅ FIXED: Nama Aplikasi -->
+        <!--  Nama Aplikasi -->
         <td class="px-6 py-4 text-left">
             <div class="text-sm font-medium text-gray-900 max-w-xs">
                 {{ Str::limit($appLayanan->appname, 40) }}
             </div>
         </td>
 
-        <!-- ✅ FIXED: Deskripsi -->
+        <!--  Deskripsi -->
         <td class="px-6 py-4 text-left">
             <div class="text-sm text-gray-600 max-w-xs" title="{{ $appLayanan->description }}">
                 {{ Str::limit(strip_tags($appLayanan->description), 60) }}
             </div>
         </td>
 
-        <!-- ✅ FIXED: Link Aplikasi -->
+        <!--  Link Aplikasi -->
         <td class="px-6 py-4 whitespace-nowrap text-center">
             @if ($appLayanan->applink)
                 <a href="{{ $appLayanan->applink }}" target="_blank"

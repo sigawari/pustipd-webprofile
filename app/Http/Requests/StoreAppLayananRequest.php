@@ -9,9 +9,9 @@ class StoreAppLayananRequest extends FormRequest
     public function rules()
     {
         return [
-            'appname'     => 'required|string|max:255|unique:applayanan,appname', // ✅ Tambah unique check
-            'description' => 'required|string|min:10',          // ✅ Tambah min length
-            'status'      => 'sometimes|in:draft,published,archived', // ✅ 'sometimes' karena controller force draft
+            'appname'     => 'required|string|max:255|unique:applayanan,appname', // Tambah unique check
+            'description' => 'required|string|min:10',          // Tambah min length
+            'status'      => 'sometimes|in:draft,published,archived', // 'sometimes' karena controller force draft
             'category'    => 'required|in:akademik,pegawai,pembelajaran,administrasi',
             'applink'     => 'nullable|url|max:500',
         ];
@@ -32,7 +32,7 @@ class StoreAppLayananRequest extends FormRequest
         ];
     }
     
-    // ✅ Override untuk force draft status sesuai workflow requirement
+    // Override untuk force draft status sesuai workflow requirement
     public function validated($key = null, $default = null)
     {
         $data = parent::validated($key, $default);
