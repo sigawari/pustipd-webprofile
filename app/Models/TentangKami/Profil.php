@@ -8,8 +8,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Profil extends Model
 {
-    /** @use HasFactory<\Database\Factories\ProfilFactory> */
     use HasFactory;
+
+    protected $table = 'profils';
+
     protected $fillable = [
         'organization_name',
         'description',
@@ -30,8 +32,15 @@ class Profil extends Model
         'universities' => 'array',
     ];
 
-    //Relationships
-    public function publics () {
+    // Relationships
+    public function publics()
+    {
         return $this->belongsTo(Publics::class);
+    }
+
+    // Accessor untuk mendapatkan URL foto profil
+    public function getProfilPhotoUrlAttribute()
+    {
+        return $this->profil_photo ? asset('storage/' . $this->profil_photo) : null;
     }
 }

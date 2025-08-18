@@ -19,7 +19,7 @@ class ProfilController extends Controller
 
     public function store(Request $request)
     {
-        // Validasi langsung di controller
+        // Validasi
         $request->validate([
             'organization_name' => 'required|string|max:255',
             'description'       => 'nullable|string',
@@ -37,13 +37,135 @@ class ProfilController extends Controller
             'organization_name.max'      => 'Nama organisasi maksimal 255 karakter.',
         ]);
 
-        // Ambil record pertama, kalau nggak ada buat baru
+        // Cek apakah sudah ada profil
+        $existingProfil = Profil::first();
+        
+        if ($existingProfil) {
+            return redirect()
+                ->route('admin.tentang-kami.profil.index')
+                ->with('error', 'Profil sudah ada. Gunakan fitur update untuk mengubah data.');
+        }
+
+        // Buat profil baru
+        $profil = new Profil();
+        $profil->fill($request->except('profil_photo'));
+
+        // Upload foto
+        if ($request->hasFile('profil_photo')) {
+            $profil->profil_photo = $request->file('profil_photo')->store('profil_photos', 'public');
+        }
+
+        $profil->save();
+
+        return redirect()
+            ->route('admin.tentang-kami.profil.index')
+            ->with('success', 'Profil berhasil disimpan.');
+    }
+
+    public function update(Request $request, $id)
+    {
+        // Validasi
+        $request->validate([
+            'organization_name' => 'nullable|string|max:255',
+            'description'       => 'nullable|string',
+            'address'           => 'nullable|string',
+            'email'             => 'nullable|email',
+            'instagram_url'     => 'nullable|url|regex:/^https:\/\//',
+            'facebook_url'      => 'nullable|url|regex:/^https:\/\//',
+            'youtube_url'       => 'nullable|url|regex:/^https:\/\//',
+            'applications'      => 'nullable|array',
+            'institutions'      => 'nullable|array',
+            'universities'      => 'nullable|array',
+            'profil_photo'      => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
+        ], [
+            'profil_photo.required' => 'Foto profil wajib diupload.',
+            'profil_photo.image' => 'File harus berupa gambar.',
+            'profil_photo.mimes' => 'Format gambar harus jpg, jpeg, png, atau webp.',
+            'profil_photo.max' => 'Ukuran gambar maksimal 2MB.',
+            'instagram_url.regex' => 'URL Instagram harus menggunakan HTTPS.',
+            'facebook_url.regex' => 'URL Facebook harus menggunakan HTTPS.',
+            'youtube_url.regex' => 'URL YouTube harus menggunakan HTTPS.',
+        ]);        
+
+        // Cari profil berdasarkan ID
+        $profil = Profil::findOrFail($id);
+
+        // Update semua kolom kecuali foto
+        $profil->fill($request->except('profil_photo'));
+
+        // Upload foto baru jika ada
+        if ($request->hasFile('profil_photo')) {
+            // Hapus foto lama jika ada
+            if ($profil->profil_photo && Storage::disk('public')->exists($profil->profil_photo)) {
+                Storage::disk('public')->delete($profil->profil_photo);
+            }
+            $profil->profil_photo = $request->file('profil_photo')->store('profil_photos', 'public');
+        }
+
+        $profil->save();
+
+        return redirect()
+            ->route('admin.tentang-kami.profil.index')
+            ->with('success', 'Profil berhasil diperbarui.');
+    }
+
+    public function destroy($id)
+    {
+        try {
+            $profil = Profil::findOrFail($id);
+
+            // Hapus foto jika ada
+            if ($profil->profil_photo && Storage::disk('public')->exists($profil->profil_photo)) {
+                Storage::disk('public')->delete($profil->profil_photo);
+            }
+
+            $profil->delete();
+
+            return redirect()
+                ->route('admin.tentang-kami.profil.index')
+                ->with('success', 'Profil berhasil dihapus.');
+
+        } catch (\Exception $e) {
+            return redirect()
+                ->route('admin.tentang-kami.profil.index')
+                ->with('error', 'Gagal menghapus profil. Error: ' . $e->getMessage());
+        }
+    }
+
+    // Method tambahan untuk single record system
+    public function createOrUpdate(Request $request)
+    {
+        // Validasi
+        $request->validate([
+            'organization_name' => 'nullable|string|max:255',
+            'description'       => 'nullable|string',
+            'address'           => 'nullable|string',
+            'email'             => 'nullable|email',
+            'instagram_url'     => 'nullable|url|regex:/^https:\/\//',
+            'facebook_url'      => 'nullable|url|regex:/^https:\/\//',
+            'youtube_url'       => 'nullable|url|regex:/^https:\/\//',
+            'applications'      => 'nullable|array',
+            'institutions'      => 'nullable|array',
+            'universities'      => 'nullable|array',
+            'profil_photo'      => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
+        ], [
+            'profil_photo.required' => 'Foto profil wajib diupload.',
+            'profil_photo.image' => 'File harus berupa gambar.',
+            'profil_photo.mimes' => 'Format gambar harus jpg, jpeg, png, atau webp.',
+            'profil_photo.max' => 'Ukuran gambar maksimal 2MB.',
+            'instagram_url.regex' => 'URL Instagram harus menggunakan HTTPS.',
+            'facebook_url.regex' => 'URL Facebook harus menggunakan HTTPS.',
+            'youtube_url.regex' => 'URL YouTube harus menggunakan HTTPS.',
+        ]);        
+
+        // Ambil atau buat profil baru (single record system)
         $profil = Profil::firstOrNew([]);
         $profil->fill($request->except('profil_photo'));
 
         // Upload foto
         if ($request->hasFile('profil_photo')) {
-            if ($profil->profil_photo) {
+            // Hapus foto lama jika ada
+            if ($profil->profil_photo && Storage::disk('public')->exists($profil->profil_photo)) {
                 Storage::disk('public')->delete($profil->profil_photo);
             }
             $profil->profil_photo = $request->file('profil_photo')->store('profil_photos', 'public');
@@ -51,57 +173,10 @@ class ProfilController extends Controller
 
         $profil->save();
 
-        return redirect()->route('admin.tentang-kami.profil.index')->with('success', 'Profil berhasil disimpan.');
-    }
-
-    public function update(Request $request, $id = null)
-    {
-        // Validasi langsung di controller
-        $request->validate([
-            'organization_name' => 'required|string|max:255',
-            'description'       => 'nullable|string',
-            'address'           => 'nullable|string',
-            'email'             => 'nullable|string|email',
-            'instagram_url'     => 'nullable|url',
-            'facebook_url'      => 'nullable|url',
-            'youtube_url'       => 'nullable|url',
-            'applications'      => 'nullable|array',
-            'institutions'      => 'nullable|array',
-            'universities'      => 'nullable|array',
-            'profil_photo'     => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-        ], [
-            'organization_name.required' => 'Nama organisasi wajib diisi.',
-            'organization_name.max'      => 'Nama organisasi maksimal 255 karakter.',
-        ]);
-
-        // Ambil record, kalau belum ada bikin baru
-        $profil = $id ? Profil::findOrFail($id) : Profil::firstOrNew([]);
-
-        // Isi semua kolom kecuali foto
-        $profil->fill($request->except('profil_photo'));
-
-        // Upload foto baru jika ada
-        if ($request->hasFile('profil_photo')) {
-            if ($profil->profil_photo) {
-                Storage::disk('public')->delete($profil->profil_photo);
-            }
-            $profil->profil_photo = $request->file('profil_photo')->store('profil_photos', 'public');
-        }
-
-        // Simpan data
-        $profil->save();
-
-        return redirect()->route('admin.tentang-kami.profil.index')->with('success', 'Profil berhasil diperbarui.');
-    }
-
-    public function destroy($id)
-    {
-        $profil = Profil::findOrFail($id);
-
-        $profil->delete();
+        $message = $profil->wasRecentlyCreated ? 'Profil berhasil dibuat.' : 'Profil berhasil diperbarui.';
 
         return redirect()
             ->route('admin.tentang-kami.profil.index')
-            ->with('success', 'Profil berhasil dihapus.');
+            ->with('success', $message);
     }
 }

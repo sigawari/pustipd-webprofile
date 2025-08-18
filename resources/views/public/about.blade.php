@@ -223,10 +223,15 @@
             <div class="flex flex-col lg:flex-row items-center lg:items-start gap-12 max-w-5xl mx-auto">
                 <!-- Image left -->
                 <div class="flex-shrink-0 w-full lg:w-2/5">
-                    <img src="{{ Storage::url($profil->profil_photo) ?? asset('assets/img/placeholder/dummy.png') }}"
-                        alt="Foto PUSTIPD"
-                        class="w-full h-full rounded-xl object-cover aspect-[2/1] shadow-md bg-gray-100" />
+                    @if ($profil && $profil->profil_photo && Storage::disk('public')->exists($profil->profil_photo))
+                        <img src="{{ Storage::url($profil->profil_photo) }}" alt="Foto PUSTIPD"
+                            class="w-full h-full rounded-xl object-cover aspect-[2/1] shadow-md bg-gray-100" />
+                    @else
+                        <img src="{{ asset('assets/img/placeholder/dummy.png') }}" alt="Foto PUSTIPD"
+                            class="w-full h-full rounded-xl object-cover aspect-[2/1] shadow-md bg-gray-100" />
+                    @endif
                 </div>
+
 
                 <!-- Text right -->
                 <div class="content-about text-secondary text-lg w-full lg:w-3/5 text-justify">
