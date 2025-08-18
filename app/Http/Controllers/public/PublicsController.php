@@ -7,6 +7,7 @@ use ZipArchive;
 use App\Models\Faq;
 use App\Models\AppLayanan;
 use App\Models\Dokumen\Sop;
+use Illuminate\Support\Str;
 use App\Models\Announcement;
 use Illuminate\Http\Request;
 use App\Models\Dokumen\Panduan;
@@ -210,7 +211,7 @@ class PublicsController extends Controller
             ->firstOrFail();
 
         $title = $news->name;
-        $description = \Str::limit(strip_tags($news->content), 155);
+        $description = Str::limit(strip_tags($news->content), 155);
         $keywords = $news->tags ?? 'berita, pustipd';
         $url = url()->current();
         $shareText = "Baca Berita Terbaru dari PUSTIPD UIN RF Palembang - " . $news->name . " " . $url;
@@ -262,7 +263,7 @@ class PublicsController extends Controller
             ->firstOrFail();
     
         $title = $announcement->title;
-        $description = \Str::limit(strip_tags($announcement->content), 155);
+        $description = Str::limit(strip_tags($announcement->content), 155);
         $keywords = $announcement->tags ?? 'pengumuman, pustipd';
         $url = url()->current();
         $shareText = "Baca Pengumuman dari PUSTIPD UIN RF Palembang - " . $announcement->name . " " . $url;
@@ -291,7 +292,7 @@ class PublicsController extends Controller
             ->firstOrFail();
     
         $title = $tutorial->title;
-        $description = \Str::limit(strip_tags($tutorial->content), 155);
+        $description = Str::limit(strip_tags($tutorial->content), 155);
         $keywords = $tutorial->tags ?? 'tutorial, pustipd';
         $url = url()->current();
         $shareText = "Baca Tutorial dari PUSTIPD UIN RF Palembang - " . $tutorial->name . " " . $url;
