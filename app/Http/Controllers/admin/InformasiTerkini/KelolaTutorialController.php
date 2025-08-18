@@ -96,7 +96,7 @@ class KelolaTutorialController extends Controller
             'content_blocks.*.title' => 'required_if:content_blocks.*.type,step|string',
             'content_blocks.*.content' => 'required|string',
             'content_blocks.*.tip_type' => 'required_if:content_blocks.*.type,tip|string',
-            'content_blocks.*.image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'content_blocks.*.image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5048',
         ]);
 
         try {

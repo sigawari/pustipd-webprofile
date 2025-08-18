@@ -85,10 +85,29 @@ class KelolaTutorial extends Model
     /**
      * Get content blocks with proper structure.
      */
-    public function getContentBlocks(): array
+    public function getContentBlocks()
     {
-        return $this->content_blocks ?? [];
+        return $this->content_blocks ? json_decode($this->content_blocks, true) : [];
     }
+
+    public function hasImages()
+    {
+        $blocks = $this->getContentBlocks();
+        return collect($blocks)->some(function($block) {
+            return !empty($block['image']);
+        });
+    }
+
+    public function getAllImages()
+    {
+        $blocks = $this->getContentBlocks();
+        return collect($blocks)
+            ->pluck('image')
+            ->filter()
+            ->values()
+            ->toArray();
+    }
+
 
     /**
      * Get only step blocks.

@@ -21,6 +21,8 @@ return new class extends Migration
             $table->text('excerpt')->nullable();
             $table->json('content_blocks')->nullable();
             $table->boolean('is_hidden')->default(false);
+            $table->text('featured_image')->nullable(); 
+            $table->json('media_files')->nullable();  
 
 
             // Category - sesuai dengan analisis PUSTIPD
