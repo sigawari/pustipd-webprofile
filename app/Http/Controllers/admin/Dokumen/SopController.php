@@ -183,29 +183,19 @@ class SopController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
+        // dd($request->all());
         // dd($id);
         $sop = Sop::findOrFail($id);
-
-        try {
-            // Hapus file dari storage jika ada
-            if ($sop->file_path && Storage::disk('public')->exists($sop->file_path)) {
-                Storage::disk('public')->delete($sop->file_path);
-            }
-
-            $sop->delete();
-
-            return redirect()
-                ->back()
-                ->with('success', 'SOP berhasil dihapus.');
-
-        } catch (\Exception $e) {
-            Log::error('Error deleting SOP: ' . $e->getMessage());
-            return redirect()
-                ->back()
-                ->with('error', 'Gagal menghapus SOP: ' . $e->getMessage());
+        $sop->delete();
+        // Hapus file jika ada
+        if ($sop->file_path && Storage::disk('public')->exists($sop->file_path)) {
+            Storage::disk('public')->delete($sop->file_path);
         }
+        return redirect()
+            ->back()
+            ->with('success', 'SOP berhasil dihapus.');
     }
 
     /**

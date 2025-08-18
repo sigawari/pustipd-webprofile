@@ -13,12 +13,13 @@ return new class extends Migration
     {
         Schema::create('dashboards', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('kelola_beritas_id')->constrained()->onDelete('cascade');
-            $table->foreignId('ketetapans_id')->constrained()->onDelete('cascade');
-            $table->foreignId('regulasis_id')->constrained()->onDelete('cascade');
-            $table->foreignId('panduans_id')->constrained()->onDelete('cascade');
-            $table->foreignId('sops_id')->constrained()->onDelete('cascade');
+            $table->foreignId('kelola_berita_id')->constrained('kelola_beritas')->onDelete('cascade');
+            $table->foreignId('ketetapan_id')->constrained('ketetapans')->onDelete('cascade');
+            $table->foreignId('regulasi_id')->constrained('regulasis')->onDelete('cascade');
+            $table->foreignId('panduan_id')->constrained('panduans')->onDelete('cascade');
+            $table->foreignId('sop_id')->constrained('sops')->onDelete('cascade');
         });
+
     }
 
     /**

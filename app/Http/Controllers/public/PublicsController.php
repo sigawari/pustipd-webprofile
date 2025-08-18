@@ -47,7 +47,7 @@ class PublicsController extends Controller
         // Query pengumuman - PILIH SALAH SATU:
         
         // OPSI 1: Untuk homepage - gunakan limit dengan get() (recommended untuk homepage)
-        $announcementsList = \App\Models\InformasiTerkini\KelolaPengumuman::where('status', 'published')
+        $announcementsList = KelolaPengumuman::where('status', 'published')
                 ->valid() // Hanya yang masih berlaku
                 ->orderByRaw("CASE WHEN urgency = 'penting' THEN 1 WHEN urgency = 'normal' THEN 2 ELSE 3 END")
                 ->orderBy('date', 'desc')
