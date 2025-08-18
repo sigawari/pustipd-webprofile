@@ -24,6 +24,10 @@ import {
     copyContentLink,
 } from "./components/public/share.js";
 
+import Quill from "quill";
+import "quill/dist/quill.snow.css";
+
+
 window.copyContentLink = copyContentLink;
 window.shareTo = shareTo;
 initShareButtons();
@@ -33,8 +37,6 @@ initShareButtons();
 // import "./components/public/search";
 // import "./components/public/pagination";
 // import "./components/public/modal-public";
-import Quill from "quill";
-import "quill/dist/quill.snow.css";
 
 document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll(".editor").forEach((editorElem) => {

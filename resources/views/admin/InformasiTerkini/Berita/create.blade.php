@@ -116,10 +116,10 @@
                     <label for="content" class="block text-sm font-medium text-gray-700 mb-2">Konten Berita</label>
 
                     {{-- Editor Quill --}}
-                    <div id="editor" style="height: 200px;"></div>
+                    <div class="editor" style="height: 200px;"></div>
 
                     {{-- Hidden textarea untuk form submit --}}
-                    <textarea id="content" name="content" class="hidden"></textarea>
+                    <textarea name="content" class="hidden"></textarea>
                 </div>
             </div>
 
