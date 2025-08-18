@@ -83,7 +83,7 @@ class Publics extends Model
         return $this->belongsTo(Gallery::class, 'galleris_id');
     }
 
-    public function visiMisi()
+    public function visi_misi()
     {
         return $this->belongsTo(VisiMisi::class, 'visi_misi_id');
     }

@@ -247,7 +247,7 @@ class PublicsController extends Controller
                                     ELSE 3
                                 END
                             ")
-                            ->orderBy('date', 'desc')  // Atau 'created_at' jika pakai timestamp upload
+                            ->orderBy('date', 'desc') 
                             ->paginate(6)
                             ->withQueryString();
 
@@ -273,34 +273,71 @@ class PublicsController extends Controller
         ));
     }    
 
-    public function tutorial(){
-        $title = 'Tutorial';
-        $description = 'Tutorial terkait penggunaan teknologi informasi di kawasan civitas akademika UIN Raden Fatah Palembang';
-        $keywords = 'tutorial, cara, pustipd';
+    // PublicsController.php
 
-        $tutorials = KelolaTutorial::where('status', 'published')
-            ->orderBy('date', 'desc')
-            ->paginate(8);
+    public function tutorial(Request $request)
+    {
+        // Ambil query search jika ada
+        $searchQuery = $request->input('search');
 
-        return view('public.tutorial', compact('title', 'description', 'keywords', 'tutorials'));
+        // Query dasar: hanya tutorial published dan tidak hidden
+        $query = KelolaTutorial::where('status', 'published')
+            ->where('is_hidden', false);
+
+        // Jika ada pencarian
+        if (!empty($searchQuery)) {
+            $query->search($searchQuery);
+        }
+
+        // Paginasi
+        $tutorialsList = $query->orderByDesc('created_at')->paginate(10)->withQueryString();
+
+        // Metadata SEO (bisa diubah sesuai kebutuhan)
+        $title = 'Tutorial PUSTIPD';
+        $description = 'Kumpulan tutorial teknologi informasi terkini dari PUSTIPD UIN Raden Fatah Palembang';
+        $keywords = 'tutorial, pustipd, teknologi, panduan';
+
+        // Kirim semua ke view
+        return view('public.tutorial', compact('title', 'description', 'keywords', 'tutorialsList'));
     }
+
 
     public function tutorialsDetail($slug)
     {
+        // Ambil tutorial yang dipublikasikan dan tidak di-hidden
         $tutorial = KelolaTutorial::where('status', 'published')
-            ->where('slug', $slug)
-            ->firstOrFail();
-    
+                    ->where('slug', $slug)
+                    ->where('is_hidden', false)  // Pastikan hanya tampilkan yang tidak di-hidden
+                    ->firstOrFail();
+
+        // Dapatkan data utama
         $title = $tutorial->title;
-        $description = Str::limit(strip_tags($tutorial->content), 155);
-        $keywords = $tutorial->tags ?? 'tutorial, pustipd';
-        $url = url()->current();
-        $shareText = "Baca Tutorial dari PUSTIPD UIN RF Palembang - " . $tutorial->name . " " . $url;
-    
-        return view('public.tutorials-detail', compact(
-            'title', 'description', 'keywords', 'tutorial', 'url', 'shareText'
+        $description = $tutorial->excerpt ?: \Illuminate\Support\Str::limit(strip_tags($tutorial->content), 155);
+        $keywords = $tutorial->tags ? implode(',', $tutorial->tags) : 'tutorial, pustipd';
+        $dateFormatted = $tutorial->date ? $tutorial->date->format('d M Y') : null;
+
+        // Untuk SEO / metadata
+        $metaDescription = $description;
+        $metaKeywords = $keywords;
+
+        // Bagian content blocks siap disiapkan untuk view
+        $contentBlocks = $tutorial->getContentBlocks(); // array of blocks
+
+        // Bagikan URL untuk sharing yang dipakai di view
+        $shareUrl = url()->current();
+
+        return view('public.tutorial-detail', compact(
+            'tutorial',
+            'title',
+            'metaDescription',
+            'metaKeywords',
+            'contentBlocks',
+            'dateFormatted',
+            'shareUrl'
         ));
-    } 
+    }
+
+
 
     public function ketetapan(Request $request)
     {

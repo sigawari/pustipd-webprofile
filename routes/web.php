@@ -219,7 +219,8 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
             Route::delete('/kelola-tutorial/{kelolatutorial}', 'destroy')->name('kelola-tutorial.destroy');
             Route::get('/kelola-tutorial/export', 'export')->name('kelola-tutorial.export');
             Route::post('/kelola-tutorial/bulk', 'bulk')->name('kelola-tutorial.bulk');
-            Route::post('/kelola-tutorial/{kelolatutorial}/featured', 'toggleFeatured')->name('kelola-tutorial.featured'); // ✅ Fixed method & parameter
+            Route::post('/kelola-tutorial/{kelolatutorial}/featured', 'toggleFeatured')->name('kelola-tutorial.featured');
+            Route::post('/kelola-tutorial/{kelolatutorial}/toggle-hide', 'toggleHide')->name('kelola-tutorial.toggle-hide');
         });
     });
 
@@ -322,10 +323,10 @@ Route::prefix('/')->group(function () {
     Route::get('/struktur', [PublicsController::class, 'struktur'])->name('structure');
     Route::get('/applayanan', [PublicsController::class, 'applayanan'])->name('applayanan');
     Route::get('/berita', [PublicsController::class, 'berita'])->name('news');
-    Route::get('/pengumuman', [PublicsController::class, 'pengumuman'])->name('announcements');
-    Route::get('/tutorial', [PublicsController::class, 'tutorial'])->name('tutorials');
     Route::get('/berita/{slug}', [PublicsController::class, 'newsDetail'])->name('news-detail');  
+    Route::get('/pengumuman', [PublicsController::class, 'pengumuman'])->name('announcements');
     Route::get('/pengumuman/{slug}', [PublicsController::class, 'announcementsDetail'])->name('announcements-detail');
+    Route::get('/tutorial', [PublicsController::class, 'tutorial'])->name('tutorials');
     Route::get('/tutorial/tutorials-detail', [PublicsController::class, 'tutorialsDetail'])->name('tutorials-detail');
     
     // PublicsController routes

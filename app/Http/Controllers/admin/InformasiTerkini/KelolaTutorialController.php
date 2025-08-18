@@ -16,33 +16,45 @@ class KelolaTutorialController extends Controller
         $title = "Tutorial";
         $search = $request->input('search', '');
         $filter = $request->query('filter', 'all');
+        $featured = $request->query('featured', null);
         $perPage = $request->input('perPage', 10);
+        $status = $request->input('status');
 
-        // Query builder awal
         $kelolaTutorialQuery = KelolaTutorial::query();
 
-        // Search dengan field yang benar
-        if ($search) {
-            $kelolaTutorialQuery->search($search); // Gunakan scope search yang sudah diperbaiki
+        // Filter status
+        if ($status) {
+            $kelolaTutorialQuery->where('status', $status);
         }
 
-        // Filter status
+        // Filter is_hidden (tambahkan agar jelas)
+        if ($request->has('is_hidden')) {
+            $kelolaTutorialQuery->where('is_hidden', $request->boolean('is_hidden'));
+        }
+
+
+        if ($search) {
+            $kelolaTutorialQuery->search($search);
+        }
+
         if ($filter && $filter !== 'all') {
             $kelolaTutorialQuery->where('status', $filter);
         }
 
+        if (!is_null($featured)) {
+            $kelolaTutorialQuery->where('is_featured', ($featured == 1));
+        }
+
+        // Order by created_at desc
         $kelolaTutorialQuery->orderBy('created_at', 'desc');
 
         $merged = $kelolaTutorialQuery->get();
 
-        // Per-page logic
         if ($perPage === 'all') {
             $perPage = max($merged->count(), 1);
         } else {
             $perPage = (int) $perPage;
-            if ($perPage < 1) {
-                $perPage = 1;
-            }
+            if ($perPage < 1) $perPage = 1;
         }
 
         $currentPage = LengthAwarePaginator::resolveCurrentPage();
@@ -56,13 +68,13 @@ class KelolaTutorialController extends Controller
             ['path' => LengthAwarePaginator::resolveCurrentPath()]
         );
 
-        // AJAX Response
         if ($request->ajax()) {
             return view('admin.InformasiTerkini.Tutorial.partials.table_body', compact('kelolaTutorials'));
         }
 
         return view('admin.InformasiTerkini.Tutorial.index', compact('title', 'kelolaTutorials'));
     }
+
 
     public function store(Request $request)
     {
@@ -71,10 +83,10 @@ class KelolaTutorialController extends Controller
         Log::info('Tutorial store request:', $request->all());
 
         $request->validate([
-            'title' => 'required|string|max:255',
+            'title' => 'required|string|max:400',
             'slug' => 'required|string|unique:kelola_tutorials,slug',
-            'category' => 'required|in:sistem_informasi_akademik,e_learning,layanan_digital_mahasiswa,pengelolaan_data_akun,jaringan_konektivitas,software_aplikasi,keamanan_digital,penelitian_akademik,layanan_publik,mobile_responsive',
-            'date' => 'required|date', // Ubah dari published_at ke date
+            'category' => 'required|in:sistem_informasi_akademik,e_learning,layanan_digital_mahasiswa,pengelolaan_data_akun,jaringan_konektivitas,software_aplikasi,keamanan_digital,penelitian_akademik,layanan_publik',
+            'created_at' => 'required|date', // Ubah dari published_at ke date
             'status' => 'required|in:draft,published',
             'excerpt' => 'nullable|string', // Ubah dari description ke excerpt
             'tags' => 'nullable|array',
@@ -114,17 +126,19 @@ class KelolaTutorialController extends Controller
 
             // Create tutorial
             KelolaTutorial::create([
-                'title' => $request->title,
-                'slug' => $request->slug,
-                'excerpt' => $request->excerpt,
-                'category' => $request->category,
-                'date' => $request->date,
-                'status' => $request->status,
-                'tags' => $request->tags,
-                'is_featured' => $request->boolean('is_featured'),
-                'content_blocks' => $contentBlocks,
-                'view_count' => 0,
+                'title'         => $request->title,
+                'slug'          => $request->slug,
+                'excerpt'       => $request->excerpt,
+                'category'      => $request->category,
+                'date'          => $request->date,
+                'status'        => $request->status,
+                'tags'          => $request->tags,
+                'is_featured'   => $request->boolean('is_featured'),
+                'is_hidden'     => $request->boolean('is_hidden', false),
+                'content_blocks'=> $contentBlocks,
+                'view_count'    => 0,
             ]);
+            
 
             return redirect()
                 ->back()
@@ -146,7 +160,7 @@ class KelolaTutorialController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'slug' => 'required|string|unique:kelola_tutorials,slug,' . $tutorial->id,
-            'category' => 'required|in:sistem_informasi_akademik,e_learning,layanan_digital_mahasiswa,pengelolaan_data_akun,jaringan_konektivitas,software_aplikasi,keamanan_digital,penelitian_akademik,layanan_publik,mobile_responsive',
+            'category' => 'required|in:sistem_informasi_akademik,e_learning,layanan_digital_mahasiswa,pengelolaan_data_akun,jaringan_konektivitas,software_aplikasi,keamanan_digital,penelitian_akademik,layanan_publik',
             'date' => 'required|date',
             'status' => 'required|in:draft,published',
             'excerpt' => 'nullable|string',
@@ -197,16 +211,17 @@ class KelolaTutorialController extends Controller
             }
 
             $tutorial->update([
-                'title' => $request->title,
-                'slug' => $request->slug,
-                'excerpt' => $request->excerpt,
-                'category' => $request->category,
-                'date' => $request->date,
-                'status' => $request->status,
-                'tags' => $request->tags,
-                'is_featured' => $request->boolean('is_featured'),
-                'content_blocks' => $contentBlocks,
-            ]);
+                'title'         => $request->title,
+                'slug'          => $request->slug,
+                'excerpt'       => $request->excerpt,
+                'category'      => $request->category,
+                'date'          => $request->date,
+                'status'        => $request->status,
+                'tags'          => $request->tags,
+                'is_featured'   => $request->boolean('is_featured'),
+                'is_hidden'     => $request->boolean('is_hidden', false),
+                'content_blocks'=> $contentBlocks,
+            ]);            
 
             return redirect()
                 ->back()
@@ -287,4 +302,25 @@ class KelolaTutorialController extends Controller
             ], 500);
         }
     }
+
+    public function toggleHide(Request $request, KelolaTutorial $kelolatutorial)
+    {
+        try {
+            $kelolatutorial->is_hidden = !$kelolatutorial->is_hidden;
+            $kelolatutorial->save();
+    
+            return response()->json([
+                'success' => true,
+                'message' => $kelolatutorial->is_hidden ? 'Tutorial disembunyikan' : 'Tutorial ditampilkan',
+                'is_hidden' => $kelolatutorial->is_hidden,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+    
+
 }

@@ -12,7 +12,7 @@ return new class extends Migration
         Schema::create('visi_misi', function (Blueprint $table) {
             $table->id();
             $table->text('visi')->nullable();
-            $table->json('misi')->nullable(); // Menyimpan array misi dalam JSON
+            $table->json('misi')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });

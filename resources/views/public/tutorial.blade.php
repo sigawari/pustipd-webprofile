@@ -1,60 +1,4 @@
-@php
-    // Data dummy tutorial
-    $tutorials = [
-        [
-            'title' => 'Tutorial Mengganti E-Mail',
-            'excerpt' => 'Panduan lengkap cara mengganti email utama pada sistem kampus.',
-            'link' => '/tutorial/mengganti-email',
-        ],
-        [
-            'title' => 'Reset/Lupa Akun E-Learning',
-            'excerpt' => 'Solusi jika lupa password akun e-learning atau ingin reset akun.',
-            'link' => '/tutorial/reset-elearning',
-        ],
-        [
-            'title' => 'Mengganti Password Email',
-            'excerpt' => 'Langkah-langkah penggantian sandi email UIN.',
-            'link' => '/tutorial/ganti-password-email',
-        ],
-        [
-            'title' => 'Aktivasi Laravel',
-            'excerpt' => 'Bagaimana mengaktifkan akun Laravel dan tips pemrograman dasar.',
-            'link' => '/tutorial/aktivasi-laravel',
-        ],
-        [
-            'title' => 'Tutorial Makan Ayam',
-            'excerpt' => 'Tips efektif menikmati ayam di kantin kampus (dummy contoh).',
-            'link' => '/tutorial/makan-ayam',
-        ],
-        [
-            'title' => 'Tutorial Mengganti E-Mail',
-            'excerpt' => 'Panduan lengkap cara mengganti email utama pada sistem kampus.',
-            'link' => '/tutorial/mengganti-email',
-        ],
-        [
-            'title' => 'Reset/Lupa Akun E-Learning',
-            'excerpt' => 'Solusi jika lupa password akun e-learning atau ingin reset akun.',
-            'link' => '/tutorial/reset-elearning',
-        ],
-        [
-            'title' => 'Mengganti Password Email',
-            'excerpt' => 'Langkah-langkah penggantian sandi email UIN.',
-            'link' => '/tutorial/ganti-password-email',
-        ],
-        [
-            'title' => 'Aktivasi Laravel',
-            'excerpt' => 'Bagaimana mengaktifkan akun Laravel dan tips pemrograman dasar.',
-            'link' => '/tutorial/aktivasi-laravel',
-        ],
-        [
-            'title' => 'Tutorial Makan Ayam',
-            'excerpt' => 'Tips efektif menikmati ayam di kantin kampus (dummy contoh).',
-            'link' => '/tutorial/makan-ayam',
-        ],
-    ];
-@endphp
-
-<x-public.layouts title="{{ $title }}" description="{{ $description }}" keywords="{{ $keywords }}">
+<x-public.layouts :title="$title" :description="$description" :keywords="$keywords">
     <x-slot:title>{{ $title }}</x-slot:title>
 
     <section id="tutorial" class="py-20 bg-primary">
@@ -69,14 +13,14 @@
                     Fatah Palembang
                 </h3>
             </div>
-
             <!-- Search Form -->
-            <form action="#" method="GET" class="relative w-full max-w-md mx-auto mb-6">
-                <input type="text" name="search" placeholder="Cari tutorial di sini...."
-                    class="w-full rounded-xl pl-12 pr-4 py-2 sm:py-3 
-                           text-secondary placeholder-gray-400
-                           bg-white border border-white shadow-sm focus:ring-2 focus:ring-secondary focus:border-transparent
-                           focus:outline-none " />
+            <form action="{{ route('tutorials') }}" method="GET" class="relative w-full max-w-md mx-auto mb-8">
+                <input type="text" name="search" value="{{ request('search') }}"
+                    placeholder="Cari Tutorial di sini...."
+                    class="w-full rounded-xl pl-12 pr-4 py-2 sm:py-3
+                        text-secondary placeholder-gray-400
+                        bg-white border border-white shadow-sm focus:ring-2 focus:ring-secondary focus:border-transparent
+                        focus:outline-none" />
                 <button type="submit" class="absolute top-1/2 left-3 transform -translate-y-1/2 text-secondary">
                     <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" stroke-width="2"
                         viewBox="0 0 24 24">
@@ -87,48 +31,36 @@
             </form>
 
             <!-- Grid Card Tutorial -->
-            <div class="tutorial-grid">
-                @foreach ($tutorials as $tutor)
-                    <a href="{{ $tutor['link'] }}" class="tutorial-card group" title="{{ $tutor['title'] }}">
-                        <div class="tutorial-title group-hover:text-custom-blue transition">{{ $tutor['title'] }}</div>
-                        <div class="tutorial-excerpt">{{ $tutor['excerpt'] }}</div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                @forelse ($tutorialsList as $tutorial)
+                    <a href="{{ route('tutorials-detail', $tutorial->slug) }}"
+                        class="p-4 rounded-xl shadow-md bg-white hover:shadow-lg transition"
+                        title="{{ $tutorial->title }}">
+                        <div class="font-bold text-lg text-secondary">{{ $tutorial->title }}</div>
+                        @if ($tutorial->excerpt)
+                            <div class="text-gray-600 text-sm">
+                                {{ \Illuminate\Support\Str::limit($tutorial->excerpt, 80) }}
+                            </div>
+                        @elseif ($tutorial->content_blocks && count($tutorial->content_blocks) > 0)
+                            @php
+                                $firstBlock = collect($tutorial->content_blocks)->first();
+                                $previewContent = $firstBlock['title'] ?? strip_tags($firstBlock['content'] ?? '');
+                            @endphp
+                            <div class="text-gray-600 text-sm">
+                                {{ \Illuminate\Support\Str::limit($previewContent, 80) }}
+                            </div>
+                        @endif
                     </a>
-                @endforeach
+                @empty
+                    <div class="col-span-3 text-center py-10 text-gray-600">
+                        Tidak ada tutorial ditemukan.
+                    </div>
+                @endforelse
             </div>
 
+
             <!-- Pagination -->
-            <div class="flex justify-center items-center gap-2 mt-7 select-none">
-                <!-- Tombol Previous -->
-                <button
-                    class="flex items-center justify-center w-9 h-9 rounded bg-white text-custom-blue hover:bg-custom-blue hover:text-white transition focus:outline-none"
-                    aria-label="Sebelumnya">
-                    <!-- Panah kiri: SVG -->
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 20 20">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 15l-5-5 5-5" />
-                    </svg>
-                </button>
-                <button
-                    class="flex items-center justify-center w-9 h-9 rounded bg-custom-blue text-white font-semibold shadow transition focus:outline-none">
-                    1
-                </button>
-                <button
-                    class="flex items-center justify-center w-9 h-9 rounded bg-white text-custom-blue hover:bg-custom-blue hover:text-white transition focus:outline-none">
-                    2
-                </button>
-                <button
-                    class="flex items-center justify-center w-9 h-9 rounded bg-white text-custom-blue hover:bg-custom-blue hover:text-white transition focus:outline-none">
-                    3
-                </button>
-                <!-- Tombol Next -->
-                <button
-                    class="flex items-center justify-center w-9 h-9 rounded bg-white text-custom-blue hover:bg-custom-blue hover:text-white transition focus:outline-none"
-                    aria-label="Selanjutnya">
-                    <!-- Panah kanan: SVG -->
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 20 20">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M7 5l5 5-5 5" />
-                    </svg>
-                </button>
-            </div>
+            <x-pagination :paginator="$tutorialsList" />
         </div>
     </section>
 </x-public.layouts>

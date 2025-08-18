@@ -2,6 +2,7 @@
 
 namespace App\Models\InformasiTerkini;
 
+use App\Models\Publics;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -15,31 +16,60 @@ class KelolaTutorial extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title',           
-        'content',         
-        'excerpt',         
-        'content_blocks',  // NEW: Support untuk blocks
-        'category',       
-        'tags',           
-        'slug',           
-        'date',           
+        'title',
+        'slug',
+        'excerpt',
+        'category',
+        'date',
         'status',
-        'view_count',     
-        'is_featured',    
+        'tags',
+        'is_featured',
+        'is_hidden',   
+        'content_blocks',
+        'view_count',
     ];
-
-    /**
-     * The attributes that should be cast.
-     */
+    
+    
     protected $casts = [
         'date' => 'date',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
-        'tags' => 'array',           
-        'content_blocks' => 'array', 
-        'is_featured' => 'boolean',   
-        'view_count' => 'integer',    
+        'tags' => 'array',
+        'content_blocks' => 'array',
+        'view_count' => 'integer',
+        'is_hidden' => 'boolean',   // casting boolean
     ];
+    
+        public function scopePublished($query)
+    {
+        return $query->where('status', 'published');
+    }
+
+    public function scopeDraft($query)
+    {
+        return $query->where('status', 'draft');
+    }
+
+    public function scopeCategory($query, string $category)
+    {
+        return $query->where('category', $category);
+    }
+
+    public function scopeFeatured($query)
+    {
+        return $query->where('is_featured', true); // Pastikan ada kolom is_featured
+    }
+
+    // Scope untuk filter tutorial yang tidak disembunyikan (visible)
+    public function scopeVisible($query)
+    {
+        return $query->where('is_hidden', false);
+    }
+
+    
+    public function publics () {
+        return $this->hasMany(Publics::class);
+    }
 
     protected $primaryKey = 'id'; // atau kolom sebenarnya
     public $incrementing = true;
@@ -192,11 +222,6 @@ class KelolaTutorial extends Model
                 'icon' => '📱',
                 'color' => 'bg-indigo-100 text-indigo-800'
             ],
-            'keamanan_digital' => [
-                'label' => 'Keamanan Digital',
-                'icon' => '🔒',
-                'color' => 'bg-red-100 text-red-800'
-            ],
             'penelitian_akademik' => [
                 'label' => 'Penelitian & Akademik',
                 'icon' => '📚',
@@ -206,11 +231,6 @@ class KelolaTutorial extends Model
                 'label' => 'Layanan Publik',
                 'icon' => '🏛️',
                 'color' => 'bg-gray-100 text-gray-800'
-            ],
-            'mobile_responsive' => [
-                'label' => 'Mobile & Responsive',
-                'icon' => '📲',
-                'color' => 'bg-pink-100 text-pink-800'
             ],
         ];
         
@@ -354,10 +374,8 @@ class KelolaTutorial extends Model
             'pengelolaan_data_akun' => 'Pengelolaan Data & Akun',
             'jaringan_konektivitas' => 'Jaringan & Konektivitas',
             'software_aplikasi' => 'Software & Aplikasi',
-            'keamanan_digital' => 'Keamanan Digital',
             'penelitian_akademik' => 'Penelitian & Akademik',
             'layanan_publik' => 'Layanan Publik',
-            'mobile_responsive' => 'Mobile & Responsive',
         ];
     }
 

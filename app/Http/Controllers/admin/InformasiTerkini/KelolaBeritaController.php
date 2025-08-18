@@ -98,7 +98,7 @@ class KelolaBeritaController extends Controller
             'slug'         => 'required|string|max:255|unique:kelola_beritas,slug',
             'tags'         => 'nullable|string|max:255',
             'publish_date' => 'nullable|date',
-            'status'       => 'required|in:draft,published,archived',
+            'status'       => 'required|in:draft,published',
             'image'        => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'content'      => 'required|string',
         ]);
@@ -160,7 +160,7 @@ class KelolaBeritaController extends Controller
             'slug'         => 'required|string|max:255|unique:kelola_beritas,slug,' . $kelolaBerita->id,
             'tags'         => 'nullable|string|max:255',
             'publish_date' => 'nullable|date',
-            'status'       => 'required|in:draft,published,archived',
+            'status'       => 'required|in:draft,published',
             'image'        => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'content'      => 'required|string',
         ]);
@@ -208,4 +208,44 @@ class KelolaBeritaController extends Controller
 
         return redirect()->route('admin.informasi-terkini.kelola-berita.index')->with('success', 'Berita berhasil dihapus!');
     }
+
+    /**
+     * BULK ACTION : publish / draft  delete / permanent_delete
+     */
+    public function bulk(Request $request)
+    {
+        $ids = $request->input('ids', []);
+        $action = $request->input('action');
+
+        if (!$ids || !$action) {
+            return back()->with('error', 'Data atau aksi tidak valid.');
+        }
+
+        switch ($action) {
+            case 'permanent_delete':
+                // Hard delete: hapus data dan gambar
+                $items = KelolaBerita::whereIn('id', $ids)->get();
+                foreach ($items as $item) {
+                    if ($item->image && Storage::disk('public')->exists($item->image)) {
+                        Storage::disk('public')->delete($item->image);
+                    }
+                    $item->delete();
+                }
+                $message = count($items) . ' Berita berhasil dihapus permanen.';
+                break;
+
+            case 'published':
+            case 'draft':
+                $updatedCount = KelolaBerita::whereIn('id', $ids)->update(['status' => $action]);
+                $statusText = ucfirst($action);
+                $message = "{$updatedCount} Berita berhasil diubah ke status {$statusText}.";
+                break;
+
+            default:
+                return back()->with('error', 'Aksi tidak valid.');
+        }
+
+        return back()->with('success', $message);
+    }
+
 }

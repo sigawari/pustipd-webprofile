@@ -98,10 +98,8 @@
                     <option value="pengelolaan_data_akun">Pengelolaan Data & Akun</option>
                     <option value="jaringan_konektivitas">Jaringan & Konektivitas</option>
                     <option value="software_aplikasi">Software & Aplikasi</option>
-                    <option value="keamanan_digital">Keamanan Digital</option>
                     <option value="penelitian_akademik">Penelitian & Akademik</option>
                     <option value="layanan_publik">Layanan Publik</option>
-                    <option value="mobile_responsive">Mobile & Responsive</option>
                 </select>
                 <select id="statusFilter"
                     class="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
@@ -283,15 +281,41 @@
 
     <!-- Additional JavaScript for filters -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Featured filter functionality
+        document.addEventListener("DOMContentLoaded", function() {
             const featuredFilter = document.getElementById('featuredFilter');
-            if (featuredFilter) {
-                featuredFilter.addEventListener('change', function() {
-                    // Add filter logic here
-                    console.log('Featured filter changed:', this.value);
-                });
+            const categoryFilter = document.getElementById('categoryFilter');
+            const statusFilter = document.getElementById('statusFilter');
+            const perPageSelect = document.getElementById('perPage');
+            const searchInput = document.getElementById('searchInput');
+
+            function fetchFilteredTutorials() {
+                const params = new URLSearchParams();
+                if (featuredFilter.value) params.append('featured', featuredFilter.value);
+                if (categoryFilter.value) params.append('category', categoryFilter.value);
+                if (statusFilter.value) params.append('filter', statusFilter.value);
+                if (perPageSelect.value) params.append('perPage', perPageSelect.value);
+                if (searchInput.value.trim()) params.append('search', searchInput.value.trim());
+
+                fetch(`${window.location.pathname}?${params.toString()}`, {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    })
+                    .then(response => response.text())
+                    .then(html => {
+                        document.getElementById('tutorialTableBody').innerHTML = html;
+                    })
+                    .catch(err => console.error(err));
             }
+
+            featuredFilter.addEventListener('change', fetchFilteredTutorials);
+            categoryFilter.addEventListener('change', fetchFilteredTutorials);
+            statusFilter.addEventListener('change', fetchFilteredTutorials);
+            perPageSelect.addEventListener('change', fetchFilteredTutorials);
+            searchInput.addEventListener('input', () => {
+                clearTimeout(window.searchTimeout);
+                window.searchTimeout = setTimeout(fetchFilteredTutorials, 500);
+            });
         });
     </script>
 </x-admin.layouts>
