@@ -41,7 +41,7 @@ class KelolaTutorial extends Model
         'view_count' => 'integer',    
     ];
 
-    protected $primaryKey = 'tutorial_id'; // atau kolom sebenarnya
+    protected $primaryKey = 'id'; // atau kolom sebenarnya
     public $incrementing = true;
     protected $keyType = 'int'; 
 

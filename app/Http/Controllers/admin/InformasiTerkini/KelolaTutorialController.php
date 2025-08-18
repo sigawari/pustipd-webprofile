@@ -66,6 +66,8 @@ class KelolaTutorialController extends Controller
 
     public function store(Request $request)
     {
+        // dd($request->all());
+
         Log::info('Tutorial store request:', $request->all());
 
         $request->validate([
@@ -111,7 +113,7 @@ class KelolaTutorialController extends Controller
             }
 
             // Create tutorial
-            $kelolaTutorial = KelolaTutorial::create([
+            KelolaTutorial::create([
                 'title' => $request->title,
                 'slug' => $request->slug,
                 'excerpt' => $request->excerpt,
@@ -219,30 +221,21 @@ class KelolaTutorialController extends Controller
         }
     }
 
-    public function destroy(KelolaTutorial $kelolaTutorial)
+    public function destroy(Request $request, $id)
     {
-        try {
-            // Hapus semua image content blocks
-            if (is_array($kelolaTutorial->getContentBlocks())) {
-                foreach ($kelolaTutorial->getContentBlocks() as $block) {
-                    if (!empty($block['image']) && File::exists(public_path($block['image']))) {
-                        File::delete(public_path($block['image']));
-                    }
-                }
+        // dd($id);
+        $kelolaTutorial = KelolaTutorial::findOrFail($id);
+        // Hapus gambar-gambar terkait
+        foreach ($kelolaTutorial->getContentBlocks() as $block) {
+            if (isset($block['image']) && File::exists(public_path($block['image']))) {
+                File::delete(public_path($block['image']));
             }
-            
-            $kelolaTutorial->delete();
-
-            return redirect()
-                ->back()
-                ->with('success', 'Tutorial berhasil dihapus.');
-        } catch (\Exception $e) {
-            Log::error('Error deleting tutorial:', ['error' => $e->getMessage()]);
-
-            return redirect()
-                ->back()
-                ->with('error', 'Gagal menghapus tutorial: ' . $e->getMessage());
         }
+        $kelolaTutorial->delete();
+        return redirect()
+            ->back()
+            ->with('success', 'Tutorial berhasil dihapus.');
+    
     }
 
 

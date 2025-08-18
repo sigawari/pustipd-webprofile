@@ -123,10 +123,17 @@
                     <div id="contentBlocks-{{ $tutorial->id }}" class="space-y-3">
                         @if ($tutorial->content_blocks)
                             @php
-                                $contentBlocks = json_decode($tutorial->content_blocks, true);
-                                usort($contentBlocks, function ($a, $b) {
-                                    return ($a['order'] ?? 0) - ($b['order'] ?? 0);
-                                });
+                                $contentBlocks = $tutorial->content_blocks;
+
+                                if (is_null($contentBlocks)) {
+                                    $contentBlocks = [];
+                                } elseif (!is_array($contentBlocks)) {
+                                    // Kalau entah kenapa masih string JSON
+                                    $decoded = json_decode((string) $contentBlocks, true);
+                                    $contentBlocks = is_array($decoded) ? $decoded : [];
+                                }
+
+                                usort($contentBlocks, fn($a, $b) => ($a['order'] ?? 0) <=> ($b['order'] ?? 0));
                             @endphp
 
                             @foreach ($contentBlocks as $index => $block)
