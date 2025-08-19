@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Models\TentangKami\Profil;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Console\Scheduling\Schedule;
 
@@ -20,8 +21,16 @@ class AppServiceProvider extends ServiceProvider
             $schedule->command('announcements:archive')->everyMinute();
         });
 
-        // Ambil data profil (1 record terbaru)
-        $footerData = Profil::latest()->first();
+        // Safety check: hanya load data jika tabel ada
+        $footerData = null;
+        try {
+            if (Schema::hasTable('profils')) {
+                $footerData = Profil::latest()->first();
+            }
+        } catch (\Exception $e) {
+            // Log error atau handle gracefully
+            \Log::info('Profils table not available: ' . $e->getMessage());
+        }
 
         // Share variable ke seluruh view
         View::share('footerData', [

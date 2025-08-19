@@ -49,7 +49,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-// Initialize Structure
 document.addEventListener("DOMContentLoaded", () => {
     if (document.getElementById("organizationForm")) {
         const orgManager = new Structure();

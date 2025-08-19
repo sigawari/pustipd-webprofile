@@ -775,9 +775,193 @@ export class Structure {
         }
     }
 
-    previewOrgChart() {
-        // Copy implementation dari kode asli
-        // ... (implementasi lengkap)
+    previewOrgChart(strukturData = null) {
+        console.log("previewOrgChart dipanggil"); // Debug log
+
+        // Jika strukturData tidak diberikan, ambil dari form data
+        if (!strukturData) {
+            const formData = this.collectFormData();
+            strukturData = this.formatDataForChart(formData);
+        }
+
+        const container = document.getElementById("orgChartContainer");
+        if (!container) {
+            console.error("Container orgChartContainer tidak ditemukan");
+            alert("Error: Container untuk preview tidak ditemukan!");
+            return;
+        }
+
+        // Clear existing content
+        container.innerHTML = "";
+
+        // Cek jika data kosong
+        if (!strukturData || Object.keys(strukturData).length === 0) {
+            container.innerHTML = `
+                <div class="text-center py-8">
+                    <div class="text-gray-400 mb-4">
+                        <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                        </svg>
+                    </div>
+                    <p class="text-gray-500 text-lg">Tidak ada data struktur organisasi</p>
+                    <p class="text-gray-400 text-sm mt-2">Tambahkan divisi dan staff untuk melihat preview</p>
+                </div>
+            `;
+        } else {
+            // Create structure preview sama seperti di solution sebelumnya
+            this.renderStructurePreview(container, strukturData);
+        }
+
+        // Show modal
+        const modal = document.getElementById("orgChartPreviewModal");
+        if (modal) {
+            modal.classList.remove("hidden");
+            console.log("Modal ditampilkan"); // Debug log
+        } else {
+            console.error("Modal orgChartPreviewModal tidak ditemukan");
+            alert("Error: Modal preview tidak ditemukan!");
+        }
+    }
+
+    // Helper method untuk render struktur
+    renderStructurePreview(container, strukturData) {
+        const wrapper = document.createElement("div");
+        wrapper.className = "space-y-6";
+
+        // Get form data untuk header
+        const formData = this.collectFormData();
+
+        // Add organization header
+        if (formData.name || formData.head.name) {
+            const headerDiv = document.createElement("div");
+            headerDiv.className =
+                "text-center bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6 mb-6";
+
+            headerDiv.innerHTML = `
+                <h1 class="text-2xl font-bold text-gray-800 mb-2">${
+                    formData.name || "Struktur Organisasi"
+                }</h1>
+                ${
+                    formData.description
+                        ? `<p class="text-gray-600 mb-4">${formData.description}</p>`
+                        : ""
+                }
+                ${
+                    formData.head.name
+                        ? `
+                    <div class="inline-flex items-center space-x-4 bg-white rounded-lg p-4 shadow-sm">
+                        <img class="h-12 w-12 rounded-full object-cover border-2 border-blue-200" 
+                             src="${
+                                 formData.head.photo ||
+                                 "/assets/img/placeholder/dummy.png"
+                             }" 
+                             alt="${formData.head.name}"
+                             onerror="this.src='/assets/img/placeholder/dummy.png'">
+                        <div class="text-left">
+                            <h3 class="font-semibold text-gray-900">${
+                                formData.head.name
+                            }</h3>
+                            <p class="text-blue-600 text-sm">${
+                                formData.head.position || "Pimpinan"
+                            }</p>
+                        </div>
+                    </div>
+                `
+                        : ""
+                }
+            `;
+            wrapper.appendChild(headerDiv);
+        }
+
+        // Loop through divisions
+        Object.keys(strukturData).forEach((divisi, index) => {
+            const members = strukturData[divisi];
+            if (!members || members.length === 0) return;
+
+            const divisionDiv = document.createElement("div");
+            divisionDiv.className = "bg-white rounded-lg shadow border p-4";
+
+            // Division header
+            const headerDiv = document.createElement("div");
+            headerDiv.className =
+                "bg-blue-500 text-white p-3 rounded-t-lg -mt-4 -mx-4 mb-4";
+            headerDiv.innerHTML = `
+                <h3 class="font-semibold flex items-center">
+                    <span class="bg-white bg-opacity-20 rounded px-2 py-1 text-sm mr-2">${
+                        index + 1
+                    }</span>
+                    ${divisi}
+                </h3>
+            `;
+            divisionDiv.appendChild(headerDiv);
+
+            // Members
+            const membersDiv = document.createElement("div");
+            membersDiv.className = "space-y-3";
+
+            members.forEach((member) => {
+                const memberDiv = document.createElement("div");
+                memberDiv.className =
+                    "flex items-center space-x-3 p-2 bg-gray-50 rounded";
+
+                memberDiv.innerHTML = `
+                    <img class="h-10 w-10 rounded-full object-cover border" 
+                         src="${
+                             member.photo || "/assets/img/placeholder/dummy.png"
+                         }" 
+                         alt="${member.name}"
+                         onerror="this.src='/assets/img/placeholder/dummy.png'">
+                    <div class="flex-1">
+                        <h4 class="font-medium text-gray-900">${
+                            member.name
+                        }</h4>
+                        <p class="text-sm text-gray-600">${member.position}</p>
+                    </div>
+                `;
+
+                membersDiv.appendChild(memberDiv);
+            });
+
+            divisionDiv.appendChild(membersDiv);
+            wrapper.appendChild(divisionDiv);
+        });
+
+        container.appendChild(wrapper);
+    }
+
+    // Helper method untuk format data
+    formatDataForChart(formData) {
+        const strukturData = {};
+
+        formData.divisions.forEach((division) => {
+            if (division.name && division.staff && division.staff.length > 0) {
+                strukturData[division.name] = division.staff;
+            }
+        });
+
+        return strukturData;
+    }
+
+    // Helper method untuk format data
+    formatDataForChart(formData) {
+        const strukturData = {};
+
+        // Add divisions and their staff
+        formData.divisions.forEach((division) => {
+            if (division.name && division.staff && division.staff.length > 0) {
+                strukturData[division.name] = division.staff.map((staff) => ({
+                    nama: staff.name,
+                    jabatan: staff.position,
+                    email: staff.email,
+                    foto: staff.photo
+                        ? staff.photo.replace("/storage/", "")
+                        : null,
+                    urutan_index: staff.order,
+                }));
+            }
+        });
+
+        return strukturData;
     }
 
     closeCarouselPreview() {

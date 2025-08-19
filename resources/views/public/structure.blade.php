@@ -1,97 +1,31 @@
 @php
-    // Data dummy struktur
-    $head = [
-        'nama' => 'Awang Sugiarto, S.Kom.',
-        'jabatan' => 'Kepala Bagian',
-        'divisi' => 'Manajemen',
-        'image' => asset('assets/img/placeholder/dummy.png'),
+    $organization = $organization ?? [
+        'name' => 'Struktur Organisasi',
+        'description' => 'Struktur organisasi dan divisi PUSTIPD UIN Raden Fatah Palembang',
+        'subtitle' =>
+            'Berdasarkan surat XXX nomor XXX tentang Pengangkatan Pusat Teknologi Informasi dan Pangkalan Data Universitas Islam Negeri Raden Fatah Palembang Masa Bakti 2023-2027 menetapkan struktural organisasi sebagai berikut:',
     ];
 
-    $divisions = [
-        [
-            'name' => 'Manajemen',
-            'members' => [
-                [
-                    'nama' => 'Ahmad Kusuma, S.Kom.',
-                    'jabatan' => 'Sekretaris',
-                    'image' => asset('assets/img/placeholder/dummy.png'),
-                ],
-                [
-                    'nama' => 'Siti Nurhaliza, S.E.',
-                    'jabatan' => 'Bendahara',
-                    'image' => asset('assets/img/placeholder/dummy.png'),
-                ],
-                [
-                    'nama' => 'Dian Agustin, S.E.',
-                    'jabatan' => 'Staf Manajemen',
-                    'image' => asset('assets/img/placeholder/dummy.png'),
-                ],
-            ],
-        ],
-        [
-            'name' => 'Jaringan',
-            'members' => [
-                [
-                    'nama' => 'Budi Hartono, S.T.',
-                    'jabatan' => 'Administrator Jaringan',
-                    'image' => asset('assets/img/placeholder/dummy.png'),
-                ],
-                [
-                    'nama' => 'Eko Prasetyo, S.Kom.',
-                    'jabatan' => 'Network Engineer',
-                    'image' => asset('assets/img/placeholder/dummy.png'),
-                ],
-                [
-                    'nama' => 'Rina Novita, S.Kom.',
-                    'jabatan' => 'Staf Jaringan',
-                    'image' => asset('assets/img/placeholder/dummy.png'),
-                ],
-            ],
-        ],
-        [
-            'name' => 'Pengembangan Aplikasi',
-            'members' => [
-                [
-                    'nama' => 'Doni Setiawan, S.Kom.',
-                    'jabatan' => 'Frontend Developer',
-                    'image' => asset('assets/img/placeholder/dummy.png'),
-                ],
-                [
-                    'nama' => 'Indah Sari, S.T.',
-                    'jabatan' => 'Backend Developer',
-                    'image' => asset('assets/img/placeholder/dummy.png'),
-                ],
-                [
-                    'nama' => 'Sulis Wulandari, S.T.',
-                    'jabatan' => 'Staf Aplikasi',
-                    'image' => asset('assets/img/placeholder/dummy.png'),
-                ],
-            ],
-        ],
-        [
-            'name' => 'Pangkalan Data',
-            'members' => [
-                [
-                    'nama' => 'Rudi Wijaya, S.Kom.',
-                    'jabatan' => 'Database Administrator',
-                    'image' => asset('assets/img/placeholder/dummy.png'),
-                ],
-                [
-                    'nama' => 'Maya Sari, S.T.',
-                    'jabatan' => 'Data Analyst',
-                    'image' => asset('assets/img/placeholder/dummy.png'),
-                ],
-                [
-                    'nama' => 'Agus Supriyadi, S.Kom.',
-                    'jabatan' => 'Staf Data',
-                    'image' => asset('assets/img/placeholder/dummy.png'),
-                ],
-            ],
-        ],
-    ];
+    $head = isset($organization['head'])
+        ? [
+            'nama' => $organization['head']['nama'] ?? '',
+            'jabatan' => $organization['head']['jabatan'] ?? '',
+            'divisi' => $organization['head']['divisi'] ?? '',
+            'image' => $organization['head']['image'] ?? asset('assets/img/placeholder/dummy.png'),
+            'email' => $organization['head']['email'] ?? '',
+        ]
+        : [
+            'nama' => '',
+            'jabatan' => '',
+            'divisi' => '',
+            'image' => asset('assets/img/placeholder/dummy.png'),
+        ];
 
-    // Urutan divisi
-    $orderDivisions = ['Manajemen', 'Jaringan', 'Pengembangan Aplikasi', 'Pangkalan Data'];
+    // Data divisi dari CMS
+    $divisions = $organization['divisions'] ?? [];
+
+    // Urutan divisi dari CMS (jika ada) atau default kosong
+    $orderDivisions = $organization['division_order'] ?? collect($divisions)->pluck('name')->toArray();
 @endphp
 
 <x-public.layouts title="{{ $title }}" description="{{ $description }}" keywords="{{ $keywords }}">
@@ -144,42 +78,74 @@
             <!-- Header dan Deskripsi -->
             <div class="text-center mb-10 group max-w-3xl mx-auto pt-10">
                 <h2 class="text-3xl md:text-4xl font-bold text-secondary relative inline-block underline-animate mb-3">
-                    Struktur Organisasi
+                    {{ $organization['name'] ?? 'Struktur Organisasi' }}
                 </h2>
                 <h3 class="text-lg text-secondary pt-3">
-                    Struktur organisasi dan divisi PUSTIPD UIN Raden Fatah Palembang
+                    {{ $organization['description'] ?? 'Struktur organisasi dan divisi PUSTIPD UIN Raden Fatah Palembang' }}
                 </h3>
                 <p class="text-center text-secondary mb-8 pt-3 max-w-xl mx-auto">
-                    Berdasarkan surat XXX nomor XXX tentang Pengangkatan Pusat Teknologi Informasi dan Pangkalan Data
-                    Universitas Islam Negeri Raden Fatah Palembang Masa Bakti 2023-2027 menetapkan struktural organisasi
-                    sebagai berikut:
+                    {{ $organization['subtitle'] ?? 'Berdasarkan surat XXX nomor XXX tentang Pengangkatan Pusat Teknologi Informasi dan Pangkalan Data Universitas Islam Negeri Raden Fatah Palembang Masa Bakti 2023-2027 menetapkan struktural organisasi sebagai berikut:' }}
                 </p>
             </div>
 
-            <!-- Kepala Organisasi -->
-            <div class="mb-16 flex justify-center">
-                <x-team-card :name="$head['nama']" :position="$head['jabatan']" :image="$head['image']" />
-            </div>
+            <!-- Kepala Organisasi - Hanya tampil jika ada data -->
+            @if (!empty($head['nama']))
+                <div class="mb-16 flex justify-center">
+                    <x-team-card :name="$head['nama']" :position="$head['jabatan']" :image="$head['image']" :email="$head['email'] ?? ''" />
+                </div>
+            @endif
 
             <!-- Struktur divisi satu per satu vertikal -->
-            @foreach ($orderDivisions as $divName)
-                @php
-                    $div = collect($divisions)->firstWhere('name', $divName);
-                @endphp
+            @if (!empty($divisions))
+                @foreach ($orderDivisions as $divName)
+                    @php
+                        $div = collect($divisions)->firstWhere('name', $divName);
+                    @endphp
 
-                @if ($div)
-                    <div class="mb-14">
-                        <div class="divisi-title mb-8">{{ $div['name'] }}</div>
-                        <div class="flex justify-center gap-8 flex-wrap" role="list"
-                            aria-label="Anggota divisi {{ $div['name'] }}">
-                            @foreach ($div['members'] as $anggota)
-                                <x-team-card :name="$anggota['nama']" :position="$anggota['jabatan']" :image="$anggota['image']" />
-                            @endforeach
+                    @if ($div && !empty($div['members']))
+                        <div class="mb-14">
+                            <div class="divisi-tree-title mb-8">{{ $div['name'] }}</div>
+                            <div class="flex justify-center gap-8 flex-wrap" role="list"
+                                aria-label="Anggota divisi {{ $div['name'] }}">
+                                @foreach ($div['members'] as $anggota)
+                                    <x-team-card :name="$anggota['nama']" :position="$anggota['jabatan']" :image="$anggota['image'] ?? asset('assets/img/placeholder/dummy.png')"
+                                        :email="$anggota['email'] ?? ''" />
+                                @endforeach
+                            </div>
+                        </div>
+                    @elseif($div)
+                        <!-- Divisi ada tapi belum ada anggota -->
+                        <div class="mb-14">
+                            <div class="divisi-tree-title mb-8">{{ $div['name'] }}</div>
+                            <div class="flex justify-center">
+                                <p class="text-secondary opacity-75 italic">Anggota divisi sedang dalam proses
+                                    pengangkatan</p>
+                            </div>
+                        </div>
+                    @endif
+                @endforeach
+            @else
+                <!-- Empty state jika belum ada divisi -->
+                @if (empty($head['nama']))
+                    <div class="text-center py-16">
+                        <div class="bg-white/10 backdrop-blur-sm rounded-lg p-8 max-w-md mx-auto">
+                            <svg class="mx-auto h-16 w-16 text-secondary/50 mb-4" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
+                                </path>
+                            </svg>
+                            <h3 class="text-lg font-semibold text-secondary mb-2">Struktur Organisasi Sedang
+                                Dipersiapkan</h3>
+                            <p class="text-secondary/75 text-sm">Data struktur organisasi akan segera dipublikasikan</p>
                         </div>
                     </div>
+                @else
+                    <div class="text-center py-8">
+                        <p class="text-secondary/75 italic">Struktur divisi sedang dalam proses finalisasi</p>
+                    </div>
                 @endif
-            @endforeach
+            @endif
         </div>
     </section>
-
 </x-public.layouts>

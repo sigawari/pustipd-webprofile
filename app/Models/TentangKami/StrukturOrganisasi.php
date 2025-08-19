@@ -1,13 +1,11 @@
 <?php
-// app/Models/StrukturOrganisasi.php
-
 namespace App\Models\TentangKami;
 
 use Illuminate\Database\Eloquent\Model;
 
 class StrukturOrganisasi extends Model
 {
-    protected $table = 'struktur_organisasis'; // Table yang sudah ada
+    protected $table = 'struktur_organisasis';
     
     protected $fillable = [
         'nama',
@@ -18,12 +16,18 @@ class StrukturOrganisasi extends Model
         'status'
     ];
 
-    // Method untuk single entry management
-    public static function getAllForManagement()
+    // Scope untuk data published/active
+    public function scopePublished($query)
     {
-        return static::orderBy('divisi')->orderBy('urutan_index')->get();
+        return $query->where('status', 'active');
     }
 
+    public function scopeActive($query)
+    {
+        return $query->where('status', 'active');
+    }
+
+    // Method untuk homepage carousel
     public static function getCarouselData()
     {
         return static::where('status', 'active')
@@ -31,11 +35,19 @@ class StrukturOrganisasi extends Model
                     ->get();
     }
 
+    // Method untuk tree structure di halaman structure
     public static function getTreeStructure()
     {
         return static::where('status', 'active')
+                    ->orderBy('divisi')
                     ->orderBy('urutan_index')
                     ->get()
                     ->groupBy('divisi');
+    }
+
+    // Method untuk management admin
+    public static function getAllForManagement()
+    {
+        return static::orderBy('divisi')->orderBy('urutan_index')->get();
     }
 }

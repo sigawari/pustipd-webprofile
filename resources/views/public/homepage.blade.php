@@ -290,6 +290,7 @@
         </div>
     </section>
 
+    <!-- Berita Pengumuman Section -->
     <section id="informasi" class="py-20 bg-primary">
         <div class="container mx-auto px-6">
             {{-- Header Section --}}
@@ -424,7 +425,7 @@
     </section>
 
     <!-- Tim Section dengan Infinite Carousel -->
-    <section id="tentang" class="py-20 bg-white overflow-hidden">
+    <section id="tentang" class="py-15 bg-white overflow-hidden">
         <div class="container mx-auto px-4 sm:px-6">
             <div class="text-center mb-10 group">
                 <h2 class="text-3xl md:text-4xl font-bold text-secondary mb-4 relative inline-block underline-animate">
@@ -435,61 +436,54 @@
                 </h3>
             </div>
 
-            <!-- Infinite Carousel Container -->
-            <div class="relative overflow-hidden">
-                <!-- Carousel Track -->
-                <div class="flex animate-infinite-scroll gap-2 sm:gap-4 md:gap-5" id="teamCarousel">
-                    <!-- First Set of Cards -->
-                    <x-team-card name="Dr. Ahmad Wijaya" position="Kepala PUSTIPD"
-                        description="Visioner dengan pengalaman 15+ tahun dalam teknologi informasi"
-                        image="{{ asset('assets/img/placeholder/dummy.png') }}" />
+            @if (!empty($teams) && $teams->count() > 0)
+                <!-- Infinite Carousel Container -->
+                <div class="relative overflow-hidden">
+                    <!-- Carousel Track -->
+                    <div class="flex animate-infinite-scroll gap-2 sm:gap-4 md:gap-5" id="teamCarousel">
+                        <!-- First Set of Cards - Dynamic -->
+                        @foreach ($teams as $member)
+                            <x-team-card name="{{ $member->nama }}" position="{{ $member->jabatan }}"
+                                description="{{ $member->divisi }}"
+                                image="{{ $member->foto ? asset('storage/' . $member->foto) : asset('assets/img/placeholder/dummy.png') }}" />
+                        @endforeach
 
-                    <x-team-card name="Siti Nurhaliza, S.Kom" position="Kepala Divisi Jaringan"
-                        description="Expert dalam infrastruktur jaringan dan keamanan sistem"
-                        image="{{ asset('assets/img/placeholder/dummy.png') }}" />
-
-                    <x-team-card name="Budi Santoso, M.T" position="Kepala Divisi Aplikasi"
-                        description="Spesialis pengembangan aplikasi dan sistem informasi"
-                        image="{{ asset('assets/img/placeholder/dummy.png') }}" />
-
-                    <x-team-card name="Diana Putri, S.T" position="Kepala Divisi Data"
-                        description="Ahli dalam manajemen data dan business intelligence"
-                        image="{{ asset('assets/img/placeholder/dummy.png') }}" />
-
-                    <x-team-card name="Rizki Pratama, S.T" position="Network Administrator"
-                        description="Spesialis maintenance dan monitoring infrastruktur jaringan"
-                        image="{{ asset('assets/img/placeholder/dummy.png') }}" />
-
-                    <x-team-card name="Maya Sari, S.Kom" position="UI/UX Designer"
-                        description="Kreator pengalaman pengguna yang intuitif dan menarik"
-                        image="{{ asset('assets/img/placeholder/dummy.png') }}" />
-
-                    <!-- Duplicate Set untuk Infinite Effect -->
-                    <x-team-card name="Dr. Ahmad Wijaya" position="Kepala PUSTIPD"
-                        description="Visioner dengan pengalaman 15+ tahun dalam teknologi informasi"
-                        image="{{ asset('assets/img/placeholder/dummy.png') }}" />
-
-                    <x-team-card name="Siti Nurhaliza, S.Kom" position="Kepala Divisi Jaringan"
-                        description="Expert dalam infrastruktur jaringan dan keamanan sistem"
-                        image="{{ asset('assets/img/placeholder/dummy.png') }}" />
-
-                    <x-team-card name="Budi Santoso, M.T" position="Kepala Divisi Aplikasi"
-                        description="Spesialis pengembangan aplikasi dan sistem informasi"
-                        image="{{ asset('assets/img/placeholder/dummy.png') }}" />
-
-                    <x-team-card name="Diana Putri, S.T" position="Kepala Divisi Data"
-                        description="Ahli dalam manajemen data dan business intelligence"
-                        image="{{ asset('assets/img/placeholder/dummy.png') }}" />
-
-                    <x-team-card name="Rizki Pratama, S.T" position="Network Administrator"
-                        description="Spesialis maintenance dan monitoring infrastruktur jaringan"
-                        image="{{ asset('assets/img/placeholder/dummy.png') }}" />
-
-                    <x-team-card name="Maya Sari, S.Kom" position="UI/UX Designer"
-                        description="Kreator pengalaman pengguna yang intuitif dan menarik"
-                        image="{{ asset('assets/img/placeholder/dummy.png') }}" />
+                        <!-- Duplicate Set untuk Infinite Effect -->
+                        @foreach ($teams as $member)
+                            <x-team-card name="{{ $member->nama }}" position="{{ $member->jabatan }}"
+                                description="{{ $member->divisi }}"
+                                image="{{ $member->foto ? asset('storage/' . $member->foto) : asset('assets/img/placeholder/dummy.png') }}" />
+                        @endforeach
+                    </div>
                 </div>
-            </div>
+            @else
+                <!-- Empty State -->
+                <div class="text-center py-10">
+                    <div class="max-w-md mx-auto">
+                        <!-- Icon -->
+                        <div class="flex justify-center mb-6">
+                            <div class="bg-gray-100 p-6 rounded-full">
+                                <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
+                                    </path>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- Content -->
+                        <h3 class="text-xl font-semibold text-gray-800 mb-3">
+                            Tim Sedang Dalam Penyusunan
+                        </h3>
+                        <p class="text-gray-600 leading-relaxed mb-6">
+                            Informasi lengkap tentang tim PUSTIPD akan segera tersedia.
+                            Kami sedang mempersiapkan profil anggota tim untuk memberikan
+                            layanan terbaik kepada Anda.
+                        </p>
+                    </div>
+                </div>
+            @endif
         </div>
     </section>
 
@@ -526,7 +520,5 @@
 
         </div>
     </section>
-
-
 
 </x-public.layouts>

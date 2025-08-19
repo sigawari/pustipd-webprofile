@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('profils', function (Blueprint $table) {
             $table->id();
-            $table->string('organization_name')->default('PUSTIPD');
+            $table->string('organization_name')->default('Pusat Teknologi Informasi dan Pangkalan Data');
             $table->text('description')->nullable();
             $table->text('address')->nullable();
             $table->string('email')->nullable();

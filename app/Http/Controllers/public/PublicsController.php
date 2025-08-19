@@ -38,10 +38,9 @@ class PublicsController extends Controller
         $title = 'UIN Raden Fatah Palembang';
         $description = 'Pusat Sistem dan Teknologi Informasi dan Pangkalan Data UIN Raden Fatah Palembang';
         $keywords = 'pustipd, uin raden fatah, teknologi informasi';
-
-        $profil = Profil::latest()->first(); 
+    
+        $profils = Profil::latest()->first(); 
         
-        // Perbaiki pencapaian - hilangkan ";" dan tambahkan ()
         $achievements = Pencapaian::published()
                                 ->orderBy('created_at', 'desc')
                                 ->get();
@@ -49,13 +48,11 @@ class PublicsController extends Controller
         $services = Layanan::published()
                            ->orderBy('created_at', 'desc')
                            ->get();
-
+    
         $partners = Mitra::published()
                            ->orderBy('created_at', 'desc')
                            ->get();
-        
-        
-
+    
         // Query berita dengan pagination
         $query = KelolaBerita::where('status', 'published');
         $newsList = $query->orderBy('publish_date', 'desc')
@@ -70,12 +67,13 @@ class PublicsController extends Controller
                                             ->limit(3)
                                             ->get();
         
-        $teams = StrukturOrganisasi::published();
-
+        // Perbaiki pemanggilan teams untuk carousel
+        $teams = StrukturOrganisasi::getCarouselData();
+    
         return view('public.homepage', compact(
-            'title', 'description', 'keywords', 'profil', 'newsList', 'announcementsList', 'achievements', 'services', 'partners', 'teams'
+            'title', 'description', 'keywords', 'profils', 'newsList', 'announcementsList', 'achievements', 'services', 'partners', 'teams'
         ));
-    }
+    }  
 
 
     public function tentang(){
@@ -98,9 +96,9 @@ class PublicsController extends Controller
             ];
         });
 
-        $profil = Profil::latest()->first(); 
+        $profils = Profil::latest()->first(); 
     
-        return view('public.about', compact('title', 'description', 'keywords', 'galleries', 'galleriesData', 'profil'));
+        return view('public.about', compact('title', 'description', 'keywords', 'galleries', 'galleriesData', 'profils'));
     }
 
     public function visi_misi(){
@@ -117,12 +115,13 @@ class PublicsController extends Controller
         return view('public.vision', compact('title', 'description', 'keywords', 'visiMisi'));
     }
 
-    public function struktur(){
+    public function struktur()
+    {
         $title = 'Struktur Organisasi PUSTIPD';
         $description = 'Struktur organisasi PUSTIPD UIN Raden Fatah Palembang';
         $keywords = 'struktur, organisasi, pustipd';
         
-        // Data untuk tree structure
+        // Data untuk tree structure - sudah digroup by divisi
         $strukturData = StrukturOrganisasi::getTreeStructure();
         
         return view('public.structure', compact(
