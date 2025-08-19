@@ -15,15 +15,18 @@ import "./components/admin/ketetapan-action";
 import "./components/admin/slug";
 import "./components/admin/tutorialblock";
 import "./components/admin/tutorialfeatured";
-import "./componenets/admin/structure";
+import "./components/admin/structure";
 
-// Import komponem public
+// Import komponent public
 import "./components/public/bulk-download";
 import {
     initShareButtons,
     shareTo,
     copyContentLink,
 } from "./components/public/share.js";
+
+// Import Structure dari components/admin (BUKAN modules/)
+import { Structure } from "./components/admin/structure.js";
 
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
@@ -32,12 +35,6 @@ window.copyContentLink = copyContentLink;
 window.shareTo = shareTo;
 initShareButtons();
 
-// import "./components/admin/rencana_dummyJS";
-// Import future public components
-// import "./components/public/search";
-// import "./components/public/pagination";
-// import "./components/public/modal-public";
-
 document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll(".editor").forEach((editorElem) => {
         const quill = new Quill(editorElem, {
@@ -45,10 +42,24 @@ document.addEventListener("DOMContentLoaded", function () {
             placeholder: "Tulis isi konten di sini...",
         });
 
-        // Sinkronisasi ke textarea terkait (diasumsikan textarea adalah sibling setelah editor)
         const textarea = editorElem.nextElementSibling;
         quill.on("text-change", function () {
             textarea.value = quill.root.innerHTML;
         });
     });
+});
+
+// Initialize Structure
+document.addEventListener("DOMContentLoaded", () => {
+    if (document.getElementById("organizationForm")) {
+        const orgManager = new Structure();
+        orgManager.init();
+
+        // Expose to global untuk onclick handlers di Blade
+        window.orgManager = orgManager;
+        window.addDivisionEntry = () => orgManager.addDivisionEntry();
+        window.saveOrganization = () => orgManager.saveOrganization();
+        window.previewCarousel = () => orgManager.previewCarousel();
+        window.previewOrgChart = () => orgManager.previewOrgChart();
+    }
 });
