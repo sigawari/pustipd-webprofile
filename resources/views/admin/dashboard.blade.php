@@ -45,7 +45,7 @@
                     </div>
                     <div class="ml-4">
                         <p class="text-sm font-medium text-gray-600">Total Dokumen</p>
-                        <p class="text-2xl font-bold text-gray-900">18</p>
+                        <p class="text-2xl font-bold text-gray-900">{{ $totalDokumen }}</p>
                         <p class="text-sm text-blue-600">3 dokumen baru</p>
                     </div>
                 </div>
@@ -67,7 +67,7 @@
                     </div>
                     <div class="ml-4">
                         <p class="text-sm font-medium text-gray-600">Pengumuman Aktif</p>
-                        <p class="text-2xl font-bold text-gray-900">7</p>
+                        <p class="text-2xl font-bold text-gray-900">{{ $totalPengumuman }}</p>
                         <p class="text-sm text-orange-600">2 urgent</p>
                     </div>
                 </div>
