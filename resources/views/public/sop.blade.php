@@ -178,7 +178,7 @@
                                         <!-- Download Button -->
                                         <td class="px-6 py-4 text-center">
                                             @if ($sop->file_path && file_exists(storage_path('app/public/' . $sop->file_path)))
-                                                <a href="{{ route('ketetapan.download', $sop->id) }}"
+                                                <a href="{{ route('sop.download', $sop->id) }}"
                                                     class="inline-flex items-center px-3 py-2 bg-blue-600 text-white rounded-lg 
                                                            hover:bg-blue-700 transition-colors text-xs font-medium shadow-sm"
                                                     title="Download {{ $sop->title }}" target="_blank">
@@ -209,9 +209,9 @@
                                                         stroke-width="1.5"
                                                         d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                                 </svg>
-                                                <p class="text-lg font-medium text-gray-900 mb-2">Belum ada ketetapan
+                                                <p class="text-lg font-medium text-gray-900 mb-2">Belum ada SOP
                                                     tersedia</p>
-                                                <p class="text-gray-600">Ketetapan akan segera ditambahkan oleh admin
+                                                <p class="text-gray-600">SOP akan segera ditambahkan oleh admin
                                                 </p>
                                             </div>
                                         </td>
@@ -380,7 +380,7 @@
                         <!-- Info Pagination -->
                         <div class="text-sm text-secondary">
                             Menampilkan {{ $sops->firstItem() ?? 0 }} sampai {{ $sops->lastItem() ?? 0 }}
-                            dari {{ $sops->total() ?? 0 }} ketetapan
+                            dari {{ $sops->total() ?? 0 }} SOP
                         </div>
 
                         <!-- Pagination Links -->
@@ -445,7 +445,7 @@
     </section>
 
     <!-- Bulk Download Form -->
-    <form id="bulk-download-form" method="POST" action="{{ route('public.ketetapan.bulk-download') }}"
+    <form id="bulk-download-form" method="POST" action="{{ route('public.sop.bulk-download') }}"
         style="display: none;">
         @csrf
         <div id="bulk-download-inputs"></div>

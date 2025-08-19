@@ -6,7 +6,7 @@
 
         <!-- Content -->
         <div class="flex-1 flex flex-col justify-center">
-            <h3 class="text-xl font-bold text-gray-800 mb-4 group-hover:text-primary transition-colors duration-300">
+            <h3 class="text-xl font-bold text-gray-800 mb-4 group-hover:text-custom-blue transition-colors duration-300">
                 {{ $title }}
             </h3>
             <p class="text-gray-600 leading-relaxed">
