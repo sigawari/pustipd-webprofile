@@ -26,7 +26,9 @@
             <!-- Form -->
             <form id="editForm-{{ $tutorial->id }}" method="POST"
                 action="{{ route('admin.informasi-terkini.kelola-tutorial.update', $tutorial->id) }}"
-                class="space-y-6" onsubmit="return validateAndSubmitUpdate(event, '{{ $tutorial->id }}')">
+                class="space-y-6" onsubmit="return validateAndSubmitUpdate(event, '{{ $tutorial->id }}')"
+                enctype="multipart/form-data"
+            >
                 @csrf
                 @method('PUT')
 
@@ -70,28 +72,28 @@
                             <select id="category-{{ $tutorial->id }}" name="category" required
                                 class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500">
                                 <option value="">Pilih Kategori</option>
-                                <option value="web_development" @selected($tutorial->category == 'web_development')>💻 Web Development</option>
-                                <option value="database" @selected($tutorial->category == 'database')>🗄️ Database</option>
-                                <option value="server_management" @selected($tutorial->category == 'server_management')>⚙️ Server Management
-                                </option>
-                                <option value="security" @selected($tutorial->category == 'security')>🔒 Security</option>
-                                <option value="technology" @selected($tutorial->category == 'technology')>🔧 Teknologi</option>
-                                <option value="academic_services" @selected($tutorial->category == 'academic_services')>🎓 Layanan Akademik
-                                </option>
-                                <option value="library_resources" @selected($tutorial->category == 'library_resources')>📚 Sumber Daya
-                                    Perpustakaan</option>
+                                <option value="sistem_informasi_akademik" @selected($tutorial->category == 'sistem_informasi_akademik')>📚 Sistem Informasi Akademik</option>
+                                <option value="e_learning" @selected($tutorial->category == 'e_learning')>💻 E-Learning</option>
+                                <option value="layanan_digital_mahasiswa" @selected($tutorial->category == 'layanan_digital_mahasiswa')>🎓 Layanan Digital Mahasiswa</option>
+                                <option value="pengelolaan_data_akun" @selected($tutorial->category == 'pengelolaan_data_akun')>🔑 Pengelolaan Data Akun</option>
+                                <option value="jaringan_konektivitas" @selected($tutorial->category == 'jaringan_konektivitas')>🌐 Jaringan & Konektivitas</option>
+                                <option value="software_aplikasi" @selected($tutorial->category == 'software_aplikasi')>🛠️ Software & Aplikasi</option>
+                                <option value="keamanan_digital" @selected($tutorial->category == 'keamanan_digital')>🔒 Keamanan Digital</option>
+                                <option value="penelitian_akademik" @selected($tutorial->category == 'penelitian_akademik')>📖 Penelitian Akademik</option>
+                                <option value="layanan_publik" @selected($tutorial->category == 'layanan_publik')>🏛️ Layanan Publik</option>
+                                <option value="mobile_responsive" @selected($tutorial->category == 'mobile_responsive')>📱 Mobile Responsive</option>
                             </select>
                         </div>
 
                         <!-- Tanggal Publish -->
                         <div>
-                            <label for="published_at-{{ $tutorial->id }}"
+                            <label for="date-{{ $tutorial->id }}"
                                 class="block text-sm font-medium text-gray-700 mb-2">
                                 Tanggal Publikasi <span class="text-red-500">*</span>
                             </label>
-                            <input type="date" id="published_at-{{ $tutorial->id }}" name="published_at" required
+                            <input type="date" id="date-{{ $tutorial->id }}" name="date" required
                                 class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500"
-                                value="{{ old('published_at', $tutorial->published_at ? date('Y-m-d', strtotime($tutorial->published_at)) : date('Y-m-d')) }}">
+                                value="{{ old('date', $tutorial->date ? date('Y-m-d', strtotime($tutorial->date)) : date('Y-m-d')) }}">
                         </div>
 
                         <!-- Status -->
@@ -137,7 +139,10 @@
                             @endphp
 
                             @foreach ($contentBlocks as $index => $block)
-                                @if ($block['type'] == 'step')
+                                @php
+                                    $blockType = $block['type'] ?? null;
+                                @endphp
+                                @if ($blockType === 'step')
                                     <div class="content-block bg-white border border-gray-200 rounded-lg p-4"
                                         data-type="step" data-id="{{ $block['id'] }}" draggable="true">
                                         <div class="flex items-center justify-between mb-3">
@@ -215,7 +220,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                @elseif($block['type'] == 'tip')
+                                @elseif($blockType === 'tip')
                                     <div class="content-block bg-yellow-50 border border-yellow-200 rounded-lg p-4"
                                         data-type="tip" data-id="{{ $block['id'] }}" draggable="true">
                                         <div class="flex items-center justify-between mb-3">

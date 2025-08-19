@@ -23,7 +23,9 @@
 
         <!-- Form -->
         <form id="addForm" method="POST" action="{{ route('admin.informasi-terkini.kelola-tutorial.store') }}"
-            class="space-y-6" onsubmit="return tutorialBlockBuilder.validateBlocks()">
+            class="space-y-6" onsubmit="return tutorialBlockBuilder.validateBlocks()"
+            enctype="multipart/form-data"
+        >
             @csrf
 
             <!-- Bagian Info Dasar Tutorial - TANPA deskripsi -->
@@ -61,14 +63,17 @@
                         </label>
                         <select id="category" name="category" required
                             class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500">
+                            <option value="">Pilih Kategori</option>
                             <option value="sistem_informasi_akademik">📚 Sistem Informasi Akademik</option>
                             <option value="e_learning">💻 E-Learning</option>
                             <option value="layanan_digital_mahasiswa">🎓 Layanan Digital Mahasiswa</option>
                             <option value="pengelolaan_data_akun">🔑 Pengelolaan Data Akun</option>
                             <option value="jaringan_konektivitas">🌐 Jaringan & Konektivitas</option>
                             <option value="software_aplikasi">🛠️ Software & Aplikasi</option>
+                            <option value="keamanan_digital">🔒 Keamanan Digital</option>
                             <option value="penelitian_akademik">📖 Penelitian Akademik</option>
                             <option value="layanan_publik">🏛️ Layanan Publik</option>
+                            <option value="mobile_responsive">📱 Mobile Responsive</option>
                         </select>
                     </div>
 

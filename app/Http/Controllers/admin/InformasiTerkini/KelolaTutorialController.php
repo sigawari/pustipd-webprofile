@@ -136,7 +136,6 @@ class KelolaTutorialController extends Controller
                 'is_featured'   => $request->boolean('is_featured'),
                 'is_hidden'     => $request->boolean('is_hidden', false),
                 'content_blocks'=> $contentBlocks,
-                'view_count'    => 0,
             ]);
             
 
@@ -155,98 +154,103 @@ class KelolaTutorialController extends Controller
 
     public function update(Request $request, $id)
     {
-        $tutorial = KelolaTutorial::findOrFail($id);
+        // dd($request->all());
+        $kelolaTutorials = KelolaTutorial::findOrFail($id);
 
-        $request->validate([
+        // 1. Validasi input
+        $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'slug' => 'required|string|unique:kelola_tutorials,slug,' . $tutorial->id,
-            'category' => 'required|in:sistem_informasi_akademik,e_learning,layanan_digital_mahasiswa,pengelolaan_data_akun,jaringan_konektivitas,software_aplikasi,keamanan_digital,penelitian_akademik,layanan_publik',
-            'date' => 'required|date',
+            'slug' => 'required|string|max:255|unique:kelola_tutorials,slug,' . $kelolaTutorials->id,
+            'category' => 'required|string|max:255',
+            'date' => 'nullable|date',
             'status' => 'required|in:draft,published',
-            'excerpt' => 'nullable|string',
-            'tags' => 'nullable|array',
+            'excerpt' => 'nullable|string|max:500',
+            'tags' => 'nullable|string|max:255',
             'is_featured' => 'nullable|boolean',
-            'content_blocks' => 'required|array|min:1',
-            'content_blocks.*.type' => 'required|in:step,tip',
-            'content_blocks.*.title' => 'required_if:content_blocks.*.type,step|string',
-            'content_blocks.*.content' => 'required|string',
-            'content_blocks.*.tip_type' => 'required_if:content_blocks.*.type,tip|string',
-            'content_blocks.*.image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'is_hidden' => 'nullable|boolean',
+            'featured_image' => 'nullable|image|max:2048',
+            'media_files.*' => 'nullable|file|max:5120', // max 5MB
+            'content_blocks' => 'nullable|array',
+            'content_blocks.*.title' => 'nullable|string|max:255',
+            'content_blocks.*.content' => 'nullable|string',
+            'content_blocks.*.image' => 'nullable|image|max:2048',
         ]);
 
-        try {
-            $contentBlocks = [];
+        // 2. Ambil field utama
+        $data = $request->only([
+            'title',
+            'slug',
+            'category',
+            'status',
+            'excerpt',
+        ]);
 
-            foreach ($request->content_blocks as $index => $block) {
-                $contentBlock = [
-                    'id' => $index,
-                    'type' => $block['type'],
-                    'order' => $block['order'] ?? $index + 1,
-                    'title' => $block['title'] ?? null,
-                    'content' => $block['content'],
-                    'tip_type' => $block['tip_type'] ?? null,
+        $data['is_featured'] = $request->boolean('is_featured');
+        $data['is_hidden']   = $request->boolean('is_hidden', false);
+
+        // 3. Tags → ubah string jadi array
+        $data['tags'] = $request->filled('tags')
+            ? array_map('trim', explode(',', $request->tags))
+            : [];
+
+        // 4. Handle featured image
+        if ($request->hasFile('featured_image')) {
+            $path = $request->file('featured_image')->store('tutorials/featured', 'public');
+            $data['featured_image'] = 'storage/' . $path;
+        }
+
+        // 5. Handle media files (multiple)
+        if ($request->hasFile('media_files')) {
+            $files = [];
+            foreach ($request->file('media_files') as $file) {
+                $files[] = 'storage/' . $file->store('tutorials/media', 'public');
+            }
+            $data['media_files'] = $files;
+        }
+
+        // 6. Handle content_blocks
+        $blocks = [];
+        if ($request->has('content_blocks')) {
+            foreach ($request->content_blocks as $blockId => $block) {
+                $blockData = [
+                    'title'   => $block['title'] ?? null,
+                    'content' => $block['content'] ?? null,
                 ];
 
-                // Handle image upload
-                if (isset($block['image']) && $request->hasFile("content_blocks.{$index}.image")) {
-                    // Hapus file lama jika ada
-                    $oldBlocks = $tutorial->getContentBlocks();
-                    if (isset($oldBlocks[$index]['image']) && File::exists(public_path($oldBlocks[$index]['image']))) {
-                        File::delete(public_path($oldBlocks[$index]['image']));
-                    }
-
-                    $image = $request->file("content_blocks.{$index}.image");
-                    $imageName = time() . '_' . $index . '.' . $image->getClientOriginalExtension();
-                    $image->move(public_path('uploads/tutorial-images'), $imageName);
-                    $contentBlock['image'] = 'uploads/tutorial-images/' . $imageName;
+                if (isset($block['image']) && $block['image'] instanceof \Illuminate\Http\UploadedFile) {
+                    $path = $block['image']->store('tutorials', 'public');
+                    $blockData['image'] = 'storage/' . $path;
                 } else {
-                    // Pertahankan gambar lama jika tidak diupload baru
-                    $oldBlocks = $tutorial->getContentBlocks();
-                    if (isset($oldBlocks[$index]['image'])) {
-                        $contentBlock['image'] = $oldBlocks[$index]['image'];
+                    $existingBlocks = $kelolaTutorials->content_blocks ?? [];
+                    if (isset($existingBlocks[$blockId]['image'])) {
+                        $blockData['image'] = $existingBlocks[$blockId]['image'];
                     }
                 }
 
-                $contentBlocks[] = $contentBlock;
+                $blocks[$blockId] = $blockData; // ✅ jangan numerik, simpan pakai key blockId
             }
-
-            $tutorial->update([
-                'title'         => $request->title,
-                'slug'          => $request->slug,
-                'excerpt'       => $request->excerpt,
-                'category'      => $request->category,
-                'date'          => $request->date,
-                'status'        => $request->status,
-                'tags'          => $request->tags,
-                'is_featured'   => $request->boolean('is_featured'),
-                'is_hidden'     => $request->boolean('is_hidden', false),
-                'content_blocks'=> $contentBlocks,
-            ]);            
-
-            return redirect()
-                ->back()
-                ->with('success', 'Tutorial berhasil diupdate.');
-
-        } catch (\Exception $e) {
-            Log::error('Error updating tutorial:', ['error' => $e->getMessage()]);
-
-            return redirect()
-                ->back()
-                ->with('error', 'Gagal meng-update tutorial: ' . $e->getMessage());
         }
+        $data['content_blocks'] = $blocks;
+
+        // 7. Update tutorial
+        $kelolaTutorials->update($data);
+
+        return redirect()
+            ->back()
+            ->with('success', 'Tutorial berhasil diperbarui!');
     }
 
     public function destroy(Request $request, $id)
     {
         // dd($id);
-        $kelolaTutorial = KelolaTutorial::findOrFail($id);
+        $kelolaTutorials = KelolaTutorial::findOrFail($id);
         // Hapus gambar-gambar terkait
-        foreach ($kelolaTutorial->getContentBlocks() as $block) {
+        foreach ($kelolaTutorials->getContentBlocks() as $block) {
             if (isset($block['image']) && File::exists(public_path($block['image']))) {
                 File::delete(public_path($block['image']));
             }
         }
-        $kelolaTutorial->delete();
+        $kelolaTutorials->delete();
         return redirect()
             ->back()
             ->with('success', 'Tutorial berhasil dihapus.');
