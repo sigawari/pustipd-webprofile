@@ -154,8 +154,12 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
             Route::put('/struktur-organisasi/{strukturOrganisasi}', 'update')->name('struktur-organisasi.update');
             Route::delete('/struktur-organisasi/{strukturOrganisasi}', 'destroy')->name('struktur-organisasi.destroy');
             Route::get('/struktur-organisasi/export', 'export')->name('struktur-organisasi.export');
-            Route::get('/struktur-organisasi/reorder', 'reorder')->name('struktur-organisasi.reorder');
+            Route::post('/struktur-organisasi/reorder', 'reorder')->name('struktur-organisasi.reorder');
+            Route::get('/struktur-organisasi/get-data', 'getDraftData')->name('struktur-organisasi.get-data');
+            Route::get('/struktur-organisasi/preview', 'preview')->name('struktur-organisasi.preview');
+            Route::get('/struktur-organisasi/preview-data', 'getPreviewData')->name('struktur-organisasi.preview-data');
         });
+
 
         // Visi Misi Routes
         Route::controller(VisiMisiController::class)->group(function () {

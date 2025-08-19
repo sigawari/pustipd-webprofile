@@ -126,14 +126,6 @@
                                     class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                     placeholder="kepala@pustipd.uinrf.ac.id">
                             </div>
-
-                            <div>
-                                <label for="headOrder" class="block text-sm font-medium text-gray-700 mb-2">Urutan
-                                    Tampilan</label>
-                                <input type="number" id="headOrder" name="headOrder" value="0" readonly
-                                    class="w-full px-3 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-500"
-                                    placeholder="0 (Selalu di posisi pertama)">
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -159,7 +151,6 @@
 
                 <!-- Divisions Container -->
                 <div id="divisionsContainer" class="space-y-6">
-                    <!-- Division entries akan ditambahkan di sini -->
                 </div>
 
                 <!-- Empty State -->
