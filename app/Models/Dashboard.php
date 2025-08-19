@@ -8,6 +8,7 @@ use App\Models\Dokumen\Regulasi;
 use App\Models\Dokumen\Ketetapan;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\InformasiTerkini\KelolaBerita;
+use App\Models\InformasiTerkini\KelolaTutorial;
 use App\Models\InformasiTerkini\KelolaPengumuman;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -50,6 +51,30 @@ class Dashboard extends Model
     public function pengumuman()
     {
         return $this->belongsTo(KelolaPengumuman::class, 'pengumumans_id');
+    }
+    public function tutorial()
+    {
+        return $this->belongsTo(KelolaTutorial::class, 'tutorials_id');
+    }
+    public function ketetapan()
+    {
+        return $this->belongsTo(Ketetapan::class, 'ketetapans_id');
+    }
+    public function regulasi()
+    {
+        return $this->belongsTo(Regulasi::class, 'regulasis_id');
+    }
+    public function panduan()
+    {
+        return $this->belongsTo(Panduan::class, 'panduans_id');
+    }
+    public function sop()
+    {
+        return $this->belongsTo(Sop::class, 'sops_id');
+    }
+    public function faq()
+    {
+        return $this->belongsTo(Faq::class, 'faqs_id');
     }
 
 }

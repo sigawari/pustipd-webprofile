@@ -92,7 +92,8 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
     
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
-
+    Route::get('/dashboard/realtime', [DashboardController::class, 'getRealTimeData'])->name('dashboard.realtime');
+    
     // Beranda
     Route::prefix('beranda')->as('beranda.')->group(function () {
 
