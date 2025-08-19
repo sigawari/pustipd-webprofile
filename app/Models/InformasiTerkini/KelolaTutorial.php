@@ -87,7 +87,7 @@ class KelolaTutorial extends Model
      */
     public function getContentBlocks()
     {
-        return $this->content_blocks ? json_decode($this->content_blocks, true) : [];
+        return $this->content_blocks;
     }
 
     public function hasImages()

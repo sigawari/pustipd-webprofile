@@ -53,6 +53,8 @@ class PublicsController extends Controller
         $partners = Mitra::published()
                            ->orderBy('created_at', 'desc')
                            ->get();
+        
+        
 
         // Query berita dengan pagination
         $query = KelolaBerita::where('status', 'published');
@@ -67,9 +69,11 @@ class PublicsController extends Controller
                                             ->orderBy('date', 'desc')
                                             ->limit(3)
                                             ->get();
+        
+        $teams = StrukturOrganisasi::published();
 
         return view('public.homepage', compact(
-            'title', 'description', 'keywords', 'profil', 'newsList', 'announcementsList', 'achievements', 'services', 'partners'
+            'title', 'description', 'keywords', 'profil', 'newsList', 'announcementsList', 'achievements', 'services', 'partners', 'teams'
         ));
     }
 
