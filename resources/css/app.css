@@ -6,6 +6,7 @@
 @import "tailwindcss";
 
 @theme {
+    /* Light Mode Colors */
     --color-secondary: #062749;
     --color-primary: #f5fbff;
     --color-custom-blue: #82bee0;
@@ -20,9 +21,45 @@
     --color-navy-700: #265784;
     --color-navy-800: #1a3f67;
     --color-navy-900: #062749;
+
+    /* Dark Mode Colors */
+    --color-dark-bg: #0f172a;
+    --color-dark-surface: #1e293b;
+    --color-dark-elevated: #334155;
+    --color-dark-text: #f1f5f9;
+    --color-dark-text-secondary: #ffff;
+    --color-dark-text-muted: #94a3b8;
+    --color-dark-border: #475569;
+    --color-dark-accent: #0ea5e9;
+    --color-dark-accent-hover: #0284c7;
+}
+
+/* Root variables untuk dark mode */
+:root {
+    --bg-color: var(--color-primary);
+    --surface-color: #ffffff;
+    --text-color: var(--color-secondary);
+    --text-secondary: #ffff;
+    --text-muted: #94a3b8;
+    --border-color: #e2e8f0;
+    --accent-color: var(--color-custom-blue);
+    --accent-hover: var(--color-navy-600);
+}
+
+/* Dark mode variables */
+.dark {
+    --bg-color: var(--color-dark-bg);
+    --surface-color: var(--color-dark-surface);
+    --text-color: var(--color-dark-text);
+    --text-secondary: var(--color-dark-text-secondary);
+    --text-muted: var(--color-dark-text-muted);
+    --border-color: var(--color-dark-border);
+    --accent-color: var(--color-dark-accent);
+    --accent-hover: var(--color-dark-accent-hover);
 }
 
 @layer base {
+    /* Font families */
     h1,
     h2,
     h3,
@@ -42,14 +79,72 @@
     textarea {
         font-family: "Nunito", sans-serif;
     }
+
+    /* Base styles dengan dark mode support */
+    html {
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* Form elements dark mode */
+    .dark input,
+    .dark textarea,
+    .dark select {
+        background-color: var(--surface-color);
+        border-color: var(--border-color);
+        color: var(--text-color);
+    }
+
+    .dark input:focus,
+    .dark textarea:focus,
+    .dark select:focus {
+        border-color: var(--accent-color);
+        box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+    }
+
+    /* Card styles */
+    .dark .bg-white {
+        background-color: var(--surface-color) !important;
+    }
+
+    .dark .bg-gray-50 {
+        background-color: var(--color-dark-elevated) !important;
+    }
+
+    .dark .text-gray-900 {
+        color: var(--text-color) !important;
+    }
+
+    .dark .text-gray-600 {
+        color: var(--text-secondary) !important;
+    }
+
+    .dark .text-gray-500 {
+        color: var(--text-muted) !important;
+    }
+
+    .dark .border-gray-200 {
+        border-color: var(--border-color) !important;
+    }
 }
 
 @layer components {
-    /* Partner card styling untuk carousel */
+    /* Partner card styling untuk carousel - Dark Mode Enhanced */
     .partner-carousel-card {
         backdrop-filter: blur(10px);
         border: 1px solid rgba(255, 255, 255, 0.2);
         transition: all 0.3s ease;
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .dark .partner-carousel-card {
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background-color: rgba(30, 41, 59, 0.8);
     }
 
     .partner-carousel-card:hover {
@@ -59,7 +154,13 @@
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
     }
 
-    /* Logo styling dalam carousel */
+    .dark .partner-carousel-card:hover {
+        border-color: rgba(14, 165, 233, 0.5);
+        background-color: rgba(30, 41, 59, 0.9);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Logo styling dalam carousel - Dark Mode Compatible */
     .partner-logo {
         filter: brightness(0) invert(1);
         transition: all 0.3s ease;
@@ -68,25 +169,80 @@
         object-fit: contain;
     }
 
+    .dark .partner-logo {
+        filter: brightness(0) invert(1);
+    }
+
     .partner-logo:hover {
         transform: scale(1.1);
     }
 
-    /* Team Carousel Container */
+    .dark .partner-logo:hover {
+        filter: brightness(0) invert(1)
+            drop-shadow(0 0 8px rgba(14, 165, 233, 0.5));
+    }
+
+    /* Team Carousel Container - Dark Mode */
     .team-carousel-card {
-        width: 288px; /* 278px card + 10px margin */
+        width: 288px;
         flex-shrink: 0;
+        background-color: var(--surface-color);
+        border: 1px solid var(--border-color);
+        transition: all 0.3s ease;
+    }
+
+    .dark .team-carousel-card {
+        background-color: var(--surface-color);
+        border-color: var(--border-color);
+    }
+
+    .team-carousel-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .dark .team-carousel-card:hover {
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+        border-color: var(--accent-color);
     }
 
     /* Infinite Scroll Animation */
     .animate-infinite-scroll {
         animation: infiniteScroll 30s linear infinite;
-        width: calc(288px * 12); /* 6 cards x 2 sets x 288px width */
+        width: calc(288px * 12);
     }
 
-    /* Pause animation on hover */
     .animate-infinite-scroll:hover {
         animation-play-state: paused;
+    }
+
+    /* Navigation dan Button Styles untuk Dark Mode */
+    .dark .nav-item {
+        color: var(--text-secondary);
+    }
+
+    .dark .nav-item:hover {
+        color: var(--text-color);
+        background-color: var(--color-dark-elevated);
+    }
+
+    .dark .btn-primary {
+        background-color: var(--accent-color);
+        color: white;
+    }
+
+    .dark .btn-primary:hover {
+        background-color: var(--accent-hover);
+    }
+
+    .dark .btn-secondary {
+        background-color: var(--surface-color);
+        color: var(--text-color);
+        border-color: var(--border-color);
+    }
+
+    .dark .btn-secondary:hover {
+        background-color: var(--color-dark-elevated);
     }
 }
 
@@ -98,6 +254,46 @@
         -webkit-box-orient: vertical;
         overflow: hidden;
     }
+
+    /* Dark mode utilities */
+    .dark-bg-primary {
+        background-color: var(--bg-color);
+    }
+
+    .dark-bg-secondary {
+        background-color: var(--surface-color);
+    }
+
+    .dark-text-primary {
+        color: var(--text-color);
+    }
+
+    .dark-text-secondary {
+        color: var(--text-secondary);
+    }
+
+    .dark-border {
+        border-color: var(--border-color);
+    }
+
+    /* Scrollbar styling untuk dark mode */
+    .dark ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+
+    .dark ::-webkit-scrollbar-track {
+        background: var(--surface-color);
+    }
+
+    .dark ::-webkit-scrollbar-thumb {
+        background: var(--border-color);
+        border-radius: 4px;
+    }
+
+    .dark ::-webkit-scrollbar-thumb:hover {
+        background: var(--text-muted);
+    }
 }
 
 /* Keyframe untuk infinite scroll */
@@ -106,19 +302,46 @@
         transform: translateX(0);
     }
     100% {
-        transform: translateX(-50%); /* Move by half width (6 cards) */
+        transform: translateX(-50%);
     }
+}
+
+/* Dark mode toggle button styling */
+.dark-mode-toggle {
+    position: relative;
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    transition: all 0.3s ease;
+}
+
+.dark-mode-toggle:hover {
+    background: var(--color-dark-elevated);
+    color: var(--text-color);
+    transform: scale(1.05);
+}
+
+.dark .dark-mode-toggle {
+    background: var(--surface-color);
+    border-color: var(--border-color);
+    color: var(--accent-color);
+}
+
+.dark .dark-mode-toggle:hover {
+    background: var(--color-dark-elevated);
+    color: var(--accent-hover);
+    box-shadow: 0 0 10px rgba(14, 165, 233, 0.2);
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .animate-infinite-scroll {
-        animation-duration: 25s; /* Slightly faster on mobile */
+        animation-duration: 25s;
         width: calc(260px * 12);
     }
 
     .team-carousel-card {
-        width: 260px; /* Smaller cards on mobile */
+        width: 260px;
     }
 }
 
@@ -129,6 +352,12 @@
     }
 
     .team-carousel-card {
-        width: 240px; /* Even smaller on very small screens */
+        width: 240px;
     }
+}
+
+/* Animasi untuk transisi dark mode */
+* {
+    transition: background-color 0.3s ease, color 0.3s ease,
+        border-color 0.3s ease;
 }

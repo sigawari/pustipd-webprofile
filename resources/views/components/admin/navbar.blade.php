@@ -62,14 +62,18 @@
                 isMobileSearchOpen: false,
                 isNotificationsMenuOpen: false,
                 isProfileMenuOpen: false,
-                darkMode: localStorage.getItem('darkMode') === 'true' || false,
+                darkMode: localStorage.getItem('admin-theme') === 'dark' || false,
+                isAdmin: true, // Set to true since this is admin navbar
             
                 init() {
                     console.log('Navbar dropdowns initialized');
+            
+                    // Watch for dark mode changes
                     this.$watch('darkMode', value => {
-                        localStorage.setItem('darkMode', value);
-                        console.log('Dark mode changed:', value);
+                        this.updateDarkMode(value);
                     });
+            
+                    // Close other dropdowns when one opens
                     this.$watch('isNotificationsMenuOpen', value => {
                         console.log('Notifications menu:', value);
                         if (value) this.isProfileMenuOpen = false;
@@ -78,6 +82,53 @@
                         console.log('Profile menu:', value);
                         if (value) this.isNotificationsMenuOpen = false;
                     });
+            
+                    // Listen for theme changes from app.js
+                    window.addEventListener('adminThemeChanged', (event) => {
+                        this.darkMode = event.detail.darkMode;
+                    });
+                },
+            
+                toggleDarkMode() {
+                    console.log('Toggle dark mode clicked');
+            
+                    // Toggle the state
+                    this.darkMode = !this.darkMode;
+            
+                    // Update via AppUtils if available
+                    if (window.AppUtils && typeof window.AppUtils.setTheme === 'function') {
+                        window.AppUtils.setTheme(this.darkMode ? 'dark' : 'light');
+                    } else {
+                        // Fallback: direct localStorage update
+                        this.updateDarkMode(this.darkMode);
+                    }
+                },
+            
+                updateDarkMode(isDark) {
+                    const theme = isDark ? 'dark' : 'light';
+            
+                    // Save to localStorage
+                    localStorage.setItem('admin-theme', theme);
+            
+                    // Update document classes
+                    if (isDark) {
+                        document.documentElement.classList.add('dark');
+                        document.body.classList.add('dark');
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                        document.body.classList.remove('dark');
+                    }
+            
+                    // Dispatch event for other components
+                    window.dispatchEvent(new CustomEvent('adminThemeChanged', {
+                        detail: {
+                            darkMode: isDark,
+                            theme: theme,
+                            scope: 'admin'
+                        }
+                    }));
+            
+                    console.log('Dark mode updated:', theme);
                 }
             }" class="relative flex items-center space-x-1 sm:space-x-2 lg:space-x-3">
 
@@ -90,17 +141,31 @@
                     </svg>
                 </button>
 
-                <!-- Dark Mode Toggle -->
-                <button @click="darkMode = !darkMode"
-                    class="flex items-center justify-center w-10 h-10 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors duration-200">
-                    <svg x-show="!darkMode" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <!-- Dark Mode Toggle Button -->
+                <button @click="toggleDarkMode()" x-show="isAdmin"
+                    class="flex items-center justify-center w-10 h-10 rounded-lg text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-700 transition-all duration-200"
+                    title="Toggle Dark Mode" :class="{ 'text-blue-600 dark:text-blue-400': darkMode }" x-cloak>
+
+                    <!-- Sun icon (shown when dark mode is ON) -->
+                    <svg x-show="darkMode" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        x-transition:enter="transition-opacity duration-200" x-transition:enter-start="opacity-0"
+                        x-transition:enter-end="opacity-100" x-transition:leave="transition-opacity duration-200"
+                        x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
                     </svg>
-                    <svg x-show="darkMode" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                    <!-- Moon icon (shown when dark mode is OFF) -->
+                    <svg x-show="!darkMode" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        x-transition:enter="transition-opacity duration-200" x-transition:enter-start="opacity-0"
+                        x-transition:enter-end="opacity-100" x-transition:leave="transition-opacity duration-200"
+                        x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
                     </svg>
+
+                    <!-- Screen reader text -->
+                    <span class="sr-only" x-text="darkMode ? 'Switch to light mode' : 'Switch to dark mode'"></span>
                 </button>
 
                 <!-- Notification Icon -->
@@ -129,7 +194,8 @@
                         class="fixed left-1/2 top-17 -translate-x-1/2 w-11/12 max-w-sm       
                                md:absolute  md:translate-x-0  md:left-auto  md:right-0         
                                md:top-auto md:mt-2 md:w-80
-                               bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden z-[1000]">
+                               bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden z-[1000]"
+                        x-cloak>
                         <div class="px-4 py-3 border-b border-gray-100 bg-gray-50">
                             <div class="flex items-center justify-between">
                                 <h3 class="text-sm font-semibold text-gray-900">Notifikasi</h3>
@@ -222,7 +288,8 @@
                         x-transition:leave="transition ease-in duration-75"
                         x-transition:leave-start="transform opacity-100 scale-100"
                         x-transition:leave-end="transform opacity-0 scale-95"
-                        class="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden z-[1000]">
+                        class="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden z-[1000]"
+                        x-cloak>
 
                         <!-- Header di dropdown -->
                         <div class="px-4 py-4 border-b border-gray-100 bg-gray-50">
@@ -240,7 +307,6 @@
                                 </div>
                             </div>
                         </div>
-
 
                         <div class="py-2">
                             <a href="#"
@@ -294,7 +360,7 @@
                     </div>
                 </div>
 
-                <!-- ==== MOBILE SEARCH (beberapa px di bawah navbar) ==== -->
+                <!-- Mobile Search Dropdown -->
                 <div x-show="isMobileSearchOpen" @click.away="isMobileSearchOpen = false"
                     x-transition:enter="transition ease-out duration-200"
                     x-transition:enter-start="opacity-0 -translate-y-2"
@@ -302,10 +368,10 @@
                     x-transition:leave="transition ease-in duration-150"
                     x-transition:leave-start="opacity-100 translate-y-0"
                     x-transition:leave-end="opacity-0 -translate-y-2"
-                    class="fixed inset-x-0 top-20 px-6 md:hidden z-[999]">
+                    class="fixed inset-x-0 top-20 px-6 md:hidden z-[999]" x-cloak>
 
                     <div class="relative w-full max-w-md mx-auto">
-                        <!-- ikon search -->
+                        <!-- Search icon -->
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24">
@@ -314,14 +380,14 @@
                             </svg>
                         </div>
 
-                        <!-- input -->
+                        <!-- Search input -->
                         <input type="search" x-ref="mobileSearchInput"
                             class="block w-full pl-10 pr-12 py-3 rounded-lg border border-gray-300
-                 text-base placeholder-gray-500 text-center bg-gray-50
-                 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                   text-base placeholder-gray-500 text-center bg-gray-50
+                                   focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                             placeholder="Cari menu, halaman, atau data…" />
 
-                        <!-- tombol X -->
+                        <!-- Close button -->
                         <button @click="isMobileSearchOpen = false"
                             class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -336,3 +402,10 @@
         </div>
     </div>
 </nav>
+
+<!-- Add this CSS to prevent flash of unstyled content -->
+<style>
+    [x-cloak] {
+        display: none !important;
+    }
+</style>
