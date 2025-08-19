@@ -35,53 +35,6 @@ export class Structure {
         }
     }
 
-    loadDummyData() {
-        this.organizationData = {
-            name: "PUSTIPD UIN Raden Fatah Palembang",
-            description: "Pusat Teknologi Informasi dan Pangkalan Data",
-            head: {
-                name: "Awang Sugiarto, S.Kom.",
-                position: "Kepala PUSTIPD",
-                email: "kepala@pustipd.uinrf.ac.id",
-                photo: "https://via.placeholder.com/200x200?text=Kepala",
-            },
-            divisions: [
-                {
-                    id: 1,
-                    name: "Divisi Pengembangan Perangkat Lunak",
-                    staff: [
-                        {
-                            name: "Budi Santoso, S.Kom",
-                            position: "Kepala Divisi",
-                            email: "budi@pustipd.uinrf.ac.id",
-                            photo: "https://via.placeholder.com/200x200?text=Budi",
-                        },
-                        {
-                            name: "Sari Wulandari, S.T.",
-                            position: "Programmer",
-                            email: "sari@pustipd.uinrf.ac.id",
-                            photo: "https://via.placeholder.com/200x200?text=Sari",
-                        },
-                    ],
-                },
-                {
-                    id: 2,
-                    name: "Divisi Jaringan dan Infrastruktur",
-                    staff: [
-                        {
-                            name: "Eko Prasetyo, S.T.",
-                            position: "Kepala Divisi",
-                            email: "eko@pustipd.uinrf.ac.id",
-                            photo: "https://via.placeholder.com/200x200?text=Eko",
-                        },
-                    ],
-                },
-            ],
-        };
-
-        this.populateFormWithDummy();
-    }
-
     populateForm(data) {
         // Fill organization info
         document.getElementById("orgName").value = data.name || "";

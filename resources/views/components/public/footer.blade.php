@@ -137,7 +137,7 @@
 
         <!-- Footer Bottom -->
         <div class="mt-6 pt-4 text-sm text-blue-200 flex flex-col sm:flex-row justify-between items-center gap-2">
-            <p>{{ $footerData['copyright'] ?? '© PPID UIN RF Palembang 2025. All Rights Reserved' }}</p>
+            <p>{{ $footerData['copyright'] ?? '© PUSTIPD UIN RF Palembang 2025. All Rights Reserved' }}</p>
             <p>{{ $footerData['attribution'] ?? 'Made with' }} <span class="text-red-400">❤</span>
                 {{ $footerData['developer'] ?? 'by PUSTIPD UIN RF Palembang' }}</p>
         </div>

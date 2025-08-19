@@ -64,7 +64,7 @@ class AppServiceProvider extends ServiceProvider
             ],
             
             // Footer Bottom
-            'copyright' => '© PPID UIN RF Palembang 2025. All Rights Reserved',
+            'copyright' => '© PUSTIPD UIN RF Palembang 2025. All Rights Reserved',
             'attribution' => 'Made with',
             'developer' => 'by PUSTIPD UIN RF Palembang'
         ]);

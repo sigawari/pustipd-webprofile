@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\TentangKami\StrukturOrganisasi;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class StrukturOrganisasiController extends Controller
 {
@@ -24,6 +25,9 @@ class StrukturOrganisasiController extends Controller
 
     public function store(Request $request)
     {
+        // Debug: Log incoming request data
+        Log::info('Store request data:', $request->all());
+        
         $request->validate([
             // Deskripsi organisasi
             'orgName' => 'required|string|max:255',
@@ -35,17 +39,8 @@ class StrukturOrganisasiController extends Controller
             'headEmail' => 'nullable|email',
             'headPhoto' => 'nullable|image|max:2048',
             
-            // Data divisi dan anggota
+            // Data divisi dan anggota - perbaikan validasi
             'divisions' => 'nullable|array',
-            'divisions.*.name' => 'required|string|max:255',
-            'divisions.*.order' => 'required|integer',
-            'divisions.*.members' => 'nullable|array',
-            'divisions.*.members.*.nama' => 'required|string|max:255',
-            'divisions.*.members.*.jabatan' => 'required|string|max:255',
-            'divisions.*.members.*.email' => 'nullable|email',
-            'divisions.*.members.*.photo' => 'nullable|image|max:2048',
-            'divisions.*.members.*.order' => 'required|integer',
-            
             'status' => 'required|in:draft,published'
         ]);
 
@@ -64,7 +59,7 @@ class StrukturOrganisasiController extends Controller
                 
                 StrukturOrganisasi::create([
                     'nama' => $request->headName,
-                    'jabatan' => $request->headPosition,
+                    'jabatan' => $request->headPosition ?? 'Kepala PUSTIPD',
                     'email' => $request->headEmail,
                     'foto' => $headPhotoPath,
                     'divisi' => 'Kepala',
@@ -76,54 +71,93 @@ class StrukturOrganisasiController extends Controller
                 ]);
             }
             
-            // Simpan data divisi dan anggota
+            // Simpan data divisi dan anggota - perbaikan parsing
             if ($request->has('divisions')) {
-                foreach ($request->divisions as $divisionData) {
-                    if (!empty($divisionData['members'])) {
-                        foreach ($divisionData['members'] as $memberData) {
+                Log::info('Processing divisions:', $request->divisions);
+                
+                foreach ($request->divisions as $divisionKey => $divisionData) {
+                    // Skip jika nama divisi kosong
+                    if (empty($divisionData['name'])) {
+                        continue;
+                    }
+
+                    $divisionName = $divisionData['name'];
+                    $divisionOrder = $divisionData['order'] ?? $divisionKey;
+                    
+                    // Process members jika ada
+                    if (isset($divisionData['members']) && is_array($divisionData['members'])) {
+                        Log::info("Processing members for division: {$divisionName}", $divisionData['members']);
+                        
+                        foreach ($divisionData['members'] as $memberKey => $memberData) {
+                            // Skip jika data member tidak lengkap
+                            if (empty($memberData['nama']) || empty($memberData['jabatan'])) {
+                                Log::warning("Skipping incomplete member data:", $memberData);
+                                continue;
+                            }
+
                             $memberPhotoPath = null;
-                            if (isset($memberData['photo']) && $memberData['photo']) {
-                                $memberPhotoPath = $memberData['photo']->store('struktur-organisasi/anggota', 'public');
+                            
+                            // Handle photo upload dengan key yang benar
+                            $photoFieldName = "divisions.{$divisionKey}.members.{$memberKey}.photo";
+                            if ($request->hasFile($photoFieldName)) {
+                                $memberPhotoPath = $request->file($photoFieldName)->store('struktur-organisasi/anggota', 'public');
                             }
                             
-                            StrukturOrganisasi::create([
+                            $memberRecord = [
                                 'nama' => $memberData['nama'],
                                 'jabatan' => $memberData['jabatan'],
                                 'email' => $memberData['email'] ?? null,
                                 'foto' => $memberPhotoPath,
-                                'divisi' => $divisionData['name'],
+                                'divisi' => $divisionName,
                                 'level' => 'anggota',
-                                'urutan_index' => $memberData['order'],
-                                'division_order' => $divisionData['order'],
+                                'urutan_index' => $memberData['order'] ?? $memberKey + 1,
+                                'division_order' => $divisionOrder,
                                 'status' => $request->status,
                                 'org_name' => $request->orgName,
                                 'org_description' => $request->orgDescription,
-                            ]);
+                            ];
+                            
+                            Log::info('Creating member record:', $memberRecord);
+                            StrukturOrganisasi::create($memberRecord);
                         }
+                    } else {
+                        Log::info("No members found for division: {$divisionName}");
                     }
                 }
             }
             
             DB::commit();
             
+            // Log successful save
+            $savedCount = StrukturOrganisasi::count();
+            Log::info("Successfully saved {$savedCount} records");
+            
             return response()->json([
                 'success' => true,
-                'message' => 'Struktur organisasi berhasil disimpan'
+                'message' => 'Struktur organisasi berhasil disimpan',
+                'saved_records' => $savedCount
             ]);
             
         } catch (\Exception $e) {
             DB::rollback();
             
+            Log::error('Error saving structure organization:', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
             return response()->json([
                 'success' => false,
-                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage(),
+                'debug' => config('app.debug') ? $e->getTraceAsString() : null
             ], 500);
         }
     }
 
     public function getOrganizationData()
     {
-        $allData = StrukturOrganisasi::where('status', 'published')
+        // Ambil semua data (draft dan published) untuk management
+        $allData = StrukturOrganisasi::orderBy('division_order')
                                    ->orderBy('urutan_index')
                                    ->get();
         
@@ -159,7 +193,6 @@ class StrukturOrganisasiController extends Controller
                                   });
         
         $divisions = [];
-        $divisionOrder = [];
         
         foreach ($anggotaByDivisi as $divisionName => $members) {
             $divisionOrderIndex = $members->first()->division_order ?? 999;
@@ -176,8 +209,6 @@ class StrukturOrganisasiController extends Controller
                     ];
                 })->toArray()
             ];
-            
-            $divisionOrder[] = $divisionName;
         }
         
         // Sort divisions by order
@@ -191,10 +222,30 @@ class StrukturOrganisasiController extends Controller
         return $organization;
     }
 
-    // Method untuk preview di halaman publik
-    public function preview()
+    // Method untuk mendapatkan data draft dan published
+    public function getDraftData()
     {
         $organization = $this->getOrganizationData();
+        
+        return response()->json([
+            'success' => true,
+            'data' => $organization
+        ]);
+    }
+
+    // Method untuk preview di halaman publik - hanya published
+    public function preview()
+    {
+        $allData = StrukturOrganisasi::where('status', 'published')
+                                   ->orderBy('division_order')
+                                   ->orderBy('urutan_index')
+                                   ->get();
+        
+        if ($allData->isEmpty()) {
+            $organization = null;
+        } else {
+            $organization = $this->formatOrganizationDataFromCollection($allData);
+        }
         
         return view('public.structure', [
             'title' => 'Preview Struktur Organisasi',
@@ -207,7 +258,12 @@ class StrukturOrganisasiController extends Controller
     // Method untuk API preview
     public function getPreviewData()
     {
-        $organization = $this->getOrganizationData();
+        $allData = StrukturOrganisasi::where('status', 'published')
+                                   ->orderBy('division_order')
+                                   ->orderBy('urutan_index')
+                                   ->get();
+        
+        $organization = $allData->isEmpty() ? null : $this->formatOrganizationDataFromCollection($allData);
         
         return response()->json([
             'success' => true,
@@ -215,54 +271,7 @@ class StrukturOrganisasiController extends Controller
         ]);
     }
 
-    public function destroy($id)
-    {
-        try {
-            $struktur = StrukturOrganisasi::findOrFail($id);
-            
-            // Hapus foto jika ada
-            if ($struktur->foto) {
-                Storage::disk('public')->delete($struktur->foto);
-            }
-            
-            $struktur->delete();
-            
-            return response()->json([
-                'success' => true,
-                'message' => 'Data berhasil dihapus'
-            ]);
-            
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
-            ], 500);
-        }
-    }
-
-    // Method untuk mendapatkan data draft
-    public function getDraftData()
-    {
-        $draftData = StrukturOrganisasi::where('status', 'draft')
-                                     ->orderBy('urutan_index')
-                                     ->get();
-        
-        if ($draftData->isEmpty()) {
-            return response()->json([
-                'success' => true,
-                'data' => null
-            ]);
-        }
-        
-        $organization = $this->formatOrganizationData($draftData);
-        
-        return response()->json([
-            'success' => true,
-            'data' => $organization
-        ]);
-    }
-
-    private function formatOrganizationData($data)
+    private function formatOrganizationDataFromCollection($data)
     {
         if ($data->isEmpty()) {
             return null;
@@ -307,5 +316,30 @@ class StrukturOrganisasiController extends Controller
         $organization['divisions'] = $divisions;
         
         return $organization;
+    }
+
+    public function destroy($id)
+    {
+        try {
+            $struktur = StrukturOrganisasi::findOrFail($id);
+            
+            // Hapus foto jika ada
+            if ($struktur->foto) {
+                Storage::disk('public')->delete($struktur->foto);
+            }
+            
+            $struktur->delete();
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Data berhasil dihapus'
+            ]);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }
