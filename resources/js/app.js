@@ -14,7 +14,8 @@ import "./components/admin/bulk-actions";
 import "./components/admin/ketetapan-action";
 import "./components/admin/slug";
 import "./components/admin/tutorialblock";
-import "./components/admin/tutorialfeatured.js";
+import "./components/admin/tutorialfeatured";
+import "./componenets/admin/structure";
 
 // Import komponem public
 import "./components/public/bulk-download";
@@ -26,7 +27,6 @@ import {
 
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
-
 
 window.copyContentLink = copyContentLink;
 window.shareTo = shareTo;
