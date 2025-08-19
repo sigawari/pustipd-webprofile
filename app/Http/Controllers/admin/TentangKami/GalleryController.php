@@ -201,4 +201,25 @@ class GalleryController extends Controller
                    ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
+
+   public function toggleVisibility(Request $request, $id)
+    {
+        $gallery = Gallery::findOrFail($id);
+
+        if ($gallery->status === 'published') {
+            $gallery->status = 'draft';
+            $message = 'Gallery disembunyikan';
+        } else {
+            $gallery->status = 'published';
+            $message = 'Gallery ditampilkan';
+        }
+
+        $gallery->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => $message
+        ]);
+    }
+
 }

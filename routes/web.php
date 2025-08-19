@@ -141,6 +141,7 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
             Route::delete('/gallery/{gallery}', 'destroy')->name('gallery.destroy');
             Route::get('/gallery/export', 'export')->name('gallery.export');
             Route::post('/gallery/bulk-action', 'bulk')->name('gallery.bulk');
+            Route::post('/gallery/{id}/toggle-visibility', [GalleryController::class, 'toggleVisibility'])->name('gallery.toggle-visibility');
         });
 
         // Profil Routes
