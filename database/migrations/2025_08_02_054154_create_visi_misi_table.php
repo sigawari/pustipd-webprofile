@@ -1,5 +1,5 @@
 <?php
-// database/migrations/xxxx_create_visi_misi_table.php
+// C:\laragon\www\bismillah\database\migrations\2025_08_02_054154_create_visi_misi_table.php
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -20,6 +20,6 @@ return new class extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('visi_misi');
+        Schema::dropIfExists('visi_misis');
     }
 };
