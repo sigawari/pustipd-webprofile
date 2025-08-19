@@ -2,7 +2,7 @@
     <x-slot:title>{{ $title }}</x-slot:title>
 
     <!-- Hero Section -->
-    <x-modalnews />
+    <x-modalnews :urgentAnnouncements="$urgentAnnouncements" />
     <section id="beranda"
         class="relative bg-blue-950 text-amber-50 min-h-screen flex items-center justify-center overflow-hidden">
         <!-- Background Image -->
@@ -408,9 +408,9 @@
                     {{-- Desktop Section --}}
                     <div class="hidden lg:grid grid-cols-2 lg:grid-cols-3 gap-8 announcement-grid">
                         @forelse ($announcementsList as $announcement)
-                            <x-announcement-card :urgency="$announcement->urgency" :category="$announcement->category" :title="$announcement->title" :excerpt="$announcement->excerpt ??
-                                \Illuminate\Support\Str::limit(strip_tags($announcement->content), 140)"
-                                :date="$announcement->date ? $announcement->date->format('d F Y') : '-'" :link="route('announcements-detail', $announcement->slug)" />
+                            <x-announcement-card :urgency="$announcement->urgency" :category="$announcement->category" :title="$announcement->title"
+                                :excerpt="$announcement->excerpt ??
+                                    \Illuminate\Support\Str::limit(strip_tags($announcement->content), 140)" :date="$announcement->date ? $announcement->date->format('d F Y') : '-'" :link="route('announcements-detail', $announcement->slug)" />
                         @empty
                             <div class="col-span-full text-center py-10 text-gray-600">
                                 Tidak ada pengumuman tersedia.

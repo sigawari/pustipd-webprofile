@@ -1,148 +1,153 @@
-<!-- Modal Pop-up Berita & Pengumuman dengan Animasi, Overlay Tipis, dan Carousel Responsif -->
+<!-- Modal Pop-up Pengumuman Penting -->
 <div id="newsAnnouncementModal"
     class="fixed inset-0 z-50 flex items-center justify-center bg-black/20 transition-opacity duration-500 opacity-0 pointer-events-none px-2">
     <div id="modalWindow"
-        class="bg-white rounded-xl shadow-2xl w-full max-w-sm sm:max-w-md p-3 sm:p-4 relative scale-95 translate-y-8 transition-all duration-500 max-h-[90vh] overflow-hidden">
+        class="bg-white rounded-xl shadow-2xl w-full max-w-md p-4 relative scale-95 translate-y-8 transition-all duration-500 max-h-[84vh] min-h-[340px] overflow-hidden">
         <button id="closeModalBtn"
             class="absolute top-2 right-2 text-secondary hover:text-red-600 text-xl font-bold leading-none select-none z-10">&times;</button>
-        <h2 class="text-lg sm:text-xl font-bold mb-2 text-center text-secondary pr-6">Berita & Pengumuman Terbaru</h2>
 
-        <!-- Carousel Container -->
-        <div class="relative">
-            <div id="carouselWrapper"
-                class="flex overflow-hidden select-none transition-transform duration-300 ease-in-out">
-                <!-- Slide 1: Berita dengan gambar -->
-                <div class="min-w-full flex flex-col items-center justify-center" style="min-height: 180px;">
-                    <h3 class="font-semibold mb-2 text-secondary text-center text-base">📰 Berita Terbaru</h3>
-                    <div class="w-full rounded-lg border shadow-sm bg-white flex flex-col items-center p-3">
-                        <img src="{{ asset('assets/img/placeholder/dummy.png') }}" alt="judul berita"
-                            class="w-full max-w-[150px] h-auto object-cover rounded-md mb-2">
-                        <div class="font-bold text-sm sm:text-base mb-1 text-center text-secondary">Peluncuran Sistem
-                            Informasi Terbaru PUSTIPD</div>
-                        <div class="text-xs sm:text-sm text-secondary text-center leading-relaxed">Sistem informasi baru
-                            telah diluncurkan untuk meningkatkan pelayanan digital.</div>
-                    </div>
-                </div>
+        @if (isset($urgentAnnouncements) && $urgentAnnouncements->count() > 0)
+            <h2 class="text-xl font-bold mb-2 text-center text-secondary">
+                🚨 Pengumuman Penting PUSTIPD
+            </h2>
+            <div class="relative">
+                <div id="carouselWrapper" class="flex transition-transform duration-300 ease-in-out"
+                    style="height:320px;">
 
-                <!-- Slide 2: Berita tanpa gambar -->
-                <div class="min-w-full flex flex-col items-center justify-center" style="min-height: 180px;">
-                    <h3 class="font-semibold mb-2 text-secondary text-center text-base">📰 Berita Terbaru</h3>
-                    <div class="w-full rounded-lg border shadow-sm bg-white p-3">
-                        <div class="font-bold text-sm sm:text-base mb-1 text-center text-secondary">Workshop Digital
-                            Transformation untuk UMKM</div>
-                        <div class="text-xs sm:text-sm text-secondary text-center leading-relaxed">Pelatihan
-                            komprehensif untuk meningkatkan kemampuan digital UMKM di era modern.</div>
-                    </div>
-                </div>
-
-                <!-- Slide 3: Pengumuman (lebih compact) -->
-                <div class="min-w-full flex flex-col items-center justify-center" style="min-height: 180px;">
-                    <h3 class="font-semibold mb-2 text-secondary text-center text-base">📢 Pengumuman Penting</h3>
-                    <div class="w-full rounded-lg border shadow-sm bg-orange-50 p-3 flex items-start space-x-3">
-                        <div class="flex-shrink-0">
-                            <div class="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center">
-                                <span class="text-white text-sm font-bold">!</span>
+                    @foreach ($urgentAnnouncements as $announcement)
+                        <div class="min-w-full flex flex-col items-center justify-start" style="height:320px;">
+                            <!-- Header -->
+                            <div class="w-full flex items-center mb-2 justify-between px-2">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center">
+                                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                    </div>
+                                    <span class="font-bold text-red-700">{{ $announcement->title }}</span>
+                                </div>
+                                <div class="text-xs text-gray-500 font-semibold">
+                                    {{ \Carbon\Carbon::parse($announcement->publish_date ?? $announcement->date)->format('d M Y') }}
+                                </div>
+                            </div>
+                            <!-- Kategori -->
+                            <div class="w-full px-2 text-xs font-medium text-red-600 mb-1">
+                                {{ ucfirst($announcement->category) }}
+                            </div>
+                            <!-- Excerpt Konten: hanya ringkasan -->
+                            <div class="w-full h-full overflow-y-auto px-2 py-2">
+                                <div
+                                    class="text-sm text-gray-800 leading-relaxed bg-white rounded border border-red-100 p-2 max-h-[140px] overflow-hidden">
+                                    {{ $announcement->excerpt ?: Str::limit(strip_tags($announcement->content), 400) }}
+                                </div>
+                                @if ($announcement->valid_until)
+                                    <div
+                                        class="text-xs text-red-700 bg-red-100 px-2 py-1 rounded mt-2 font-semibold flex items-center">
+                                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        Berlaku hingga:
+                                        {{ \Carbon\Carbon::parse($announcement->valid_until)->format('d M Y, H:i') }}
+                                        WIB
+                                    </div>
+                                @endif
                             </div>
                         </div>
-                        <div class="flex-1">
-                            <div class="font-bold text-sm text-secondary mb-1">Maintenance Server Terjadwal</div>
-                            <div class="text-xs text-secondary">25 Juli 2025, 01:00 - 05:00 WIB</div>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
-
-                <!-- Slide 4: Pengumuman (lebih compact) -->
-                <div class="min-w-full flex flex-col items-center justify-center" style="min-height: 180px;">
-                    <h3 class="font-semibold mb-2 text-secondary text-center text-base">📢 Pengumuman Penting</h3>
-                    <div class="w-full rounded-lg border shadow-sm bg-blue-50 p-3 flex items-start space-x-3">
-                        <div class="flex-shrink-0">
-                            <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
-                                <span class="text-white text-sm font-bold">!</span>
-                            </div>
-                        </div>
-                        <div class="flex-1">
-                            <div class="font-bold text-sm text-secondary mb-1">Program Magang Teknologi</div>
-                            <div class="text-xs text-secondary">Kesempatan magang untuk mahasiswa IT durasi 3-6 bulan
-                            </div>
-                        </div>
-                    </div>
+                <!-- Navigation Buttons: Selalu tampil -->
+                <button id="prevBtn"
+                    class="absolute left-2 top-1/2 -translate-y-1/2 bg-white border border-red-200 text-red-600 p-2 rounded-full shadow transition hover:scale-110 z-20">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                <button id="nextBtn"
+                    class="absolute right-2 top-1/2 -translate-y-1/2 bg-white border border-red-200 text-red-600 p-2 rounded-full shadow transition hover:scale-110 z-20">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+                <!-- Carousel Indicators -->
+                <div class="flex justify-center space-x-2 mt-3">
+                    @for ($i = 0; $i < $urgentAnnouncements->count(); $i++)
+                        <span
+                            class="carousel-indicator w-3 h-3 rounded-full bg-red-300 opacity-50 cursor-pointer transition-all duration-300 hover:opacity-100"></span>
+                    @endfor
                 </div>
             </div>
-
-            <!-- Navigation Buttons (tanpa circle, lebih kecil) -->
-            <button id="prevBtn"
-                class="absolute left-0 top-1/2 -translate-y-1/2  hover:text-custom-blue text-secondary p-1 transition-all duration-300 hover:scale-110">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7" />
-                </svg>
-            </button>
-            <button id="nextBtn"
-                class="absolute right-0 top-1/2 -translate-y-1/2  hover:text-custom-blue text-secondary p-1 transition-all duration-300 hover:scale-110">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7" />
-                </svg>
-            </button>
-
-            <!-- Carousel Indicators -->
-            <div class="flex justify-center space-x-2 mt-3">
-                <span
-                    class="carousel-indicator w-2 h-2 rounded-full bg-secondary opacity-50 cursor-pointer transition-all duration-300"></span>
-                <span
-                    class="carousel-indicator w-2 h-2 rounded-full bg-secondary opacity-50 cursor-pointer transition-all duration-300"></span>
-                <span
-                    class="carousel-indicator w-2 h-2 rounded-full bg-secondary opacity-50 cursor-pointer transition-all duration-300"></span>
-                <span
-                    class="carousel-indicator w-2 h-2 rounded-full bg-secondary opacity-50 cursor-pointer transition-all duration-300"></span>
+        @else
+            <div class="text-center py-8">
+                <div
+                    class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 overflow-hidden bg-white shadow-lg border-2 border-blue-100">
+                    <img src="{{ asset('assets/img/logo/logo-uin-rfp.png') }}" alt="Logo UIN Raden Fatah Palembang"
+                        class="w-12 h-12 object-contain">
+                </div>
+                <h2 class="text-lg sm:text-xl font-bold mb-2 text-secondary">
+                    Selamat Datang di Website PUSTIPD
+                </h2>
+                <h3 class="text-base font-semibold text-custom-blue mb-2">
+                    UIN Raden Fatah Palembang
+                </h3>
+                <p class="text-sm text-gray-600 leading-relaxed">
+                    Pusat Sistem dan Teknologi Informasi dan Pangkalan Data<br>
+                    Universitas Islam Negeri Raden Fatah Palembang
+                </p>
+                <div class="mt-4 text-xs text-gray-500">
+                    {{ \Carbon\Carbon::now()->format('d F Y') }}
+                </div>
             </div>
-        </div>
+        @endif
     </div>
 </div>
 
 <script>
     let autoInterval = null;
     let currentIndex = 0;
+    const totalSlides = {{ isset($urgentAnnouncements) ? $urgentAnnouncements->count() : 0 }};
 
-    // Show modal with animated entrance
     document.addEventListener('DOMContentLoaded', () => {
         const modal = document.getElementById('newsAnnouncementModal');
         const modalWindow = document.getElementById('modalWindow');
-
         setTimeout(() => {
             modal.classList.remove('opacity-0', 'pointer-events-none');
             modal.classList.add('opacity-100');
             modalWindow.classList.remove('scale-95', 'translate-y-8');
             modalWindow.classList.add('scale-100', 'translate-y-0');
-
-            // Initialize carousel after modal shows
-            initializeCarousel();
-        }, 500);
+            if (totalSlides > 0) {
+                initializeCarousel();
+            }
+        }, 800);
     });
 
-    // Close modal function - langsung destroy
     function closeModal() {
         const modal = document.getElementById('newsAnnouncementModal');
-
-        // Stop auto carousel
         if (autoInterval) {
             clearInterval(autoInterval);
             autoInterval = null;
         }
-
-        // Remove modal completely from DOM
         if (modal) {
-            modal.style.display = 'none';
-            modal.remove();
+            const modalWindow = document.getElementById('modalWindow');
+            modal.classList.remove('opacity-100');
+            modal.classList.add('opacity-0');
+            modalWindow.classList.remove('scale-100', 'translate-y-0');
+            modalWindow.classList.add('scale-95', 'translate-y-8');
+            setTimeout(() => {
+                modal.style.display = 'none';
+                modal.remove();
+            }, 500);
         }
     }
 
-    // Event listener untuk tombol close
     document.addEventListener('DOMContentLoaded', () => {
         const closeBtn = document.getElementById('closeModalBtn');
         if (closeBtn) {
             closeBtn.addEventListener('click', closeModal);
         }
-
-        // Close modal when clicking outside
         const modal = document.getElementById('newsAnnouncementModal');
         if (modal) {
             modal.addEventListener('click', (e) => {
@@ -151,8 +156,6 @@
                 }
             });
         }
-
-        // Close modal with ESC key
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 closeModal();
@@ -160,27 +163,22 @@
         });
     });
 
-    // Carousel Logic
     function initializeCarousel() {
         const wrapper = document.getElementById('carouselWrapper');
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
         const indicators = document.querySelectorAll('.carousel-indicator');
-
         if (!wrapper || !prevBtn || !nextBtn) return;
-
-        const totalSlides = wrapper.children.length;
 
         function updateCarousel() {
             wrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
             indicators.forEach((el, idx) => {
                 if (idx === currentIndex) {
-                    el.classList.remove('opacity-50');
-                    el.classList.add('opacity-100', 'bg-primary');
-                    el.classList.remove('bg-secondary');
+                    el.classList.remove('opacity-50', 'bg-red-300');
+                    el.classList.add('opacity-100', 'bg-red-600');
                 } else {
-                    el.classList.add('opacity-50', 'bg-secondary');
-                    el.classList.remove('opacity-100', 'bg-primary');
+                    el.classList.add('opacity-50', 'bg-red-300');
+                    el.classList.remove('opacity-100', 'bg-red-600');
                 }
             });
         }
@@ -196,7 +194,7 @@
         }
 
         function startAuto() {
-            autoInterval = setInterval(nextSlide, 4000);
+            autoInterval = setInterval(nextSlide, 6000);
         }
 
         function stopAuto() {
@@ -211,21 +209,18 @@
             startAuto();
         }
 
-        // Event listeners dengan preventDefault
         prevBtn.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
             prevSlide();
             resetAuto();
         });
-
         nextBtn.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
             nextSlide();
             resetAuto();
         });
-
         indicators.forEach((el, idx) => {
             el.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -236,14 +231,12 @@
             });
         });
 
-        // Pause auto-scroll on hover
         const modalWindow = document.getElementById('modalWindow');
         if (modalWindow) {
             modalWindow.addEventListener('mouseenter', stopAuto);
             modalWindow.addEventListener('mouseleave', startAuto);
         }
 
-        // Initialize
         updateCarousel();
         startAuto();
     }

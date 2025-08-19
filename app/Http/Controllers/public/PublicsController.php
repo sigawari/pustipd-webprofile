@@ -38,7 +38,7 @@ class PublicsController extends Controller
         $title = 'UIN Raden Fatah Palembang';
         $description = 'Pusat Sistem dan Teknologi Informasi dan Pangkalan Data UIN Raden Fatah Palembang';
         $keywords = 'pustipd, uin raden fatah, teknologi informasi';
-    
+
         $profils = Profil::latest()->first(); 
         
         $achievements = Pencapaian::published()
@@ -46,34 +46,51 @@ class PublicsController extends Controller
                                 ->get();
         
         $services = Layanan::published()
-                           ->orderBy('created_at', 'desc')
-                           ->get();
-    
+                        ->orderBy('created_at', 'desc')
+                        ->get();
+
         $partners = Mitra::published()
-                           ->orderBy('created_at', 'desc')
-                           ->get();
-    
+                        ->orderBy('created_at', 'desc')
+                        ->get();
+
         // Query berita dengan pagination
-        $query = KelolaBerita::where('status', 'published');
-        $newsList = $query->orderBy('publish_date', 'desc')
-                        ->paginate(3)
-                        ->withQueryString();
+        $newsList = KelolaBerita::where('status', 'published')
+                            ->orderBy('publish_date', 'desc')
+                            ->paginate(3)
+                            ->withQueryString();
         
-        // Query pengumuman
+        // PERBAIKAN: Query pengumuman penting tanpa valid() terlebih dahulu
+        $urgentAnnouncements = KelolaPengumuman::where('status', 'published')
+                                            ->where('urgency', 'penting')
+                                            ->where(function($query) {
+                                                $query->whereNull('valid_until')
+                                                        ->orWhere('valid_until', '>=', now());
+                                            })
+                                            ->orderBy('date', 'desc')
+                                            ->get();
+        
+        // Debug - hapus setelah selesai
+        \Log::info('Urgent Announcements Count: ' . $urgentAnnouncements->count());
+        \Log::info('Urgent Announcements Data: ' . $urgentAnnouncements->toJson());
+        
+        // Query semua pengumuman untuk section lain
         $announcementsList = KelolaPengumuman::where('status', 'published')
-                                            ->valid() 
+                                            ->where(function($query) {
+                                                $query->whereNull('valid_until')
+                                                    ->orWhere('valid_until', '>=', now());
+                                            })
                                             ->orderByRaw("CASE WHEN urgency = 'penting' THEN 1 WHEN urgency = 'normal' THEN 2 ELSE 3 END")
                                             ->orderBy('date', 'desc')
                                             ->limit(3)
                                             ->get();
         
-        // Perbaiki pemanggilan teams untuk carousel
         $teams = StrukturOrganisasi::getCarouselData();
-    
+
         return view('public.homepage', compact(
-            'title', 'description', 'keywords', 'profils', 'newsList', 'announcementsList', 'achievements', 'services', 'partners', 'teams'
+            'title', 'description', 'keywords', 'profils', 'newsList', 
+            'announcementsList', 'urgentAnnouncements', 'achievements', 'services', 'partners', 'teams'
         ));
-    }  
+    }
 
 
     public function tentang(){
