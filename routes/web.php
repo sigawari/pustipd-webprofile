@@ -86,6 +86,10 @@ Route::post('/sop/bulk-download', [PublicsController::class, 'bulkDownloadDokume
 // Admin Routes - Protected by authentication
 Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
 
+    Route::get('/', function () {
+        return redirect()->route('admin.dashboard.index');
+    });
+    
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
