@@ -147,8 +147,8 @@ class GalleryController extends Controller
     public function bulk(Request $request)
     {
         $request->validate([
-            'action' => 'required|in:published,draft,archived,permanent_delete',
-            'ids' => 'required|array|min:1', // ← Tambah min:1
+            'action' => 'required|in:published,draft,permanent_delete',
+            'ids' => 'required|array|min:1',
             'ids.*' => 'exists:galleries,id'
         ]);
     

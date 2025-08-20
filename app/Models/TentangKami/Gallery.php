@@ -3,6 +3,7 @@
 
 namespace App\Models\TentangKami;
 
+use App\Models\Publics;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
