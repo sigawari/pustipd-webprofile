@@ -40,7 +40,7 @@
             <!-- Floating Buttons BELOW Hero -->
             <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
                 <!-- Left Button -->
-                <a href="#"
+                <a href="https://form.typeform.com/to/Z1hqZywY" target="_blank"
                     class="bg-white text-custom-yellow font-medium px-4 py-2 rounded-full shadow-md flex items-center justify-center gap-2 transition transform hover:scale-105 hover:bg-custom-yellow hover:text-white w-full sm:w-auto">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
@@ -51,7 +51,7 @@
                 </a>
 
                 <!-- Right Button -->
-                <a href="#"
+                <a href="https://t.me/pustipd_bot" target="_blank"
                     class="bg-white text-secondary font-medium px-4 py-2 rounded-full shadow-md flex items-center justify-center gap-2 transition transform hover:scale-105 hover:bg-secondary hover:text-white w-full sm:w-auto">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
