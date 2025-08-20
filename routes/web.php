@@ -132,6 +132,17 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
 
     // Tentang Kami
     Route::prefix('tentang-kami')->as('tentang-kami.')->group(function () {
+        // Struktur Organisasi Routes
+        Route::controller(StrukturOrganisasiController::class)->group(function () {
+            Route::get('/struktur-organisasi', 'index')->name('struktur-organisasi.index');
+            Route::post('/struktur-organisasi', 'store')->name('struktur-organisasi.store');
+            Route::put('/struktur-organisasi/{strukturOrganisasi}', 'update')->name('struktur-organisasi.update');
+            Route::delete('/struktur-organisasi/{strukturOrganisasi}', 'destroy')->name('struktur-organisasi.destroy');
+            Route::get('/struktur-organisasi/export', 'export')->name('struktur-organisasi.export');
+            Route::post('/struktur-organisasi/reorder', 'reorder')->name('struktur-organisasi.reorder');
+            Route::get('/struktur-organisasi/preview', 'preview')->name('struktur-organisasi.preview');
+            Route::get('/struktur-organisasi/get-data', 'getData')->name('struktur-organisasi.get-data');
+        });
 
         // Galleri Routes
         Route::controller(GalleryController::class)->group(function () {
@@ -151,19 +162,6 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
             Route::put('/profil/{profil}', 'update')->name('profil.update');
             Route::delete('/profil/{profil}', 'destroy')->name('profil.destroy');
             Route::get('/profil/export', 'export')->name('profil.export');
-        });
-
-        // Struktur Organisasi Routes
-        Route::controller(StrukturOrganisasiController::class)->group(function () {
-            Route::get('/struktur-organisasi', 'index')->name('struktur-organisasi.index');
-            Route::post('/struktur-organisasi', 'store')->name('struktur-organisasi.store');
-            Route::put('/struktur-organisasi/{strukturOrganisasi}', 'update')->name('struktur-organisasi.update');
-            Route::delete('/struktur-organisasi/{strukturOrganisasi}', 'destroy')->name('struktur-organisasi.destroy');
-            Route::get('/struktur-organisasi/export', 'export')->name('struktur-organisasi.export');
-            Route::post('/struktur-organisasi/reorder', 'reorder')->name('struktur-organisasi.reorder');
-            Route::get('/struktur-organisasi/get-data', 'getDraftData')->name('struktur-organisasi.get-data');
-            Route::get('/struktur-organisasi/preview', 'preview')->name('struktur-organisasi.preview');
-            Route::get('/struktur-organisasi/preview-data', 'getPreviewData')->name('struktur-organisasi.preview-data');
         });
 
 

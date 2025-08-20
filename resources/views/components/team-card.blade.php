@@ -22,10 +22,11 @@
 
         <!-- Content Container -->
         <div class="p-2 text-center h-20 sm:h-24 md:h-30 flex flex-col justify-center">
-            <h3
+            <h2
                 class="text-lg sm:text-xl font-bold text-secondary mb-1 group-hover:text-custom-blue transition-colors duration-300">
-                {{ $name }}</h3>
-            <h4 class="text-sm sm:text-base text-secondary font-medium mb-2 sm:mb-3">{{ $position }}</h4>
+                {{ $name }}</h2>
+            <h3 class="text-sm sm:text-base text-secondary font-medium mb-2 sm:mb-3">{{ $position }}</h3>
+            <h4 class="text-sm sm:text-base text-secondary font-medium mb-2 sm:mb-3">{{ $email }}</h4>
         </div>
     </div>
 </div>

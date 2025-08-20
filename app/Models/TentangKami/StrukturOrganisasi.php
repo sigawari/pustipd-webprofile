@@ -8,46 +8,54 @@ class StrukturOrganisasi extends Model
     protected $table = 'struktur_organisasis';
     
     protected $fillable = [
+        'nama_divisi',
+        'divisi_order',
         'nama',
         'jabatan', 
-        'divisi',
+        'email',
         'foto',
-        'urutan_index',
-        'status'
+        'staff_order',
+        'is_active'
     ];
 
-    // Scope untuk data published/active
-    public function scopePublished($query)
-    {
-        return $query->where('status', 'active');
-    }
+    protected $casts = [
+        'is_active' => 'boolean',
+        'divisi_order' => 'integer',
+        'staff_order' => 'integer',
+    ];
 
+    // Scope untuk data aktif
     public function scopeActive($query)
     {
-        return $query->where('status', 'active');
+        return $query->where('is_active', true);
     }
 
-    // Method untuk homepage carousel
-    public static function getCarouselData()
+    // Method untuk mendapatkan struktur organisasi yang terorganisir
+    public static function getOrganizationStructure()
     {
-        return static::where('status', 'active')
-                    ->orderBy('urutan_index')
-                    ->get();
-    }
-
-    // Method untuk tree structure di halaman structure
-    public static function getTreeStructure()
-    {
-        return static::where('status', 'active')
-                    ->orderBy('divisi')
-                    ->orderBy('urutan_index')
+        return static::active()
+                    ->orderBy('divisi_order')
+                    ->orderBy('staff_order')
                     ->get()
-                    ->groupBy('divisi');
+                    ->groupBy('nama_divisi');
     }
 
-    // Method untuk management admin
-    public static function getAllForManagement()
+    // Method untuk mendapatkan semua divisi yang unik
+    public static function getAllDivisions()
     {
-        return static::orderBy('divisi')->orderBy('urutan_index')->get();
+        return static::active()
+                    ->select('nama_divisi', 'divisi_order')
+                    ->distinct()
+                    ->orderBy('divisi_order')
+                    ->pluck('nama_divisi');
+    }
+
+    // Method untuk mendapatkan data per divisi
+    public static function getDivisionStaff($divisionName)
+    {
+        return static::active()
+                    ->where('nama_divisi', $divisionName)
+                    ->orderBy('staff_order')
+                    ->get();
     }
 }

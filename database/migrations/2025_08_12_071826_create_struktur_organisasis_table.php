@@ -12,33 +12,28 @@ return new class extends Migration
         Schema::create('struktur_organisasis', function (Blueprint $table) {
             $table->id();
             
-            // Data personal anggota
-            $table->string('nama');
-            $table->string('jabatan');
-            $table->string('email')->nullable();
-            $table->string('foto')->nullable();
+            // Data divisi
+            $table->string('nama_divisi'); // Nama divisi yang bisa diinput bebas
+            $table->integer('divisi_order')->default(1); // Urutan tampilan divisi
             
-            // Data organisasi
-            $table->string('divisi'); // Tidak lagi enum, bisa diinput bebas
-            $table->enum('level', ['kepala', 'anggota'])->default('anggota'); // Level dalam struktur
+            // Data personal staf dalam divisi
+            $table->string('nama'); // Sesuai dengan 'nama_kepala' di tabel head
+            $table->string('jabatan'); // Sesuai dengan 'jabatan_kepala' di tabel head
+            $table->string('email')->nullable(); // Sesuai dengan 'email_kepala' di tabel head
+            $table->string('foto')->nullable(); // Sesuai dengan 'foto_kepala' di tabel head
             
-            // Data urutan dan organisasi
-            $table->integer('urutan_index')->default(1); // Urutan dalam divisi
-            $table->integer('division_order')->nullable(); // Urutan divisi
+            // Urutan staf dalam divisi
+            $table->integer('staff_order')->default(1); // Urutan staf dalam satu divisi
             
-            // Metadata organisasi (disimpan di setiap record untuk simplicity)
-            $table->string('org_name')->nullable(); // Nama organisasi
-            $table->text('org_description')->nullable(); // Deskripsi organisasi
-            
-            // Status publikasi
-            $table->enum('status', ['draft', 'published', 'inactive'])->default('draft');
+            // Status
+            $table->boolean('is_active')->default(true); // Konsisten dengan tabel head
             
             $table->timestamps();
             
-            // Indexes untuk performa
-            $table->index(['status', 'level']);
-            $table->index(['divisi', 'urutan_index']);
-            $table->index(['level', 'urutan_index']);
+            // Indexes untuk performa query
+            $table->index(['nama_divisi', 'divisi_order']); // Query per divisi
+            $table->index(['nama_divisi', 'staff_order']); // Urutan staf dalam divisi
+            $table->index('is_active'); // Filter status aktif
         });
     }
 

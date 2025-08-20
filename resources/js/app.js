@@ -20,7 +20,7 @@ import "./components/admin/tutorialblock";
 import "./components/admin/tutorialfeatured";
 
 // Import Structure management
-import { Structure } from "./components/admin/structure.js";
+// import { Structure } from "./components/admin/structure.js";
 
 // Import komponen public
 import "./components/public/bulk-download";
@@ -299,53 +299,53 @@ class AppManager {
         });
     }
 
-    initializeStructureManager() {
-        const organizationForm = document.getElementById("organizationForm");
+    // initializeStructureManager() {
+    //     const organizationForm = document.getElementById("organizationForm");
 
-        if (!organizationForm) {
-            console.log(
-                "🏗️ No organization form found, skipping Structure manager"
-            );
-            return;
-        }
+    //     if (!organizationForm) {
+    //         console.log(
+    //             "🏗️ No organization form found, skipping Structure manager"
+    //         );
+    //         return;
+    //     }
 
-        try {
-            console.log("🏗️ Initializing Structure manager...");
+    //     try {
+    //         console.log("🏗️ Initializing Structure manager...");
 
-            const orgManager = new Structure();
-            orgManager.init();
+    //         const orgManager = new Structure();
+    //         orgManager.init();
 
-            // Store reference
-            this.components.set("structureManager", orgManager);
+    //         // Store reference
+    //         this.components.set("structureManager", orgManager);
 
-            // Expose to global scope for onclick handlers in Blade templates
-            window.orgManager = orgManager;
+    //         // Expose to global scope for onclick handlers in Blade templates
+    //         window.orgManager = orgManager;
 
-            // Global functions for compatibility with blade onclick
-            window.addDivisionEntry = () => orgManager.addDivisionEntry();
-            window.saveOrganization = () => orgManager.saveOrganization();
-            window.previewCarousel = () => orgManager.previewCarousel();
-            window.previewOrgChart = () => orgManager.previewOrgChart();
-            window.closeCarouselPreview = () =>
-                orgManager.closeCarouselPreview();
-            window.closeOrgChartPreview = () =>
-                orgManager.closeOrgChartPreview();
+    //         // Global functions for compatibility with blade onclick
+    //         window.addDivisionEntry = () => orgManager.addDivisionEntry();
+    //         window.saveOrganization = () => orgManager.saveOrganization();
+    //         window.previewCarousel = () => orgManager.previewCarousel();
+    //         window.previewOrgChart = () => orgManager.previewOrgChart();
+    //         window.closeCarouselPreview = () =>
+    //             orgManager.closeCarouselPreview();
+    //         window.closeOrgChartPreview = () =>
+    //             orgManager.closeOrgChartPreview();
 
-            console.log("✅ Structure manager initialized successfully");
-        } catch (error) {
-            console.error("❌ Error initializing structure manager:", error);
-        }
-    }
+    //         console.log("✅ Structure manager initialized successfully");
+    //     } catch (error) {
+    //         console.error("❌ Error initializing structure manager:", error);
+    //     }
+    // }
 
     updateComponentThemes(darkMode) {
         // Update Structure manager if exists
-        const structureManager = this.components.get("structureManager");
-        if (
-            structureManager &&
-            typeof structureManager.updateTheme === "function"
-        ) {
-            structureManager.updateTheme(darkMode);
-        }
+        // const structureManager = this.components.get("structureManager");
+        // if (
+        //     structureManager &&
+        //     typeof structureManager.updateTheme === "function"
+        // ) {
+        //     structureManager.updateTheme(darkMode);
+        // }
 
         // Update other components that need theme updates
         this.components.forEach((component, name) => {
@@ -393,4 +393,4 @@ const appManager = new AppManager();
 
 // Export for module usage
 export default appManager;
-export { Structure };
+// export { Structure };
