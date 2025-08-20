@@ -2,18 +2,23 @@
 
 namespace App\Http\Controllers\admin;
 
+use Carbon\Carbon;
+use App\Models\Faq;
 use App\Models\Dashboard;
 use App\Models\Dokumen\Sop;
 use Illuminate\Http\Request;
 use App\Models\Dokumen\Panduan;
 use App\Models\Dokumen\Regulasi;
 use App\Models\Dokumen\Ketetapan;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+// Add other content models as needed
+// use App\Models\Tutorial;
+// use App\Models\FAQ;
 use Illuminate\Support\Facades\Auth;
 use App\Models\InformasiTerkini\KelolaBerita;
+use App\Models\InformasiTerkini\KelolaTutorial;
 use App\Models\InformasiTerkini\KelolaPengumuman;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -28,7 +33,9 @@ class DashboardController extends Controller
         $totalPanduan = Panduan::count();
         $totalSop = Sop::count();
         $totalDokumen = $totalPanduan + $totalRegulasi + $totalKetetapan + $totalSop;
-        $totalPengumuman = KelolaPengumuman::count();
+        
+        // Only count published announcements
+        $totalPengumuman = KelolaPengumuman::where('status', 'published')->count();
 
         // Real-time statistics
         $beritaMingguan = KelolaBerita::where('created_at', '>=', Carbon::now()->subWeek())->count();
@@ -39,15 +46,18 @@ class DashboardController extends Controller
             Sop::where('created_at', '>=', Carbon::now()->subWeek())->count()
         ])->sum();
 
-        $pengumumanUrgent = KelolaPengumuman::where('urgency', 'penting')
-                                          ->orWhere('is_priority', true)
+        $pengumumanUrgent = KelolaPengumuman::where('status', 'published')
+                                          ->where(function($query) {
+                                              $query->where('urgency', 'penting')
+                                                    ->orWhere('is_priority', true);
+                                          })
                                           ->count();
 
-        // Content status
+        // Content status - includes all content types with status
         $contentStatus = [
-            'draft' => KelolaBerita::where('status', 'draft')->count(),
-            'published' => KelolaBerita::where('status', 'published')->count(),
-            'scheduled' => KelolaBerita::where('status', 'scheduled')->count()
+            'draft' => $this->getTotalContentByStatus('draft'),
+            'published' => $this->getTotalContentByStatus('published'),
+            'scheduled' => $this->getTotalContentByStatus('scheduled')
         ];
 
         // Recent activities
@@ -85,6 +95,56 @@ class DashboardController extends Controller
     }
 
     /**
+     * Get total content by status across all content types
+     */
+    /**
+ * Get total content by status across all content types
+ */
+    private function getTotalContentByStatus($status)
+    {
+        $total = 0;
+        
+        // Berita
+        $total += KelolaBerita::where('status', $status)->count();
+        
+        // Pengumuman - with special handling for scheduled
+        if ($status === 'scheduled') {
+            // For announcements, "scheduled" means published with valid_until in the future
+            $total += KelolaPengumuman::where('status', 'published')
+                                    ->whereNotNull('valid_until')
+                                    ->where('valid_until', '>=', now())
+                                    ->count();
+        } else {
+            // For draft and published, use regular status check
+            if ($status === 'published') {
+                // Published announcements are those that are published AND either have no valid_until 
+                // OR valid_until is in the future (still active)
+                $total += KelolaPengumuman::where('status', 'published')
+                                        ->where(function($query) {
+                                            $query->whereNull('valid_until')
+                                                ->orWhere('valid_until', '>=', now());
+                                        })
+                                        ->count();
+            } else {
+                // For draft status
+                $total += KelolaPengumuman::where('status', $status)->count();
+            }
+        }
+        
+            if (class_exists('\App\Models\Tutorial')) {
+            $total += KelolaTutorial::where('status', $status)->count();
+        }
+        
+        // FAQ (if exists)
+        if (class_exists('\App\Models\FAQ')) {
+            $total += Faq::where('status', $status)->count();
+        }
+        
+        return $total;
+    }
+
+
+    /**
      * Get recent activities
      */
     private function getRecentActivities()
@@ -102,8 +162,11 @@ class DashboardController extends Controller
             ];
         }
 
-        // Recent announcements
-        $recentAnnouncements = KelolaPengumuman::latest()->limit(2)->get();
+        // Recent announcements (only published)
+        $recentAnnouncements = KelolaPengumuman::where('status', 'published')
+                                              ->latest()
+                                              ->limit(2)
+                                              ->get();
         foreach ($recentAnnouncements as $announcement) {
             $activities[] = [
                 'type' => 'announcement',
@@ -183,12 +246,17 @@ class DashboardController extends Controller
         return response()->json([
             'totalBerita' => KelolaBerita::count(),
             'totalDokumen' => Panduan::count() + Regulasi::count() + Ketetapan::count() + Sop::count(),
-            'totalPengumuman' => KelolaPengumuman::count(),
-            'visitorsToday' => rand(1200, 1400), // Replace with real data
+            'totalPengumuman' => KelolaPengumuman::where('status', 'published')->count(),
+            'visitorsToday' => rand(1200, 1400),
             'recentActivities' => $this->getRecentActivities(),
             'systemHealth' => [
                 'database' => $this->checkDatabaseHealth(),
                 'storage' => $this->getStorageUsage()
+            ],
+            'contentStatus' => [
+                'draft' => $this->getTotalContentByStatus('draft'),
+                'published' => $this->getTotalContentByStatus('published'),
+                'scheduled' => $this->getTotalContentByStatus('scheduled')
             ]
         ]);
     }
