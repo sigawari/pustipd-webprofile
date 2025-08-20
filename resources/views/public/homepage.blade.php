@@ -443,16 +443,9 @@
                     <div class="flex animate-infinite-scroll gap-2 sm:gap-4 md:gap-5" id="teamCarousel">
                         <!-- First Set of Cards - Dynamic -->
                         @foreach ($teams as $member)
-                            <x-team-card name="{{ $member->nama }}" position="{{ $member->jabatan }}"
-                                description="{{ $member->divisi }}"
-                                image="{{ $member->foto ? asset('storage/' . $member->foto) : asset('assets/img/placeholder/dummy.png') }}" />
-                        @endforeach
-
-                        <!-- Duplicate Set untuk Infinite Effect -->
-                        @foreach ($teams as $member)
-                            <x-team-card name="{{ $member->nama }}" position="{{ $member->jabatan }}"
-                                description="{{ $member->divisi }}"
-                                image="{{ $member->foto ? asset('storage/' . $member->foto) : asset('assets/img/placeholder/dummy.png') }}" />
+                            <x-team-card :nama="$member->nama" :jabatan="$member->jabatan" :foto="$member->foto
+                                ? asset('storage/' . $member->foto)
+                                : asset('assets/img/placeholder/dummy.png')" :email="$member->email ?? ''" />
                         @endforeach
                     </div>
                 </div>
@@ -460,7 +453,6 @@
                 <!-- Empty State -->
                 <div class="text-center py-10">
                     <div class="max-w-md mx-auto">
-                        <!-- Icon -->
                         <div class="flex justify-center mb-6">
                             <div class="bg-gray-100 p-6 rounded-full">
                                 <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor"
@@ -472,20 +464,18 @@
                             </div>
                         </div>
 
-                        <!-- Content -->
                         <h3 class="text-xl font-semibold text-gray-800 mb-3">
                             Tim Sedang Dalam Penyusunan
                         </h3>
                         <p class="text-gray-600 leading-relaxed mb-6">
                             Informasi lengkap tentang tim PUSTIPD akan segera tersedia.
-                            Kami sedang mempersiapkan profil anggota tim untuk memberikan
-                            layanan terbaik kepada Anda.
                         </p>
                     </div>
                 </div>
             @endif
         </div>
     </section>
+
 
     <!-- Mitra Section dengan Grid -->
     <section id="mitra" class="py-20 bg-gray-100">

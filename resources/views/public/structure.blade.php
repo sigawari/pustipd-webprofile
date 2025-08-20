@@ -1,32 +1,67 @@
 @php
-    $organization = $organization ?? [
-        'name' => 'Struktur Organisasi',
-        'description' => 'Struktur organisasi dan divisi PUSTIPD UIN Raden Fatah Palembang',
+    // Perbaikan untuk mengambil structure_desc dari database
+    $organization = [
+        'name' => 'Struktur Organisasi PUSTIPD',
+        'description' => $description ?? 'Struktur organisasi dan divisi PUSTIPD UIN Raden Fatah Palembang',
+        // PERBAIKAN: Gunakan structure_desc dari headData jika ada
         'subtitle' =>
-            'Berdasarkan surat XXX nomor XXX tentang Pengangkatan Pusat Teknologi Informasi dan Pangkalan Data Universitas Islam Negeri Raden Fatah Palembang Masa Bakti 2023-2027 menetapkan struktural organisasi sebagai berikut:',
+            $headData && !empty($headData->structure_desc)
+                ? $headData->structure_desc
+                : 'Berdasarkan surat XXX nomor XXX tentang Pengangkatan Pusat Teknologi Informasi dan Pangkalan Data Universitas Islam Negeri Raden Fatah Palembang Masa Bakti 2023-2027 menetapkan struktural organisasi sebagai berikut:',
     ];
 
-    $head = isset($organization['head'])
+    // Perbaikan head data
+    $head = $headData
         ? [
-            'nama' => $organization['head']['nama'] ?? '',
-            'jabatan' => $organization['head']['jabatan'] ?? '',
-            'divisi' => $organization['head']['divisi'] ?? '',
-            'image' => $organization['head']['image'] ?? asset('assets/img/placeholder/dummy.png'),
-            'email' => $organization['head']['email'] ?? '',
+            'nama' => $headData->nama_kepala,
+            'jabatan' => $headData->jabatan_kepala,
+            // PERBAIKAN: Cek apakah foto ada dan path-nya benar
+            'image' =>
+                $headData->foto_kepala && Storage::disk('public')->exists($headData->foto_kepala)
+                    ? asset('storage/' . $headData->foto_kepala)
+                    : asset('assets/img/placeholder/dummy.png'),
+            'email' => $headData->email_kepala ?? '',
         ]
         : [
             'nama' => '',
             'jabatan' => '',
-            'divisi' => '',
             'image' => asset('assets/img/placeholder/dummy.png'),
+            'email' => '',
         ];
 
-    // Data divisi dari CMS
-    $divisions = $organization['divisions'] ?? [];
+    // Perbaikan divisions data
+    $divisions = [];
+    if ($strukturData && $strukturData->count() > 0) {
+        foreach ($strukturData as $divisionName => $staffs) {
+            $members = [];
+            foreach ($staffs as $staff) {
+                $members[] = [
+                    'nama' => $staff->nama,
+                    'jabatan' => $staff->jabatan,
+                    // PERBAIKAN: Cek apakah foto staff ada
+                    'image' =>
+                        $staff->foto && Storage::disk('public')->exists($staff->foto)
+                            ? asset('storage/' . $staff->foto)
+                            : asset('assets/img/placeholder/dummy.png'),
+                    'email' => $staff->email ?? '',
+                ];
+            }
 
-    // Urutan divisi dari CMS (jika ada) atau default kosong
-    $orderDivisions = $organization['division_order'] ?? collect($divisions)->pluck('name')->toArray();
+            $divisions[] = [
+                'name' => $divisionName,
+                'members' => $members,
+                'order' => $staffs->first()->divisi_order ?? 1,
+            ];
+        }
+
+        usort($divisions, function ($a, $b) {
+            return $a['order'] <=> $b['order'];
+        });
+    }
+
+    $orderDivisions = collect($divisions)->pluck('name')->toArray();
 @endphp
+
 
 <x-public.layouts title="{{ $title }}" description="{{ $description }}" keywords="{{ $keywords }}">
     <x-slot:title>{{ $title }}</x-slot:title>
@@ -78,20 +113,20 @@
             <!-- Header dan Deskripsi -->
             <div class="text-center mb-10 group max-w-3xl mx-auto pt-10">
                 <h2 class="text-3xl md:text-4xl font-bold text-secondary relative inline-block underline-animate mb-3">
-                    {{ $organization['name'] ?? 'Struktur Organisasi' }}
+                    {{ $organization['name'] }}
                 </h2>
                 <h3 class="text-lg text-secondary pt-3">
-                    {{ $organization['description'] ?? 'Struktur organisasi dan divisi PUSTIPD UIN Raden Fatah Palembang' }}
+                    {{ $organization['description'] }}
                 </h3>
                 <p class="text-center text-secondary mb-8 pt-3 max-w-xl mx-auto">
-                    {{ $organization['subtitle'] ?? 'Berdasarkan surat XXX nomor XXX tentang Pengangkatan Pusat Teknologi Informasi dan Pangkalan Data Universitas Islam Negeri Raden Fatah Palembang Masa Bakti 2023-2027 menetapkan struktural organisasi sebagai berikut:' }}
+                    {{ $organization['subtitle'] }}
                 </p>
             </div>
 
             <!-- Kepala Organisasi - Hanya tampil jika ada data -->
             @if (!empty($head['nama']))
                 <div class="mb-16 flex justify-center">
-                    <x-team-card :name="$head['nama']" :position="$head['jabatan']" :image="$head['image']" :email="$head['email'] ?? ''" />
+                    <x-team-card :nama="$head['nama']" :jabatan="$head['jabatan']" :foto="$head['image']" :email="$head['email']" />
                 </div>
             @endif
 
@@ -108,8 +143,8 @@
                             <div class="flex justify-center gap-8 flex-wrap" role="list"
                                 aria-label="Anggota divisi {{ $div['name'] }}">
                                 @foreach ($div['members'] as $anggota)
-                                    <x-team-card :name="$anggota['nama']" :position="$anggota['jabatan']" :image="$anggota['image'] ?? asset('assets/img/placeholder/dummy.png')"
-                                        :email="$anggota['email'] ?? ''" />
+                                    <x-team-card :nama="$anggota['nama']" :jabatan="$anggota['jabatan']" :foto="$anggota['image']"
+                                        :email="$anggota['email']" />
                                 @endforeach
                             </div>
                         </div>

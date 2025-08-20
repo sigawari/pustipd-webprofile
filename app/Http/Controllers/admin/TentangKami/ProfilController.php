@@ -31,7 +31,7 @@ class ProfilController extends Controller
             'applications'      => 'nullable|array',
             'institutions'      => 'nullable|array',
             'universities'      => 'nullable|array',
-            'profil_photo'     => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'profil_photo'     => 'nullable|image|mimes:jpg,jpeg,png|max:10240',
         ], [
             'organization_name.required' => 'Nama organisasi wajib diisi.',
             'organization_name.max'      => 'Nama organisasi maksimal 255 karakter.',
@@ -76,7 +76,7 @@ class ProfilController extends Controller
             'applications'      => 'nullable|array',
             'institutions'      => 'nullable|array',
             'universities'      => 'nullable|array',
-            'profil_photo'      => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'profil_photo'      => 'required|image|mimes:jpg,jpeg,png,webp|max:10240',
         ], [
             'profil_photo.required' => 'Foto profil wajib diupload.',
             'profil_photo.image' => 'File harus berupa gambar.',
@@ -147,7 +147,7 @@ class ProfilController extends Controller
             'applications'      => 'nullable|array',
             'institutions'      => 'nullable|array',
             'universities'      => 'nullable|array',
-            'profil_photo'      => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'profil_photo'      => 'required|image|mimes:jpg,jpeg,png,webp|max:10240',
         ], [
             'profil_photo.required' => 'Foto profil wajib diupload.',
             'profil_photo.image' => 'File harus berupa gambar.',

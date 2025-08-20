@@ -150,7 +150,7 @@
                                 <div class="staff-container space-y-3">
                                     @foreach ($staffs as $staff)
                                         <div
-                                            class="staff-entry grid grid-cols-1 md:grid-cols-4 gap-3 p-3 bg-white rounded border">
+                                            class="staff-entry grid grid-cols-1 md:grid-cols-4 gap-3 p-3 bg-white rounded">
                                             <input type="text"
                                                 name="divisions[{{ $loop->parent->index }}][staff][{{ $loop->index }}][nama]"
                                                 value="{{ $staff->nama }}" class="px-2 py-1 border rounded"
@@ -245,11 +245,11 @@
 
             const container = document.getElementById('divisionsContainer');
             const divisionHtml = `
-                <div class="division-entry bg-gray-50 rounded-lg p-4 border">
+                <div class="division-entry bg-gray-50 rounded-lg p-4 border-gray-300">
                     <div class="flex items-center justify-between mb-3">
                         <input type="text" name="divisions[${divisionCounter}][nama_divisi]" 
-                               class="font-medium bg-transparent border-b border-gray-300 focus:border-blue-500 focus:outline-none"
-                               placeholder="Nama Divisi" required>
+                            class="font-medium bg-transparent border-b border-gray-300 focus:border-blue-500 focus:outline-none"
+                            placeholder="Nama Divisi" required>
                         <input type="hidden" name="divisions[${divisionCounter}][divisi_order]" value="${divisionCounter + 1}">
                         <button type="button" onclick="removeDivisionEntry(this)"
                             class="text-red-600 hover:text-red-800 text-sm">
@@ -258,27 +258,27 @@
                     </div>
                     
                     <div class="staff-container space-y-3">
-                        <div class="staff-entry grid grid-cols-1 md:grid-cols-4 gap-3 p-3 bg-white rounded border">
+                        <div class="staff-entry grid grid-cols-1 md:grid-cols-4 gap-3 p-3 bg-white rounded border-gray-300">
                             <input type="text" name="divisions[${divisionCounter}][staff][0][nama]" 
-                                   class="px-2 py-1 border rounded" placeholder="Nama Staff" required>
+                                class="px-2 py-1 border-gray-300 border rounded focus:border-blue-500 focus:outline-none" placeholder="Nama Staff" required>
                             <input type="text" name="divisions[${divisionCounter}][staff][0][jabatan]" 
-                                   class="px-2 py-1 border rounded" placeholder="Jabatan" required>
+                                class="px-2 py-1 border-gray-300 border rounded focus:border-blue-500 focus:outline-none" placeholder="Jabatan" required>
                             <input type="email" name="divisions[${divisionCounter}][staff][0][email]" 
-                                   class="px-2 py-1 border rounded" placeholder="Email">
+                                class="px-2 py-1 border-gray-300 border rounded focus:border-blue-500 focus:outline-none" placeholder="Email">
                             <div class="flex items-center gap-2">
                                 <input type="file" name="divisions[${divisionCounter}][staff][0][foto]" 
-                                       accept="image/*" class="hidden" id="staff_photo_${divisionCounter}_0">
+                                    accept="image/*" class="hidden" id="staff_photo_${divisionCounter}_0">
                                 <button type="button" onclick="document.getElementById('staff_photo_${divisionCounter}_0').click()"
-                                    class="text-xs bg-gray-200 px-2 py-1 rounded">Foto</button>
+                                    class="text-xs bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded transition-colors">Foto</button>
                                 <button type="button" onclick="removeStaffEntry(this)"
-                                    class="text-red-600 text-xs">Hapus</button>
+                                    class="text-red-600 hover:text-red-800 text-xs transition-colors">Hapus</button>
                             </div>
                             <input type="hidden" name="divisions[${divisionCounter}][staff][0][staff_order]" value="1">
                         </div>
                     </div>
                     
                     <button type="button" onclick="addStaffEntry(this)"
-                        class="mt-3 text-blue-600 text-sm hover:text-blue-800">
+                        class="mt-3 text-blue-600 text-sm hover:text-blue-800 transition-colors">
                         + Tambah Staff
                     </button>
                 </div>

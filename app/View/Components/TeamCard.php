@@ -2,36 +2,30 @@
 
 namespace App\View\Components;
 
-use Closure;
-use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
 class TeamCard extends Component
 {
-    public $name;
-    public $position;
-    public $image;
-    public $initials;
+    public $nama;
+    public $jabatan;
+    public $foto;
+    public $email;
 
-    public function __construct($name, $position, $image = null)
+    /**
+     * Create a new component instance.
+     */
+    public function __construct($nama = '', $jabatan = '', $foto = null, $email = '')
     {
-        $this->name = $name;
-        $this->position = $position;
-        $this->image = $image;
-        $this->initials = $this->generateInitials($name);
+        $this->nama = $nama;
+        $this->jabatan = $jabatan;
+        $this->foto = $foto;
+        $this->email = $email;
     }
 
-    private function generateInitials($name)
-    {
-        $words = explode(' ', $name);
-        $initials = '';
-        foreach ($words as $word) {
-            $initials .= strtoupper(substr($word, 0, 1));
-        }
-        return substr($initials, 0, 2); // Maksimal 2 karakter
-    }
-
-    public function render(): View|Closure|string
+    /**
+     * Get the view / contents that represent the component.
+     */
+    public function render()
     {
         return view('components.team-card');
     }

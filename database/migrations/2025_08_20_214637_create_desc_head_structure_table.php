@@ -12,23 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('desc_head_structure', function (Blueprint $table) {
-            $table->id(); // Primary key
-            
-            // Deskripsi halaman struktur organisasi
+            $table->id();
             $table->text('structure_desc')->nullable();
-            
-            // Data kepala organisasi
             $table->string('nama_kepala');
-            $table->string('jabatan_kepala')->default('Kepala PUSTIPD');
+            $table->string('jabatan_kepala');
             $table->string('email_kepala')->nullable();
-            $table->string('foto_kepala')->nullable(); // Path/nama file foto
-            
-            // Metadata tambahan
-            $table->boolean('is_active')->default(true); // Status aktif/nonaktif
-            $table->integer('sort_order')->default(1); // Urutan tampilan jika ada multiple records
-            
-            $table->timestamps();
+            $table->string('foto_kepala')->nullable();
+            $table->boolean('is_active')->default(true);
+            $table->integer('sort_order')->default(1);
+            $table->timestamps(); // PENTING: Pastikan ada timestamps
         });
+        
     }
 
     /**

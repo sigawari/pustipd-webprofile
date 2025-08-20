@@ -2,9 +2,12 @@
 namespace App\Models\TentangKami;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class DescHeadStructure extends Model
 {
+    use HasFactory;
+    
     protected $table = 'desc_head_structure';
     
     protected $fillable = [
@@ -22,22 +25,36 @@ class DescHeadStructure extends Model
         'sort_order' => 'integer',
     ];
 
-    // Scope untuk data aktif
+    // PERBAIKAN: Gunakan public $timestamps = true (default Laravel)
+    public $timestamps = true;
+
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
     }
 
-    // Method untuk mendapatkan data kepala organisasi aktif
     public static function getActiveHead()
     {
-        return static::active()->orderBy('sort_order')->first();
+        \Log::info('getActiveHead called');
+        $result = self::where('is_active', 1)->first();
+        \Log::info('getActiveHead result:', $result ? $result->toArray() : ['null']);
+        return $result;
     }
-
-    // Method untuk mendapatkan deskripsi struktur
+    
     public static function getDescription()
     {
-        $head = static::getActiveHead();
-        return $head ? $head->structure_desc : null;
+        \Log::info('getDescription called');
+        $result = self::where('is_active', 1)->value('structure_desc');
+        \Log::info('getDescription result:', ['desc' => $result]);
+        return $result;
     }
+
+    // Accessor untuk foto kepala (seperti di model Profil)
+    public function getFotoKepalaUrlAttribute()
+    {
+        return $this->foto_kepala ? asset('storage/' . $this->foto_kepala) : null;
+    }
+
+    // PERBAIKAN: Hapus method saveHeadData yang bermasalah
+    // Gunakan pattern Laravel standar saja
 }
