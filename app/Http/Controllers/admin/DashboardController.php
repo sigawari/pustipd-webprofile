@@ -6,15 +6,16 @@ use Carbon\Carbon;
 use App\Models\Faq;
 use App\Models\Dashboard;
 use App\Models\Dokumen\Sop;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\Dokumen\Panduan;
 use App\Models\Dokumen\Regulasi;
 use App\Models\Dokumen\Ketetapan;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller;
 // Add other content models as needed
 // use App\Models\Tutorial;
 // use App\Models\FAQ;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Models\InformasiTerkini\KelolaBerita;
 use App\Models\InformasiTerkini\KelolaTutorial;
@@ -156,7 +157,7 @@ class DashboardController extends Controller
         foreach ($recentNews as $news) {
             $activities[] = [
                 'type' => 'news',
-                'message' => 'Berita "' . \Str::limit($news->name, 30) . '" dipublish',
+                'message' => 'Berita "' . Str::limit($news->name, 30) . '" dipublish',
                 'time' => $news->created_at->diffForHumans(),
                 'color' => 'blue'
             ];
@@ -170,7 +171,7 @@ class DashboardController extends Controller
         foreach ($recentAnnouncements as $announcement) {
             $activities[] = [
                 'type' => 'announcement',
-                'message' => 'Pengumuman "' . \Str::limit($announcement->title, 30) . '" diperbarui',
+                'message' => 'Pengumuman "' . Str::limit($announcement->title, 30) . '" diperbarui',
                 'time' => $announcement->updated_at->diffForHumans(),
                 'color' => 'yellow'
             ];
@@ -185,7 +186,7 @@ class DashboardController extends Controller
         foreach ($recentDocs as $doc) {
             $activities[] = [
                 'type' => 'document',
-                'message' => $doc['type'] . ' "' . \Str::limit($doc['title'], 30) . '" ditambahkan',
+                'message' => $doc['type'] . ' "' . Str::limit($doc['title'], 30) . '" ditambahkan',
                 'time' => $doc['created_at']->diffForHumans(),
                 'color' => 'green'
             ];

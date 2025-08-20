@@ -17,11 +17,13 @@ use App\Models\Dokumen\Regulasi;
 use App\Models\Dokumen\Ketetapan;
 use App\Models\Beranda\Pencapaian;
 use App\Models\TentangKami\Profil;
+use Illuminate\Support\FacadesLog;
 use App\Models\TentangKami\Gallery;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Models\TentangKami\VisiMisi;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\FacadesStorage;
 use Illuminate\Support\Facades\Storage;
 use App\Models\InformasiTerkini\KelolaBerita;
 use App\Models\TentangKami\DescHeadStructure;
@@ -96,10 +98,10 @@ class PublicsController extends Controller
             ]);
             
             // Debug head data
-            \Log::info('Homepage Head Data:', [
+            Log::info('Homepage Head Data:', [
                 'nama' => $headData->nama_kepala,
                 'foto_path' => $headData->foto_kepala,
-                'foto_exists' => $headData->foto_kepala ? \Storage::disk('public')->exists($headData->foto_kepala) : false
+                'foto_exists' => $headData->foto_kepala ? Storage::disk('public')->exists($headData->foto_kepala) : false
             ]);
         }
 
@@ -117,17 +119,17 @@ class PublicsController extends Controller
             ]);
             
             // Debug staff data
-            \Log::info('Homepage Staff Data:', [
+            Log::info('Homepage Staff Data:', [
                 'nama' => $staff->nama,
                 'foto_path' => $staff->foto,
-                'foto_exists' => $staff->foto ? \Storage::disk('public')->exists($staff->foto) : false
+                'foto_exists' => $staff->foto ? Storage::disk('public')->exists($staff->foto) : false
             ]);
         }
         
-        \Log::info('Homepage Teams Total:', ['count' => $teams->count()]);
+        Log::info('Homepage Teams Total:', ['count' => $teams->count()]);
         
     } catch (\Exception $e) {
-        \Log::error('Error loading teams: ' . $e->getMessage());
+        Log::error('Error loading teams: ' . $e->getMessage());
     }
 
     return view('public.homepage', compact(
@@ -194,9 +196,9 @@ class PublicsController extends Controller
         
         // Debug untuk memastikan path gambar benar
         if ($headData && $headData->foto_kepala) {
-            \Log::info('Structure Head Photo:', [
+            Log::info('Structure Head Photo:', [
                 'path' => $headData->foto_kepala,
-                'exists' => \Storage::disk('public')->exists($headData->foto_kepala),
+                'exists' => Storage::disk('public')->exists($headData->foto_kepala),
                 'url' => asset('storage/' . $headData->foto_kepala)
             ]);
         }
@@ -204,10 +206,10 @@ class PublicsController extends Controller
         foreach ($strukturData as $divisionName => $staffs) {
             foreach ($staffs as $staff) {
                 if ($staff->foto) {
-                    \Log::info('Structure Staff Photo:', [
+                    Log::info('Structure Staff Photo:', [
                         'nama' => $staff->nama,
                         'path' => $staff->foto,
-                        'exists' => \Storage::disk('public')->exists($staff->foto),
+                        'exists' => Storage::disk('public')->exists($staff->foto),
                         'url' => asset('storage/' . $staff->foto)
                     ]);
                 }
@@ -215,7 +217,7 @@ class PublicsController extends Controller
         }
         
     } catch (\Exception $e) {
-        \Log::error('Structure error: ' . $e->getMessage());
+        Log::error('Structure error: ' . $e->getMessage());
         $headData = null;
         $strukturData = collect();
     }
@@ -434,7 +436,7 @@ class PublicsController extends Controller
 
         // Dapatkan data utama (safe null handling)
         $title = $tutorial->title ?? 'Tutorial';
-        $description = $tutorial->excerpt ?: \Illuminate\Support\Str::limit(strip_tags($tutorial->content ?? ''), 155);
+        $description = $tutorial->excerpt ?: Str::limit(strip_tags($tutorial->content ?? ''), 155);
         $keywords = (is_array($tutorial->tags) && count($tutorial->tags) > 0)
             ? implode(', ', $tutorial->tags)
             : 'tutorial, pustipd';
