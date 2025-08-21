@@ -124,8 +124,8 @@
         </td>
     </tr>
 @empty
-    <tr class="hover:bg-gray-50 max-w-full">
-        <td colspan="9" class="px-9 py-4 text-center text-gray-500 italic">
+    <tr class="hover:bg-gray-50">
+        <td colspan="9" class="py-4 text-center text-gray-500 italic min-w-screen">
             <div class="flex flex-col items-center justify-center text-sm text-gray-500 space-y-1">
                 @if ($kelolaPengumumans->isEmpty() && !request()->filled('search') && !request()->filled('filter'))
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-400 mb-1" fill="none"
