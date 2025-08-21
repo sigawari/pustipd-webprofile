@@ -45,7 +45,6 @@
                 </div>
             </form>
 
-            <!-- Tombol X di pojok -->
             <button onclick="closeDeleteModal('{{ $layanan->id }}')"
                 class="absolute top-3 right-3 text-gray-400 hover:text-gray-600">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
