@@ -3,23 +3,10 @@ window.updateBulkActionsBar = function () {
     const bulkBar = document.getElementById("bulkActionsBar");
     const selectedCount = document.getElementById("selectedCount");
     const defaultActions = document.getElementById("defaultActions");
-    const archivedActions = document.getElementById("archivedActions");
 
     if (checkedBoxes.length > 0) {
         bulkBar.classList.remove("hidden");
         selectedCount.textContent = checkedBoxes.length;
-
-        const allArchived = Array.from(checkedBoxes).every((cb) => {
-            const row = cb.closest("tr");
-            const statusElement = row.querySelector(".inline-flex");
-            return (
-                statusElement &&
-                statusElement.textContent
-                    .trim()
-                    .toLowerCase()
-                    .includes("archived")
-            );
-        });
 
         if (allArchived) {
             defaultActions.classList.add("hidden");
@@ -45,16 +32,13 @@ window.bulkAction = function (action) {
     let confirmMessage = "";
     switch (action) {
         case "published":
-            confirmMessage = `Publish ${ids.length} Gallery?`;
+            confirmMessage = `Publish ${ids.length} Konten?`;
             break;
         case "draft":
-            confirmMessage = `Jadikan draft ${ids.length} Gallery?`;
-            break;
-        case "archived":
-            confirmMessage = `Arsipkan ${ids.length} Gallery?`;
+            confirmMessage = `Jadikan draft ${ids.length} Konten?`;
             break;
         case "permanent_delete":
-            confirmMessage = `⚠️ BAHAYA!\n\nHapus PERMANEN ${ids.length} Gallery?\n\nData tidak dapat dikembalikan!`;
+            confirmMessage = `⚠️ BAHAYA!\n\nHapus PERMANEN ${ids.length} Konten?\n\nData tidak dapat dikembalikan!`;
             break;
     }
 

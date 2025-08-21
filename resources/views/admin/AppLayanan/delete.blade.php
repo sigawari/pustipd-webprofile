@@ -18,12 +18,12 @@
             <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
                 <div class="flex items-start space-x-3">
                     @php
-                        $iconData = $appLayanan->category_icon;
+                        $categoryData = $appLayanan->category_data;
                     @endphp
                     <div class="flex-shrink-0">
                         <span
-                            class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium {{ $iconData['bg_color'] }}">
-                            {{ $iconData['emoji'] }}
+                            class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium {{ $categoryData['bg_color'] }}">
+                            {{ $categoryData['emoji'] }}
                         </span>
                     </div>
                     <div class="flex-1">

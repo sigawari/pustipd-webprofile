@@ -75,14 +75,6 @@ class AppLayanan extends Model
     }
 
     /**
-     * Scope a query to only include archived applications.
-     */
-    public function scopeArchived(Builder $query): Builder
-    {
-        return $query->where('status', 'archived');
-    }
-
-    /**
      * Scope a query to filter by category.
      */
     public function scopeCategory(Builder $query, string $category): Builder
@@ -130,28 +122,32 @@ class AppLayanan extends Model
     /**
      * Get the category icon data.
      */
-    public function getCategoryIconAttribute(): array
+    public function getCategoryDataAttribute(): array
     {
-        $icons = [
+        $categories = [
             'akademik' => [
+                'label' => 'Akademik',
                 'icon' => 'M12 14l9-5-9-5-9 5 9 5z M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z',
                 'color' => 'from-blue-500 to-blue-600',
                 'emoji' => '🎓',
                 'bg_color' => 'bg-blue-100 text-blue-800'
             ],
             'pegawai' => [
+                'label' => 'Pegawai',
                 'icon' => 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z',
                 'color' => 'from-green-500 to-green-600',
                 'emoji' => '👥',
                 'bg_color' => 'bg-green-100 text-green-800'
             ],
             'pembelajaran' => [
+                'label' => 'Pembelajaran',
                 'icon' => 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253',
                 'color' => 'from-orange-500 to-orange-600',
                 'emoji' => '📖',
                 'bg_color' => 'bg-orange-100 text-orange-800'
             ],
             'administrasi' => [
+                'label' => 'Administrasi',
                 'icon' => 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z',
                 'color' => 'from-purple-500 to-purple-600',
                 'emoji' => '📋',
@@ -159,8 +155,15 @@ class AppLayanan extends Model
             ]
         ];
         
-        return $icons[$this->category] ?? $icons['administrasi'];
+        return $categories[$this->category] ?? [
+            'label' => ucfirst($this->category),
+            'icon' => 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z',
+            'color' => 'from-gray-500 to-gray-600',
+            'emoji' => '📄',
+            'bg_color' => 'bg-gray-100 text-gray-800'
+        ];
     }
+    
 
     /**
      * Get the status badge color.
@@ -170,7 +173,6 @@ class AppLayanan extends Model
         return match($this->status) {
             'published' => 'bg-green-100 text-green-800',
             'draft' => 'bg-yellow-100 text-yellow-800',
-            'archived' => 'bg-gray-100 text-gray-800',
             default => 'bg-gray-100 text-gray-800'
         };
     }
@@ -228,14 +230,6 @@ class AppLayanan extends Model
     }
 
     /**
-     * Check if application is archived.
-     */
-    public function isArchived(): bool
-    {
-        return $this->status === 'archived';
-    }
-
-    /**
      * Publish the application.
      */
     public function publish(): bool
@@ -249,14 +243,6 @@ class AppLayanan extends Model
     public function draft(): bool
     {
         return $this->update(['status' => 'draft']);
-    }
-
-    /**
-     * Archive the application.
-     */
-    public function archive(): bool
-    {
-        return $this->update(['status' => 'archived']);
     }
 
     // ================================
@@ -284,7 +270,6 @@ class AppLayanan extends Model
         return [
             'draft' => 'Draft',
             'published' => 'Published',
-            'archived' => 'Archived'
         ];
     }
 

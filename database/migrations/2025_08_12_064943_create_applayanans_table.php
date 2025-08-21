@@ -22,7 +22,6 @@ return new class extends Migration
             $table->enum('status', [
                 'draft', 
                 'published', 
-                'archived'
             ])->default('draft');
             $table->timestamps();
             

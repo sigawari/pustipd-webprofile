@@ -51,33 +51,6 @@
                     </svg>
                     <span>Last updated: <span id="last-updated">{{ date('d M Y, H:i') }} WIB</span></span>
                 </div>
-
-                <!-- Quick Links -->
-                <div class="flex items-center space-x-4">
-                    <a href="#" class="hover:text-blue-600 transition-colors duration-200 flex items-center">
-                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        Help
-                    </a>
-                    <a href="#" class="hover:text-blue-600 transition-colors duration-200 flex items-center">
-                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                            </path>
-                        </svg>
-                        Documentation
-                    </a>
-                    <a href="#" class="hover:text-blue-600 transition-colors duration-200 flex items-center">
-                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
-                            </path>
-                        </svg>
-                        Support
-                    </a>
-                </div>
             </div>
         </div>
     </div>

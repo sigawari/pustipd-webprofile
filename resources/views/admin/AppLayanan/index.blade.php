@@ -50,78 +50,81 @@
             window.bulkActionRoute = "{{ route('admin.app-layanan.bulk') }}";
         </script>
         <script>
-            document.addEventListener("DOMContentLoaded", function() {
+            document.addEventListener('DOMContentLoaded', function() {
                 window.initBulkActions();
+                const categorySelect = document.getElementById('category-select');
+
+                if (categorySelect) {
+                    categorySelect.addEventListener('change', function() {
+                        const url = this.dataset.url;
+                        const target = this.dataset.target;
+                        const category = this.value;
+
+                        // Ambil parameter yang sudah ada
+                        const urlParams = new URLSearchParams(window.location.search);
+
+                        // Update parameter category
+                        if (category) {
+                            urlParams.set('category', category);
+                        } else {
+                            urlParams.delete('category');
+                        }
+
+                        // Buat URL baru dengan semua parameter
+                        const newUrl = url + '?' + urlParams.toString();
+
+                        // AJAX request
+                        fetch(newUrl, {
+                                method: 'GET',
+                                headers: {
+                                    'X-Requested-With': 'XMLHttpRequest',
+                                    'Content-Type': 'application/json',
+                                },
+                            })
+                            .then(response => response.text())
+                            .then(html => {
+                                // Update table body
+                                const targetElement = document.getElementById(target);
+                                if (targetElement) {
+                                    targetElement.innerHTML = html;
+                                }
+
+                                // Update URL tanpa reload
+                                window.history.pushState({}, '', newUrl);
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                            });
+                    });
+                }
             });
         </script>
 
-        <!-- ADOPSI: Bulk Actions Bar yang lebih intuitif -->
+        <!-- Bulk Actions Bar -->
         <div id="bulkActionsBar" class="hidden bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                <div class="flex items-center gap-2">
-                    <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                    <span class="text-blue-800 font-medium">
-                        <span id="selectedCount">0</span> aplikasi dipilih
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <span class="text-sm font-medium text-blue-800">
+                        <span id="selectedCount">0</span> item dipilih
                     </span>
                 </div>
-
-                <!-- Actions berdasarkan status yang dipilih -->
-                <div class="flex flex-col sm:flex-row gap-2" id="bulkActionButtons">
-                    <!-- Default actions (untuk draft/published) -->
-                    <div id="defaultActions">
-                        <button onclick="bulkAction('published')"
-                            class="px-3 py-2 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700">
-                            <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            Publish
-                        </button>
-                        <button onclick="bulkAction('draft')"
-                            class="px-3 py-2 text-sm bg-yellow-600 text-white rounded-lg hover:bg-yellow-700">
-                            <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
-                                </path>
-                            </svg>
-                            Draft
-                        </button>
-                        <button onclick="bulkAction('archived')"
-                            class="px-3 py-2 text-sm bg-gray-600 text-white rounded-lg hover:bg-gray-700">
-                            <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 8l6 6m0 0l6-6m-6 6V3"></path>
-                            </svg>
-                            Archive
-                        </button>
-                    </div>
-
-                    <!-- Actions untuk archived items -->
-                    <div id="archivedActions" class="hidden">
-                        <button onclick="bulkAction('draft')"
-                            class="px-3 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                            <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
-                                </path>
-                            </svg>
-                            Restore
-                        </button>
-                        <button onclick="bulkAction('permanent_delete')"
-                            class="px-3 py-2 text-sm bg-red-600 text-white rounded-lg hover:bg-red-700">
-                            <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M6 18L18 6M6 6l12 12"></path>
-                            </svg>
-                            Hapus Permanen
-                        </button>
-                    </div>
+                <div class="flex items-center space-x-2">
+                    <button onclick="bulkAction('published')"
+                        class="px-3 py-1 bg-green-600 text-white text-sm rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500">
+                        📢 Publish
+                    </button>
+                    <button onclick="bulkAction('draft')"
+                        class="px-3 py-1 bg-yellow-600 text-white text-sm rounded-md hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                        📝 Draft
+                    </button>
+                    <button onclick="bulkAction('permanent_delete')"
+                        class="px-3 py-1 bg-red-600 text-white text-sm rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">
+                        🗑️ Hapus
+                    </button>
                 </div>
             </div>
         </div>
+
 
         <!-- ADOPSI: Filter dan Search dengan AJAX -->
         <div class="flex flex-col gap-3 mb-4 sm:mb-6">
@@ -228,80 +231,144 @@
         </div>
 
         <!-- Pagination yang lebih sederhana dan responsif -->
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4 pt-4">
-            <!-- Info jumlah data -->
-            <div class="text-sm text-gray-500 text-center sm:text-left">
-                Menampilkan {{ $appLayanans->firstItem() ?? 0 }} sampai {{ $appLayanans->lastItem() ?? 0 }} dari
-                {{ $appLayanans->total() ?? 0 }}
-                {{ strtolower($title) }}
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4 pt-4"
+            id="pagination-container">
+            <!-- Info jumlah data yang akurat -->
+            <div class="text-sm text-gray-500 text-center sm:text-left" id="pagination-info">
+                @php
+                    $hasFilter =
+                        request()->hasAny(['search', 'status', 'category']) &&
+                        (request('search') ||
+                            (request('status') && request('status') !== 'all') ||
+                            (request('category') && request('category') !== ''));
+                @endphp
+
+                @if ($appLayanans->total() > 0)
+                    @if (request('perPage') === 'all')
+                        Menampilkan semua {{ number_format($appLayanans->total()) }} {{ strtolower($title) }}
+                    @else
+                        Menampilkan
+                        {{ number_format($appLayanans->firstItem() ?? 1) }}
+                        sampai
+                        {{ number_format($appLayanans->lastItem() ?? $appLayanans->total()) }}
+                        dari {{ number_format($appLayanans->total()) }} {{ strtolower($title) }}
+
+                        {{-- Debug info --}}
+                        <span class="text-gray-400 text-xs">
+                            ({{ $appLayanans->perPage() }} per halaman)
+                        </span>
+                    @endif
+
+                    @if ($hasFilter)
+                        <span class="text-blue-600 font-medium">(difilter)</span>
+                    @endif
+                @else
+                    Tidak ada {{ strtolower($title) }} yang ditemukan
+                    @if ($hasFilter)
+                        <span class="text-orange-600">dengan filter yang dipilih</span>
+                    @endif
+                @endif
             </div>
 
             <!-- Tombol Pagination -->
-            <div class="flex justify-center sm:justify-end">
-                <nav class="inline-flex space-x-1 sm:space-x-2" aria-label="Pagination">
-                    <!-- Tombol Sebelumnya -->
-                    @if ($appLayanans->onFirstPage())
-                        <span
-                            class="px-3 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-300 rounded-lg cursor-not-allowed flex items-center gap-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:hidden" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M15 19l-7-7 7-7" />
-                            </svg>
-                            <span class="hidden sm:inline">Sebelumnya</span>
-                        </span>
-                    @else
-                        <a href="{{ $appLayanans->previousPageUrl() }}"
-                            class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center gap-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:hidden" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M15 19l-7-7 7-7" />
-                            </svg>
-                            <span class="hidden sm:inline">Sebelumnya</span>
-                        </a>
-                    @endif
-
-                    {{-- Tombol Angka Halaman --}}
-                    @foreach ($appLayanans->getUrlRange(1, $appLayanans->lastPage()) as $page => $url)
-                        @if ($page == $appLayanans->currentPage())
+            @if ($appLayanans->hasPages())
+                <div class="flex justify-center sm:justify-end" id="pagination-links">
+                    <nav class="inline-flex space-x-1 sm:space-x-2" aria-label="Pagination">
+                        <!-- Tombol Sebelumnya -->
+                        @if ($appLayanans->onFirstPage())
                             <span
-                                class="px-3 py-2 text-sm font-semibold text-white bg-blue-600 border border-blue-600 rounded-lg">
-                                {{ $page }}
+                                class="px-3 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-300 rounded-lg cursor-not-allowed flex items-center gap-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:hidden" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15 19l-7-7 7-7" />
+                                </svg>
+                                <span class="hidden sm:inline">Sebelumnya</span>
                             </span>
                         @else
+                            <a href="{{ $appLayanans->previousPageUrl() }}"
+                                class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center gap-1 pagination-link">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:hidden" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15 19l-7-7 7-7" />
+                                </svg>
+                                <span class="hidden sm:inline">Sebelumnya</span>
+                            </a>
+                        @endif
+
+                        {{-- PERBAIKAN: Tombol Angka Halaman yang Clickable --}}
+                        @if ($appLayanans->lastPage() > 1)
+                            @php
+                                $start = max(1, $appLayanans->currentPage() - 2);
+                                $end = min($appLayanans->lastPage(), $appLayanans->currentPage() + 2);
+                            @endphp
+
+                            {{-- First page --}}
+                            @if ($start > 1)
+                                <a href="{{ $appLayanans->url(1) }}"
+                                    class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 pagination-link">
+                                    1
+                                </a>
+                                @if ($start > 2)
+                                    <span class="px-3 py-2 text-sm font-medium text-gray-500">...</span>
+                                @endif
+                            @endif
+
+                            {{-- Page numbers --}}
+                            @for ($page = $start; $page <= $end; $page++)
+                                @if ($page == $appLayanans->currentPage())
+                                    <span
+                                        class="px-3 py-2 text-sm font-semibold text-white bg-blue-600 border border-blue-600 rounded-lg">
+                                        {{ $page }}
+                                    </span>
+                                @else
+                                    <a href="{{ $appLayanans->url($page) }}"
+                                        class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 pagination-link">
+                                        {{ $page }}
+                                    </a>
+                                @endif
+                            @endfor
+
+                            {{-- Last page --}}
+                            @if ($end < $appLayanans->lastPage())
+                                @if ($end < $appLayanans->lastPage() - 1)
+                                    <span class="px-3 py-2 text-sm font-medium text-gray-500">...</span>
+                                @endif
+                                <a href="{{ $appLayanans->url($appLayanans->lastPage()) }}"
+                                    class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 pagination-link">
+                                    {{ $appLayanans->lastPage() }}
+                                </a>
+                            @endif
+                        @endif
+
+                        <!-- Tombol Selanjutnya -->
+                        @if ($appLayanans->hasMorePages())
+                            <a href="{{ $appLayanans->nextPageUrl() }}"
+                                class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center gap-1 pagination-link">
+                                <span class="hidden sm:inline">Selanjutnya</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:hidden" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 5l7 7-7 7" />
+                                </svg>
+                            </a>
+                        @else
                             <span
-                                class="px-3 py-2 text-sm font-medium text-gray-500 bg-gray-100 border border-gray-300 rounded-lg cursor-not-allowed">
-                                {{ $page }}
+                                class="px-3 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-300 rounded-lg cursor-not-allowed flex items-center gap-1">
+                                <span class="hidden sm:inline">Selanjutnya</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:hidden" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 5l7 7-7 7" />
+                                </svg>
                             </span>
                         @endif
-                    @endforeach
-
-                    <!-- Tombol Selanjutnya -->
-                    @if ($appLayanans->hasMorePages())
-                        <a href="{{ $appLayanans->nextPageUrl() }}"
-                            class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center gap-1">
-                            <span class="hidden sm:inline">Selanjutnya</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:hidden" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 5l7 7-7 7" />
-                            </svg>
-                        </a>
-                    @else
-                        <span
-                            class="px-3 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-300 rounded-lg cursor-not-allowed flex items-center gap-1">
-                            <span class="hidden sm:inline">Selanjutnya</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:hidden" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 5l7 7-7 7" />
-                            </svg>
-                        </span>
-                    @endif
-                </nav>
-            </div>
+                    </nav>
+                </div>
+            @endif
         </div>
+
     </div>
 
     <!-- ADOPSI: Modal untuk Tambah, Edit, Hapus -->

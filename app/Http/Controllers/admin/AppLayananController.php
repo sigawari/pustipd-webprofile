@@ -19,16 +19,24 @@ class AppLayananController extends Controller
     {
         $title = 'Aplikasi Layanan';
         $search = $request->input('search', '');
-        $filter = $request->query('filter', 'all');
+        $filter = $request->input('filter', 'all');
+        $category = $request->input('category', '');
         $perPage = $request->input('perPage', 10);
-
+    
+        // PERBAIKAN: Validasi perPage untuk keamanan
+        $allowedPerPage = [10, 25, 50, 100, 'all'];
+        if (!in_array($perPage, $allowedPerPage)) {
+            \Log::warning('Invalid perPage, resetting to 10', ['perPage' => $perPage]);
+            $perPage = 10;
+        }
+    
         // Pisahkan multi keyword
         $keywords = !empty($search) ? preg_split('/\s+/', (string) $search) : [];
-
+    
         // Query builder awal
         $appLayananQuery = AppLayanan::query();
-
-        // Apply search dengan field yang benar
+    
+        // Apply search
         if ($search) {
             $appLayananQuery->where(function ($q) use ($keywords) {
                 foreach ($keywords as $word) {
@@ -40,58 +48,70 @@ class AppLayananController extends Controller
                 }
             });
         }
-
+    
         // Filter status
         if ($filter && $filter !== 'all') {
             $appLayananQuery->where('status', $filter);
         }
-
-        // SIMPLIFIED: Sorting berdasarkan created_at (terbaru dulu)
+    
+        // Filter category
+        if ($category && $category !== '') {
+            $appLayananQuery->where('category', $category);
+        }
+    
+        // Sorting
         $appLayananQuery->orderBy('created_at', 'desc');
-
-        // Pagination
+    
+        // PERBAIKAN: Pagination dengan handling perPage yang benar
         if ($perPage === 'all') {
-            $appLayanans = $appLayananQuery->get();
-            $perPage = max($appLayanans->count(), 1);
+            $allData = $appLayananQuery->get();
+            $total = $allData->count();
             
-            // Manual pagination untuk 'all'
-            $currentPage = LengthAwarePaginator::resolveCurrentPage();
-            $currentItems = $appLayanans->slice(($currentPage - 1) * $perPage, $perPage)->values();
+            // PERBAIKAN: Hindari division by zero
+            $perPageValue = $total > 0 ? $total : 1; // Minimal 1 untuk hindari division by zero
             
+            // Untuk 'all', buat manual pagination
             $appLayanans = new LengthAwarePaginator(
-                $currentItems,
-                $appLayanans->count(),
-                $perPage,
-                $currentPage,
-                ['path' => LengthAwarePaginator::resolveCurrentPath()]
+                $allData,     // Semua data
+                $total,       // Total items
+                $perPageValue, // Items per page (minimal 1)
+                1,            // Current page = 1
+                [
+                    'path' => LengthAwarePaginator::resolveCurrentPath(),
+                    'pageName' => 'page',
+                ]
             );
         } else {
-            $perPage = max((int) $perPage, 1);
+            // Convert ke integer untuk pagination normal
+            $perPage = (int) $perPage;
             $appLayanans = $appLayananQuery->paginate($perPage);
         }
 
+    
+        // PENTING: Preserve SEMUA query parameters
+        $appLayanans->appends($request->all());
+    
         // AJAX Response
         if ($request->ajax()) {
             return view('admin.AppLayanan.partials.table_body', compact('title', 'appLayanans'))->render();
         }
-
+    
         return view('admin.AppLayanan.index', compact('title', 'appLayanans'));
     }
+    
+    
 
     /**
      * STORE : simpan AppLayanan baru
      */
-   // Di AppLayananController.php
-     public function store(Request $request)
+    public function store(Request $request)
     {
-        // dd($request->all());
-        // Validasi data
         $validated = $request->validate([
             'appname'     => 'required|string|max:255',
             'category'    => 'required|in:akademik,pegawai,pembelajaran,administrasi',
             'description' => 'required|string',
             'applink'     => 'nullable|url|max:500',
-            'status'      => 'required|in:draft,published,archived',
+            'status'      => 'required|in:draft,published',
         ]);
 
         try {
@@ -112,14 +132,12 @@ class AppLayananController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // dd($request->all());
-        // Validasi data
         $validated = $request->validate([
             'appname'     => 'required|string|max:255',
             'category'    => 'required|in:akademik,pegawai,pembelajaran,administrasi',
             'description' => 'required|string',
             'applink'     => 'nullable|url|max:500',
-            'status'      => 'required|in:draft,published,archived',
+            'status'      => 'required|in:draft,published',
         ]);
 
         try {
@@ -137,18 +155,17 @@ class AppLayananController extends Controller
     }
 
     /**
-     * DESTROY : hapus satu AppLayanan (soft delete ke archived)
+     * DESTROY : hapus satu AppLayanan (HARD DELETE)
      */
     public function destroy($id)
     {
-        // dd($id);
         try {
             $appLayanan = AppLayanan::findOrFail($id);
-            $appLayanan->delete();
+            $appLayanan->delete(); // Hard delete
 
             return redirect()
                 ->route('admin.app-layanan.index')
-                ->with('success', 'Aplikasi berhasil dihapus.');
+                ->with('success', 'Aplikasi berhasil dihapus permanen.');
         } catch (\Exception $e) {
             return redirect()
                 ->route('admin.app-layanan.index')
@@ -157,12 +174,12 @@ class AppLayananController extends Controller
     }
 
     /**
-     * BULK ACTION : publish / draft / archived / delete / permanent_delete
+     * BULK ACTION : publish / draft / delete
      */
     public function bulk(Request $request)
     {
         $request->validate([
-            'action' => 'required|in:published,draft,archived,delete,permanent_delete',
+            'action' => 'required|in:published,draft,delete',
             'ids' => 'required|array',
             'ids.*' => 'exists:applayanans,id'
         ]);
@@ -185,24 +202,17 @@ class AppLayananController extends Controller
             ]);
             
             switch ($action) {
-                case 'permanent_delete':
+                case 'delete':
                     $deletedCount = AppLayanan::whereIn('id', $ids)->delete();
                     $message = "{$deletedCount} Aplikasi Layanan berhasil dihapus permanen.";
                     break;
                     
-                case 'delete':
-                    $archivedCount = AppLayanan::whereIn('id', $ids)->update(['status' => 'archived']);
-                    $message = "{$archivedCount} Aplikasi Layanan berhasil diarsipkan.";
-                    break;
-                    
                 case 'published':
                 case 'draft':
-                case 'archived':
                     $updatedCount = AppLayanan::whereIn('id', $ids)->update(['status' => $action]);
                     $statusText = match($action) {
                         'published' => 'Published',
-                        'draft' => 'Draft',
-                        'archived' => 'Archived'
+                        'draft' => 'Draft'
                     };
                     $message = "{$updatedCount} Aplikasi Layanan berhasil diubah ke status {$statusText}.";
                     break;
@@ -229,7 +239,7 @@ class AppLayananController extends Controller
     }
 
     /**
-     * OPTIONAL : halaman/partial konfirmasi delete
+     * Halaman konfirmasi delete
      */
     public function delete(AppLayanan $appLayanan)
     {
@@ -237,4 +247,3 @@ class AppLayananController extends Controller
         return view('admin.AppLayanan.delete', compact('title', 'appLayanan'));
     }
 }
-
