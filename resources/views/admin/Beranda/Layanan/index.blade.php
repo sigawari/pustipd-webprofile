@@ -158,9 +158,9 @@
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4 pt-4">
             <!-- Info jumlah data -->
             <div class="text-sm text-gray-500 text-center sm:text-left">
-                Menampilkan {{ $layanans->firstItem() }} sampai {{ $layanans->lastItem() }} dari
-                {{ $layanans->total() }}
-                {{ strtolower($title) }}
+                <span class="block sm:inline">Menampilkan {{ $layanans->firstItem() }} sampai
+                    {{ $layanans->lastItem() }}</span>
+                <span class="block sm:inline">dari {{ $layanans->total() }} {{ strtolower($title) }}</span>
             </div>
 
             <!-- Tombol Pagination -->
@@ -169,51 +169,88 @@
                     <!-- Tombol Sebelumnya -->
                     @if ($layanans->onFirstPage())
                         <span
-                            class="px-3 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-300 rounded-lg cursor-not-allowed flex items-center gap-1">
-                            <!-- Icon: panah kiri -->
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:hidden" fill="none"
+                            class="px-2 py-2 sm:px-3 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-300 rounded-lg cursor-not-allowed flex items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
                                 viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M15 19l-7-7 7-7" />
                             </svg>
-                            <!-- Teks hanya di desktop -->
-                            <span class="hidden sm:inline">Sebelumnya</span>
+                            <span class="hidden md:inline">Sebelumnya</span>
                         </span>
                     @else
                         <a href="{{ $layanans->previousPageUrl() }}"
-                            class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center gap-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:hidden" fill="none"
+                            class="px-2 py-2 sm:px-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
                                 viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M15 19l-7-7 7-7" />
                             </svg>
-                            <span class="hidden sm:inline">Sebelumnya</span>
+                            <span class="hidden md:inline">Sebelumnya</span>
                         </a>
                     @endif
 
-                    {{-- Tombol Angka Halaman --}}
-                    @foreach ($layanans->getUrlRange(1, $layanans->lastPage()) as $page => $url)
-                        @if ($page == $layanans->currentPage())
-                            {{-- Halaman aktif --}}
+                    {{-- Tombol Angka Halaman dengan Smart Display --}}
+                    @php
+                        $currentPage = $layanans->currentPage();
+                        $lastPage = $layanans->lastPage();
+                        $start = max(1, $currentPage - 2);
+                        $end = min($lastPage, $currentPage + 2);
+
+                        // Untuk mobile, tampilkan lebih sedikit
+                        if (
+                            request()->header('User-Agent') &&
+                            preg_match('/Mobile|Android|iPhone|iPad/', request()->header('User-Agent'))
+                        ) {
+                            $start = max(1, $currentPage - 1);
+                            $end = min($lastPage, $currentPage + 1);
+                        }
+                    @endphp
+
+                    {{-- Halaman pertama jika tidak dalam range --}}
+                    @if ($start > 1)
+                        <a href="{{ $layanans->url(1) }}"
+                            class="hidden sm:inline-flex px-2 py-2 sm:px-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                            1
+                        </a>
+                        @if ($start > 2)
                             <span
-                                class="px-3 py-2 text-sm font-semibold text-white bg-blue-600 border border-blue-600 rounded-lg">
+                                class="hidden sm:inline-flex px-2 py-2 sm:px-3 text-sm font-medium text-gray-500">...</span>
+                        @endif
+                    @endif
+
+                    {{-- Range halaman --}}
+                    @for ($page = $start; $page <= $end; $page++)
+                        @if ($page == $currentPage)
+                            <span
+                                class="px-2 py-2 sm:px-3 text-sm font-semibold text-white bg-blue-600 border border-blue-600 rounded-lg">
                                 {{ $page }}
                             </span>
                         @else
-                            {{-- Halaman lain (indikator saja, tidak bisa diklik) --}}
-                            <span
-                                class="px-3 py-2 text-sm font-medium text-gray-500 bg-gray-100 border border-gray-300 rounded-lg cursor-not-allowed">
+                            <a href="{{ $layanans->url($page) }}"
+                                class="px-2 py-2 sm:px-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
                                 {{ $page }}
-                            </span>
+                            </a>
                         @endif
-                    @endforeach
+                    @endfor
+
+                    {{-- Halaman terakhir jika tidak dalam range --}}
+                    @if ($end < $lastPage)
+                        @if ($end < $lastPage - 1)
+                            <span
+                                class="hidden sm:inline-flex px-2 py-2 sm:px-3 text-sm font-medium text-gray-500">...</span>
+                        @endif
+                        <a href="{{ $layanans->url($lastPage) }}"
+                            class="hidden sm:inline-flex px-2 py-2 sm:px-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                            {{ $lastPage }}
+                        </a>
+                    @endif
 
                     <!-- Tombol Selanjutnya -->
                     @if ($layanans->hasMorePages())
                         <a href="{{ $layanans->nextPageUrl() }}"
-                            class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center gap-1">
-                            <span class="hidden sm:inline">Selanjutnya</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:hidden" fill="none"
+                            class="px-2 py-2 sm:px-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center gap-1">
+                            <span class="hidden md:inline">Selanjutnya</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
                                 viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 5l7 7-7 7" />
@@ -221,9 +258,9 @@
                         </a>
                     @else
                         <span
-                            class="px-3 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-300 rounded-lg cursor-not-allowed flex items-center gap-1">
-                            <span class="hidden sm:inline">Selanjutnya</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:hidden" fill="none"
+                            class="px-2 py-2 sm:px-3 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-300 rounded-lg cursor-not-allowed flex items-center gap-1">
+                            <span class="hidden md:inline">Selanjutnya</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
                                 viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 5l7 7-7 7" />
@@ -236,7 +273,6 @@
 
     </div>
 
-    <!-- Modal untuk Tambah, Edit, Hapus -->
     @include('admin.beranda.layanan.create')
     @include('admin.beranda.layanan.update')
     @include('admin.beranda.layanan.delete')
