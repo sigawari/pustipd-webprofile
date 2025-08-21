@@ -390,57 +390,6 @@
                                 Analytics</span>
                         </a>
                     </li>
-
-                    {{-- <li>
-                        <a href="#" @click.prevent="selected = (selected === 'Settings' ? '':'Settings')"
-                            class="group relative flex items-center gap-3 rounded-xl px-4 py-3 font-medium text-gray-600 duration-300 ease-in-out hover:bg-gray-50 hover:text-gray-600"
-                            :class="(selected === 'Settings') ? 'bg-gray-50 text-gray-600' : ''">
-                            <svg :class="(selected === 'Settings') ? 'fill-gray-600' : 'fill-gray-500 group-hover:fill-gray-600'"
-                                class="transition-colors duration-200" width="20" height="20"
-                                viewBox="0 0 24 24">
-                                <path
-                                    d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.22,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.22,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.67 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z" />
-                            </svg>
-                            <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">Pengaturan</span>
-                            <svg class="absolute right-4 stroke-current transition-transform duration-200"
-                                :class="[(selected === 'Settings') ? 'rotate-180' : '', sidebarToggle ? 'lg:hidden' : '']"
-                                width="16" height="16" viewBox="0 0 20 20">
-                                <path d="M4.79175 7.39584L10.0001 12.6042L15.2084 7.39585" stroke-width="1.5"
-                                    stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                        </a>
-
-                        <!-- Dropdown Menu -->
-                        <div class="overflow-hidden transition-all duration-300 ease-in-out"
-                            :class="(selected === 'Settings') ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'">
-                            <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'" class="flex flex-col gap-1 mt-2 pl-12">
-                                <li>
-                                    <a href="#"
-                                        class="block py-2 px-4 text-sm text-gray-500 hover:text-gray-600 hover:bg-gray-25 rounded-lg transition-colors duration-200">
-                                        SEO Settings
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#"
-                                        class="block py-2 px-4 text-sm text-gray-500 hover:text-gray-600 hover:bg-gray-25 rounded-lg transition-colors duration-200">
-                                        Konfigurasi Website
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#"
-                                        class="block py-2 px-4 text-sm text-gray-500 hover:text-gray-600 hover:bg-gray-25 rounded-lg transition-colors duration-200">
-                                        Media Library
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#"
-                                        class="block py-2 px-4 text-sm text-gray-500 hover:text-gray-600 hover:bg-gray-25 rounded-lg transition-colors duration-200">
-                                        Sistem
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li> --}}
                 </ul>
             </div>
         </nav>

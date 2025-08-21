@@ -299,14 +299,6 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
             Route::delete('/manage-users/{user}', 'destroy')->name('manage-users.destroy');
             Route::get('/manage-users/export', 'export')->name('manage-users.export');
         });
-
-        Route::controller(ReportsController::class)->group(function () {
-            Route::get('/reports', 'index')->name('reports.index');
-            Route::post('/reports', 'store')->name('reports.store');
-            Route::put('/reports/{user}', 'update')->name('reports.update');
-            Route::delete('/reports/{user}', 'destroy')->name('reports.destroy');
-            Route::get('/reports/export', 'export')->name('reports.export');
-        });
     });
 
 });
