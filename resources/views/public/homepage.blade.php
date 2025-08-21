@@ -437,11 +437,16 @@
             </div>
 
             @if (!empty($teams) && $teams->count() > 0)
-                <!-- Infinite Carousel Container -->
-                <div class="relative overflow-hidden">
+                <!-- Infinite Carousel -->
+                <div class="container mx-auto px-6 max-w-8-full">
                     <!-- Carousel Track -->
                     <div class="flex animate-infinite-scroll gap-2 sm:gap-4 md:gap-5" id="teamCarousel">
                         <!-- First Set of Cards - Dynamic -->
+                        @foreach ($teams as $member)
+                            <x-team-card :nama="$member->nama" :jabatan="$member->jabatan" :foto="$member->foto
+                                ? asset('storage/' . $member->foto)
+                                : asset('assets/img/placeholder/dummy.png')" :email="$member->email ?? ''" />
+                        @endforeach
                         @foreach ($teams as $member)
                             <x-team-card :nama="$member->nama" :jabatan="$member->jabatan" :foto="$member->foto
                                 ? asset('storage/' . $member->foto)
