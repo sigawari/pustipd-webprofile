@@ -48,7 +48,6 @@
 
                 <!-- Actions berdasarkan status yang dipilih -->
                 <div class="flex flex-col sm:flex-row gap-2" id="bulkActionButtons">
-                    <!-- Default actions (Published/Draft/Archive) -->
                     <div id="defaultActions" class="flex flex-wrap gap-2">
                         <!-- Publish -->
                         <button onclick="bulkAction('published')"
@@ -70,43 +69,6 @@
                                     113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                             </svg>
                             Draft
-                        </button>
-
-                        <!-- Archive -->
-                        <button onclick="bulkAction('archived')"
-                            class="flex items-center gap-1.5 px-3 py-2 text-sm bg-gray-600 text-white rounded-lg hover:bg-gray-700">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0
-                                    1-2.247 2.118H6.622a2.25 2.25 0 0
-                                    1-2.247-2.118L3.75 7.5m8.25 3v6.75m0
-                                    0-3-3m3 3 3-3M3.375 7.5h17.25c.621
-                                    0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621
-                                    0-1.125.504-1.125 1.125v1.5c0
-                                    .621.504 1.125 1.125 1.125Z" />
-                            </svg>
-                            Archive
-                        </button>
-                    </div>
-
-                    <!-- Actions untuk archived items -->
-                    <div id="archivedActions" class="hidden">
-                        <button onclick="bulkAction('draft')"
-                            class="px-3 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                            <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
-                                </path>
-                            </svg>
-                            Restore
-                        </button>
-                        <button onclick="bulkAction('permanent_delete')"
-                            class="px-3 py-2 text-sm bg-red-600 text-white rounded-lg hover:bg-red-700">
-                            <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M6 18L18 6M6 6l12 12"></path>
-                            </svg>
-                            Hapus Permanen
                         </button>
                     </div>
                 </div>
@@ -136,11 +98,10 @@
                     <option value="published" {{ request('filter') == 'published' ? 'selected' : '' }}>Published
                     </option>
                     <option value="draft" {{ request('filter') == 'draft' ? 'selected' : '' }}>Draft</option>
-                    <option value="archived" {{ request('filter') == 'archived' ? 'selected' : '' }}>Archived</option>
                 </select>
 
-                <select id="perpage-select" name="perPage"
-                    data-url="{{ route('admin.tentang-kami.gallery.index') }}" data-target="GalleryTableBody"
+                <select id="perpage-select" name="perPage" data-url="{{ route('admin.tentang-kami.gallery.index') }}"
+                    data-target="GalleryTableBody"
                     class="flex-1 sm:flex-none px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
                     <option value="all" {{ request('perPage') == 'all' ? 'selected' : '' }}>
                         -- Semua {{ $title }} --

@@ -34,8 +34,7 @@
             {{-- Announcement Cards Grid --}}
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 announcement-grid mt-6">
                 @forelse ($announcementsList as $announcement)
-                    <x-announcement-card :urgency="$announcement->urgency" :category="$announcement->category" :title="$announcement->title" :excerpt="$announcement->excerpt ??
-                        \Illuminate\Support\Str::limit(strip_tags($announcement->content), 140)"
+                    <x-announcement-card :urgency="$announcement->urgency" :category="$announcement->category" :title="$announcement->title" :excerpt="$announcement->excerpt ?? Str::limit(strip_tags($announcement->content), 140)"
                         :date="$announcement->date ? $announcement->date->format('d F Y') : '-'" :link="route('announcements-detail', $announcement->slug)" />
                 @empty
                     <div class="col-span-full text-center py-10 text-gray-600">

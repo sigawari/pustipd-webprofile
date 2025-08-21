@@ -18,7 +18,7 @@ return new class extends Migration
             // $table->text('description')->nullable(); // HAPUS ini
             $table->string('image'); // Path gambar
             $table->date('event_date');
-            $table->enum('status', ['published', 'draft', 'archived'])->default('draft'); // Default draft
+            $table->enum('status', ['published', 'draft'])->default('draft');
             $table->timestamps();
         });
     }
