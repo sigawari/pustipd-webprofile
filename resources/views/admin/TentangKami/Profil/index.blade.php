@@ -151,13 +151,13 @@
                 </div>
             </div>
 
-            <!-- Action Buttons - RESPONSIF -->
             <div
                 class="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-6 pt-6 border-t border-gray-200 gap-4">
                 <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:space-x-3">
+                    {{-- Tombol batal jadikan tombol hiilangkan semua --}}
                     <button type="button" onclick="window.history.back()"
                         class="w-full sm:w-auto px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors duration-200 text-sm sm:text-base">
-                        Batal
+                        Hapus Semua
                     </button>
                     <button type="submit"
                         class="w-full sm:w-auto px-4 py-2 bg-secondary text-white rounded-lg hover:bg-custom-blue transition-colors duration-200 flex items-center justify-center text-sm sm:text-base">

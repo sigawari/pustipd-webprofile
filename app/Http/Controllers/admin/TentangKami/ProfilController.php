@@ -17,6 +17,18 @@ class ProfilController extends Controller
         return view('admin.TentangKami.Profil.index', compact('title', 'profilData'));
     }
 
+    private function filterArrayData($array)
+    {
+        if (!is_array($array)) {
+            return [];
+        }
+
+        return array_values(array_filter($array, function($item) {
+            // Hapus item yang tidak memiliki nama atau URL yang valid
+            return !empty($item['name']) || !empty($item['url']);
+        }));
+    }
+    
     public function store(Request $request)
     {
         // Validasi
