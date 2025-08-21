@@ -62,7 +62,7 @@
                             @if ($tutorial->excerpt)
                                 <div
                                     class="text-gray-600 text-center text-sm mb-4 flex-grow flex items-center justify-center leading-relaxed">
-                                    {{ \Illuminate\Support\Str::limit($tutorial->excerpt, 60) }}
+                                    {{ Str::limit($tutorial->excerpt, 60) }}
                                 </div>
                             @elseif ($tutorial->content_blocks && count($tutorial->content_blocks) > 0)
                                 @php
@@ -71,7 +71,7 @@
                                 @endphp
                                 <div
                                     class="text-gray-600 text-center text-sm mb-4 flex-grow flex items-center justify-center leading-relaxed">
-                                    {{ \Illuminate\Support\Str::limit($previewContent, 60) }}
+                                    {{ Str::limit($previewContent, 60) }}
                                 </div>
                             @endif
 

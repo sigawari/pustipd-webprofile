@@ -29,14 +29,17 @@ class ProfilController extends Controller
             'facebook_url'      => 'nullable|url',
             'youtube_url'       => 'nullable|url',
             'applications'      => 'nullable|array',
+            'applications.*.name' => 'nullable|string',
+            'applications.*.url' => 'nullable|url',
             'institutions'      => 'nullable|array',
+            'institutions.*.name' => 'nullable|string',
+            'institutions.*.url' => 'nullable|url',
             'universities'      => 'nullable|array',
+            'universities.*.name' => 'nullable|string',
+            'universities.*.url' => 'nullable|url',
             'profil_photo'     => 'nullable|image|mimes:jpg,jpeg,png|max:10240',
-        ], [
-            'organization_name.required' => 'Nama organisasi wajib diisi.',
-            'organization_name.max'      => 'Nama organisasi maksimal 255 karakter.',
         ]);
-
+    
         // Cek apakah sudah ada profil
         $existingProfil = Profil::first();
         
@@ -45,24 +48,33 @@ class ProfilController extends Controller
                 ->route('admin.tentang-kami.profil.index')
                 ->with('error', 'Profil sudah ada. Gunakan fitur update untuk mengubah data.');
         }
-
+    
+        // Prepare data
+        $data = $request->except(['profil_photo']);
+        
+        // Filter array data - hapus yang kosong
+        $data['applications'] = $this->filterArrayData($request->input('applications', []));
+        $data['institutions'] = $this->filterArrayData($request->input('institutions', []));
+        $data['universities'] = $this->filterArrayData($request->input('universities', []));
+    
         // Buat profil baru
         $profil = new Profil();
-        $profil->fill($request->except('profil_photo'));
-
+        $profil->fill($data);
+    
         // Upload foto
         if ($request->hasFile('profil_photo')) {
             $profil->profil_photo = $request->file('profil_photo')->store('profil_photos', 'public');
         }
-
+    
         $profil->save();
-
+    
         return redirect()
             ->route('admin.tentang-kami.profil.index')
             ->with('success', 'Profil berhasil disimpan.');
     }
+    
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Profil $profil)
     {
         // Validasi
         $request->validate([
@@ -74,25 +86,28 @@ class ProfilController extends Controller
             'facebook_url'      => 'nullable|url|regex:/^https:\/\//',
             'youtube_url'       => 'nullable|url|regex:/^https:\/\//',
             'applications'      => 'nullable|array',
+            'applications.*.name' => 'nullable|string',
+            'applications.*.url' => 'nullable|url',
             'institutions'      => 'nullable|array',
+            'institutions.*.name' => 'nullable|string',
+            'institutions.*.url' => 'nullable|url',
             'universities'      => 'nullable|array',
-            'profil_photo'      => 'required|image|mimes:jpg,jpeg,png,webp|max:10240',
-        ], [
-            'profil_photo.required' => 'Foto profil wajib diupload.',
-            'profil_photo.image' => 'File harus berupa gambar.',
-            'profil_photo.mimes' => 'Format gambar harus jpg, jpeg, png, atau webp.',
-            'profil_photo.max' => 'Ukuran gambar maksimal 2MB.',
-            'instagram_url.regex' => 'URL Instagram harus menggunakan HTTPS.',
-            'facebook_url.regex' => 'URL Facebook harus menggunakan HTTPS.',
-            'youtube_url.regex' => 'URL YouTube harus menggunakan HTTPS.',
+            'universities.*.name' => 'nullable|string',
+            'universities.*.url' => 'nullable|url',
+            'profil_photo'      => 'nullable|image|mimes:jpg,jpeg,png,webp|max:10240',
         ]);        
-
-        // Cari profil berdasarkan ID
-        $profil = Profil::findOrFail($id);
-
+    
+        // Prepare data
+        $data = $request->except(['profil_photo']);
+        
+        // Filter array data - hapus yang kosong
+        $data['applications'] = $this->filterArrayData($request->input('applications', []));
+        $data['institutions'] = $this->filterArrayData($request->input('institutions', []));
+        $data['universities'] = $this->filterArrayData($request->input('universities', []));
+    
         // Update semua kolom kecuali foto
-        $profil->fill($request->except('profil_photo'));
-
+        $profil->fill($data);
+    
         // Upload foto baru jika ada
         if ($request->hasFile('profil_photo')) {
             // Hapus foto lama jika ada
@@ -101,30 +116,29 @@ class ProfilController extends Controller
             }
             $profil->profil_photo = $request->file('profil_photo')->store('profil_photos', 'public');
         }
-
+    
         $profil->save();
-
+    
         return redirect()
             ->route('admin.tentang-kami.profil.index')
             ->with('success', 'Profil berhasil diperbarui.');
     }
-
-    public function destroy($id)
+    
+    
+    public function destroy(Profil $profil) // ✅ Ubah dari $id ke Profil $profil
     {
         try {
-            $profil = Profil::findOrFail($id);
-
             // Hapus foto jika ada
             if ($profil->profil_photo && Storage::disk('public')->exists($profil->profil_photo)) {
                 Storage::disk('public')->delete($profil->profil_photo);
             }
-
+    
             $profil->delete();
-
+    
             return redirect()
                 ->route('admin.tentang-kami.profil.index')
                 ->with('success', 'Profil berhasil dihapus.');
-
+    
         } catch (\Exception $e) {
             return redirect()
                 ->route('admin.tentang-kami.profil.index')

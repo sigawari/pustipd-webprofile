@@ -421,25 +421,6 @@
                                 User</span>
                         </div>
                     </a>
-
-                    <!-- Reports -->
-                    <a href="{{ route('admin.sistem.reports.index') }}"
-                        class="p-3 border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-gray-300 transition-colors duration-200 group">
-                        <div class="flex items-center">
-                            <div
-                                class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center group-hover:bg-gray-200 transition-colors">
-                                <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
-                                    </path>
-                                </svg>
-                            </div>
-                            <span
-                                class="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-700">Reports</span>
-                        </div>
-                    </a>
-
                 </div>
 
                 <!-- Link untuk Lihat Semua -->
@@ -572,8 +553,6 @@
                         Pengaturan SEO</a>
                     <a href="{{ route('admin.faq.index') }}"
                         class="block text-sm text-blue-600 hover:text-blue-700 hover:underline">• Kelola FAQ</a>
-                    <a href="{{ route('admin.sistem.reports.index') }}"
-                        class="block text-sm text-blue-600 hover:text-blue-700 hover:underline">• Laporan Analytics</a>
                     <a href="#" class="block text-sm text-blue-600 hover:text-blue-700 hover:underline">• Backup
                         & Maintenance</a>
                     <a href="#" class="block text-sm text-blue-600 hover:text-blue-700 hover:underline">•

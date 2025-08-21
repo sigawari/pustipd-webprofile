@@ -38,7 +38,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 news-grid">
                     @forelse ($newsList as $news)
                         <x-newspage-card title="{{ $news->name }}"
-                            excerpt="{{ \Illuminate\Support\Str::limit(strip_tags($news->content), 140) }}"
+                            excerpt="{{ Str::limit(strip_tags($news->content), 140) }}"
                             date="{{ date('d F Y', strtotime($news->publish_date)) }}"
                             category="{{ ucfirst(str_replace('_', ' ', $news->category)) }}"
                             link="{{ route('news-detail', $news->slug) }}"

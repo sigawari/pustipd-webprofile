@@ -252,7 +252,7 @@
                         @if ($newsList->count() > 0)
                             @php $firstNews = $newsList->first(); @endphp
                             <x-news-card title="{{ $firstNews->name }}"
-                                excerpt="{{ \Illuminate\Support\Str::limit(strip_tags($firstNews->content), 140) }}"
+                                excerpt="{{ Str::limit(strip_tags($firstNews->content), 140) }}"
                                 date="{{ $firstNews->publish_date ? \Carbon\Carbon::parse($firstNews->publish_date)->format('d F Y') : '-' }}"
                                 category="{{ ucfirst(str_replace('_', ' ', $firstNews->category)) }}"
                                 link="{{ route('news-detail', $firstNews->slug) }}"
@@ -263,7 +263,7 @@
                             <div class="bg-white rounded-lg border border-gray-200 p-3">
                                 <div class="font-bold text-gray-900 mb-1 text-sm truncate">{{ $news->name }}</div>
                                 <div class="text-gray-600 text-xs mb-2 line-clamp-2">
-                                    {{ \Illuminate\Support\Str::limit(strip_tags($news->content), 100) }}</div>
+                                    {{ Str::limit(strip_tags($news->content), 100) }}</div>
                                 <a href="{{ route('news-detail', $news->slug) }}"
                                     class="text-blue-600 font-semibold text-xs flex items-center">
                                     Selanjutnya
@@ -281,7 +281,7 @@
                     <div class="hidden lg:grid grid-cols-2 lg:grid-cols-3 gap-8 news-grid">
                         @forelse ($newsList as $news)
                             <x-news-card title="{{ $news->name }}"
-                                excerpt="{{ \Illuminate\Support\Str::limit(strip_tags($news->content), 140) }}"
+                                excerpt="{{ Str::limit(strip_tags($news->content), 140) }}"
                                 date="{{ $news->publish_date ? \Carbon\Carbon::parse($news->publish_date)->format('d F Y') : '-' }}"
                                 category="{{ ucfirst(str_replace('_', ' ', $news->category)) }}"
                                 link="{{ route('news-detail', $news->slug) }}"
@@ -337,7 +337,7 @@
                         @forelse ($announcementsList as $announcement)
                             <x-announcement-card :urgency="$announcement->urgency" :category="$announcement->category" :title="$announcement->title"
                                 :excerpt="$announcement->excerpt ??
-                                    \Illuminate\Support\Str::limit(strip_tags($announcement->content), 140)" :date="$announcement->date ? $announcement->date->format('d F Y') : '-'" :link="route('announcements-detail', $announcement->slug)" />
+                                    Str::limit(strip_tags($announcement->content), 140)" :date="$announcement->date ? $announcement->date->format('d F Y') : '-'" :link="route('announcements-detail', $announcement->slug)" />
                         @empty
                             <div class="col-span-full text-center py-10 text-gray-600">
                                 Tidak ada pengumuman tersedia.
