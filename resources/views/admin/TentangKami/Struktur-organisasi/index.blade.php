@@ -133,16 +133,16 @@
                 <div id="divisionsContainer" class="space-y-6">
                     @if ($structure && $structure->count() > 0)
                         @foreach ($structure as $divisionName => $staffs)
-                            <div class="division-entry bg-gray-50 rounded-lg p-4 border">
-                                <div class="flex items-center justify-between mb-3">
+                            <div class="division-entry bg-gray-50 rounded-lg p-4 border border-gray-200">
+                                <div class="flex items-center justify-between mb-3 gap-3">
                                     <input type="text" name="divisions[{{ $loop->index }}][nama_divisi]"
                                         value="{{ $divisionName }}"
-                                        class="font-medium bg-transparent border-b border-gray-300 focus:border-blue-500 focus:outline-none"
+                                        class="flex-1 font-medium bg-transparent border-b-0.2 border-gray-300 focus:border-blue-500 focus:outline-none px-2 py-2"
                                         placeholder="Nama Divisi">
                                     <input type="hidden" name="divisions[{{ $loop->index }}][divisi_order]"
                                         value="{{ $staffs->first()->divisi_order }}">
                                     <button type="button" onclick="removeDivisionEntry(this)"
-                                        class="text-red-600 hover:text-red-800 text-sm">
+                                        class="text-red-600 hover:text-red-800 text-sm whitespace-nowrap">
                                         Hapus Divisi
                                     </button>
                                 </div>
@@ -150,29 +150,49 @@
                                 <div class="staff-container space-y-3">
                                     @foreach ($staffs as $staff)
                                         <div
-                                            class="staff-entry grid grid-cols-1 md:grid-cols-4 gap-3 p-3 bg-white rounded">
+                                            class="staff-entry grid grid-cols-1 md:grid-cols-4 gap-3 p-3 bg-white rounded border border-gray-200">
                                             <input type="text"
                                                 name="divisions[{{ $loop->parent->index }}][staff][{{ $loop->index }}][nama]"
-                                                value="{{ $staff->nama }}" class="px-2 py-1 border rounded"
+                                                value="{{ $staff->nama }}"
+                                                class="px-2 py-1 border border-gray-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                                 placeholder="Nama Staff">
                                             <input type="text"
                                                 name="divisions[{{ $loop->parent->index }}][staff][{{ $loop->index }}][jabatan]"
-                                                value="{{ $staff->jabatan }}" class="px-2 py-1 border rounded"
+                                                value="{{ $staff->jabatan }}"
+                                                class="px-2 py-1 border border-gray-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                                 placeholder="Jabatan">
                                             <input type="email"
                                                 name="divisions[{{ $loop->parent->index }}][staff][{{ $loop->index }}][email]"
-                                                value="{{ $staff->email }}" class="px-2 py-1 border rounded"
+                                                value="{{ $staff->email }}"
+                                                class="px-2 py-1 border border-gray-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                                 placeholder="Email">
-                                            <div class="flex items-center gap-2">
-                                                <input type="file"
-                                                    name="divisions[{{ $loop->parent->index }}][staff][{{ $loop->index }}][foto]"
-                                                    accept="image/*" class="hidden"
-                                                    id="staff_photo_{{ $loop->parent->index }}_{{ $loop->index }}">
-                                                <button type="button"
-                                                    onclick="document.getElementById('staff_photo_{{ $loop->parent->index }}_{{ $loop->index }}').click()"
-                                                    class="text-xs bg-gray-200 px-2 py-1 rounded">Foto</button>
+                                            <div class="flex items-center gap-2 w-full">
+                                                <div
+                                                    class="flex-1 flex items-center gap-2 border border-gray-200 rounded px-3 py-2 bg-gray-50">
+                                                    <input type="file"
+                                                        name="divisions[{{ $loop->parent->index }}][staff][{{ $loop->index }}][foto]"
+                                                        accept="image/*" class="hidden"
+                                                        id="staff_photo_{{ $loop->parent->index }}_{{ $loop->index }}"
+                                                        onchange="updateFileName(this, 'filename_{{ $loop->parent->index }}_{{ $loop->index }}')">
+                                                    <button type="button"
+                                                        onclick="document.getElementById('staff_photo_{{ $loop->parent->index }}_{{ $loop->index }}').click()"
+                                                        class="text-xs bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 whitespace-nowrap">
+                                                        Pilih Foto
+                                                    </button>
+                                                    <span
+                                                        id="filename_{{ $loop->parent->index }}_{{ $loop->index }}"
+                                                        class="text-xs text-gray-600 truncate flex-1">
+                                                        @if ($staff->foto)
+                                                            {{ basename($staff->foto) }}
+                                                        @else
+                                                            Belum ada file
+                                                        @endif
+                                                    </span>
+                                                </div>
                                                 <button type="button" onclick="removeStaffEntry(this)"
-                                                    class="text-red-600 text-xs">Hapus</button>
+                                                    class="text-red-600 text-xs hover:text-red-800 whitespace-nowrap">
+                                                    Hapus
+                                                </button>
                                             </div>
                                             <input type="hidden"
                                                 name="divisions[{{ $loop->parent->index }}][staff][{{ $loop->index }}][staff_order]"
@@ -245,10 +265,10 @@
 
             const container = document.getElementById('divisionsContainer');
             const divisionHtml = `
-                <div class="division-entry bg-gray-50 rounded-lg p-4 border-gray-300">
+                <div class="division-entry bg-gray-50 rounded-lg p-4 border border-gray-200">
                     <div class="flex items-center justify-between mb-3">
                         <input type="text" name="divisions[${divisionCounter}][nama_divisi]" 
-                            class="font-medium bg-transparent border-b border-gray-300 focus:border-blue-500 focus:outline-none"
+                            class="flex-1 font-medium bg-transparent border-b-2 border-gray-300 focus:border-blue-500 focus:outline-none px-2 py-2"
                             placeholder="Nama Divisi" required>
                         <input type="hidden" name="divisions[${divisionCounter}][divisi_order]" value="${divisionCounter + 1}">
                         <button type="button" onclick="removeDivisionEntry(this)"
@@ -258,18 +278,22 @@
                     </div>
                     
                     <div class="staff-container space-y-3">
-                        <div class="staff-entry grid grid-cols-1 md:grid-cols-4 gap-3 p-3 bg-white rounded border-gray-300">
+                        <div class="staff-entry grid grid-cols-1 md:grid-cols-4 gap-3 p-3 bg-white rounded border border-gray-200">
                             <input type="text" name="divisions[${divisionCounter}][staff][0][nama]" 
-                                class="px-2 py-1 border-gray-300 border rounded focus:border-blue-500 focus:outline-none" placeholder="Nama Staff" required>
+                                class="px-2 py-1 border border-gray-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Nama Staff" required>
                             <input type="text" name="divisions[${divisionCounter}][staff][0][jabatan]" 
-                                class="px-2 py-1 border-gray-300 border rounded focus:border-blue-500 focus:outline-none" placeholder="Jabatan" required>
+                                class="px-2 py-1 border border-gray-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Jabatan" required>
                             <input type="email" name="divisions[${divisionCounter}][staff][0][email]" 
-                                class="px-2 py-1 border-gray-300 border rounded focus:border-blue-500 focus:outline-none" placeholder="Email">
-                            <div class="flex items-center gap-2">
-                                <input type="file" name="divisions[${divisionCounter}][staff][0][foto]" 
-                                    accept="image/*" class="hidden" id="staff_photo_${divisionCounter}_0">
-                                <button type="button" onclick="document.getElementById('staff_photo_${divisionCounter}_0').click()"
-                                    class="text-xs bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded transition-colors">Foto</button>
+                                class="px-2 py-1 border border-gray-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Email">
+                            <div class="flex items-center gap-2 w-full">
+                                <div class="flex-1 flex items-center gap-2 border border-gray-200 rounded px-3 py-2 bg-gray-50">
+                                    <input type="file" name="divisions[${divisionCounter}][staff][0][foto]" 
+                                        accept="image/*" class="hidden" id="staff_photo_${divisionCounter}_0"
+                                        onchange="updateFileName(this, 'filename_${divisionCounter}_0')">
+                                    <button type="button" onclick="document.getElementById('staff_photo_${divisionCounter}_0').click()"
+                                        class="text-xs bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 whitespace-nowrap">Pilih Foto</button>
+                                    <span id="filename_${divisionCounter}_0" class="text-xs text-gray-600 truncate flex-1">Belum ada file</span>
+                                </div>
                                 <button type="button" onclick="removeStaffEntry(this)"
                                     class="text-red-600 hover:text-red-800 text-xs transition-colors">Hapus</button>
                             </div>
@@ -303,18 +327,22 @@
             const staffCount = staffContainer.children.length;
 
             const staffHtml = `
-                <div class="staff-entry grid grid-cols-1 md:grid-cols-4 gap-3 p-3 bg-white rounded border">
+                <div class="staff-entry grid grid-cols-1 md:grid-cols-4 gap-3 p-3 bg-white rounded border border-gray-200">
                     <input type="text" name="divisions[${divisionIndex}][staff][${staffCount}][nama]" 
-                           class="px-2 py-1 border rounded" placeholder="Nama Staff" required>
+                           class="px-2 py-1 border border-gray-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Nama Staff" required>
                     <input type="text" name="divisions[${divisionIndex}][staff][${staffCount}][jabatan]" 
-                           class="px-2 py-1 border rounded" placeholder="Jabatan" required>
+                           class="px-2 py-1 border border-gray-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Jabatan" required>
                     <input type="email" name="divisions[${divisionIndex}][staff][${staffCount}][email]" 
-                           class="px-2 py-1 border rounded" placeholder="Email">
-                    <div class="flex items-center gap-2">
-                        <input type="file" name="divisions[${divisionIndex}][staff][${staffCount}][foto]" 
-                               accept="image/*" class="hidden" id="staff_photo_${divisionIndex}_${staffCount}">
-                        <button type="button" onclick="document.getElementById('staff_photo_${divisionIndex}_${staffCount}').click()"
-                            class="text-xs bg-gray-200 px-2 py-1 rounded">Foto</button>
+                           class="px-2 py-1 border border-gray-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Email">
+                    <div class="flex items-center gap-2 w-full">
+                        <div class="flex-1 flex items-center gap-2 border border-gray-200 rounded px-3 py-2 bg-gray-50">
+                            <input type="file" name="divisions[${divisionIndex}][staff][${staffCount}][foto]" 
+                                   accept="image/*" class="hidden" id="staff_photo_${divisionIndex}_${staffCount}"
+                                   onchange="updateFileName(this, 'filename_${divisionIndex}_${staffCount}')">
+                            <button type="button" onclick="document.getElementById('staff_photo_${divisionIndex}_${staffCount}').click()"
+                                class="text-xs bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 whitespace-nowrap">Pilih Foto</button>
+                            <span id="filename_${divisionIndex}_${staffCount}" class="text-xs text-gray-600 truncate flex-1">Belum ada file</span>
+                        </div>
                         <button type="button" onclick="removeStaffEntry(this)"
                             class="text-red-600 text-xs">Hapus</button>
                     </div>
@@ -327,6 +355,21 @@
 
         function removeStaffEntry(button) {
             button.closest('.staff-entry').remove();
+        }
+
+        // Function to update filename display
+        function updateFileName(input, spanId) {
+            const file = input.files[0];
+            const span = document.getElementById(spanId);
+            if (file) {
+                span.textContent = file.name;
+                span.classList.remove('text-gray-600');
+                span.classList.add('text-green-600', 'font-medium');
+            } else {
+                span.textContent = 'Belum ada file';
+                span.classList.remove('text-green-600', 'font-medium');
+                span.classList.add('text-gray-600');
+            }
         }
 
         function saveOrganization() {
