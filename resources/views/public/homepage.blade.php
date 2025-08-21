@@ -64,66 +64,6 @@
         </div>
     </section>
 
-    {{-- <!-- Divisi Section -->
-    <section id="divisi" class="py-20 bg-gray-100">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-10 group">
-                <h2 class="text-3xl md:text-4xl font-bold text-secondary mb-4 relative inline-block underline-animate">
-                    Divisi PUSTIPD
-                </h2>
-            </div>
-
-            <div class="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-                <!-- Card Division -->
-                <!-- Jaringan Division -->
-                <div
-                    class="group rounded-lg border border-gray-200 shadow-lg transition-all duration-300 transform hover:-translate-y-2">
-                    <div class="card-animated p-8 text-center rounded-lg">
-                        <div class="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                            <svg class="w-15 h-15 text-secondary card-text transition-colors duration-300"
-                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                    d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2 4h.01M17 16h.01" />
-                            </svg>
-                        </div>
-                        <h4 class="text-sm text-secondary mb-2 card-text">Divisi</h4>
-                        <h3 class="text-lg font-bold text-secondary card-text">Jaringan</h3>
-                    </div>
-                </div>
-                <!-- Pengembangan Aplikasi Division -->
-                <div
-                    class="group rounded-lg border border-gray-200 shadow-lg transition-all duration-300 transform hover:-translate-y-2">
-                    <div class="card-animated p-8 text-center rounded-lg">
-                        <div class="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                            <svg class="w-15 h-15 text-secondary card-text  transition-colors duration-300 "
-                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                    d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                            </svg>
-                        </div>
-                        <h4 class="text-sm text-secondary mb-2 card-text">Divisi</h4>
-                        <h3 class="text-lg font-bold text-secondary card-text">Pengembangan Aplikasi</h3>
-                    </div>
-                </div>
-                <!-- Pangkalan Data Division -->
-                <div
-                    class="group rounded-lg border border-gray-200 shadow-lg transition-all duration-300 transform hover:-translate-y-2">
-                    <div class="card-animated p-8 text-center rounded-lg">
-                        <div class="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                            <svg class="w-12 h-12 text-secondary card-text  transition-colors duration-300 "
-                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                    d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
-                            </svg>
-                        </div>
-                        <h4 class="text-sm text-secondary mb-2 card-text">Divisi</h4>
-                        <h3 class="text-lg font-bold text-secondary card-text">Pangkalan Data</h3>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section> --}}
-
     <!-- Pencapaian Section -->
     <section id="pencapaian" class="py-20 bg-gray-100">
         <div class="container mx-auto px-6">
@@ -228,67 +168,54 @@
 
     <!-- Layanan Section -->
     <section id="layanan" class="py-20 bg-[#E6F6FF]">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="text-center mb-10 group">
+        <div class="max-w-7xl mx-auto px-10">
+            <div class="text-center mb-8 group">
                 <h2 class="text-3xl md:text-4xl font-bold text-secondary mb-4 relative inline-block underline-animate">
                     Layanan Kami
                 </h2>
             </div>
 
             <!-- Carousel Container -->
-            <div class="relative isolate">
-                <div class="overflow-hidden relative" id="servicesCarousel">
-                    <!-- Ganti flex dengan justify-center untuk center alignment -->
-                    <div class="flex justify-center transition-transform duration-200 ease-in-out relative z-10"
-                        id="carouselWrapper">
-                        @if ($services && $services->count() > 0)
-                            @foreach ($services as $service)
-                                <x-service-card :title="$service->name" :description="$service->description" />
-                            @endforeach
-                        @else
-                            <!-- Fallback jika tidak ada data -->
-                            <div class="w-full text-center py-12">
-                                <p class="text-gray-500">Belum ada layanan yang tersedia.</p>
-                            </div>
-                        @endif
+            <div class="overflow-hidden">
+                <!-- Carousel Wrapper dengan padding minimal -->
+                <div class="px-1" id="servicesCarousel">
+                    <div class="transition-transform duration-200 ease-in-out" id="carouselWrapper">
+                        <!-- Gunakan flex dengan justify-center -->
+                        <div class="flex justify-center items-stretch items-center gap-4 min-h-[200px]">
+                            @if ($services && $services->count() > 0)
+                                @foreach ($services as $service)
+                                    <div class="flex-shrink-0 w-full max-w-sm">
+                                        <x-service-card :title="$service->name" :description="$service->description" />
+                                    </div>
+                                @endforeach
+                            @else
+                                <!-- Fallback jika tidak ada data -->
+                                <div class="w-full text-center py-12">
+                                    <p class="text-gray-500">Belum ada layanan yang tersedia.</p>
+                                </div>
+                            @endif
+                        </div>
                     </div>
                 </div>
 
                 <!-- Navigation -->
-                <div class="flex justify-center items-center mt-8 space-x-4 relative z-20"
+                <div class="flex justify-center items-center mt-1 space-x-2 relative z-10"
                     aria-label="Carousel Navigation">
-                    <button id="prevBtn"
-                        class="p-2 text-custom-blue hover:text-primary transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                        aria-label="Sebelumnya">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M15 19l-7-7 7-7" />
-                        </svg>
-                    </button>
-
                     <div class="flex space-x-2" id="indicators" aria-label="Carousel Indicators">
-                        <!-- Indicators will be generated by JS -->
                     </div>
-
-                    <button id="nextBtn"
-                        class="p-2 text-custom-blue hover:text-primary transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                        aria-label="Berikutnya">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                        </svg>
-                    </button>
                 </div>
 
                 <!-- Progress Bar -->
-                <div class="mt-6 relative z-0">
+                <div class="mt-3 px-4">
                     <div class="w-full bg-gray-200 rounded-full h-1">
-                        <div class="bg-primary h-1 rounded-full transition-all duration-300 ease-out" id="progressBar"
+                        <div class="bg-primary h-1 rounded-full transition-all duration-150 ease-out" id="progressBar"
                             style="width: {{ $services->count() > 0 ? 100 / $services->count() : 100 }}%"></div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+
 
     <!-- Berita Pengumuman Section -->
     <section id="informasi" class="py-20 bg-primary">
