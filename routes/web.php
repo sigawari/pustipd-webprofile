@@ -121,8 +121,8 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
         Route::controller(PencapaianController::class)->group(function () {
             Route::get('/pencapaian', 'index')->name('pencapaian.index');
             Route::post('/pencapaian', 'store')->name('pencapaian.store');
-            Route::put('/pencapaian/{mitra}', 'update')->name('pencapaian.update');
-            Route::delete('/pencapaian/{mitra}', 'destroy')->name('pencapaian.destroy');
+            Route::put('/pencapaian/{pencapaian}', 'update')->name('pencapaian.update');
+            Route::delete('/pencapaian/{pencapaian}', 'destroy')->name('pencapaian.destroy');
             Route::get('/pencapaian/export', 'export')->name('pencapaian.export');
             Route::post('/pencapaian/bulk', 'bulk')->name('pencapaian.bulk');
         });

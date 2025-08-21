@@ -374,22 +374,6 @@
                                 User</span>
                         </a>
                     </li>
-                    <!-- Reports -->
-                    <li>
-                        <a href="{{ route('admin.sistem.reports.index') }}" @click="selected = 'Reports'"
-                            class="group relative flex items-center gap-3 rounded-xl px-4 py-3 font-medium text-gray-600 duration-300 ease-in-out hover:bg-emerald-50 hover:text-emerald-600"
-                            :class="(selected === 'Reports') ? 'bg-emerald-50 text-emerald-600' : ''">
-                            <svg :class="(selected === 'Reports') ? 'fill-emerald-600' :
-                            'fill-gray-500 group-hover:fill-emerald-600'"
-                                class="transition-colors duration-200" width="20" height="20"
-                                viewBox="0 0 24 24">
-                                <path
-                                    d="M3,3H21A2,2 0 0,1 23,5V19A2,2 0 0,1 21,21H3A2,2 0 0,1 1,19V5A2,2 0 0,1 3,3M5,7V9H19V7H5M5,11V13H19V11H5M5,15V17H11V15H5Z" />
-                            </svg>
-                            <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">Laporan &
-                                Analytics</span>
-                        </a>
-                    </li>
                 </ul>
             </div>
         </nav>
