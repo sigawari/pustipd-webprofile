@@ -17,7 +17,7 @@ return new class extends Migration
             $table->longText('answer');  // Jawaban (bisa panjang)
             $table->enum('status', ['draft', 'published', 'archived'])->default('draft');
             $table->timestamps();
-            $table->boolean('visibility')->default(true)->after('status');
+            $table->tinyInteger('visibility')->default(1);
         });
     }
 

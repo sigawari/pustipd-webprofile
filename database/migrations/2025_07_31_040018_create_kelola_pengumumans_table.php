@@ -30,11 +30,12 @@ return new class extends Migration
             
             // Tingkat Urgency/Prioritas
             $table->enum('urgency', [
-                'normal',          // Pengumuman biasa
-                'penting',         // Penting - perlu perhatian
                 'normal',        
-                'penting'       
+                'penting',   
             ])->default('normal');
+
+            $table->boolean('is_priority')->default(false);
+
             
             $table->string('slug')->unique();
             
@@ -54,7 +55,8 @@ return new class extends Migration
             $table->index('valid_until');                 
             $table->index(['status', 'date']);            
             $table->index('view_count');                  
-            $table->index('slug');                     
+            $table->index('slug');  
+            $table->index('is_priority');                   
         });
     }
 

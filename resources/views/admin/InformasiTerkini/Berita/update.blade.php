@@ -89,7 +89,6 @@
                             class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500">
                             <option value="draft" @selected($berita->status == 'draft')>Draft</option>
                             <option value="published" @selected($berita->status == 'published')>Published</option>
-                            <option value="archived" @selected($berita->status == 'archived')>Archived</option>
                         </select>
                     </div>
                 </div>

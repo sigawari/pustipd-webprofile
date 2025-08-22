@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -19,7 +19,6 @@ return new class extends Migration
             $table->foreignId('panduan_id')->constrained('panduans')->onDelete('cascade');
             $table->foreignId('sop_id')->constrained('sops')->onDelete('cascade');
         });
-
     }
 
     /**

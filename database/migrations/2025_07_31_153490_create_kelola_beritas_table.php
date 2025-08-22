@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -22,13 +22,13 @@ return new class extends Migration
                 'research_development',
                 'other'
             ]);
-            $table->string('name'); // Judul berita
+            $table->string('name'); 
             $table->string('slug')->unique();
             $table->string('tags')->nullable();
             $table->dateTime('publish_date')->nullable();
-            $table->string('image')->nullable(); // path gambar thumbnail
-            $table->longText('content'); // isi berita
-            $table->enum('status', ['draft', 'published', 'archived'])->default('draft');
+            $table->string('image')->nullable(); 
+            $table->longText('content');
+            $table->enum('status', ['draft', 'published'])->default('draft');
             $table->timestamps();
         });
     }

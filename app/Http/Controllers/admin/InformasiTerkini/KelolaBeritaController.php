@@ -140,7 +140,7 @@ class KelolaBeritaController extends Controller
             'tags'         => 'nullable|string|max:255',
             'publish_date' => 'nullable|date',
             'status'       => 'required|in:draft,published',
-            'image'        => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'image'        => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:10480',
             'content'      => 'required|string',
         ]);
 
@@ -202,7 +202,7 @@ class KelolaBeritaController extends Controller
             'tags'         => 'nullable|string|max:255',
             'publish_date' => 'nullable|date',
             'status'       => 'required|in:draft,published',
-            'image'        => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'image'        => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:10480',
             'content'      => 'required|string',
         ]);
 
