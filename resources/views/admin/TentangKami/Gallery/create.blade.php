@@ -66,7 +66,7 @@
                         <input type="file" name="image" id="image" accept="image/*" required
                             onchange="previewImage(this)"
                             class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm file:mr-4 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
-                        <p class="text-xs text-gray-500 mt-2 text-center">Format: JPG, PNG, GIF. Maksimal 2MB</p>
+                        <p class="text-xs text-gray-500 mt-2 text-center">Format: JPG, PNG, GIF. Maksimal 10MB</p>
                         @error('image')
                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                         @enderror

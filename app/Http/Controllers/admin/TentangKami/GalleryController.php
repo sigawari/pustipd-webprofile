@@ -78,7 +78,7 @@ class GalleryController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:10240',
             'event_date' => 'required|date',
         ]);
 
