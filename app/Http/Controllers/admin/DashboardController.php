@@ -157,7 +157,7 @@ class DashboardController extends Controller
         foreach ($recentNews as $news) {
             $activities[] = [
                 'type' => 'news',
-                'message' => 'Berita "' . Str::limit($news->name, 30) . '" dipublish',
+                'message' => 'Berita "' . Str::limit($news->name, 40) . '" dipublish',
                 'time' => $news->created_at->diffForHumans(),
                 'color' => 'blue'
             ];

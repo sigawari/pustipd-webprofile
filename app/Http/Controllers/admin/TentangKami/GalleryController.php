@@ -46,7 +46,7 @@ class GalleryController extends Controller
 
         // Per-page validation
         if ($perPage === 'all') {
-            $perPage = max($merged->count(), 1); // Kalau 0, set jadi 1
+            $perPage = max($merged->count(), 1); 
         } else {
             $perPage = (int) $perPage;
             if ($perPage < 1) {
@@ -94,7 +94,7 @@ class GalleryController extends Controller
             'title' => $request->title,
             'image' => $imagePath,
             'event_date' => $request->event_date,
-            'status' => 'draft', // Default draft
+            'status' => 'draft',
         ]);
 
         return redirect()->back()->with('success', 'Gambar berhasil disimpan sebagai draft!');
