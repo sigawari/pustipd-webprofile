@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\InformasiTerkini;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 use App\Models\InformasiTerkini\KelolaBerita;
@@ -10,71 +11,112 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class KelolaBeritaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request)
     {
+        DB::enableQueryLog();
+        
         $title = "Berita";
         $search = $request->input('search', '');
-        $filter = $request->query('filter', 'all');
+        $status = $request->input('status', '');
+        $category = $request->input('category', '');
         $perPage = $request->input('perPage', 10);
+        $defaultPerPage = 10;
 
-        // Pisahkan multi keyword
-        $keywords = !empty($search) ? preg_split('/\s+/', (string) $search) : [];
-
-        // Query builder awal
+        // Query builder
         $kelolaBeritaQuery = KelolaBerita::query();
 
-        // Apply search jika ada
+        // Search
         if ($search) {
+            $keywords = array_slice(preg_split('/\s+/', trim($search)), 0, 5); // Batasi 5 kata
             $kelolaBeritaQuery->where(function ($q) use ($keywords) {
                 foreach ($keywords as $word) {
-                    $q->where(function ($q) use ($word) {
-                        $q->where('name', 'like', "%{$word}%")
-                          ->orWhere('description', 'like', "%{$word}%");
+                    $q->where(function ($subQ) use ($word) {
+                        $subQ->where('name', 'like', "%{$word}%")
+                            ->orWhere('content', 'like', "%{$word}%")
+                            ->orWhere('tags', 'like', "%{$word}%");
                     });
                 }
             });
         }
 
         // Filter status
-        if ($filter && $filter !== 'all') {
-            $kelolaBeritaQuery->where('status', $filter);
+        if ($status && $status !== '') {
+            $kelolaBeritaQuery->where('status', $status);
         }
 
-        // Merge results
-        $merged = $kelolaBeritaQuery->get();
+        // Filter category
+        if ($category && $category !== '') {
+            $kelolaBeritaQuery->where('category', $category);
+        }
 
-        // Per-page validation
+        // Order default
+        $kelolaBeritaQuery->orderBy('created_at', 'desc');
+
+        // PerPage - PERBAIKAN UNTUK MENCEGAH MEMORY EXHAUSTED
         if ($perPage === 'all') {
-            $perPage = max($merged->count(), 1); // Kalau 0, set jadi 1
+            // Batasi maksimal 1000 record untuk mencegah memory habis
+            $maxRecords = 1000;
+            $kelolaBeritas = $kelolaBeritaQuery->paginate($maxRecords);
+            $kelolaBeritas->appends($request->query());
         } else {
-            $perPage = (int) $perPage;
-            if ($perPage < 1) {
-                $perPage = 1;
-            }
+            $perPage = (is_numeric($perPage) && $perPage > 0) ? min((int)$perPage, 100) : $defaultPerPage;
+            $kelolaBeritas = $kelolaBeritaQuery->paginate($perPage);
+            $kelolaBeritas->appends($request->query());
         }
 
-        $currentPage = LengthAwarePaginator::resolveCurrentPage();
-        $currentItems = $merged->slice(($currentPage - 1) * $perPage, $perPage)->values();
+        // ✅ Debug query di sini jika diperlukan
+        $queries = DB::getQueryLog();
+        // dd($queries); // Uncomment untuk debug
 
-        $kelolaBeritas = new LengthAwarePaginator(
-            $currentItems,
-            $merged->count(),
-            $perPage,
-            $currentPage,
-            ['path' => LengthAwarePaginator::resolveCurrentPath()]
-        );
-
-        // AJAX Response
         if ($request->ajax()) {
-            return view('admin.InformasiTerkini.Berita.partials.table_body', compact('kelolaBeritas', 'title'));
+            return response()->json([
+                'table_html' => view('admin.InformasiTerkini.Berita.partials.table_body', compact('kelolaBeritas', 'title'))->render(),
+                'pagination_html' => view('admin.InformasiTerkini.Berita.partials.pagination', compact('kelolaBeritas', 'title'))->render(),
+                'success' => true
+            ]);
         }
 
-        // Render view
         return view('admin.InformasiTerkini.Berita.index', compact('title', 'kelolaBeritas'));
     }
+
+    public function bulk(Request $request)
+    {
+        $ids = $request->input('ids', []);
+        $action = $request->input('action');
+
+        if (!$ids || !$action) {
+            return response()->json(['success' => false, 'message' => 'Data atau aksi tidak valid.']);
+        }
+
+        try {
+            switch ($action) {
+                case 'permanent_delete':
+                    $items = KelolaBerita::whereIn('id', $ids)->get();
+                    foreach ($items as $item) {
+                        if ($item->image && Storage::disk('public')->exists($item->image)) {
+                            Storage::disk('public')->delete($item->image);
+                        }
+                        $item->delete();
+                    }
+                    $message = count($items) . ' Berita dihapus permanen.';
+                    break;
+
+                case 'published':
+                case 'draft':
+                case 'archived':
+                    $count = KelolaBerita::whereIn('id', $ids)->update(['status' => $action]);
+                    $message = "$count Berita diubah ke status $action.";
+                    break;
+
+                default:
+                    return response()->json(['success' => false, 'message' => 'Aksi tidak valid.']);
+            }
+            return response()->json(['success' => true, 'message' => $message]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Kesalahan: ' . $e->getMessage()]);
+        }
+    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -89,7 +131,6 @@ class KelolaBeritaController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all()); // Hapus ini setelah testing
 
         // Validasi input
         $request->validate([
@@ -208,44 +249,4 @@ class KelolaBeritaController extends Controller
 
         return redirect()->route('admin.informasi-terkini.kelola-berita.index')->with('success', 'Berita berhasil dihapus!');
     }
-
-    /**
-     * BULK ACTION : publish / draft  delete / permanent_delete
-     */
-    public function bulk(Request $request)
-    {
-        $ids = $request->input('ids', []);
-        $action = $request->input('action');
-
-        if (!$ids || !$action) {
-            return back()->with('error', 'Data atau aksi tidak valid.');
-        }
-
-        switch ($action) {
-            case 'permanent_delete':
-                // Hard delete: hapus data dan gambar
-                $items = KelolaBerita::whereIn('id', $ids)->get();
-                foreach ($items as $item) {
-                    if ($item->image && Storage::disk('public')->exists($item->image)) {
-                        Storage::disk('public')->delete($item->image);
-                    }
-                    $item->delete();
-                }
-                $message = count($items) . ' Berita berhasil dihapus permanen.';
-                break;
-
-            case 'published':
-            case 'draft':
-                $updatedCount = KelolaBerita::whereIn('id', $ids)->update(['status' => $action]);
-                $statusText = ucfirst($action);
-                $message = "{$updatedCount} Berita berhasil diubah ke status {$statusText}.";
-                break;
-
-            default:
-                return back()->with('error', 'Aksi tidak valid.');
-        }
-
-        return back()->with('success', $message);
-    }
-
 }

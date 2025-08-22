@@ -426,7 +426,7 @@
                 <!-- Link untuk Lihat Semua -->
                 <div class="mt-4 pt-4 border-t border-gray-200">
                     <p class="text-sm text-gray-500 text-center">
-                        Total <span class="font-semibold text-blue-600">20</span> menu manajemen tersedia
+                        Total <span class="font-semibold text-blue-600">17</span> menu manajemen tersedia
                     </p>
                 </div>
             </div>

@@ -59,7 +59,6 @@
                 'inline-flex px-2 py-1 text-xs font-semibold rounded-full',
                 'bg-green-300 text-green-800' => $berita->status === 'published',
                 'bg-yellow-300 text-yellow-800' => $berita->status === 'draft',
-                'bg-gray-300 text-gray-800' => $berita->status === 'archived',
             ])>
                 {{ ucfirst($berita->status) }}
             </span>

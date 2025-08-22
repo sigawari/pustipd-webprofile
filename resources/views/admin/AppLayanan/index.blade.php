@@ -233,7 +233,6 @@
         <!-- Pagination yang lebih sederhana dan responsif -->
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4 pt-4"
             id="pagination-container">
-            <!-- Info jumlah data yang akurat -->
             <div class="text-sm text-gray-500 text-center sm:text-left" id="pagination-info">
                 @php
                     $hasFilter =
