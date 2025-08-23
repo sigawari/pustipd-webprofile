@@ -172,8 +172,7 @@
                             <tr>
                                 <!-- Checkbox -->
                                 <th class="px-4 py-3">
-                                    <input type="checkbox" id="selectAll"
-                                        class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                    <input type="checkbox" id="selectAll" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
                                 </th>
 
                                 <!-- Nomor Urut -->

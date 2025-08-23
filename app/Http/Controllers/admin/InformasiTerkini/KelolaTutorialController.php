@@ -15,10 +15,10 @@ class KelolaTutorialController extends Controller
     {
         $title = "Tutorial";
         $search = $request->input('search', '');
-        $filter = $request->query('filter', 'all');
-        $featured = $request->query('featured', null);
+        $status = $request->input('status'); // Published / Draft
+        $category = $request->input('category'); // dari categoryFilter
+        $featured = $request->input('featured', null); // Featured filter
         $perPage = $request->input('perPage', 10);
-        $status = $request->input('status');
 
         $kelolaTutorialQuery = KelolaTutorial::query();
 
@@ -27,45 +27,46 @@ class KelolaTutorialController extends Controller
             $kelolaTutorialQuery->where('status', $status);
         }
 
-        // Filter is_hidden (tambahkan agar jelas)
-        if ($request->has('is_hidden')) {
-            $kelolaTutorialQuery->where('is_hidden', $request->boolean('is_hidden'));
+        // Filter kategori
+        if ($category) {
+            $kelolaTutorialQuery->where('category', $category);
         }
 
+        // Filter featured
+        if (!is_null($featured)) {
+            $kelolaTutorialQuery->where('is_featured', (bool) $featured);
+        }
 
+        // Search
         if ($search) {
             $kelolaTutorialQuery->search($search);
         }
 
-        if ($filter && $filter !== 'all') {
-            $kelolaTutorialQuery->where('status', $filter);
-        }
+        // Order by date terbaru
+        $kelolaTutorialQuery->orderByDesc('date');
 
-        if (!is_null($featured)) {
-            $kelolaTutorialQuery->where('is_featured', ($featured == 1));
-        }
+        // Ambil semua data dulu
+        $all = $kelolaTutorialQuery->get();
 
-        // Order by created_at desc
-        $kelolaTutorialQuery->orderBy('date', 'desc');
-
-        $merged = $kelolaTutorialQuery->get();
-
+        // Atur perPage
         if ($perPage === 'all') {
-            $perPage = max($merged->count(), 1);
+            $perPage = max($all->count(), 1);
         } else {
-            $perPage = (int) $perPage;
-            if ($perPage < 1) $perPage = 1;
+            $perPage = max((int) $perPage, 1);
         }
 
         $currentPage = LengthAwarePaginator::resolveCurrentPage();
-        $currentItems = $merged->slice(($currentPage - 1) * $perPage, $perPage)->values();
+        $currentItems = $all->slice(($currentPage - 1) * $perPage, $perPage)->values();
 
         $kelolaTutorials = new LengthAwarePaginator(
             $currentItems,
-            $merged->count(),
+            $all->count(),
             $perPage,
             $currentPage,
-            ['path' => LengthAwarePaginator::resolveCurrentPath()]
+            [
+                'path' => request()->url(),
+                'query' => request()->query(),
+            ]
         );
 
         if ($request->ajax()) {

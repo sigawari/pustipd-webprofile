@@ -85,11 +85,15 @@
                     </svg>
                 </div>
                 <input type="search" id="searchInput" placeholder="Cari {{ $title }}..."
+                    data-url="{{ route('admin.informasi-terkini.kelola-tutorial.index') }}"
+                    data-target="tutorialTableBody"
                     class="block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
             </div>
             <div class="flex flex-col sm:flex-row gap-2">
                 <!-- Updated kategori sesuai dengan model -->
                 <select id="categoryFilter"
+                    data-url="{{ route('admin.informasi-terkini.kelola-tutorial.index') }}"
+                    data-target="tutorialTableBody"
                     class="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
                     <option value="">Semua Kategori</option>
                     <option value="sistem_informasi_akademik">Sistem Informasi Akademik</option>
@@ -102,6 +106,8 @@
                     <option value="layanan_publik">Layanan Publik</option>
                 </select>
                 <select id="statusFilter"
+                    data-url="{{ route('admin.informasi-terkini.kelola-tutorial.index') }}"
+                    data-target="tutorialTableBody"
                     class="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
                     <option value="">Semua Status</option>
                     <option value="published">Published</option>
@@ -109,6 +115,8 @@
                 </select>
                 <!-- NEW: Featured filter -->
                 <select id="featuredFilter"
+                    data-url="{{ route('admin.informasi-terkini.kelola-tutorial.index') }}"
+                    data-target="tutorialTableBody"
                     class="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
                     <option value="">Semua Tutorial</option>
                     <option value="1">Tutorial Featured</option>
@@ -132,39 +140,32 @@
                         <thead class="bg-gray-50">
                             <tr>
                                 <!-- 1. Checkbox -->
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     <input type="checkbox" id="selectAll"
                                         class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
                                 </th>
                                 <!-- 2. No -->
-                                <th
-                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     No
                                 </th>
                                 <!-- 3. Kategori -->
-                                <th
-                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Kategori
                                 </th>
                                 <!-- 4. Title -->
-                                <th
-                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Judul {{ $title }}
                                 </th>
                                 <!-- 5. Content Preview -->
-                                <th
-                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Preview Konten
                                 </th>
                                 <!-- 6. Content Structure (NEW) -->
-                                <th
-                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Struktur
                                 </th>
                                 <!-- 7. View Count (NEW) -->
-                                <th
-                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     <div class="flex items-center justify-center">
                                         <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
@@ -178,18 +179,15 @@
                                     </div>
                                 </th>
                                 <!-- 8. Status -->
-                                <th
-                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Status
                                 </th>
                                 <!-- 9. Date -->
-                                <th
-                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Tanggal
                                 </th>
                                 <!-- 10. Actions -->
-                                <th
-                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Aksi
                                 </th>
                             </tr>
