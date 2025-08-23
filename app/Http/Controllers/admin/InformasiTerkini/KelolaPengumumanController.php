@@ -14,43 +14,45 @@ class KelolaPengumumanController extends Controller
     {
         $title = "Pengumuman";
         $search = $request->input('search', '');
-        $filter = $request->query('filter', 'all');
+        $category = $request->input('category', ''); // sesuai id categoryFilter
+        $status = $request->input('status', '');     // sesuai id statusFilter
         $perPage = $request->input('perPage', 10);
 
-        // Query builder awal
         $kelolaPengumumanQuery = KelolaPengumuman::query();
 
-        // Search dengan field yang benar
+        // Search
         if ($search) {
             $keywords = preg_split('/\s+/', trim($search));
             $kelolaPengumumanQuery->where(function ($q) use ($keywords) {
                 foreach ($keywords as $word) {
                     $q->where(function ($q) use ($word) {
-                        $q->where('title', 'like', "%{$word}%")          // FIXED: title bukan name
-                          ->orWhere('content', 'like', "%{$word}%")       // FIXED: content bukan description
-                          ->orWhere('category', 'like', "%{$word}%");
+                        $q->where('title', 'like', "%{$word}%")
+                        ->orWhere('content', 'like', "%{$word}%")
+                        ->orWhere('category', 'like', "%{$word}%");
                     });
                 }
             });
         }
 
+        // Filter kategori
+        if ($category) {
+            $kelolaPengumumanQuery->where('category', $category);
+        }
+
         // Filter status
-        if ($filter && $filter !== 'all') {
-            $kelolaPengumumanQuery->where('status', $filter);
+        if ($status) {
+            $kelolaPengumumanQuery->where('status', $status);
         }
 
         $kelolaPengumumanQuery->orderBy('created_at', 'desc');
 
         $merged = $kelolaPengumumanQuery->get();
 
-        // Per-page logic tetap sama
+        // Per-page handling
         if ($perPage === 'all') {
             $perPage = max($merged->count(), 1);
         } else {
-            $perPage = (int) $perPage;
-            if ($perPage < 1) {
-                $perPage = 1;
-            }
+            $perPage = max((int) $perPage, 1);
         }
 
         $currentPage = LengthAwarePaginator::resolveCurrentPage();
@@ -64,7 +66,6 @@ class KelolaPengumumanController extends Controller
             ['path' => LengthAwarePaginator::resolveCurrentPath()]
         );
 
-        // AJAX Response
         if ($request->ajax()) {
             return view('admin.InformasiTerkini.Pengumuman.partials.table_body', compact('kelolaPengumumans'));
         }
