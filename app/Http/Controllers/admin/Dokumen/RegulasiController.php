@@ -3,13 +3,14 @@
 namespace App\Http\Controllers\Admin\Dokumen;
 
 use App\Models\Dokumen\Regulasi;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class RegulasiController extends Controller
 {
@@ -23,12 +24,14 @@ class RegulasiController extends Controller
         $filter = $request->get('filter', 'all');
         $perPage = $request->get('perPage', 10);
         
+        // Pisahkan Multi Keyword
+        $keywords = !empty($search) ? preg_split('/\s+/', (string) $search) : [];
+        
         // Query builder awal
         $regulasiQuery = Regulasi::query();
 
         // Apply search jika ada
         if ($search) {
-            $keywords = preg_split('/\s+/', trim($search));
             $regulasiQuery->where(function ($q) use ($keywords) {
                 foreach ($keywords as $word) {
                     $q->where(function ($q) use ($word) {
@@ -48,6 +51,9 @@ class RegulasiController extends Controller
         $regulasiQuery->orderByDesc('year_published')
                        ->orderByDesc('created_at');
 
+        // Ambil semua dulu untuk custom paginate
+        $allRegulasis = $regulasiQuery->get();
+
         // Per-page validation
         if ($perPage === 'all') {
             $regulasis = $regulasiQuery->get();
@@ -56,8 +62,20 @@ class RegulasiController extends Controller
             $perPage = max((int) $perPage, 1);
         }
 
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        $currentItems = $allRegulasis->slice(($currentPage - 1) * $perPage, $perPage)->values();
+
         // Paginate
-        $regulasis = $regulasiQuery->paginate($perPage);
+        $regulasis = new LengthAwarePaginator(
+            $currentItems,
+            $allRegulasis->count(),
+            $perPage,
+            $currentPage,
+            [
+                'path' => request()->url(),
+                'query' => request()->query(),
+            ]
+        );
 
         // AJAX response
         if ($request->ajax()) {

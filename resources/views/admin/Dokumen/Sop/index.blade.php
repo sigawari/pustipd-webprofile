@@ -172,49 +172,41 @@
                             <tr>
                                 <!-- Checkbox -->
                                 <th class="px-4 py-3">
-                                    <input type="checkbox" id="selectAll"
-                                        class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                    <input type="checkbox" id="selectAll" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
                                 </th>
 
                                 <!-- Nomor Urut -->
-                                <th
-                                    class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-12">
+                                <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-12">
                                     No.
                                 </th>
 
                                 <!-- Judul SOP -->
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Nama {{ $title }}
                                 </th>
 
                                 <!-- Deskripsi -->
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Deskripsi
                                 </th>
 
                                 <!-- Tahun Terbit -->
-                                <th
-                                    class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Tahun Terbit
                                 </th>
 
                                 <!-- File Info (tipe + size) -->
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     File
                                 </th>
 
                                 <!-- Status -->
-                                <th
-                                    class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Status
                                 </th>
 
                                 <!-- Aksi -->
-                                <th
-                                    class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Aksi
                                 </th>
                             </tr>
