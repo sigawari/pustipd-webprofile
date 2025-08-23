@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class KetetapanController extends Controller
 {
@@ -23,6 +24,9 @@ class KetetapanController extends Controller
         $search = $request->get('search');
         $filter = $request->get('filter', 'all');
         $perPage = $request->get('perPage', 10);
+        
+        // Pisahkan Multi Keyword
+        $keywords = !empty($search) ? preg_split('/\s+/', (string) $search) : [];
         
         // Query builder awal
         $ketetapanQuery = Ketetapan::query();
@@ -49,6 +53,8 @@ class KetetapanController extends Controller
         $ketetapanQuery->orderByDesc('year_published')
                        ->orderByDesc('created_at');
 
+        $allKetetapans = $ketetapanQuery->get();
+
         // Per-page validation
         if ($perPage === 'all') {
             $ketetapans = $ketetapanQuery->get();
@@ -57,9 +63,21 @@ class KetetapanController extends Controller
             $perPage = max((int) $perPage, 1);
         }
 
-        // Paginate
-        $ketetapans = $ketetapanQuery->paginate($perPage);
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        $currentItems = $allKetetapans->slice(($currentPage - 1) * $perPage, $perPage)->values();
 
+        // Paginate
+        $ketetapans = new LengthAwarePaginator(
+            $currentItems,
+            $allKetetapans->count(),
+            $perPage,
+            $currentPage,
+            [
+                'path' => request()->url(),
+                'query' => request()->query(),
+            ]
+        );
+        
         // AJAX response
         if ($request->ajax()) {
             return view('admin.Dokumen.Ketetapan.partials.table_body', compact('title', 'ketetapans'))->render();

@@ -131,11 +131,15 @@
                     </svg>
                 </div>
                 <input type="search" id="search-input" value="{{ request('search') }}"
+                    data-url="{{ route('admin.dokumen.ketetapan.index') }}"
+                    data-target="KetetapanTableBody"
                     placeholder="Cari {{ strtolower($title) }}..."
                     class="block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
             </div>
             <div class="flex flex-col sm:flex-row gap-2">
                 <select id="filter-select" name="filter"
+                    data-url="{{ route('admin.dokumen.ketetapan.index') }}"
+                    data-target="KetetapanTableBody"
                     class="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
                     <option value="all" {{ request('filter') == 'all' ? 'selected' : '' }}>-- Semua Status --
                     </option>
@@ -173,44 +177,37 @@
                                 </th>
 
                                 <!-- Nomor Urut -->
-                                <th
-                                    class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-12">
+                                <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-12">
                                     No.
                                 </th>
 
                                 <!-- Judul Ketetapan -->
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Nama Ketetapan
                                 </th>
 
                                 <!-- Deskripsi -->
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Deskripsi
                                 </th>
 
                                 <!-- Tahun Terbit -->
-                                <th
-                                    class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Tahun Terbit
                                 </th>
 
                                 <!-- File Info (tipe + size) -->
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     File
                                 </th>
 
                                 <!-- Status -->
-                                <th
-                                    class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Status
                                 </th>
 
                                 <!-- Aksi -->
-                                <th
-                                    class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Aksi
                                 </th>
                             </tr>
