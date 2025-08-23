@@ -35,6 +35,7 @@ class MitraController extends Controller
         }
 
         $mitraQuery->orderBy('created_at', 'desc');
+        
         $merged = $mitraQuery->get();
 
         if ($perPage === 'all') {

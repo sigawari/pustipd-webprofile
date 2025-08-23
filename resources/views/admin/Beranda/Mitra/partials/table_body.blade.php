@@ -146,7 +146,7 @@
                 {{-- Action Buttons --}}
                 <div class="flex flex-col sm:flex-row gap-3 mt-6">
                     @if ($hasAnyFilter)
-                        <a href="{{ route('admin.mitra.index') }}"
+                        <a href="{{ route('admin.beranda.mitra.index') }}"
                             class="inline-flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -157,7 +157,7 @@
                     @endif
 
                     @if ($hasStatusFilter && request('filter') === 'published')
-                        <a href="{{ route('admin.mitra.index', ['filter' => 'draft']) }}"
+                        <a href="{{ route('admin.beranda.mitra.index', ['filter' => 'draft']) }}"
                             class="inline-flex items-center px-4 py-2 bg-yellow-100 text-yellow-800 rounded-lg hover:bg-yellow-200 transition-colors">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -166,7 +166,7 @@
                             Lihat Draft
                         </a>
                     @elseif($hasStatusFilter && request('filter') === 'draft')
-                        <a href="{{ route('admin.mitra.index', ['filter' => 'published']) }}"
+                        <a href="{{ route('admin.beranda.mitra.index', ['filter' => 'published']) }}"
                             class="inline-flex items-center px-4 py-2 bg-green-100 text-green-800 rounded-lg hover:bg-green-200 transition-colors">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -175,7 +175,7 @@
                             Lihat Published
                         </a>
                     @elseif($hasStatusFilter && request('filter') === 'inactive')
-                        <a href="{{ route('admin.mitra.index', ['filter' => 'active']) }}"
+                        <a href="{{ route('admin.beranda.mitra.index', ['filter' => 'active']) }}"
                             class="inline-flex items-center px-4 py-2 bg-green-100 text-green-800 rounded-lg hover:bg-green-200 transition-colors">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -184,7 +184,7 @@
                             Lihat Mitra Aktif
                         </a>
                     @elseif($hasStatusFilter && request('filter') === 'active')
-                        <a href="{{ route('admin.mitra.index', ['filter' => 'inactive']) }}"
+                        <a href="{{ route('admin.beranda.mitra.index', ['filter' => 'inactive']) }}"
                             class="inline-flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
