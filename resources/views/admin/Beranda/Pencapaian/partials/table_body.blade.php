@@ -143,7 +143,7 @@
                 {{-- Action Buttons --}}
                 <div class="flex flex-col sm:flex-row gap-3 mt-6">
                     @if ($hasAnyFilter)
-                        <a href="{{ route('admin.pencapaian.index') }}"
+                        <a href="{{ route('admin.beranda.pencapaian.index') }}"
                             class="inline-flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -154,7 +154,7 @@
                     @endif
 
                     @if ($hasStatusFilter && request('filter') === 'published')
-                        <a href="{{ route('admin.pencapaian.index', ['filter' => 'draft']) }}"
+                        <a href="{{ route('admin.beranda.pencapaian.index', ['filter' => 'draft']) }}"
                             class="inline-flex items-center px-4 py-2 bg-yellow-100 text-yellow-800 rounded-lg hover:bg-yellow-200 transition-colors">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -163,7 +163,7 @@
                             Lihat Draft
                         </a>
                     @elseif($hasStatusFilter && request('filter') === 'draft')
-                        <a href="{{ route('admin.pencapaian.index', ['filter' => 'published']) }}"
+                        <a href="{{ route('admin.beranda.pencapaian.index', ['filter' => 'published']) }}"
                             class="inline-flex items-center px-4 py-2 bg-green-100 text-green-800 rounded-lg hover:bg-green-200 transition-colors">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -174,7 +174,7 @@
                     @endif
 
                     @if ($hasYearFilter)
-                        <a href="{{ route('admin.pencapaian.index', ['year' => date('Y')]) }}"
+                        <a href="{{ route('admin.beranda.pencapaian.index', ['year' => date('Y')]) }}"
                             class="inline-flex items-center px-4 py-2 bg-blue-100 text-blue-800 rounded-lg hover:bg-blue-200 transition-colors">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
