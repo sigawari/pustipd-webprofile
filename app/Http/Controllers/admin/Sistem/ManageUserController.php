@@ -62,16 +62,35 @@ class ManageUserController extends Controller
 
         // Merge + Pagination
         $merged = $admins->concat($user_publics);
-        // Jika perPage adalah 'all', set ke jumlah total item
+
+        // Tentukan halaman sekarang dulu
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+
+        // Kalau perPage 'all', set ke total
         if ($perPage === 'all') {
             $perPage = $merged->count();
         }
-        $currentPage = LengthAwarePaginator::resolveCurrentPage();
-        $currentItems = $merged->slice(($currentPage - 1) * $perPage, $perPage)->values();
-        $users = new LengthAwarePaginator($currentItems, $merged->count(), $perPage, $currentPage, [
-            'path' => request()->url(),
-            'query' => request()->query(),
-        ]);
+
+        // Minimal 1
+        $perPage = max(1, (int) $perPage);
+
+        if ($merged->isEmpty()) {
+            // Paginator kosong
+            $users = new LengthAwarePaginator([], 0, $perPage, $currentPage, [
+                'path' => request()->url(),
+                'query' => request()->query(),
+            ]);
+        } else {
+            $currentItems = $merged->slice(($currentPage - 1) * $perPage, $perPage)->values();
+
+            // ⚡ Kalau hasil slice kosong → total = 0
+            $total = $currentItems->isEmpty() ? 0 : $merged->count();
+
+            $users = new LengthAwarePaginator($currentItems, $total, $perPage, $currentPage, [
+                'path' => request()->url(),
+                'query' => request()->query(),
+            ]);
+        }
 
         // AJAX response
         if ($request->ajax()){

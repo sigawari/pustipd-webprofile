@@ -108,8 +108,12 @@
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4 pt-4">
             <!-- Info jumlah data -->
             <div class="text-sm text-gray-500 text-center sm:text-left">
-                Menampilkan {{ $users->firstItem() }} sampai {{ $users->lastItem() }} dari {{ $users->total() }}
-                {{ strtolower($title) }}
+                @if ($users->count() > 0)
+                    Menampilkan {{ $users->firstItem() }} sampai {{ $users->lastItem() }} dari {{ $users->total() }}
+                    {{ strtolower($title) }}
+                @else
+                    Tidak ada {{ strtolower($title) }} yang ditemukan
+                @endif
             </div>
 
             <!-- Tombol Pagination -->
