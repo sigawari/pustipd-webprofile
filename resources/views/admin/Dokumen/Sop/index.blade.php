@@ -131,11 +131,15 @@
                     </svg>
                 </div>
                 <input type="search" id="search-input" value="{{ request('search') }}"
+                    data-url="{{ route('admin.dokumen.sop.index') }}"
+                    data-target="sopTableBody"
                     placeholder="Cari {{ strtolower($title) }}..."
                     class="block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
             </div>
             <div class="flex flex-col sm:flex-row gap-2">
                 <select id="filter-select" name="filter"
+                    data-url="{{ route('admin.dokumen.sop.index') }}"
+                    data-target="sopTableBody"
                     class="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
                     <option value="all" {{ request('filter') == 'all' ? 'selected' : '' }}>-- Semua Status --
                     </option>

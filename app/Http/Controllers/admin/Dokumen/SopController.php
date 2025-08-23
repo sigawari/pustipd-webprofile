@@ -4,13 +4,13 @@ namespace App\Http\Controllers\Admin\Dokumen;
 
 use App\Models\Dokumen\Sop;
 use App\Http\Controllers\Controller;
-
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class SopController extends Controller
 {
@@ -23,18 +23,20 @@ class SopController extends Controller
         $search = $request->get('search');
         $filter = $request->get('filter', 'all');
         $perPage = $request->get('perPage', 10);
+
+        // Pisahkan Multi Keyword
+        $keywords = !empty($search) ? preg_split('/\s+/', (string) $search) : [];
         
         // Query builder awal
         $sopQuery = Sop::query();
 
         // Apply search jika ada
         if ($search) {
-            $keywords = preg_split('/\s+/', trim($search));
             $sopQuery->where(function ($q) use ($keywords) {
                 foreach ($keywords as $word) {
                     $q->where(function ($q) use ($word) {
                         $q->where('title', 'like', "%{$word}%")
-                          ->orWhere('description', 'like', "%{$word}%");
+                        ->orWhere('description', 'like', "%{$word}%");
                     });
                 }
             });
@@ -47,18 +49,32 @@ class SopController extends Controller
 
         // Auto sorting: Tahun terbaru dulu, lalu tanggal dibuat terbaru
         $sopQuery->orderByDesc('year_published')
-                       ->orderByDesc('created_at');
+                ->orderByDesc('created_at');
+
+        // Ambil semua dulu untuk custom paginate
+        $allSops = $sopQuery->get();
 
         // Per-page validation
         if ($perPage === 'all') {
-            $sops = $sopQuery->get();
-            $perPage = max($sops->count(), 1);
+            $perPage = max($allSops->count(), 1);
         } else {
             $perPage = max((int) $perPage, 1);
         }
 
-        // Paginate
-        $sops = $sopQuery->paginate($perPage);
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        $currentItems = $allSops->slice(($currentPage - 1) * $perPage, $perPage)->values();
+
+        // Paginate manual
+        $sops = new LengthAwarePaginator(
+            $currentItems,
+            $allSops->count(),
+            $perPage,
+            $currentPage,
+            [
+                'path' => request()->url(),
+                'query' => request()->query(),
+            ]
+        );
 
         // AJAX response
         if ($request->ajax()) {
@@ -68,6 +84,7 @@ class SopController extends Controller
         // Render full view
         return view('admin.Dokumen.Sop.index', compact('title', 'sops'));
     }
+
 
     /**
      * Store a newly created resource in storage.

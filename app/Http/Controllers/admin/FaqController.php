@@ -43,8 +43,6 @@ class FaqController extends Controller
             $faqQuery->where('status', $filter);
         }
 
-        // $faqQuery->where('visibility', true);
-
         // Merge results
         $merged = $faqQuery->get();
 
