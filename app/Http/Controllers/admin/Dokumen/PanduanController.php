@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class PanduanController extends Controller
 {
@@ -23,6 +24,9 @@ class PanduanController extends Controller
         $search = $request->get('search');
         $filter = $request->get('filter', 'all');
         $perPage = $request->get('perPage', 10);
+        
+        // Pisahkan Multi Keyword
+        $keywords = !empty($search) ? preg_split('/\s+/', (string) $search) : [];
         
         // Query builder awal
         $panduanQuery = Panduan::query();
@@ -48,6 +52,8 @@ class PanduanController extends Controller
         // Auto sorting: Tahun terbaru dulu, lalu tanggal dibuat terbaru
         $panduanQuery->orderByDesc('year_published')
                        ->orderByDesc('created_at');
+        
+        $allPanduans = $panduanQuery->get();
 
         // Per-page validation
         if ($perPage === 'all') {
@@ -57,9 +63,21 @@ class PanduanController extends Controller
             $perPage = max((int) $perPage, 1);
         }
 
-        // Paginate
-        $panduans = $panduanQuery->paginate($perPage);
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        $currentItems = $allPanduans->slice(($currentPage - 1) * $perPage, $perPage)->values();
 
+        // Paginate
+        $panduans = new LengthAwarePaginator(
+            $currentItems,
+            $allPanduans->count(),
+            $perPage,
+            $currentPage,
+            [
+                'path' => request()->url(),
+                'query' => request()->query(),
+            ]
+        );
+        
         // AJAX response
         if ($request->ajax()) {
             return view('admin.Dokumen.Panduan.partials.table_body', compact('title', 'panduans'))->render();
