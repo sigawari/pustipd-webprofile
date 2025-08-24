@@ -279,7 +279,6 @@ class PanduanController extends Controller
 
      public function download(Panduan $panduan)
      {
-         // Pastikan akses publik hanya untuk Panduan published
          if (!Auth::check() && $panduan->status !== 'published') {
              abort(404, 'Dokumen tidak tersedia untuk publik');
          }
