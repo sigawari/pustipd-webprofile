@@ -1,13 +1,13 @@
 <?php
 
-use App\Http\Controllers\Admin\AppLayanan\AppLayananController as AppLayananAppLayananController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\public\PublicsController;
+use App\Http\Controllers\admin\FaqController;
+use App\Http\Controllers\Auth\LoginController;
 
 // ==========================
 // Auths
 // ==========================
-use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\public\PublicsController;
 
 // ==============================================================================
 
@@ -17,36 +17,37 @@ use App\Http\Controllers\Auth\LoginController;
 // Dashboard
 use App\Http\Controllers\admin\DashboardController;
 // Beranda
-use App\Http\Controllers\admin\Beranda\LayananController;
+use App\Http\Controllers\admin\AppLayananController;
+use App\Http\Controllers\admin\Dokumen\SopController;
 use App\Http\Controllers\admin\Beranda\MitraController;
-use App\Http\Controllers\admin\Beranda\PencapaianController;
 
 // Tentang Kami
-use App\Http\Controllers\admin\TentangKami\GalleryController;
-use App\Http\Controllers\admin\TentangKami\ProfilController;
-use App\Http\Controllers\admin\TentangKami\VisiMisiController;
-use App\Http\Controllers\admin\TentangKami\StrukturOrganisasiController;
+use App\Http\Controllers\admin\Sistem\ProfileController;
+use App\Http\Controllers\admin\Sistem\ReportsController;
+use App\Http\Controllers\admin\Beranda\LayananController;
+use App\Http\Controllers\admin\Dokumen\PanduanController;
 
 // Aplikasi & Layanan
-use App\Http\Controllers\admin\AppLayananController;
+use App\Http\Controllers\admin\Dokumen\RegulasiController;
 
 // Informasi Terkini
-use App\Http\Controllers\admin\InformasiTerkini\KelolaBeritaController;
-use App\Http\Controllers\admin\InformasiTerkini\KelolaPengumumanController;
-use App\Http\Controllers\admin\InformasiTerkini\KelolaTutorialController;
+use App\Http\Controllers\admin\Dokumen\KetetapanController;
+use App\Http\Controllers\admin\Sistem\ManageUserController;
+use App\Http\Controllers\admin\Beranda\PencapaianController;
 
 // Dokumen & Regulasi
-use App\Http\Controllers\admin\Dokumen\KetetapanController;
-use App\Http\Controllers\admin\Dokumen\PanduanController;
-use App\Http\Controllers\admin\Dokumen\RegulasiController;
-use App\Http\Controllers\admin\Dokumen\SopController;
+use App\Http\Controllers\admin\TentangKami\ProfilController;
+use App\Http\Controllers\admin\TentangKami\GalleryController;
+use App\Http\Controllers\admin\TentangKami\VisiMisiController;
+use App\Http\Controllers\admin\InformasiTerkini\KelolaBeritaController;
 
 // FAQ
-use App\Http\Controllers\admin\FaqController;
+use App\Http\Controllers\admin\TentangKami\StrukturOrganisasiController;
 
 // Sistem
-use App\Http\Controllers\admin\Sistem\ManageUserController;
-use App\Http\Controllers\admin\Sistem\ReportsController;
+use App\Http\Controllers\admin\InformasiTerkini\KelolaTutorialController;
+use App\Http\Controllers\admin\InformasiTerkini\KelolaPengumumanController;
+use App\Http\Controllers\Admin\AppLayanan\AppLayananController as AppLayananAppLayananController;
 
 /*
 |--------------------------------------------------------------------------
@@ -86,9 +87,13 @@ Route::post('/sop/bulk-download', [PublicsController::class, 'bulkDownloadDokume
 // Admin Routes - Protected by authentication
 Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
 
+    Route::get('/sistem/profil', [ProfileController::class, 'index'])->name('sistem.profil.index');
+
     Route::get('/', function () {
         return redirect()->route('admin.dashboard.index');
     });
+
+
     
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
