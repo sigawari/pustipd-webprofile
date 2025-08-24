@@ -71,7 +71,6 @@
                             <option value="keamanan_digital">🔒 Keamanan Digital</option>
                             <option value="penelitian_akademik">📖 Penelitian Akademik</option>
                             <option value="layanan_publik">🏛️ Layanan Publik</option>
-                            <option value="mobile_responsive">📱 Mobile Responsive</option>
                         </select>
                     </div>
 

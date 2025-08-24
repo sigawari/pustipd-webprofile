@@ -54,7 +54,6 @@ class KelolaBeritaController extends Controller
 
         // PerPage 
         if ($perPage === 'all') {
-            // Batasi maksimal 1000 record untuk mencegah memory habis
             $maxRecords = 1000;
             $kelolaBeritas = $kelolaBeritaQuery->paginate($maxRecords);
             $kelolaBeritas->appends($request->query());
@@ -64,9 +63,7 @@ class KelolaBeritaController extends Controller
             $kelolaBeritas->appends($request->query());
         }
 
-        // ✅ Debug query di sini jika diperlukan
         $queries = DB::getQueryLog();
-        // dd($queries); // Uncomment untuk debug
 
         if ($request->ajax()) {
             return response()->json([

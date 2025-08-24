@@ -296,7 +296,6 @@
                             </a>
                         @endif
 
-                        {{-- PERBAIKAN: Tombol Angka Halaman yang Clickable --}}
                         @if ($appLayanans->lastPage() > 1)
                             @php
                                 $start = max(1, $appLayanans->currentPage() - 2);
