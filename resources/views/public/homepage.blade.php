@@ -6,7 +6,7 @@
     <section id="beranda"
         class="relative bg-blue-950 text-amber-50 min-h-screen flex items-center justify-center overflow-hidden">
         <!-- Background Image -->
-        <img src="{{ asset('assets/img/hero/uin-raden-fatah.jpg') }}" alt="Hero Image"
+        <img src="{{ asset('assets/img/hero/img-02.jpg') }}" alt="Hero Image"
             class="absolute inset-0 w-full h-full object-cover opacity-40">
 
         <!-- Overlay -->
@@ -181,7 +181,7 @@
                 <div class="px-1" id="servicesCarousel">
                     <div class="transition-transform duration-200 ease-in-out" id="carouselWrapper">
                         <!-- Gunakan flex dengan justify-center -->
-                        <div class="flex justify-center items-stretch items-center gap-4 min-h-[200px]">
+                        <div class="flex justify-center items-stretch gap-4 min-h-[200px]">
                             @if ($services && $services->count() > 0)
                                 @foreach ($services as $service)
                                     <div class="flex-shrink-0 w-full max-w-sm">
@@ -208,8 +208,12 @@
                 <!-- Progress Bar -->
                 <div class="mt-3 px-4">
                     <div class="w-full bg-gray-200 rounded-full h-1">
-                        <div class="bg-primary h-1 rounded-full transition-all duration-150 ease-out" id="progressBar"
-                            style="width: {{ $services->count() > 0 ? 100 / $services->count() : 100 }}%"></div>
+                        <div class="bg-primary h-1 rounded-full transition-all duration-150 ease-out" 
+                            style="--w: {{ $services->count() > 0 ? 100 / $services->count() : 100 }}%; width: var(--w);">
+                        </div>
+                        <!-- <div class="bg-primary h-1 rounded-full transition-all duration-150 ease-out" id="progressBar"
+                            style="width: {{ $services->count() > 0 ? 100 / $services->count() : 100 }}%">
+                        </div> -->
                     </div>
                 </div>
             </div>
