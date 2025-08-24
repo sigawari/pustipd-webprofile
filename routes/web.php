@@ -285,7 +285,7 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
         Route::put('/{faq}', 'update')->name('update');
         Route::delete('/{faq}', 'destroy')->name('destroy');
         Route::post('/bulk', 'bulk')->name('bulk');
-        Route::put('/update-visibility', 'updateVisibility')->name('updateVisibility');  // Ubah jadi PUT
+        Route::post('/faq/{id}/toggle-visibility', [FaqController::class, 'toggleVisibility'])->name('toggle-visibility');
     });
 
 

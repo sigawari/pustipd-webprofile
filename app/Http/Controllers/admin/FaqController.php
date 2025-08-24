@@ -227,16 +227,24 @@ class FaqController extends Controller
         $title = 'Hapus FAQ';
         return view('admin.faq.delete', compact('title', 'faq'));
     } 
-    public function updateVisibility(Request $request)
+    
+    public function toggleVisibility(Request $request, $id)
     {
-        $id = $request->input('id');
-        $visibility = filter_var($request->input('visibility'), FILTER_VALIDATE_BOOLEAN);
-    
         $faq = Faq::findOrFail($id);
-        // Update visibility tanpa mengubah status
-        $faq->visibility = $visibility;
+
+        if ($faq->status === 'published') {
+            $faq->status = 'draft';
+            $message = 'FAQ disembunyikan';
+        } else {
+            $faq->status = 'published';
+            $message = 'FAQ ditampilkan';
+        }
+
         $faq->save();
-    
-        return redirect()->back()->with('success', 'Visibility FAQ berhasil diperbarui!');
+
+        return response()->json([
+            'success' => true,
+            'message' => $message
+        ]);
     }
 }
