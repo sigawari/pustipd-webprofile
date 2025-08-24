@@ -309,7 +309,6 @@
                             </a>
                         @endif
 
-                        {{-- PERBAIKAN: Tombol Angka Halaman yang Clickable --}}
                         @if ($kelolaBeritas->lastPage() > 1)
                             @php
                                 $start = max(1, $kelolaBeritas->currentPage() - 2);

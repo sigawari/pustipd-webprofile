@@ -207,7 +207,6 @@
     @include('admin.TentangKami.Visi-misi.delete')
 
     <script>
-        // PERBAIKAN: Function dengan naming yang konsisten dan ID yang benar
         function OpenCreateModal() {
             console.log('🔍 Opening create modal');
             const modal = document.getElementById('createMisiModal');
@@ -221,11 +220,9 @@
             }
         }
 
-        // PERBAIKAN: Gunakan ID yang benar sesuai HTML
         function OpenUpdateModal(index) {
             console.log('🔍 Trying to Open update modal for index:', index);
 
-            // FIXED: Gunakan format ID yang sesuai dengan HTML
             const modalId = 'updateMisiModal-' + index;
             const modal = document.getElementById(modalId);
 

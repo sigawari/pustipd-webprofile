@@ -10,7 +10,8 @@
         <!-- Vite Assets -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-        <link id="favicon" rel="shortcut icon" href="{{ asset('assets/img/logo/logo-uin-rfp.png') }}" type="image/x-icon">
+        <link id="favicon" rel="shortcut icon" href="{{ asset('assets/img/logo/logo-uin-rfp.png') }}"
+            type="image/x-icon">
 
         <!-- SEO Meta Tags -->
         <meta name="description" content="@yield('description', 'Sistem Manajemen Konten PUSTIPD UIN Raden Fatah Palembang')">
@@ -43,7 +44,7 @@
             <!-- Sidebar -->
             <x-admin.sidebar />
 
-            <!-- Main Content Area - PERBAIKAN DI SINI -->
+            <!-- Main Content Area -->
             <div class="transition-all duration-300 ease-in-out"
                 :class="{
                     'ml-0 lg:ml-[90px]': sidebarToggle, // Sidebar COLLAPSED (mini) - margin kecil

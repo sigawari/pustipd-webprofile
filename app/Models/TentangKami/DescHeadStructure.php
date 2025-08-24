@@ -25,7 +25,6 @@ class DescHeadStructure extends Model
         'sort_order' => 'integer',
     ];
 
-    // PERBAIKAN: Gunakan public $timestamps = true (default Laravel)
     public $timestamps = true;
 
     public function scopeActive($query)
@@ -54,7 +53,4 @@ class DescHeadStructure extends Model
     {
         return $this->foto_kepala ? asset('storage/' . $this->foto_kepala) : null;
     }
-
-    // PERBAIKAN: Hapus method saveHeadData yang bermasalah
-    // Gunakan pattern Laravel standar saja
 }

@@ -23,9 +23,7 @@
 
         <!-- Form -->
         <form id="addForm" method="POST" action="{{ route('admin.informasi-terkini.kelola-tutorial.store') }}"
-            class="space-y-6" onsubmit="return tutorialBlockBuilder.validateBlocks()"
-            enctype="multipart/form-data"
-        >
+            class="space-y-6" onsubmit="return tutorialBlockBuilder.validateBlocks()" enctype="multipart/form-data">
             @csrf
 
             <!-- Bagian Info Dasar Tutorial - TANPA deskripsi -->
@@ -116,7 +114,7 @@
                     <!-- Content blocks akan ditambahkan di sini secara dinamis -->
                 </div>
 
-                <!-- Tombol Tambah Content - PERBAIKAN -->
+                <!-- Tombol Tambah Content -->
                 <div class="flex gap-2 mt-4">
                     <button type="button" id="addStepBtn"
                         class="flex-1 px-3 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center justify-center gap-2">
