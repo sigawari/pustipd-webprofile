@@ -6,7 +6,7 @@
     <section id="beranda"
         class="relative bg-blue-950 text-amber-50 min-h-screen flex items-center justify-center overflow-hidden">
         <!-- Background Image -->
-        <img src="{{ asset('assets/img/hero/img-02.jpg') }}" alt="Hero Image"
+        <img src="{{ Storage::url($profils->profil_photo) }}" alt="Hero Image"
             class="absolute inset-0 w-full h-full object-cover opacity-40">
 
         <!-- Overlay -->

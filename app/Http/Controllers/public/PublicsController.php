@@ -37,109 +37,106 @@ class PublicsController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-{
-    $title = 'UIN Raden Fatah Palembang';
-    $description = 'Pusat Sistem dan Teknologi Informasi dan Pangkalan Data UIN Raden Fatah Palembang';
-    $keywords = 'pustipd, uin raden fatah, teknologi informasi';
+    {
+        $title = 'UIN Raden Fatah Palembang';
+        $description = 'Pusat Sistem dan Teknologi Informasi dan Pangkalan Data UIN Raden Fatah Palembang';
+        $keywords = 'pustipd, uin raden fatah, teknologi informasi';
 
-    $profils = Profil::latest()->first(); 
-    
-    $achievements = Pencapaian::published()
-                            ->orderBy('created_at', 'desc')
-                            ->get();
-    
-    $services = Layanan::published()
-                    ->orderBy('created_at', 'desc')
-                    ->get();
+        $profils = Profil::latest()->first(); 
+        
+        $achievements = Pencapaian::published()
+                                ->orderBy('created_at', 'desc')
+                                ->get();
+        
+        $services = Layanan::published()
+                        ->orderBy('created_at', 'desc')
+                        ->get();
 
-    $partners = Mitra::published()
-                    ->orderBy('created_at', 'desc')
-                    ->get();
+        $partners = Mitra::published()
+                        ->orderBy('created_at', 'desc')
+                        ->get();
 
-    // Query berita dengan pagination
-    $newsList = KelolaBerita::where('status', 'published')
-                        ->orderBy('publish_date', 'desc')
-                        ->paginate(3)
-                        ->withQueryString();
-    
-    // Query pengumuman penting
-    $urgentAnnouncements = KelolaPengumuman::where('status', 'published')
-                                        ->where('urgency', 'penting')
-                                        ->where(function($query) {
-                                            $query->whereNull('valid_until')
+        // Query berita dengan pagination
+        $newsList = KelolaBerita::where('status', 'published')
+                            ->orderBy('publish_date', 'desc')
+                            ->paginate(3)
+                            ->withQueryString();
+        
+        // Query pengumuman penting
+        $urgentAnnouncements = KelolaPengumuman::where('status', 'published')
+                                            ->where('urgency', 'penting')
+                                            ->where(function($query) {
+                                                $query->whereNull('valid_until')
+                                                        ->orWhere('valid_until', '>=', now());
+                                            })
+                                            ->orderBy('date', 'desc')
+                                            ->get();
+        
+        // Query semua pengumuman untuk section lain
+        $announcementsList = KelolaPengumuman::where('status', 'published')
+                                            ->where(function($query) {
+                                                $query->whereNull('valid_until')
                                                     ->orWhere('valid_until', '>=', now());
-                                        })
-                                        ->orderBy('date', 'desc')
-                                        ->get();
-    
-    // Query semua pengumuman untuk section lain
-    $announcementsList = KelolaPengumuman::where('status', 'published')
-                                        ->where(function($query) {
-                                            $query->whereNull('valid_until')
-                                                ->orWhere('valid_until', '>=', now());
-                                        })
-                                        ->orderByRaw("CASE WHEN urgency = 'penting' THEN 1 WHEN urgency = 'normal' THEN 2 ELSE 3 END")
-                                        ->orderBy('date', 'desc')
-                                        ->limit(3)
-                                        ->get();
-    
-    // PERBAIKAN: Ambil data tim dengan benar
-    $teams = collect();
+                                            })
+                                            ->orderByRaw("CASE WHEN urgency = 'penting' THEN 1 WHEN urgency = 'normal' THEN 2 ELSE 3 END")
+                                            ->orderBy('date', 'desc')
+                                            ->limit(3)
+                                            ->get();
+        
+        // PERBAIKAN: Ambil data tim dengan benar
+        $teams = collect();
 
-    try {
-        // PERBAIKAN: Gunakan first() bukan getActiveHead()
-        $headData = DescHeadStructure::first();
-        if ($headData) {
-            $teams->push((object)[
-                'nama' => $headData->nama_kepala,
-                'jabatan' => $headData->jabatan_kepala,
-                'foto' => $headData->foto_kepala,
-                'email' => $headData->email_kepala,
-            ]);
+        try {
+            // PERBAIKAN: Gunakan first() bukan getActiveHead()
+            $headData = DescHeadStructure::first();
+            if ($headData) {
+                $teams->push((object)[
+                    'nama' => $headData->nama_kepala,
+                    'jabatan' => $headData->jabatan_kepala,
+                    'foto' => $headData->foto_kepala,
+                    'email' => $headData->email_kepala,
+                ]);
+                
+                // Debug head data
+                Log::info('Homepage Head Data:', [
+                    'nama' => $headData->nama_kepala,
+                    'foto_path' => $headData->foto_kepala,
+                    'foto_exists' => $headData->foto_kepala ? Storage::disk('public')->exists($headData->foto_kepala) : false
+                ]);
+            }
+
+            // PERBAIKAN: Ambil semua staff tanpa filter active dulu
+            $allStaff = StrukturOrganisasi::orderBy('divisi_order')
+                                        ->orderBy('staff_order')
+                                        ->get();
+
+            foreach ($allStaff as $staff) {
+                $teams->push((object)[
+                    'nama' => $staff->nama,
+                    'jabatan' => $staff->jabatan,
+                    'foto' => $staff->foto,
+                    'email' => $staff->email,
+                ]);
+                
+                // Debug staff data
+                Log::info('Homepage Staff Data:', [
+                    'nama' => $staff->nama,
+                    'foto_path' => $staff->foto,
+                    'foto_exists' => $staff->foto ? Storage::disk('public')->exists($staff->foto) : false
+                ]);
+            }
             
-            // Debug head data
-            Log::info('Homepage Head Data:', [
-                'nama' => $headData->nama_kepala,
-                'foto_path' => $headData->foto_kepala,
-                'foto_exists' => $headData->foto_kepala ? Storage::disk('public')->exists($headData->foto_kepala) : false
-            ]);
+            Log::info('Homepage Teams Total:', ['count' => $teams->count()]);
+            
+        } catch (\Exception $e) {
+            Log::error('Error loading teams: ' . $e->getMessage());
         }
 
-        // PERBAIKAN: Ambil semua staff tanpa filter active dulu
-        $allStaff = StrukturOrganisasi::orderBy('divisi_order')
-                                    ->orderBy('staff_order')
-                                    ->get();
-
-        foreach ($allStaff as $staff) {
-            $teams->push((object)[
-                'nama' => $staff->nama,
-                'jabatan' => $staff->jabatan,
-                'foto' => $staff->foto,
-                'email' => $staff->email,
-            ]);
-            
-            // Debug staff data
-            Log::info('Homepage Staff Data:', [
-                'nama' => $staff->nama,
-                'foto_path' => $staff->foto,
-                'foto_exists' => $staff->foto ? Storage::disk('public')->exists($staff->foto) : false
-            ]);
-        }
-        
-        Log::info('Homepage Teams Total:', ['count' => $teams->count()]);
-        
-    } catch (\Exception $e) {
-        Log::error('Error loading teams: ' . $e->getMessage());
+        return view('public.homepage', compact(
+            'title', 'description', 'keywords', 'profils', 'newsList', 
+            'announcementsList', 'urgentAnnouncements', 'achievements', 'services', 'partners', 'teams'
+        ));
     }
-
-    return view('public.homepage', compact(
-        'title', 'description', 'keywords', 'profils', 'newsList', 
-        'announcementsList', 'urgentAnnouncements', 'achievements', 'services', 'partners', 'teams'
-    ));
-}
-
-    
-
 
     public function tentang(){
         $title = 'Tentang PUSTIPD';
