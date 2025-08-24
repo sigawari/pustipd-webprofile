@@ -21,10 +21,10 @@ class Profil extends Model
         'instagram_url',
         'facebook_url',
         'youtube_url',
-        'profil_photo',
         'applications',
         'institutions',
         'universities',
+        'profil_photo',
     ];
 
     protected $casts = [

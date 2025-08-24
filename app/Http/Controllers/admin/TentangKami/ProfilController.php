@@ -31,8 +31,6 @@ class ProfilController extends Controller
     
     public function store(Request $request)
     {
-        // dd($request->all());
-        // Validasi
         $request->validate([
             'organization_name' => 'required|string|max:255',
             'description'       => 'nullable|string',
@@ -43,98 +41,78 @@ class ProfilController extends Controller
             'youtube_url'       => 'nullable|url',
             'applications'      => 'nullable|array',
             'applications.*.name' => 'nullable|string',
-            'applications.*.url' => 'nullable|url',
+            'applications.*.url'  => 'nullable|url',
             'institutions'      => 'nullable|array',
             'institutions.*.name' => 'nullable|string',
-            'institutions.*.url' => 'nullable|url',
+            'institutions.*.url'  => 'nullable|url',
             'universities'      => 'nullable|array',
             'universities.*.name' => 'nullable|string',
-            'universities.*.url' => 'nullable|url',
-            'profil_photo'     => 'nullable|image|mimes:jpg,jpeg,png|max:10240',
+            'universities.*.url'  => 'nullable|url',
+            'profil_photo'      => 'nullable|image|mimes:jpg,jpeg,png|max:10240',
         ]);
-    
-        // Cek apakah sudah ada profil
-        $existingProfil = Profil::first();
-        
-        if ($existingProfil) {
+
+        if (Profil::first()) {
             return redirect()
                 ->route('admin.tentang-kami.profil.index')
                 ->with('error', 'Profil sudah ada. Gunakan fitur update untuk mengubah data.');
         }
-    
-        // Prepare data
+
         $data = $request->except(['profil_photo']);
-        
-        // Filter array data - hapus yang kosong
+
         $data['applications'] = $this->filterArrayData($request->input('applications', []));
         $data['institutions'] = $this->filterArrayData($request->input('institutions', []));
         $data['universities'] = $this->filterArrayData($request->input('universities', []));
-    
-        // Buat profil baru
+
         $profil = new Profil();
         $profil->fill($data);
-    
-        // Upload foto
+
         if ($request->hasFile('profil_photo')) {
             $profil->profil_photo = $request->file('profil_photo')->store('profil_photos', 'public');
         }
-    
+
         $profil->save();
-    
-        return redirect()
-            ->route('admin.tentang-kami.profil.index')
+
+        return redirect()->route('admin.tentang-kami.profil.index')
             ->with('success', 'Profil berhasil disimpan.');
-    }   
+    }
 
     public function update(Request $request, Profil $profil)
     {
-        // Validasi
         $request->validate([
             'organization_name' => 'nullable|string|max:255',
             'description'       => 'nullable|string',
             'address'           => 'nullable|string',
             'email'             => 'nullable|email',
-            'instagram_url'     => 'nullable|url|regex:/^https:\/\//',
-            'facebook_url'      => 'nullable|url|regex:/^https:\/\//',
-            'youtube_url'       => 'nullable|url|regex:/^https:\/\//',
+            'instagram_url'     => 'nullable|url|regex:/^https?:\/\//',
+            'facebook_url'      => 'nullable|url|regex:/^https?:\/\//',
+            'youtube_url'       => 'nullable|url|regex:/^https?:\/\//',
             'applications'      => 'nullable|array',
             'applications.*.name' => 'nullable|string',
-            'applications.*.url' => 'nullable|url',
+            'applications.*.url'  => 'nullable|url',
             'institutions'      => 'nullable|array',
             'institutions.*.name' => 'nullable|string',
-            'institutions.*.url' => 'nullable|url',
+            'institutions.*.url'  => 'nullable|url',
             'universities'      => 'nullable|array',
             'universities.*.name' => 'nullable|string',
-            'universities.*.url' => 'nullable|url',
-            'profil_photo'      => 'nullable|image|mimes:jpg,jpeg,png,webp|max:10240',
-        ]);        
-    
-        // Prepare data
+            'universities.*.url'  => 'nullable|url',
+            'profil_photo'      => 'nullable|image|mimes:jpg,jpeg,png|max:10240',
+        ]);
+
         $data = $request->except(['profil_photo']);
-        
-        // Filter array data - hapus yang kosong
+
         $data['applications'] = $this->filterArrayData($request->input('applications', []));
         $data['institutions'] = $this->filterArrayData($request->input('institutions', []));
         $data['universities'] = $this->filterArrayData($request->input('universities', []));
-    
-        // Update semua kolom kecuali foto
-        $profil->fill($data);
-    
-        // Upload foto baru jika ada
+
         if ($request->hasFile('profil_photo')) {
-            // Hapus foto lama jika ada
-            if ($profil->profil_photo && Storage::disk('public')->exists($profil->profil_photo)) {
-                Storage::disk('public')->delete($profil->profil_photo);
-            }
-            $profil->profil_photo = $request->file('profil_photo')->store('profil_photos', 'public');
+            $data['profil_photo'] = $request->file('profil_photo')->store('profil_photos', 'public');
         }
-    
-        $profil->save();
-    
-        return redirect()
-            ->route('admin.tentang-kami.profil.index')
+
+        $profil->update($data);
+
+        return redirect()->route('admin.tentang-kami.profil.index')
             ->with('success', 'Profil berhasil diperbarui.');
-    }    
+    }
     
     public function destroy(Profil $profil) // ✅ Ubah dari $id ke Profil $profil
     {
