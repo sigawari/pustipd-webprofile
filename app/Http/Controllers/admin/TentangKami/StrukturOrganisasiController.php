@@ -16,7 +16,7 @@ class StrukturOrganisasiController extends Controller
         $title = 'Struktur Organisasi';
         
         try {
-            // PERBAIKAN: Ambil data yang sudah ada di database
+            // Ambil data yang sudah ada di database
             $headData = DescHeadStructure::first(); // Ambil record pertama, bukan hanya yang active
             $description = $headData ? $headData->structure_desc : null;
             $structure = StrukturOrganisasi::orderBy('divisi_order')->orderBy('staff_order')->get()->groupBy('nama_divisi');
@@ -89,7 +89,7 @@ class StrukturOrganisasiController extends Controller
             // Hapus data struktur lama
             StrukturOrganisasi::query()->delete();
 
-            // PERBAIKAN: Simpan struktur organisasi dengan foto
+            // Simpan struktur organisasi dengan foto
             if ($request->has('divisions')) {
                 Log::info('Processing divisions...');
                 
@@ -115,7 +115,7 @@ class StrukturOrganisasiController extends Controller
                                 'is_active' => 1
                             ];
 
-                            // PERBAIKAN: Handle foto staff dengan benar
+                            // Handle foto staff dengan benar
                             $fotoFieldName = "divisions.{$divisionIndex}.staff.{$staffIndex}.foto";
                             Log::info("Checking for staff photo: {$fotoFieldName}");
                             

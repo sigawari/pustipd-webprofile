@@ -52,7 +52,7 @@ class KelolaBeritaController extends Controller
         // Order default
         $kelolaBeritaQuery->orderBy('created_at', 'desc');
 
-        // PerPage - PERBAIKAN UNTUK MENCEGAH MEMORY EXHAUSTED
+        // PerPage 
         if ($perPage === 'all') {
             // Batasi maksimal 1000 record untuk mencegah memory habis
             $maxRecords = 1000;

@@ -23,7 +23,7 @@ class AppLayananController extends Controller
         $category = $request->input('category', '');
         $perPage = $request->input('perPage', 10);
     
-        // PERBAIKAN: Validasi perPage untuk keamanan
+        // Validasi perPage untuk keamanan
         $allowedPerPage = [10, 25, 50, 100, 'all'];
         if (!in_array($perPage, $allowedPerPage)) {
             Log::warning('Invalid perPage, resetting to 10', ['perPage' => $perPage]);
@@ -62,12 +62,12 @@ class AppLayananController extends Controller
         // Sorting
         $appLayananQuery->orderBy('created_at', 'desc');
     
-        // PERBAIKAN: Pagination dengan handling perPage yang benar
+        // Pagination dengan handling perPage yang benar
         if ($perPage === 'all') {
             $allData = $appLayananQuery->get();
             $total = $allData->count();
             
-            // PERBAIKAN: Hindari division by zero
+            // Hindari division by zero
             $perPageValue = $total > 0 ? $total : 1; // Minimal 1 untuk hindari division by zero
             
             // Untuk 'all', buat manual pagination
