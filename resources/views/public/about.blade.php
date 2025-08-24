@@ -145,7 +145,6 @@
             text-align: center;
         }
 
-        /* ===== POPUP MOBILE RESPONSIVE ===== */
         @media (max-width: 768px) {
             .gallery-popup-box {
                 max-width: 95vw;
