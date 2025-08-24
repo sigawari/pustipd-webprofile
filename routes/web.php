@@ -105,6 +105,7 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
             Route::delete('/layanan/{layanan}', 'destroy')->name('layanan.destroy');
             Route::get('/layanan/export', 'export')->name('layanan.export');
             Route::post('/layanan/bulk', 'bulk')->name('layanan.bulk');
+            Route::post('//{id}/toggle-visibility',[LayananController::class,'toggleVisibility'])->name('toggle-visibility');
         });
 
         // Mitra Routes
@@ -115,6 +116,7 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
             Route::delete('/mitra/{mitra}', 'destroy')->name('mitra.destroy');
             Route::get('/mitra/export', 'export')->name('mitra.export');
             Route::post('/mitra/bulk', 'bulk')->name('mitra.bulk');
+            Route::post('//{id}/toggle-visibility',[MitraController::class,'toggleVisibility'])->name('toggle-visibility');
         });
 
         // Pencapaian Routes
@@ -125,6 +127,7 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
             Route::delete('/pencapaian/{pencapaian}', 'destroy')->name('pencapaian.destroy');
             Route::get('/pencapaian/export', 'export')->name('pencapaian.export');
             Route::post('/pencapaian/bulk', 'bulk')->name('pencapaian.bulk');
+            Route::post('/pencapaian/{id}/toggle-visibility',[PencapaianController::class,'toggleVisibility'])->name('pencapaian.toggle-visibility');
         });
 
     });
