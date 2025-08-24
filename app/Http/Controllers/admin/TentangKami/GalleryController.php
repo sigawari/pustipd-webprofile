@@ -158,23 +158,32 @@ class GalleryController extends Controller
         try {
             switch ($action) {
                 case 'published':
-                case 'draft':                  
+                    Gallery::whereIn('id', $ids)->update(['status' => 'published']);
+                    $message = "Berhasil mempublikasikan " . count($ids) . " gallery";
+                    break;
+            
+                case 'draft':
+                    Gallery::whereIn('id', $ids)->update(['status' => 'draft']);
+                    $message = "Berhasil menyimpan " . count($ids) . " gallery sebagai draft";
+                    break;
+            
                 case 'permanent_delete':
                     $galleries = Gallery::whereIn('id', $ids)->get();
                     $deletedCount = 0;
-                    
+            
                     foreach ($galleries as $gallery) {
-                        // Delete image file
+                        // Hapus file jika ada
                         if ($gallery->image && Storage::disk('public')->exists($gallery->image)) {
                             Storage::disk('public')->delete($gallery->image);
                         }
                         $gallery->delete();
                         $deletedCount++;
                     }
+            
                     $message = "Berhasil menghapus {$deletedCount} gallery secara permanen";
                     break;
             }
-    
+            
             // Support both AJAX and regular form submission
             if ($request->expectsJson()) {
                 return response()->json([

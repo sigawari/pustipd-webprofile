@@ -46,29 +46,20 @@
                     </span>
                 </div>
 
-                <!-- Actions berdasarkan status yang dipilih -->
+                <!-- Bulk Actions -->
                 <div class="flex flex-col sm:flex-row gap-2" id="bulkActionButtons">
                     <div id="defaultActions" class="flex flex-wrap gap-2">
-                        <!-- Publish -->
                         <button onclick="bulkAction('published')"
-                            class="flex items-center gap-1.5 px-3 py-2 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0
-                                    4.5 4.5M12 3v13.5" />
-                            </svg>
-                            Publish
+                            class="px-3 py-1 bg-green-600 text-white text-sm rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500">
+                            📢 Publish
                         </button>
-
-                        <!-- Draft -->
                         <button onclick="bulkAction('draft')"
-                            class="flex items-center gap-1.5 px-3 py-2 text-sm bg-yellow-600 text-white rounded-lg hover:bg-yellow-700">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0
-                                    113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                            </svg>
-                            Draft
+                            class="px-3 py-1 bg-yellow-600 text-white text-sm rounded-md hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                            📝 Draft
+                        </button>
+                        <button onclick="bulkAction('permanent_delete')"
+                            class="px-3 py-1 bg-red-600 text-white text-sm rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">
+                            🗑️ Hapus
                         </button>
                     </div>
                 </div>
