@@ -377,7 +377,6 @@ class KetetapanController extends Controller
         return redirect()->back()->with('error', 'Gagal membuat file ZIP');
     }
 
-
     /**
      * Handle file upload
      */

@@ -459,9 +459,10 @@ class PublicsController extends Controller
         ));
     }
 
-    public function downloadDokumen($dokumen, string $tipe = 'default')
+    public function downloadDokumen($dokumenId, string $tipe = 'default')
     {
-        if ($dokumen->status !== 'published') {
+        $dokumen = Ketetapan::find($dokumenId);
+        if (!$dokumen || $dokumen->status !== 'published') {
             abort(404, 'Dokumen tidak tersedia untuk publik');
         }
 
@@ -482,33 +483,38 @@ class PublicsController extends Controller
         return response()->download($filePath, $downloadName);
     }
     
-    public function bulkDownloadDokumen($dokumens, string $tipe)
+    public function bulkDownloadDokumen(Request $request)
     {
+        $tipe = $request->input('tipe', 'default'); 
+    
+        $ids = $request->input('ids', []); 
+    
+        $dokumens = Ketetapan::whereIn('id', $ids)->whereNotNull('file_path')->get();
+    
         if ($dokumens->isEmpty()) {
             return redirect()->back()->with('error', 'Tidak ada file yang dapat didownload');
         }
-
+    
         if ($dokumens->count() === 1) {
-            // Download langsung file tunggal
             return $this->downloadDokumen($dokumens->first(), $tipe);
         }
-
+    
         $zip = new ZipArchive();
         $zipFileName = $tipe . '_' . date('Y-m-d_H-i-s') . '.zip';
         $zipPath = storage_path('app/temp/' . $zipFileName);
-
+    
         if (!File::exists(storage_path('app/temp'))) {
             File::makeDirectory(storage_path('app/temp'), 0755, true);
         }
-
+    
         if ($zip->open($zipPath, ZipArchive::CREATE) === TRUE) {
             $fileCount = 0;
-
+    
             foreach ($dokumens as $dokumen) {
                 if (Storage::disk('public')->exists($dokumen->file_path)) {
                     $filePath = Storage::disk('public')->path($dokumen->file_path);
                     $fileName = $dokumen->original_filename ?? ($dokumen->title . '.pdf');
-
+    
                     $counter = 1;
                     $originalFileName = $fileName;
                     while ($zip->locateName($fileName) !== false) {
@@ -517,35 +523,34 @@ class PublicsController extends Controller
                         $fileName = $pathInfo['filename'] . '_' . $counter . $extension;
                         $counter++;
                     }
-
+    
                     $zip->addFile($filePath, $fileName);
                     $fileCount++;
                 }
             }
-
+    
             $zip->close();
-
+    
             if ($fileCount === 0) {
                 if (File::exists($zipPath)) {
                     File::delete($zipPath);
                 }
                 return redirect()->back()->with('error', 'Tidak ada file yang dapat didownload');
             }
-
+    
             Log::info('Public bulk download', [
                 'file_count' => $fileCount,
                 "{$tipe}_ids" => $dokumens->pluck('id')->toArray(),
                 'user_ip' => request()->ip(),
                 'user_agent' => request()->userAgent()
             ]);
-
+    
             return response()->download($zipPath, $zipFileName)->deleteFileAfterSend(true);
         }
-
+    
         return redirect()->back()->with('error', 'Gagal membuat file ZIP');
     }
-
-
+    
     public function ketetapan(Request $request)
     {
         $title = 'Ketetapan';
