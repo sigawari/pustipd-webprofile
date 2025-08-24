@@ -19,32 +19,33 @@ use App\Http\Controllers\admin\DashboardController;
 // Beranda
 use App\Http\Controllers\admin\AppLayananController;
 use App\Http\Controllers\admin\Dokumen\SopController;
-use App\Http\Controllers\admin\Beranda\MitraController;
+use App\Http\Controllers\admin\Sistem\HelpController;
 
 // Tentang Kami
+use App\Http\Controllers\admin\Beranda\MitraController;
 use App\Http\Controllers\admin\Sistem\ProfileController;
 use App\Http\Controllers\admin\Sistem\ReportsController;
 use App\Http\Controllers\admin\Beranda\LayananController;
-use App\Http\Controllers\admin\Dokumen\PanduanController;
 
 // Aplikasi & Layanan
-use App\Http\Controllers\admin\Dokumen\RegulasiController;
+use App\Http\Controllers\admin\Dokumen\PanduanController;
 
 // Informasi Terkini
+use App\Http\Controllers\admin\Dokumen\RegulasiController;
 use App\Http\Controllers\admin\Dokumen\KetetapanController;
 use App\Http\Controllers\admin\Sistem\ManageUserController;
-use App\Http\Controllers\admin\Beranda\PencapaianController;
 
 // Dokumen & Regulasi
+use App\Http\Controllers\admin\Beranda\PencapaianController;
 use App\Http\Controllers\admin\TentangKami\ProfilController;
 use App\Http\Controllers\admin\TentangKami\GalleryController;
 use App\Http\Controllers\admin\TentangKami\VisiMisiController;
-use App\Http\Controllers\admin\InformasiTerkini\KelolaBeritaController;
 
 // FAQ
-use App\Http\Controllers\admin\TentangKami\StrukturOrganisasiController;
+use App\Http\Controllers\admin\InformasiTerkini\KelolaBeritaController;
 
 // Sistem
+use App\Http\Controllers\admin\TentangKami\StrukturOrganisasiController;
 use App\Http\Controllers\admin\InformasiTerkini\KelolaTutorialController;
 use App\Http\Controllers\admin\InformasiTerkini\KelolaPengumumanController;
 use App\Http\Controllers\Admin\AppLayanan\AppLayananController as AppLayananAppLayananController;
@@ -88,6 +89,8 @@ Route::post('/sop/bulk-download', [PublicsController::class, 'bulkDownloadDokume
 Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
 
     Route::get('/sistem/profil', [ProfileController::class, 'index'])->name('sistem.profil.index');
+
+    Route::get('/sistem/bantuan', [HelpController::class, 'index'])->name('sistem.bantuan.index');
 
     Route::get('/', function () {
         return redirect()->route('admin.dashboard.index');
