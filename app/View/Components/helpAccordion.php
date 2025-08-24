@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class help-accordion extends Component
+class helpAccordion extends Component
 {
     /**
      * Create a new component instance.
@@ -21,6 +21,6 @@ class help-accordion extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.help-accordion');
+        return view('components.helpAccordion');
     }
 }
