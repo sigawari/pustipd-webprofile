@@ -276,131 +276,115 @@ class PanduanController extends Controller
     /**
      * Download file
      */
-    public function download(Panduan $panduan)
-    {
-        // Cek akses: jika user tidak login (public access), pastikan status published
-        if (!Auth::check()) {
-            if ($panduan->status !== 'published') {
-                abort(404, 'Dokumen tidak tersedia untuk publik');
-            }
-        }
 
-        // Cek file exists
-        if (!$panduan->file_path || !Storage::disk('public')->exists($panduan->file_path)) {
-            abort(404, 'File tidak ditemukan');
-        }
-
-        $filePath = Storage::disk('public')->path($panduan->file_path);
-        $downloadName = $panduan->original_filename ?? ($panduan->title . '.' . ($panduan->file_type ?? 'pdf'));
-        
-        // Log download activity
-        Log::info('File downloaded', [
-            'Panduan_id' => $panduan->id,
-            'title' => $panduan->title,
-            'user_ip' => request()->ip(),
-            'user_agent' => request()->userAgent(),
-            'user_type' => Auth::check() ? 'admin' : 'public'
-        ]);
-        
-        return response()->download($filePath, $downloadName);
-    }
-
-    /**
-     * Bulk download files
-     */
-    public function bulkDownload(Request $request)
-    {
-        $request->validate([
-            'ids' => 'required|array',
-            'ids.*' => 'exists:Panduans,id'
-        ]);
-
-        $ids = $request->input('ids');
-        
-        // Ambil Panduan yang published dan ada filenya
-        $query = Panduan::whereIn('id', $ids)->whereNotNull('file_path');
-        
-        // Jika akses public, hanya yang published
-        if (!Auth::check()) {
-            $query->where('status', 'published');
-        }
-        
-        $panduans = $query->get();
-
-        if ($panduans->isEmpty()) {
-            return redirect()->back()->with('error', 'Tidak ada file yang dapat didownload');
-        }
-
-        // Jika hanya 1 file, download langsung
-        if ($panduans->count() === 1) {
-            return $this->download($panduans->first());
-        }
-
-        // Jika lebih dari 1 file, buat ZIP
-        return $this->createZipDownload($panduans);
-    }
-
-    /**
-     * Create ZIP download
-     */
-    private function createZipDownload($panduans)
-    {
-        $zip = new \ZipArchive();
-        $zipFileName = 'Panduan_' . date('Y-m-d_H-i-s') . '.zip';
-        $zipPath = storage_path('app/temp/' . $zipFileName);
-        
-        // Buat folder temp jika belum ada
-        if (!File::exists(storage_path('app/temp'))) {
-            File::makeDirectory(storage_path('app/temp'), 0755, true);
-        }
-
-        if ($zip->open($zipPath, \ZipArchive::CREATE) === TRUE) {
-            $fileCount = 0;
-            
-            foreach ($panduans as $panduan) {
-                if (Storage::disk('public')->exists($panduan->file_path)) {
-                    $filePath = Storage::disk('public')->path($panduan->file_path);
-                    $fileName = $panduan->original_filename ?? ($panduan->title . '.pdf');
-                    
-                    // Pastikan nama file unik dalam ZIP
-                    $counter = 1;
-                    $originalFileName = $fileName;
-                    while ($zip->locateName($fileName) !== false) {
-                        $pathInfo = pathinfo($originalFileName);
-                        $extension = isset($pathInfo['extension']) ? '.' . $pathInfo['extension'] : '';
-                        $fileName = $pathInfo['filename'] . '_' . $counter . $extension;
-                        $counter++;
-                    }
-                    
-                    $zip->addFile($filePath, $fileName);
-                    $fileCount++;
-                }
-            }
-            
-            $zip->close();
-            
-            if ($fileCount === 0) {
-                // Hapus ZIP kosong
-                if (File::exists($zipPath)) {
-                    File::delete($zipPath);
-                }
-                return redirect()->back()->with('error', 'Tidak ada file yang dapat didownload');
-            }
-
-            // Log bulk download activity
-            Log::info('Bulk download', [
-                'file_count' => $fileCount,
-                'Panduan_ids' => $panduans->pluck('id')->toArray(),
-                'user_ip' => request()->ip(),
-                'user_agent' => request()->userAgent(),
-                'user_type' => Auth::check() ? 'admin' : 'public'
-            ]);
-
-            return response()->download($zipPath, $zipFileName)->deleteFileAfterSend(true);
-        }
-
-        return redirect()->back()->with('error', 'Gagal membuat file ZIP');
-    }
+     public function download(Panduan $panduan)
+     {
+         // Pastikan akses publik hanya untuk Panduan published
+         if (!Auth::check() && $panduan->status !== 'published') {
+             abort(404, 'Dokumen tidak tersedia untuk publik');
+         }
+ 
+         if (!$panduan->file_path || !Storage::disk('public')->exists($panduan->file_path)) {
+             abort(404, 'File tidak ditemukan');
+         }
+ 
+         $filePath = Storage::disk('public')->path($panduan->file_path);
+         $downloadName = $panduan->original_filename ?? ($panduan->title . '.' . ($panduan->file_type ?? 'pdf'));
+ 
+         Log::info('File downloaded', [
+             'Panduan_id' => $panduan->id,
+             'title' => $panduan->title,
+             'user_ip' => request()->ip(),
+             'user_agent' => request()->userAgent(),
+             'user_type' => Auth::check() ? 'admin' : 'user_public'
+         ]);
+ 
+         return response()->download($filePath, $downloadName);
+     }
+ 
+     public function bulkDownload(Request $request)
+     {
+         $request->validate([
+             'ids' => 'required|array',
+             'ids.*' => 'exists:Panduans,id'
+         ]);
+ 
+         $ids = $request->input('ids');
+ 
+         $query = Panduan::whereIn('id', $ids)->whereNotNull('file_path');
+ 
+         if (!Auth::check()) {
+             $query->where('status', 'published');
+         }
+ 
+         $panduans = $query->get();
+ 
+         if ($panduans->isEmpty()) {
+             return redirect()->back()->with('error', 'Tidak ada file yang dapat didownload');
+         }
+ 
+         if ($panduans->count() === 1) {
+             return $this->download($panduans->first());
+         }
+ 
+         return $this->createZipDownload($panduans);
+     }
+ 
+     private function createZipDownload($panduans)
+     {
+         $zip = new \ZipArchive();
+         $zipFileName = 'Panduan_' . date('Y-m-d_H-i-s') . '.zip';
+         $zipPath = storage_path('app/temp/' . $zipFileName);
+ 
+         if (!File::exists(storage_path('app/temp'))) {
+             File::makeDirectory(storage_path('app/temp'), 0755, true);
+         }
+ 
+         if ($zip->open($zipPath, \ZipArchive::CREATE) === TRUE) {
+             $fileCount = 0;
+ 
+             foreach ($panduans as $panduan) {
+                 if (Storage::disk('public')->exists($panduan->file_path)) {
+                     $filePath = Storage::disk('public')->path($panduan->file_path);
+                     $fileName = $panduan->original_filename ?? ($panduan->title . '.pdf');
+ 
+                     // Pastikan nama unik dalam ZIP
+                     $counter = 1;
+                     $originalFileName = $fileName;
+                     while ($zip->locateName($fileName) !== false) {
+                         $pathInfo = pathinfo($originalFileName);
+                         $extension = isset($pathInfo['extension']) ? '.' . $pathInfo['extension'] : '';
+                         $fileName = $pathInfo['filename'] . '_' . $counter . $extension;
+                         $counter++;
+                     }
+ 
+                     $zip->addFile($filePath, $fileName);
+                     $fileCount++;
+                 }
+             }
+ 
+             $zip->close();
+ 
+             if ($fileCount === 0) {
+                 if (File::exists($zipPath)) {
+                     File::delete($zipPath);
+                 }
+                 return redirect()->back()->with('error', 'Tidak ada file yang dapat didownload');
+             }
+ 
+             Log::info('Bulk download', [
+                 'file_count' => $fileCount,
+                 'Panduan_ids' => $panduans->pluck('id')->toArray(),
+                 'user_ip' => request()->ip(),
+                 'user_agent' => request()->userAgent(),
+                 'user_type' => Auth::check() ? 'admin' : 'public'
+             ]);
+ 
+             return response()->download($zipPath, $zipFileName)->deleteFileAfterSend(true);
+         }
+ 
+         return redirect()->back()->with('error', 'Gagal membuat file ZIP');
+     }
 
     /**
      * Handle file upload
