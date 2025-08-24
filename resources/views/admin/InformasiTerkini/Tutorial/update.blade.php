@@ -25,10 +25,8 @@
 
             <!-- Form -->
             <form id="editForm-{{ $tutorial->id }}" method="POST"
-                action="{{ route('admin.informasi-terkini.kelola-tutorial.update', $tutorial->id) }}"
-                class="space-y-6" onsubmit="return validateAndSubmitUpdate(event, '{{ $tutorial->id }}')"
-                enctype="multipart/form-data"
-            >
+                action="{{ route('admin.informasi-terkini.kelola-tutorial.update', $tutorial->id) }}" class="space-y-6"
+                onsubmit="return validateAndSubmitUpdate(event, '{{ $tutorial->id }}')" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
 
@@ -72,23 +70,28 @@
                             <select id="category-{{ $tutorial->id }}" name="category" required
                                 class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500">
                                 <option value="">Pilih Kategori</option>
-                                <option value="sistem_informasi_akademik" @selected($tutorial->category == 'sistem_informasi_akademik')>📚 Sistem Informasi Akademik</option>
+                                <option value="sistem_informasi_akademik" @selected($tutorial->category == 'sistem_informasi_akademik')>📚 Sistem
+                                    Informasi Akademik</option>
                                 <option value="e_learning" @selected($tutorial->category == 'e_learning')>💻 E-Learning</option>
-                                <option value="layanan_digital_mahasiswa" @selected($tutorial->category == 'layanan_digital_mahasiswa')>🎓 Layanan Digital Mahasiswa</option>
-                                <option value="pengelolaan_data_akun" @selected($tutorial->category == 'pengelolaan_data_akun')>🔑 Pengelolaan Data Akun</option>
-                                <option value="jaringan_konektivitas" @selected($tutorial->category == 'jaringan_konektivitas')>🌐 Jaringan & Konektivitas</option>
-                                <option value="software_aplikasi" @selected($tutorial->category == 'software_aplikasi')>🛠️ Software & Aplikasi</option>
-                                <option value="keamanan_digital" @selected($tutorial->category == 'keamanan_digital')>🔒 Keamanan Digital</option>
-                                <option value="penelitian_akademik" @selected($tutorial->category == 'penelitian_akademik')>📖 Penelitian Akademik</option>
+                                <option value="layanan_digital_mahasiswa" @selected($tutorial->category == 'layanan_digital_mahasiswa')>🎓 Layanan
+                                    Digital Mahasiswa</option>
+                                <option value="pengelolaan_data_akun" @selected($tutorial->category == 'pengelolaan_data_akun')>🔑 Pengelolaan Data
+                                    Akun</option>
+                                <option value="jaringan_konektivitas" @selected($tutorial->category == 'jaringan_konektivitas')>🌐 Jaringan &
+                                    Konektivitas</option>
+                                <option value="software_aplikasi" @selected($tutorial->category == 'software_aplikasi')>🛠️ Software & Aplikasi
+                                </option>
+                                <option value="keamanan_digital" @selected($tutorial->category == 'keamanan_digital')>🔒 Keamanan Digital
+                                </option>
+                                <option value="penelitian_akademik" @selected($tutorial->category == 'penelitian_akademik')>📖 Penelitian Akademik
+                                </option>
                                 <option value="layanan_publik" @selected($tutorial->category == 'layanan_publik')>🏛️ Layanan Publik</option>
-                                <option value="mobile_responsive" @selected($tutorial->category == 'mobile_responsive')>📱 Mobile Responsive</option>
                             </select>
                         </div>
 
                         <!-- Tanggal Publish -->
                         <div>
-                            <label for="date-{{ $tutorial->id }}"
-                                class="block text-sm font-medium text-gray-700 mb-2">
+                            <label for="date-{{ $tutorial->id }}" class="block text-sm font-medium text-gray-700 mb-2">
                                 Tanggal Publikasi <span class="text-red-500">*</span>
                             </label>
                             <input type="date" id="date-{{ $tutorial->id }}" name="date" required
@@ -203,7 +206,8 @@
 
                                             <div>
                                                 <label class="block text-xs font-medium text-gray-600 mb-1">Gambar
-                                                    (Opsional)</label>
+                                                    (Opsional)
+                                                </label>
                                                 @if (isset($block['image']))
                                                     <div class="mb-2">
                                                         <img src="{{ asset($block['image']) }}" alt="Step Image"
@@ -266,7 +270,8 @@
                                                     Tips</label>
                                                 <select name="content_blocks[{{ $block['id'] }}][tip_type]"
                                                     class="w-full px-2 py-1 text-sm border border-gray-200 rounded focus:ring-1 focus:ring-blue-500">
-                                                    <option value="tips" @selected(($block['tip_type'] ?? '') == 'tips')>💡 Tips Penting
+                                                    <option value="tips" @selected(($block['tip_type'] ?? '') == 'tips')>💡 Tips
+                                                        Penting
                                                     </option>
                                                     <option value="perhatian" @selected(($block['tip_type'] ?? '') == 'perhatian')>⚠️
                                                         Perhatian</option>

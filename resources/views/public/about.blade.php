@@ -37,7 +37,6 @@
             display: block;
         }
 
-        /* ===== MOBILE RESPONSIVE - 100px ===== */
         @media (max-width: 768px) {
             .gallery-card {
                 width: 100px;
