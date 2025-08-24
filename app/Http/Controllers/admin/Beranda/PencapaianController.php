@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\admin\Beranda;
 
+use Exception;
 use Illuminate\Http\Request;
 use App\Models\Beranda\Pencapaian;
 use App\Http\Controllers\Controller;
@@ -96,7 +97,7 @@ class PencapaianController extends Controller
                 ->route('admin.beranda.pencapaian.index')
                 ->with('success', "Pencapaian berhasil {$statusMessage}!");
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return redirect()
                 ->back()
                 ->withInput()
@@ -129,7 +130,7 @@ class PencapaianController extends Controller
                    ->route('admin.beranda.pencapaian.index')
                    ->with('success', "Pencapaian berhasil diperbarui dan {$statusMessage}!");
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return redirect()
                    ->back()
                    ->withInput()
@@ -145,7 +146,7 @@ class PencapaianController extends Controller
             return redirect()
                 ->route('admin.beranda.pencapaian.index')
                 ->with('success', 'Pencapaian berhasil dihapus permanen!');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return redirect()
                 ->back()
                 ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
@@ -186,8 +187,28 @@ class PencapaianController extends Controller
 
             return back()->with('success', $message);
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
+    }
+
+    public function toggleVisibility(Request $request, $id)
+    {
+        $pencapaian = Pencapaian::findOrFail($id);
+
+        if ($pencapaian->status === 'published') {
+            $pencapaian->status = 'draft';
+            $message = 'Pencapaian disembunyikan';
+        } else {
+            $pencapaian->status = 'published';
+            $message = 'Pencapaian ditampilkan';
+        }
+
+        $pencapaian->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => $message
+        ]);
     }
 }

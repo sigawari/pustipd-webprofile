@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\admin\Beranda;
 
+use Exception;
 use Illuminate\Http\Request;
 use App\Models\Beranda\Layanan;
 use App\Http\Controllers\Controller;
@@ -104,7 +105,7 @@ class LayananController extends Controller
             ->route('admin.beranda.layanan.index')
             ->with('success', "Layanan berhasil {$statusMessage}!");
 
-    } catch (\Exception $e) {
+    } catch (Exception $e) {
         return redirect()
             ->back()
             ->withInput()
@@ -141,7 +142,7 @@ class LayananController extends Controller
                    ->route('admin.beranda.layanan.index')
                    ->with('success', "Layanan berhasil diperbarui dan {$statusMessage}!");
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return redirect()
                    ->back()
                    ->withInput()
@@ -162,7 +163,7 @@ class LayananController extends Controller
                 ->route('admin.beranda.layanan.index')
                 ->with('success', 'Layanan berhasil dihapus permanen!');
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return redirect()
                 ->back()
                 ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
@@ -206,8 +207,28 @@ class LayananController extends Controller
 
             return back()->with('success', $message);
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
+    }
+
+    public function toggleVisibility(Request $request, $id)
+    {
+        $layanan = Layanan::findOrFail($id);
+
+        if ($layanan->status === 'published') {
+            $layanan->status = 'draft';
+            $message = 'Layanan disembunyikan';
+        } else {
+            $layanan->status = 'published';
+            $message = 'Layanan ditampilkan';
+        }
+
+        $layanan->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => $message
+        ]);
     }
 }

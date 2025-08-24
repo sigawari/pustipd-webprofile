@@ -1,11 +1,12 @@
 <?php
 namespace App\Http\Controllers\admin\Beranda;
 
+use Exception;
 use Illuminate\Http\Request;
 use App\Models\Beranda\Mitra;
 use App\Http\Controllers\Controller;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class MitraController extends Controller
 {
@@ -96,7 +97,7 @@ class MitraController extends Controller
                 ->route('admin.beranda.mitra.index')
                 ->with('success', "Mitra berhasil {$statusMessage}!");
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return redirect()
                 ->back()
                 ->withInput()
@@ -138,7 +139,7 @@ class MitraController extends Controller
                    ->route('admin.beranda.mitra.index')
                    ->with('success', "Mitra berhasil diperbarui dan {$statusMessage}!");
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return redirect()
                    ->back()
                    ->withInput()
@@ -160,7 +161,7 @@ class MitraController extends Controller
                 ->route('admin.beranda.mitra.index')
                 ->with('success', 'Mitra berhasil dihapus permanen!');
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return redirect()
                 ->back()
                 ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
@@ -205,8 +206,28 @@ class MitraController extends Controller
 
             return back()->with('success', $message);
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
+    }
+
+    public function toggleVisibility(Request $request, $id)
+    {
+        $mitra = Mitra::findOrFail($id);
+
+        if ($mitra->status === 'published') {
+            $mitra->status = 'draft';
+            $message = 'Mitra disembunyikan';
+        } else {
+            $mitra->status = 'published';
+            $message = 'Mitra ditampilkan';
+        }
+
+        $mitra->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => $message
+        ]);
     }
 }
