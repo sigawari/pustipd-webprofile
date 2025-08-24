@@ -47,31 +47,27 @@
                 <button onclick="toggleStatus(this)"
                     class="text-amber-600 hover:text-amber-900 p-1 rounded hover:bg-amber-50"
                     title="{{ $pencapaian->status === 'draft' ? 'Publish' : 'Unpublish' }}"
-                    data-id="{{ $pencapaian->id }}"
-                    data-status="{{ $pencapaian->status }}"
-                    data-url="{{ route('admin.beranda.pencapaian.toggle-visibility ', $pencapaian->id) }}">
+                    data-id="{{ $pencapaian->id }}" data-status="{{ $pencapaian->status }}"
+                    data-url="{{ route('admin.beranda.pencapaian.toggle-visibility', $pencapaian->id) }}">
 
                     {{-- Eye (untuk Draft → Publish) --}}
                     <svg class="size-5 icon-eye text-green-500 {{ $pencapaian->status === 'draft' ? '' : 'hidden' }}"
-                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor" stroke-width="1.5">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M2.036 12.322a1.012 1.012 0 010-.639
+                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                        stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639
                             C3.423 7.51 7.36 4.5 12 4.5
                             c4.638 0 8.573 3.007 9.963 7.178
                             .07.207.07.431 0 .639
                             C20.577 16.49 16.64 19.5 12 19.5
                             c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                     </svg>
 
                     {{-- Eye-off (untuk Published → Draft) --}}
                     <svg class="size-5 icon-eye-off text-neutral-500 {{ $pencapaian->status === 'published' ? '' : 'hidden' }}"
-                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor" stroke-width="1.5">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12
+                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                        stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12
                             C3.226 16.338 7.244 19.5 12 19.5
                             c.993 0 1.953-.138 2.863-.395M6.228 6.228
                             A10.451 10.451 0 0 1 12 4.5
