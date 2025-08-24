@@ -136,15 +136,15 @@
                     <!-- Lists Section -->
                     <div>
                         <h3 class="text-md font-medium text-gray-900 mb-3">Daftar Links</h3>
-                        <x-admin.link_list label="Daftar Aplikasi" type="applications" placeholderName="Nama Aplikasi"
+                        <x-admin.linkList label="Daftar Aplikasi" type="applications" placeholderName="Nama Aplikasi"
                             placeholderUrl="https://link-aplikasi.com" :items="$profilData->applications ?? []"
                             emptyText="Belum ada aplikasi. Klik 'Tambah' untuk menambahkan." />
 
-                        <x-admin.link_list label="Daftar Lembaga" type="institutions" placeholderName="Nama Lembaga"
+                        <x-admin.linkList label="Daftar Lembaga" type="institutions" placeholderName="Nama Lembaga"
                             placeholderUrl="https://link-lembaga.com" :items="$profilData->institutions ?? []"
                             emptyText="Belum ada lembaga. Klik 'Tambah' untuk menambahkan." />
 
-                        <x-admin.link_list label="Daftar Fakultas Universitas" type="universities"
+                        <x-admin.linkList label="Daftar Fakultas Universitas" type="universities"
                             placeholderName="Nama Fakultas" placeholderUrl="https://fakultas.univ.ac.id"
                             :items="$profilData->universities ?? []" emptyText="Belum ada fakultas. Klik 'Tambah' untuk menambahkan." />
                     </div>

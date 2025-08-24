@@ -31,6 +31,7 @@ class ProfilController extends Controller
     
     public function store(Request $request)
     {
+        // dd($request->all());
         // Validasi
         $request->validate([
             'organization_name' => 'required|string|max:255',
@@ -83,8 +84,7 @@ class ProfilController extends Controller
         return redirect()
             ->route('admin.tentang-kami.profil.index')
             ->with('success', 'Profil berhasil disimpan.');
-    }
-    
+    }   
 
     public function update(Request $request, Profil $profil)
     {
@@ -134,8 +134,7 @@ class ProfilController extends Controller
         return redirect()
             ->route('admin.tentang-kami.profil.index')
             ->with('success', 'Profil berhasil diperbarui.');
-    }
-    
+    }    
     
     public function destroy(Profil $profil) // ✅ Ubah dari $id ke Profil $profil
     {
