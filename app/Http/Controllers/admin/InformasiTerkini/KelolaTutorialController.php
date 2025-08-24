@@ -308,24 +308,24 @@ class KelolaTutorialController extends Controller
         }
     }
 
-    public function toggleHide(Request $request, KelolaTutorial $kelolatutorial)
+    public function toggleVisibility(Request $request, $id)
     {
-        try {
-            $kelolatutorial->is_hidden = !$kelolatutorial->is_hidden;
-            $kelolatutorial->save();
-    
-            return response()->json([
-                'success' => true,
-                'message' => $kelolatutorial->is_hidden ? 'Tutorial disembunyikan' : 'Tutorial ditampilkan',
-                'is_hidden' => $kelolatutorial->is_hidden,
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Terjadi kesalahan: ' . $e->getMessage(),
-            ], 500);
+        $kelolaTutorials = KelolaTutorial::findOrFail($id);
+
+        if ($kelolaTutorials->status === 'published') {
+            $kelolaTutorials->status = 'draft';
+            $message = 'Kelola Tutorial disembunyikan';
+        } else {
+            $kelolaTutorials->status = 'published';
+            $message = 'Kelola Tutorial ditampilkan';
         }
-    }
-    
+
+        $kelolaTutorials->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => $message
+        ]);
+    }    
 
 }

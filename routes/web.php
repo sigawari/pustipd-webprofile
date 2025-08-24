@@ -198,6 +198,7 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
             Route::delete('/kelola-berita/{kelolaberita}', 'destroy')->name('kelola-berita.destroy');
             Route::get('/kelola-berita/export', 'export')->name('kelola-berita.export');
             Route::post('/kelola-berita/bulk-action', 'bulk')->name('kelola-berita.bulk');
+            Route::post('/kelola-berita/{id}/toggle-visibility', [KelolaBeritaController::class, 'toggleVisibility'])->name('kelola-berita.toggle-visibility');
         });
 
         // Pengumuman Routes 
@@ -208,6 +209,7 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
             Route::delete('/kelola-pengumuman/{kelolapengumuman}', 'destroy')->name('kelola-pengumuman.destroy');
             Route::get('/kelola-pengumuman/export', 'export')->name('kelola-pengumuman.export');
             Route::post('/kelola-pengumuman/bulk-action', 'bulk')->name('kelola-pengumuman.bulk');
+            Route::post('/kelola-pengumuman/{id}/toggle-visibility', [KelolaPengumumanController::class, 'toggleVisibility'])->name('kelola-pengumuman.toggle-visibility');
         });
 
         //Tutorial Routes
@@ -218,8 +220,8 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
             Route::delete('/kelola-tutorial/{kelolatutorial}', 'destroy')->name('kelola-tutorial.destroy');
             Route::get('/kelola-tutorial/export', 'export')->name('kelola-tutorial.export');
             Route::post('/kelola-tutorial/bulk', 'bulk')->name('kelola-tutorial.bulk');
+            Route::post('/kelola-tutorial/{id}/toggle-visibility', [KelolaTutorialController::class, 'toggleVisibility'])->name('kelola-tutorial.toggle-visibility');
             Route::post('/kelola-tutorial/{kelolatutorial}/featured', 'toggleFeatured')->name('kelola-tutorial.featured');
-            Route::post('/kelola-tutorial/{kelolatutorial}/toggle-hide', 'toggleHide')->name('kelola-tutorial.toggle-hide');
         });
     });
 

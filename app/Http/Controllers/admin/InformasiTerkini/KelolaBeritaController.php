@@ -249,4 +249,24 @@ class KelolaBeritaController extends Controller
 
         return redirect()->route('admin.informasi-terkini.kelola-berita.index')->with('success', 'Berita berhasil dihapus!');
     }
+
+    public function toggleVisibility(Request $request, $id)
+    {
+        $ketetapan = KelolaBerita::findOrFail($id);
+
+        if ($ketetapan->status === 'published') {
+            $ketetapan->status = 'draft';
+            $message = 'Kelola Berita disembunyikan';
+        } else {
+            $ketetapan->status = 'published';
+            $message = 'Kelola Berita ditampilkan';
+        }
+
+        $ketetapan->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => $message
+        ]);
+    }
 }

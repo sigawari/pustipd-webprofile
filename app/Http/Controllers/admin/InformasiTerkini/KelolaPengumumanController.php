@@ -194,4 +194,24 @@ class KelolaPengumumanController extends Controller
         ]);
     }
 
+    public function toggleVisibility(Request $request, $id)
+    {
+        $pengumuman = KelolaPengumuman::findOrFail($id);
+
+        if ($pengumuman->status === 'published') {
+            $pengumuman->status = 'draft';
+            $message = 'Kelola Pengumuman disembunyikan';
+        } else {
+            $pengumuman->status = 'published';
+            $message = 'Kelola Pengumuman ditampilkan';
+        }
+
+        $pengumuman->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => $message
+        ]);
+    }
+
 }

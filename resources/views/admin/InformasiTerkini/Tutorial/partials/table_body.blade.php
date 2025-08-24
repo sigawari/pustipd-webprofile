@@ -113,39 +113,46 @@
         <!-- Actions -->
         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
             <div class="flex justify-center space-x-2">
-                <!-- Publish/Unpublish Button -->
-                @if ($tutorial->status !== 'published')
-                    <button onclick="quickStatusChange('{{ $tutorial->id }}', 'published')"
-                        class="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-50" title="Publish">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
-                            </path>
-                        </svg>
-                    </button>
-                @endif
+                {{-- Publish / Draft Toggle --}}
+                <button onclick="toggleStatus(this)"
+                    class="text-amber-600 hover:text-amber-900 p-1 rounded hover:bg-amber-50"
+                    title="{{ $tutorial->status === 'draft' ? 'Publish' : 'Unpublish' }}"
+                    data-id="{{ $tutorial->id }}"
+                    data-status="{{ $tutorial->status }}"
+                    data-url="{{ route('admin.informasi-terkini.kelola-tutorial.toggle-visibility ', $tutorial->id) }}">
 
-                <button type="button" class="toggle-visibility-btn" data-id="{{ $tutorial->id }}"
-                    data-visibility="{{ $tutorial->is_hidden ? 'true' : 'false' }}"
-                    data-url="{{ route('admin.informasi-terkini.kelola-tutorial.toggle-hide', $tutorial->id) }}"
-                    title="{{ $tutorial->is_hidden ? 'Tampilkan ke publik' : 'Sembunyikan dari publik' }}"
-                    {{ $tutorial->status !== 'published' ? 'disabled class=text-gray-400 cursor-not-allowed' : '' }}
-                    onclick="toggleVisibility(this)">
-                    @if ($tutorial->is_hidden)
-                        {{-- Icon mata tertutup --}}
-                        <svg class="w-4 h-4 text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                            width="24" height="24" fill="none" viewBox="0 0 24 24">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M3.933 13.909A4.357 4.357 0 0 1 3 12c0-1 4-6 9-6m7.6 3.8A5.068 5.068 0 0 1 21 12c0 1-3 6-9 6-.314 0-.62-.014-.918-.04M5 19 19 5m-4 7a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                        </svg>
-                    @else
-                        {{-- Icon mata terbuka --}}
-                        <svg class="w-4 h-4 text-green-500 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                            width="24" height="24" fill="none" viewBox="0 0 24 24">
-                            <path stroke="currentColor" stroke-width="2"
-                                d="M21 12c0 1.2-4.03 6-9 6s-9-4.8-9-6c0-1.2 4.03-6 9-6s9 4.8 9 6Z" />
-                            <path stroke="currentColor" stroke-width="2" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                        </svg>
-                    @endif
+                    {{-- Eye (untuk Draft → Publish) --}}
+                    <svg class="size-5 icon-eye text-green-500 {{ $tutorial->status === 'draft' ? '' : 'hidden' }}"
+                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M2.036 12.322a1.012 1.012 0 010-.639
+                            C3.423 7.51 7.36 4.5 12 4.5
+                            c4.638 0 8.573 3.007 9.963 7.178
+                            .07.207.07.431 0 .639
+                            C20.577 16.49 16.64 19.5 12 19.5
+                            c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                    </svg>
+
+                    {{-- Eye-off (untuk Published → Draft) --}}
+                    <svg class="size-5 icon-eye-off text-neutral-500 {{ $tutorial->status === 'published' ? '' : 'hidden' }}"
+                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12
+                            C3.226 16.338 7.244 19.5 12 19.5
+                            c.993 0 1.953-.138 2.863-.395M6.228 6.228
+                            A10.451 10.451 0 0 1 12 4.5
+                            c4.756 0 8.773 3.162 10.065 7.498
+                            a10.522 10.522 0 0 1-4.293 5.774
+                            M6.228 6.228 3 3m3.228 3.228
+                            3.65 3.65m7.894 7.894L21 21
+                            m-3.228-3.228-3.65-3.65m0 0
+                            a3 3 0 1 0-4.243-4.243
+                            m4.242 4.242L9.88 9.88" />
+                    </svg>
                 </button>
 
                 <!-- Edit Button -->

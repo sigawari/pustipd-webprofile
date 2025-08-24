@@ -446,7 +446,7 @@ class KetetapanController extends Controller
         ]);
     }
 
-        public function toggleVisibility(Request $request, $id)
+    public function toggleVisibility(Request $request, $id)
     {
         $ketetapan = Ketetapan::findOrFail($id);
 
