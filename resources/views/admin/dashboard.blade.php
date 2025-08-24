@@ -612,7 +612,7 @@
     <script>
         // Real-time updates every 30 seconds
         setInterval(function() {
-            fetch('{{ route('admin.dashboard.realtime') }}')
+            fetch(`{{ route('admin.dashboard.realtime') }}`)
                 .then(response => response.json())
                 .then(data => {
                     // Update statistics
