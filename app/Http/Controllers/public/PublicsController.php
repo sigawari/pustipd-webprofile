@@ -24,6 +24,7 @@ use App\Http\Controllers\Controller;
 use App\Models\TentangKami\VisiMisi;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\FacadesStorage;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use App\Models\InformasiTerkini\KelolaBerita;
 use App\Models\TentangKami\DescHeadStructure;
@@ -172,55 +173,54 @@ class PublicsController extends Controller
     }
 
     public function struktur()
-{
-    $title = 'Struktur Organisasi PUSTIPD';
-    $description = 'Struktur organisasi PUSTIPD UIN Raden Fatah Palembang';
-    $keywords = 'struktur, organisasi, pustipd';
-    
-    try {
-        // PERBAIKAN: Gunakan first() untuk mengambil semua data
-        $headData = DescHeadStructure::first();
-        $strukturData = StrukturOrganisasi::orderBy('divisi_order')
-                                        ->orderBy('staff_order')
-                                        ->get()
-                                        ->groupBy('nama_divisi');
+    {
+        $title = 'Struktur Organisasi PUSTIPD';
+        $description = 'Struktur organisasi PUSTIPD UIN Raden Fatah Palembang';
+        $keywords = 'struktur, organisasi, pustipd';
         
-        // Debug untuk memastikan path gambar benar
-        if ($headData && $headData->foto_kepala) {
-            Log::info('Structure Head Photo:', [
-                'path' => $headData->foto_kepala,
-                'exists' => Storage::disk('public')->exists($headData->foto_kepala),
-                'url' => asset('storage/' . $headData->foto_kepala)
-            ]);
-        }
-        
-        foreach ($strukturData as $divisionName => $staffs) {
-            foreach ($staffs as $staff) {
-                if ($staff->foto) {
-                    Log::info('Structure Staff Photo:', [
-                        'nama' => $staff->nama,
-                        'path' => $staff->foto,
-                        'exists' => Storage::disk('public')->exists($staff->foto),
-                        'url' => asset('storage/' . $staff->foto)
-                    ]);
+        try {
+            $headData = DescHeadStructure::first();
+            $strukturData = StrukturOrganisasi::orderBy('divisi_order')
+                                            ->orderBy('staff_order')
+                                            ->get()
+                                            ->groupBy('nama_divisi');
+            
+            // Debug untuk memastikan path gambar benar
+            if ($headData && $headData->foto_kepala) {
+                Log::info('Structure Head Photo:', [
+                    'path' => $headData->foto_kepala,
+                    'exists' => Storage::disk('public')->exists($headData->foto_kepala),
+                    'url' => asset('storage/' . $headData->foto_kepala)
+                ]);
+            }
+            
+            foreach ($strukturData as $divisionName => $staffs) {
+                foreach ($staffs as $staff) {
+                    if ($staff->foto) {
+                        Log::info('Structure Staff Photo:', [
+                            'nama' => $staff->nama,
+                            'path' => $staff->foto,
+                            'exists' => Storage::disk('public')->exists($staff->foto),
+                            'url' => asset('storage/' . $staff->foto)
+                        ]);
+                    }
                 }
             }
+            
+        } catch (\Exception $e) {
+            Log::error('Structure error: ' . $e->getMessage());
+            $headData = null;
+            $strukturData = collect();
         }
         
-    } catch (\Exception $e) {
-        Log::error('Structure error: ' . $e->getMessage());
-        $headData = null;
-        $strukturData = collect();
+        return view('public.structure', compact(
+            'title', 
+            'description', 
+            'keywords', 
+            'strukturData',
+            'headData'
+        ));
     }
-    
-    return view('public.structure', compact(
-        'title', 
-        'description', 
-        'keywords', 
-        'strukturData',
-        'headData'
-    ));
-}
 
     
     public function applayanan(Request $request)
@@ -459,7 +459,91 @@ class PublicsController extends Controller
         ));
     }
 
+    public function downloadDokumen($dokumen, string $tipe = 'default')
+    {
+        if ($dokumen->status !== 'published') {
+            abort(404, 'Dokumen tidak tersedia untuk publik');
+        }
 
+        if (!$dokumen->file_path || !Storage::disk('public')->exists($dokumen->file_path)) {
+            abort(404, 'File tidak ditemukan');
+        }
+
+        $filePath = Storage::disk('public')->path($dokumen->file_path);
+        $downloadName = $dokumen->original_filename ?? ($dokumen->title . '.pdf');
+
+        Log::info('Public file downloaded', [
+            "{$tipe}_id" => $dokumen->id,
+            'title' => $dokumen->title,
+            'user_ip' => request()->ip(),
+            'user_agent' => request()->userAgent()
+        ]);
+
+        return response()->download($filePath, $downloadName);
+    }
+    
+    public function bulkDownloadDokumen($dokumens, string $tipe)
+    {
+        if ($dokumens->isEmpty()) {
+            return redirect()->back()->with('error', 'Tidak ada file yang dapat didownload');
+        }
+
+        if ($dokumens->count() === 1) {
+            // Download langsung file tunggal
+            return $this->downloadDokumen($dokumens->first(), $tipe);
+        }
+
+        $zip = new ZipArchive();
+        $zipFileName = $tipe . '_' . date('Y-m-d_H-i-s') . '.zip';
+        $zipPath = storage_path('app/temp/' . $zipFileName);
+
+        if (!File::exists(storage_path('app/temp'))) {
+            File::makeDirectory(storage_path('app/temp'), 0755, true);
+        }
+
+        if ($zip->open($zipPath, ZipArchive::CREATE) === TRUE) {
+            $fileCount = 0;
+
+            foreach ($dokumens as $dokumen) {
+                if (Storage::disk('public')->exists($dokumen->file_path)) {
+                    $filePath = Storage::disk('public')->path($dokumen->file_path);
+                    $fileName = $dokumen->original_filename ?? ($dokumen->title . '.pdf');
+
+                    $counter = 1;
+                    $originalFileName = $fileName;
+                    while ($zip->locateName($fileName) !== false) {
+                        $pathInfo = pathinfo($originalFileName);
+                        $extension = isset($pathInfo['extension']) ? '.' . $pathInfo['extension'] : '';
+                        $fileName = $pathInfo['filename'] . '_' . $counter . $extension;
+                        $counter++;
+                    }
+
+                    $zip->addFile($filePath, $fileName);
+                    $fileCount++;
+                }
+            }
+
+            $zip->close();
+
+            if ($fileCount === 0) {
+                if (File::exists($zipPath)) {
+                    File::delete($zipPath);
+                }
+                return redirect()->back()->with('error', 'Tidak ada file yang dapat didownload');
+            }
+
+            Log::info('Public bulk download', [
+                'file_count' => $fileCount,
+                "{$tipe}_ids" => $dokumens->pluck('id')->toArray(),
+                'user_ip' => request()->ip(),
+                'user_agent' => request()->userAgent()
+            ]);
+
+            return response()->download($zipPath, $zipFileName)->deleteFileAfterSend(true);
+        }
+
+        return redirect()->back()->with('error', 'Gagal membuat file ZIP');
+    }
 
 
     public function ketetapan(Request $request)

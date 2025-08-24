@@ -98,7 +98,7 @@ class KetetapanController extends Controller
             'description'    => 'required|string',
             'file'           => 'required|file|mimes:pdf,doc,docx|max:10240', // 10MB
             'year_published' => 'nullable|digits:4|integer|min:1900|max:' . (date('Y') + 1),
-            'status'         => 'required|in:published,draft,archived'
+            'status'         => 'required|in:published,draft'
         ]);
 
         try {
@@ -204,17 +204,13 @@ class KetetapanController extends Controller
      */
     public function destroy($id)
     {
-        // dd($id);
-        // Temukan ketetapan berdasarkan ID
         $ketetapan = Ketetapan::findOrFail($id);
 
         try {
-            // Hapus file dari storage jika ada
             if ($ketetapan->file_path && Storage::disk('public')->exists($ketetapan->file_path)) {
                 Storage::disk('public')->delete($ketetapan->file_path);
             }
 
-            // Hapus record dari database
             $ketetapan->delete();
 
             return redirect()
@@ -235,7 +231,7 @@ class KetetapanController extends Controller
     public function bulk(Request $request)
     {
         $request->validate([
-            'action' => 'required|in:published,draft,archived,permanent_delete',
+            'action' => 'required|in:published,draft,permanent_delete',
             'ids' => 'required|array',
             'ids.*' => 'exists:ketetapans,id'
         ]);
@@ -246,56 +242,46 @@ class KetetapanController extends Controller
         try {
             if ($action === 'permanent_delete') {
                 $ketetapans = Ketetapan::whereIn('id', $ids)->get();
-                
+
                 foreach ($ketetapans as $ketetapan) {
-                    // Delete file if exists
                     if ($ketetapan->file_path && Storage::disk('public')->exists($ketetapan->file_path)) {
                         Storage::disk('public')->delete($ketetapan->file_path);
                     }
-                    
-                    // Delete record
                     $ketetapan->delete();
                 }
-                
                 $message = 'Ketetapan berhasil dihapus permanen';
             } else {
                 Ketetapan::whereIn('id', $ids)->update(['status' => $action]);
-                
-                $message = match($action) {
+
+                $message = match ($action) {
                     'published' => 'Ketetapan berhasil dipublish ke halaman publik',
                     'draft' => 'Ketetapan berhasil disembunyikan dari halaman publik',
+                    default => 'Status berhasil diubah',
                 };
             }
 
             return redirect()->back()->with('success', $message);
-
         } catch (\Exception $e) {
             Log::error('Error bulk action: ' . $e->getMessage());
+
             return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
 
-    /**
-     * Download file
-     */
     public function download(Ketetapan $ketetapan)
     {
-        // Cek akses: jika user tidak login (public access), pastikan status published
-        if (!Auth::check()) {
-            if ($ketetapan->status !== 'published') {
-                abort(404, 'Dokumen tidak tersedia untuk publik');
-            }
+        // Pastikan akses publik hanya untuk ketetapan published
+        if (!Auth::check() && $ketetapan->status !== 'published') {
+            abort(404, 'Dokumen tidak tersedia untuk publik');
         }
 
-        // Cek file exists
         if (!$ketetapan->file_path || !Storage::disk('public')->exists($ketetapan->file_path)) {
             abort(404, 'File tidak ditemukan');
         }
 
         $filePath = Storage::disk('public')->path($ketetapan->file_path);
         $downloadName = $ketetapan->original_filename ?? ($ketetapan->title . '.' . ($ketetapan->file_type ?? 'pdf'));
-        
-        // Log download activity
+
         Log::info('File downloaded', [
             'ketetapan_id' => $ketetapan->id,
             'title' => $ketetapan->title,
@@ -303,13 +289,10 @@ class KetetapanController extends Controller
             'user_agent' => request()->userAgent(),
             'user_type' => Auth::check() ? 'admin' : 'user_public'
         ]);
-        
+
         return response()->download($filePath, $downloadName);
     }
 
-    /**
-     * Bulk download files
-     */
     public function bulkDownload(Request $request)
     {
         $request->validate([
@@ -318,53 +301,45 @@ class KetetapanController extends Controller
         ]);
 
         $ids = $request->input('ids');
-        
-        // Ambil ketetapan yang published dan ada filenya
+
         $query = Ketetapan::whereIn('id', $ids)->whereNotNull('file_path');
-        
-        // Jika akses public, hanya yang published
+
         if (!Auth::check()) {
             $query->where('status', 'published');
         }
-        
+
         $ketetapans = $query->get();
 
         if ($ketetapans->isEmpty()) {
             return redirect()->back()->with('error', 'Tidak ada file yang dapat didownload');
         }
 
-        // Jika hanya 1 file, download langsung
         if ($ketetapans->count() === 1) {
             return $this->download($ketetapans->first());
         }
 
-        // Jika lebih dari 1 file, buat ZIP
         return $this->createZipDownload($ketetapans);
     }
 
-    /**
-     * Create ZIP download
-     */
     private function createZipDownload($ketetapans)
     {
         $zip = new \ZipArchive();
         $zipFileName = 'ketetapan_' . date('Y-m-d_H-i-s') . '.zip';
         $zipPath = storage_path('app/temp/' . $zipFileName);
-        
-        // Buat folder temp jika belum ada
+
         if (!File::exists(storage_path('app/temp'))) {
             File::makeDirectory(storage_path('app/temp'), 0755, true);
         }
 
         if ($zip->open($zipPath, \ZipArchive::CREATE) === TRUE) {
             $fileCount = 0;
-            
+
             foreach ($ketetapans as $ketetapan) {
                 if (Storage::disk('public')->exists($ketetapan->file_path)) {
                     $filePath = Storage::disk('public')->path($ketetapan->file_path);
                     $fileName = $ketetapan->original_filename ?? ($ketetapan->title . '.pdf');
-                    
-                    // Pastikan nama file unik dalam ZIP
+
+                    // Pastikan nama unik dalam ZIP
                     $counter = 1;
                     $originalFileName = $fileName;
                     while ($zip->locateName($fileName) !== false) {
@@ -373,23 +348,21 @@ class KetetapanController extends Controller
                         $fileName = $pathInfo['filename'] . '_' . $counter . $extension;
                         $counter++;
                     }
-                    
+
                     $zip->addFile($filePath, $fileName);
                     $fileCount++;
                 }
             }
-            
+
             $zip->close();
-            
+
             if ($fileCount === 0) {
-                // Hapus ZIP kosong
                 if (File::exists($zipPath)) {
                     File::delete($zipPath);
                 }
                 return redirect()->back()->with('error', 'Tidak ada file yang dapat didownload');
             }
 
-            // Log bulk download activity
             Log::info('Bulk download', [
                 'file_count' => $fileCount,
                 'ketetapan_ids' => $ketetapans->pluck('id')->toArray(),
@@ -403,6 +376,7 @@ class KetetapanController extends Controller
 
         return redirect()->back()->with('error', 'Gagal membuat file ZIP');
     }
+
 
     /**
      * Handle file upload
