@@ -6,7 +6,7 @@
     <section id="beranda"
         class="relative bg-blue-950 text-amber-50 min-h-screen flex items-center justify-center overflow-hidden">
         <!-- Background Image -->
-        <img src="{{ Storage::url($profils->profil_photo) }}" alt="Hero Image"
+        <img src="{{ Storage::url($profils->hero_image) }}" alt="Hero Image"
             class="absolute inset-0 w-full h-full object-cover opacity-40">
 
         <!-- Overlay -->
@@ -208,7 +208,7 @@
                 <!-- Progress Bar -->
                 <div class="mt-3 px-4">
                     <div class="w-full bg-gray-200 rounded-full h-1">
-                        <div class="bg-primary h-1 rounded-full transition-all duration-150 ease-out" 
+                        <div class="bg-primary h-1 rounded-full transition-all duration-150 ease-out"
                             style="--w: {{ $services->count() > 0 ? 100 / $services->count() : 100 }}%; width: var(--w);">
                         </div>
                         <!-- <div class="bg-primary h-1 rounded-full transition-all duration-150 ease-out" id="progressBar"

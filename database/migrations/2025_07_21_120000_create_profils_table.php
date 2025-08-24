@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('profils', function (Blueprint $table) {
             $table->id();
             $table->string('organization_name')->default('Pusat Teknologi Informasi dan Pangkalan Data');
+            $table->string('hero_image')->nullable();  // kolom hero_image sebagai string nullable
             $table->text('description')->nullable();
             $table->text('address')->nullable();
             $table->string('email')->nullable();
@@ -21,9 +22,6 @@ return new class extends Migration
             $table->string('facebook_url')->nullable();
             $table->string('youtube_url')->nullable();
             $table->string('profil_photo')->nullable();
-            $table->json('applications')->nullable(); // array link aplikasi
-            $table->json('institutions')->nullable(); // array link lembaga
-            $table->json('universities')->nullable(); // array link fakultas
             $table->timestamps();
         });
     }

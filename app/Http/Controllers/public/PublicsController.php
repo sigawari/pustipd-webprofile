@@ -42,7 +42,7 @@ class PublicsController extends Controller
         $description = 'Pusat Sistem dan Teknologi Informasi dan Pangkalan Data UIN Raden Fatah Palembang';
         $keywords = 'pustipd, uin raden fatah, teknologi informasi';
 
-        $profils = Profil::latest()->first(); 
+        $profils = Profil::with(['applications', 'institutions', 'universities'])->latest()->first() ?? new Profil();
         
         $achievements = Pencapaian::published()
                                 ->orderBy('created_at', 'desc')
@@ -56,13 +56,11 @@ class PublicsController extends Controller
                         ->orderBy('created_at', 'desc')
                         ->get();
 
-        // Query berita dengan pagination
         $newsList = KelolaBerita::where('status', 'published')
                             ->orderBy('publish_date', 'desc')
                             ->paginate(3)
                             ->withQueryString();
         
-        // Query pengumuman penting
         $urgentAnnouncements = KelolaPengumuman::where('status', 'published')
                                             ->where('urgency', 'penting')
                                             ->where(function($query) {
@@ -72,7 +70,6 @@ class PublicsController extends Controller
                                             ->orderBy('date', 'desc')
                                             ->get();
         
-        // Query semua pengumuman untuk section lain
         $announcementsList = KelolaPengumuman::where('status', 'published')
                                             ->where(function($query) {
                                                 $query->whereNull('valid_until')
@@ -83,11 +80,9 @@ class PublicsController extends Controller
                                             ->limit(3)
                                             ->get();
         
-        // PERBAIKAN: Ambil data tim dengan benar
         $teams = collect();
 
         try {
-            // PERBAIKAN: Gunakan first() bukan getActiveHead()
             $headData = DescHeadStructure::first();
             if ($headData) {
                 $teams->push((object)[
@@ -105,7 +100,6 @@ class PublicsController extends Controller
                 ]);
             }
 
-            // PERBAIKAN: Ambil semua staff tanpa filter active dulu
             $allStaff = StrukturOrganisasi::orderBy('divisi_order')
                                         ->orderBy('staff_order')
                                         ->get();
@@ -229,8 +223,6 @@ class PublicsController extends Controller
 }
 
     
-
-
     public function applayanan(Request $request)
     {
         $title = 'Layanan Digital';

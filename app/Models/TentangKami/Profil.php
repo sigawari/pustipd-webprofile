@@ -21,113 +21,65 @@ class Profil extends Model
         'instagram_url',
         'facebook_url',
         'youtube_url',
-        'applications',
-        'institutions',
-        'universities',
         'profil_photo',
+        'hero_image', 
     ];
 
     protected $casts = [
-        'applications' => 'array',
-        'institutions' => 'array',
-        'universities' => 'array',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
 
-    // Set default values for array fields
-    protected $attributes = [
-        'applications' => '[]',
-        'institutions' => '[]',
-        'universities' => '[]',
-    ];
+    public function applications()
+    {
+        return $this->hasMany(ProfilApplication::class)->orderBy('sort_order');
+    }
 
-    // Relationships
+    public function institutions()
+    {
+        return $this->hasMany(ProfilInstitution::class)->orderBy('sort_order');
+    }
+
+    public function universities()
+    {
+        return $this->hasMany(ProfilUniversity::class)->orderBy('sort_order');
+    }
+
     public function publics()
     {
         return $this->belongsTo(Publics::class);
     }
 
-    // Accessor untuk mendapatkan URL foto profil dengan fallback
+    // Accessor untuk profil_photo dengan fallback
     public function getProfilPhotoUrlAttribute()
     {
         if ($this->profil_photo && Storage::disk('public')->exists($this->profil_photo)) {
             return Storage::url($this->profil_photo);
         }
-        
-        // Return default image jika tidak ada foto
-        return asset('images/default-profile.png'); // Sesuaikan path default image
+        return asset('images/default-profile.png'); // sesuaikan default
     }
 
-    // Accessor untuk cek apakah foto profil ada
+    // Cek apakah profil_photo ada dan valid
     public function getHasProfilPhotoAttribute()
     {
         return !empty($this->profil_photo) && Storage::disk('public')->exists($this->profil_photo);
     }
 
-    // Mutator untuk memastikan array fields tidak null
-    public function setApplicationsAttribute($value)
+    // Accessor untuk hero_image dengan fallback
+    public function getHeroImageUrlAttribute()
     {
-        $this->attributes['applications'] = $this->filterArrayData($value);
-    }
-
-    public function setInstitutionsAttribute($value)
-    {
-        $this->attributes['institutions'] = $this->filterArrayData($value);
-    }
-
-    public function setUniversitiesAttribute($value)
-    {
-        $this->attributes['universities'] = $this->filterArrayData($value);
-    }
-
-    // Helper method untuk filter array data
-    private function filterArrayData($data)
-    {
-        if (!is_array($data)) {
-            return json_encode([]);
+        if ($this->hero_image && Storage::disk('public')->exists($this->hero_image)) {
+            return Storage::url($this->hero_image);
         }
-
-        $filtered = array_filter($data, function($item) {
-            return is_array($item) && 
-                   (!empty($item['name']) || !empty($item['url']));
-        });
-
-        return json_encode(array_values($filtered));
+        return asset('images/default-hero.jpg'); // sesuaikan default hero image
     }
 
-    // Accessor untuk mendapatkan array yang sudah difilter
-    public function getApplicationsAttribute($value)
+    public function getHasHeroImageAttribute()
     {
-        $decoded = json_decode($value, true) ?? [];
-        return array_filter($decoded, function($item) {
-            return is_array($item) && (!empty($item['name']) || !empty($item['url']));
-        });
+        return !empty($this->hero_image) && Storage::disk('public')->exists($this->hero_image);
     }
 
-    public function getInstitutionsAttribute($value)
-    {
-        $decoded = json_decode($value, true) ?? [];
-        return array_filter($decoded, function($item) {
-            return is_array($item) && (!empty($item['name']) || !empty($item['url']));
-        });
-    }
-
-    public function getUniversitiesAttribute($value)
-    {
-        $decoded = json_decode($value, true) ?? [];
-        return array_filter($decoded, function($item) {
-            return is_array($item) && (!empty($item['name']) || !empty($item['url']));
-        });
-    }
-
-    // Method untuk mendapatkan total links
-    public function getTotalLinksAttribute()
-    {
-        return count($this->applications) + count($this->institutions) + count($this->universities);
-    }
-
-    // Method untuk validasi URL sosial media
+    // Method validasi URL sosial media
     public function validateSocialUrls()
     {
         $errors = [];
@@ -147,28 +99,28 @@ class Profil extends Model
         return $errors;
     }
 
-    // Scope untuk single instance system
+    // Scope untuk single record system
     public function scopeProfile($query)
     {
         return $query->first();
     }
 
-    // Boot method untuk ensure single record
+    // Boot method untuk single record dan hapus file foto
     protected static function boot()
     {
         parent::boot();
 
         static::creating(function ($model) {
-            // Prevent multiple profiles if needed
             if (static::count() > 0) {
                 throw new \Exception('Hanya satu profil yang diizinkan. Gunakan update untuk mengubah data.');
             }
         });
 
         static::deleting(function ($model) {
-            // Delete profile photo when deleting record
-            if ($model->profil_photo && Storage::disk('public')->exists($model->profil_photo)) {
-                Storage::disk('public')->delete($model->profil_photo);
+            foreach (['profil_photo', 'hero_image'] as $field) {
+                if ($model->$field && Storage::disk('public')->exists($model->$field)) {
+                    Storage::disk('public')->delete($model->$field);
+                }
             }
         });
     }
