@@ -357,6 +357,32 @@
             button.closest('.staff-entry').remove();
         }
 
+        function reindexDivisions() {
+            const divisions = document.querySelectorAll('#divisionsContainer .division-entry');
+            divisions.forEach((division, i) => {
+                // Update nama divisi
+                division.querySelector("input[name^='divisions']").setAttribute('name',
+                    `divisions[${i}][nama_divisi]`);
+                division.querySelector("input[type=hidden][name$='divisi_order']").setAttribute('name',
+                    `divisions[${i}][divisi_order]`);
+
+                // Reindex staf dalam divisi ini
+                const staffs = division.querySelectorAll('.staff-entry');
+                staffs.forEach((staff, j) => {
+                    staff.querySelector("input[name$='[nama]']").setAttribute('name',
+                        `divisions[${i}][staff][${j}][nama]`);
+                    staff.querySelector("input[name$='[jabatan]']").setAttribute('name',
+                        `divisions[${i}][staff][${j}][jabatan]`);
+                    staff.querySelector("input[name$='[email]']").setAttribute('name',
+                        `divisions[${i}][staff][${j}][email]`);
+                    staff.querySelector("input[type=file]").setAttribute('name',
+                        `divisions[${i}][staff][${j}][foto]`);
+                    staff.querySelector("input[type=hidden][name$='staff_order']").setAttribute('name',
+                        `divisions[${i}][staff][${j}][staff_order]`);
+                });
+            });
+        }
+
         // Function to update filename display
         function updateFileName(input, spanId) {
             const file = input.files[0];

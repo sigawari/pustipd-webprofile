@@ -101,7 +101,6 @@
                             $iconData = $getCategoryIcon($appLayanan->category);
                         @endphp
                         <div class="group relative">
-                            <!-- Card Background with Enhanced Shadow -->
                             <div
                                 class="absolute inset-0 bg-white rounded-xl border border-gray-100 shadow-lg 
                                        group-hover:shadow-2xl group-hover:border-gray-200 
@@ -113,7 +112,6 @@
                                        cursor-pointer h-full min-h-[160px] flex flex-col"
                                 title="Buka {{ $appLayanan->appname }}">
 
-                                <!-- Category Badge with Enhanced Style -->
                                 <div
                                     class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold 
                                            bg-gradient-to-r from-gray-100 to-gray-50 text-gray-700 mb-3 
@@ -143,9 +141,7 @@
                                     {{ ucfirst($appLayanan->category) }}
                                 </div>
 
-                                <!-- Icon and Title Side by Side -->
                                 <div class="flex items-center mb-3">
-                                    <!-- Icon Container -->
                                     <div
                                         class="flex items-center justify-center w-12 h-12 bg-gradient-to-br {{ $iconData['color'] }} 
                                                rounded-xl mr-3 group-hover:scale-105 transition-all duration-300 shadow-lg
@@ -157,7 +153,6 @@
                                         </svg>
                                     </div>
 
-                                    <!-- Title -->
                                     <h3
                                         class="text-lg font-bold text-gray-900 group-hover:text-blue-600 
                                                transition-colors duration-300 leading-tight line-clamp-2 flex-1">
@@ -165,12 +160,10 @@
                                     </h3>
                                 </div>
 
-                                <!-- Description -->
                                 <p class="text-gray-600 leading-relaxed mb-4 text-sm line-clamp-3 flex-grow">
                                     {{ Str::limit($appLayanan->description, 100) }}
                                 </p>
 
-                                <!-- Access Button -->
                                 <div
                                     class="flex items-center justify-center mt-auto pt-3 border-t border-gray-100 w-full">
                                     <div

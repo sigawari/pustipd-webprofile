@@ -1,21 +1,17 @@
 @php
-    // Perbaikan untuk mengambil structure_desc dari database
     $organization = [
         'name' => 'Struktur Organisasi PUSTIPD',
         'description' => $description ?? 'Struktur organisasi dan divisi PUSTIPD UIN Raden Fatah Palembang',
-        // PERBAIKAN: Gunakan structure_desc dari headData jika ada
         'subtitle' =>
             $headData && !empty($headData->structure_desc)
                 ? $headData->structure_desc
                 : 'Berdasarkan surat XXX nomor XXX tentang Pengangkatan Pusat Teknologi Informasi dan Pangkalan Data Universitas Islam Negeri Raden Fatah Palembang Masa Bakti 2023-2027 menetapkan struktural organisasi sebagai berikut:',
     ];
 
-    // Perbaikan head data
     $head = $headData
         ? [
             'nama' => $headData->nama_kepala,
             'jabatan' => $headData->jabatan_kepala,
-            // PERBAIKAN: Cek apakah foto ada dan path-nya benar
             'image' =>
                 $headData->foto_kepala && Storage::disk('public')->exists($headData->foto_kepala)
                     ? asset('storage/' . $headData->foto_kepala)
@@ -29,7 +25,6 @@
             'email' => '',
         ];
 
-    // Perbaikan divisions data
     $divisions = [];
     if ($strukturData && $strukturData->count() > 0) {
         foreach ($strukturData as $divisionName => $staffs) {
@@ -38,7 +33,6 @@
                 $members[] = [
                     'nama' => $staff->nama,
                     'jabatan' => $staff->jabatan,
-                    // PERBAIKAN: Cek apakah foto staff ada
                     'image' =>
                         $staff->foto && Storage::disk('public')->exists($staff->foto)
                             ? asset('storage/' . $staff->foto)
@@ -123,14 +117,14 @@
                 </p>
             </div>
 
-            <!-- Kepala Organisasi - Hanya tampil jika ada data -->
+            <!-- Kepala Organisasi-->
             @if (!empty($head['nama']))
                 <div class="mb-16 flex justify-center">
                     <x-team-card :nama="$head['nama']" :jabatan="$head['jabatan']" :foto="$head['image']" :email="$head['email']" />
                 </div>
             @endif
 
-            <!-- Struktur divisi satu per satu vertikal -->
+            <!-- Struktur divisi satu per satu -->
             @if (!empty($divisions))
                 @foreach ($orderDivisions as $divName)
                     @php
