@@ -431,4 +431,24 @@ class SopController extends Controller
             'total' => $sops->count()
         ]);
     }
+
+    public function toggleVisibility(Request $request, $id)
+    {
+        $sop = Sop::findOrFail($id);
+
+        if ($sop->status === 'published') {
+            $sop->status = 'draft';
+            $message = 'SOP disembunyikan';
+        } else {
+            $sop->status = 'published';
+            $message = 'SOP ditampilkan';
+        }
+
+        $sop->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => $message
+        ]);
+    }
 }

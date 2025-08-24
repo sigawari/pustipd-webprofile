@@ -75,7 +75,6 @@
                 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium',
                 'bg-green-300 text-green-800' => $regulasi->status === 'published',
                 'bg-yellow-300 text-yellow-800' => $regulasi->status === 'draft',
-                'bg-gray-300 text-gray-800' => $regulasi->status === 'archived',
             ])>
                 {{ ucfirst($regulasi->status) }}
             </span>
@@ -84,26 +83,6 @@
         <!-- Aksi -->
         <td class="px-3 py-4 whitespace-nowrap text-sm font-medium">
             <div class="flex justify-center space-x-1">
-                {{-- Quick Publish/Draft Toggle --}}
-                @if ($regulasi->status === 'published')
-                    <button onclick="quickStatusChange('{{ $regulasi->id }}', 'draft')"
-                        class="p-1 text-orange-600 rounded hover:text-orange-900 hover:bg-orange-50"
-                        title="Sembunyikan dari publik">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21" />
-                        </svg>
-                    </button>
-                @else
-                    <button onclick="quickStatusChange('{{ $regulasi->id }}', 'published')"
-                        class="p-1 text-green-600 rounded hover:text-green-900 hover:bg-green-50"
-                        title="Publish ke publik">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                        </svg>
-                    </button>
-                @endif
-
                 {{-- Edit Button - menggunakan openUpdateModal dari modals.js --}}
                 <button onclick="openUpdateModal('{{ $regulasi->id }}')"
                     class="p-1 text-blue-600 rounded hover:text-blue-900 hover:bg-blue-50" title="Edit">
@@ -114,35 +93,46 @@
                     </svg>
                 </button>
 
-                <button onclick="toggleVisibility(this)" data-id="{{ $regulasi->id }}"
+                {{-- Publish / Draft Toggle --}}
+                <button onclick="toggleStatus(this)"
+                    class="text-amber-600 hover:text-amber-900 p-1 rounded hover:bg-amber-50"
+                    title="{{ $regulasi->status === 'draft' ? 'Publish' : 'Unpublish' }}"
+                    data-id="{{ $regulasi->id }}"
                     data-status="{{ $regulasi->status }}"
-                    class="p-1 rounded {{ $regulasi->status === 'published' ? 'text-green-600 hover:text-green-900 hover:bg-green-50' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50' }}"
-                    title="{{ $regulasi->status === 'published' ? 'Sembunyikan dari publik' : 'Tampilkan di publik' }}">
+                    data-url="{{ route('admin.dokumen.regulasi.toggle-visibility', $regulasi->id) }}">
 
-                    @if ($regulasi->status === 'published')
-                        {{-- Show icon (currently visible) --}}
-                        <svg class="w-4 h-4 icon-show" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                        </svg>
-                        {{-- Hide Icon --}}
-                        <svg class="w-4 h-4 icon-hidden hidden" fill="none" stroke="currentColor"
-                            viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21" />
-                        </svg>
-                    @else
-                        {{-- Hide icon (currently hidden) --}}
-                        <svg class="w-4 h-4 icon-hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21" />
-                        </svg>
-                        {{-- Show icon (hidden by default) --}}
-                        <svg class="w-4 h-4 icon-show hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                        </svg>
-                    @endif
+                    {{-- Eye (untuk Draft → Publish) --}}
+                    <svg class="size-5 icon-eye text-green-500 {{ $regulasi->status === 'draft' ? '' : 'hidden' }}"
+                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M2.036 12.322a1.012 1.012 0 010-.639
+                            C3.423 7.51 7.36 4.5 12 4.5
+                            c4.638 0 8.573 3.007 9.963 7.178
+                            .07.207.07.431 0 .639
+                            C20.577 16.49 16.64 19.5 12 19.5
+                            c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                    </svg>
+
+                    {{-- Eye-off (untuk Published → Draft) --}}
+                    <svg class="size-5 icon-eye-off text-neutral-500 {{ $regulasi->status === 'published' ? '' : 'hidden' }}"
+                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12
+                            C3.226 16.338 7.244 19.5 12 19.5
+                            c.993 0 1.953-.138 2.863-.395M6.228 6.228
+                            A10.451 10.451 0 0 1 12 4.5
+                            c4.756 0 8.773 3.162 10.065 7.498
+                            a10.522 10.522 0 0 1-4.293 5.774
+                            M6.228 6.228 3 3m3.228 3.228
+                            3.65 3.65m7.894 7.894L21 21
+                            m-3.228-3.228-3.65-3.65m0 0
+                            a3 3 0 1 0-4.243-4.243
+                            m4.242 4.242L9.88 9.88" />
+                    </svg>
                 </button>
 
                 {{-- Download Button --}}

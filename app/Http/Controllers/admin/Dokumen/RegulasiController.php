@@ -441,4 +441,24 @@ class RegulasiController extends Controller
             'total' => $regulasis->count()
         ]);
     }
+
+    public function toggleVisibility(Request $request, $id)
+    {
+        $regulasi = Regulasi::findOrFail($id);
+
+        if ($regulasi->status === 'published') {
+            $regulasi->status = 'draft';
+            $message = 'Regulasi disembunyikan';
+        } else {
+            $regulasi->status = 'published';
+            $message = 'Regulasi ditampilkan';
+        }
+
+        $regulasi->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => $message
+        ]);
+    }
 }

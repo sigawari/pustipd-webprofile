@@ -260,6 +260,7 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
             Route::get('/regulasi/{regulasi}/download', 'download')->name('regulasi.download');
             Route::post('/regulasi/bulk',  'bulk')->name('regulasi.bulk');
             Route::post('/regulasi/bulk-download', [PublicsController::class, 'bulkDownload'])->name('public.regulasi.bulk-download');
+            Route::post('/regulasi/{id}/toggle-visibility', [RegulasiController::class, 'toggleVisibility'])->name('regulasi.toggle-visibility');
         });
 
         // SOP Routes
@@ -272,6 +273,7 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
             Route::get('/sop/{sop}/download', 'download')->name('sop.download');
             Route::post('/sop/bulk', 'bulk')->name('sop.bulk');
             Route::post('/sop/bulk-download', [PublicsController::class, 'bulkDownload'])->name('public.sop.bulk-download');
+            Route::post('/sop/{id}/toggle-visibility', [SopController::class, 'toggleVisibility'])->name('sop.toggle-visibility');
         });
 
     });
