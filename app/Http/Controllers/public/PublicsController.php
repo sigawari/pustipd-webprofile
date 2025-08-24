@@ -147,9 +147,9 @@ class PublicsController extends Controller
         $keywords = 'tentang, news, pustipd';
     
         $galleries = Gallery::where('status', 'published')
-                            ->orderBy('sort_order', 'asc')
-                            ->orderBy('date', 'desc')
-                            ->get();
+            ->orderBy('event_date', 'desc')
+            ->orderBy('created_at', 'desc')
+            ->get();
     
         $galleriesData = $galleries->map(function ($gallery) {
             return [

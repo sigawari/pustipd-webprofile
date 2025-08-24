@@ -19,8 +19,8 @@ function toggleVisibility(btn) {
 
     const newVisibility = !currentVisibility;
     const actionText = newVisibility
-        ? "Sembunyikan dari publik"
-        : "Tampilkan ke publik";
+        ? "Tampilkan ke publik"
+        : "Sembunyikan dari publik";
 
     if (!confirm(`Apakah yakin ingin ${actionText}?`)) {
         return;
