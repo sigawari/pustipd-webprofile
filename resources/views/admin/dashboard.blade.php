@@ -200,8 +200,7 @@
                                     </path>
                                 </svg>
                             </div>
-                            <span
-                                class="ml-2 text-sm font-medium text-gray-700 group-hover:text-violet-700">
+                            <span class="ml-2 text-sm font-medium text-gray-700 group-hover:text-violet-700">
                                 Gallery
                             </span>
                         </div>
@@ -223,7 +222,7 @@
                                 </svg>
                             </div>
                             <span class="ml-2 text-sm font-medium text-gray-700 group-hover:text-amber-700">
-                                Visi  Misi
+                                Visi Misi
                             </span>
                         </div>
                     </a>
@@ -359,7 +358,7 @@
                                 </svg>
                             </div>
                             <span class="ml-2 text-sm font-medium text-gray-700 group-hover:text-teal-700">
-                                Kelola  Panduan
+                                Kelola Panduan
                             </span>
                         </div>
                     </a>
@@ -400,7 +399,7 @@
                                 Kelola SOP
                             </span>
                         </div>
-                    </a>                    
+                    </a>
 
                     <!-- FAQ -->
                     <a href="{{ route('admin.faq.index') }}"
@@ -428,8 +427,10 @@
                         <div class="flex items-center">
                             <div
                                 class="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center group-hover:bg-orange-200 transition-colors">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-orange-600">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-orange-600">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
                                 </svg>
                             </div>
                             <span class="ml-2 text-sm font-medium text-gray-700 group-hover:text-orange-700">
@@ -565,8 +566,6 @@
                     Link Terkait
                 </h3>
                 <div class="space-y-2">
-                    <a href="#" class="block text-sm text-blue-600 hover:text-blue-700 hover:underline">•
-                        Pengaturan SEO</a>
                     <a href="{{ route('admin.faq.index') }}"
                         class="block text-sm text-blue-600 hover:text-blue-700 hover:underline">• Kelola FAQ</a>
                     <a href="#" class="block text-sm text-blue-600 hover:text-blue-700 hover:underline">• Backup
@@ -587,10 +586,6 @@
                     <p class="text-sm text-gray-600">Kelola sesi dan akses administrator sistem</p>
                 </div>
                 <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
-                    <a href="#"
-                        class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 text-sm font-medium text-center">
-                        Pengaturan
-                    </a>
                     <form action="{{ route('login.logout') }}" method="POST" class="inline-block">
                         @csrf
                         <button type="submit"
