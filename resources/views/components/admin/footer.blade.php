@@ -35,7 +35,7 @@
                         <span class="w-1.5 h-1.5 bg-green-400 rounded-full mr-1.5"></span>
                         Online
                     </span>
-                    <span class="text-xs text-gray-500">v2.1.0</span>
+                    <span class="text-xs text-gray-500">v1.1.0</span>
                 </div>
             </div>
         </div>
