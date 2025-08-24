@@ -24,7 +24,6 @@
                 'inline-flex px-2 py-1 text-xs font-semibold rounded-full',
                 'bg-green-300 text-green-800' => $faq->status === 'published',
                 'bg-yellow-300 text-yellow-800' => $faq->status === 'draft',
-                'bg-gray-300 text-gray-800' => $faq->status === 'archived',
             ])>
                 {{ ucfirst($faq->status) }}
             </span>

@@ -26,7 +26,7 @@ class AppLayananController extends Controller
         // PERBAIKAN: Validasi perPage untuk keamanan
         $allowedPerPage = [10, 25, 50, 100, 'all'];
         if (!in_array($perPage, $allowedPerPage)) {
-            \Log::warning('Invalid perPage, resetting to 10', ['perPage' => $perPage]);
+            Log::warning('Invalid perPage, resetting to 10', ['perPage' => $perPage]);
             $perPage = 10;
         }
     
@@ -245,5 +245,25 @@ class AppLayananController extends Controller
     {
         $title = 'Hapus Aplikasi Layanan';
         return view('admin.AppLayanan.delete', compact('title', 'appLayanan'));
+    }
+
+    public function toggleVisibility(Request $request, $id)
+    {
+        $appLayanan = AppLayanan::findOrFail($id);
+
+        if ($appLayanan->status === 'published') {
+            $appLayanan->status = 'draft';
+            $message = 'appLayanan disembunyikan';
+        } else {
+            $appLayanan->status = 'published';
+            $message = 'appLayanan ditampilkan';
+        }
+
+        $appLayanan->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => $message
+        ]);
     }
 }

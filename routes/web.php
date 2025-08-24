@@ -185,6 +185,7 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
         Route::delete('/{appLayanan}', 'destroy')->name('destroy');
         Route::post('/bulk-action', 'bulk')->name('bulk');
         Route::get('/export', 'export')->name('export');
+        Route::post('/{id}/toggle-visibility', [AppLayananController::class, 'toggleVisibility'])->name('toggle-visibility');
     });
 
     // Informasi Terkini
