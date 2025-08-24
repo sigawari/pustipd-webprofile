@@ -1,4 +1,4 @@
-<!-- resources/views/admin/manage-content/beranda/mitra.blade.php -->
+<!-- resources/views/admin/manage-content/beranda/berita.blade.php -->
 <x-admin.layouts>
     <x-slot:title>{{ $title }}</x-slot:title>
     @section('page-title', 'Berita PUSTIPD')
@@ -381,7 +381,7 @@
             @endif
         </div>
 
-        @include('admin.InformasiTerkini.Berita.index')
+        @include('admin.InformasiTerkini.Berita.create')
         @include('admin.InformasiTerkini.Berita.update')
         @include('admin.InformasiTerkini.Berita.delete')
 
