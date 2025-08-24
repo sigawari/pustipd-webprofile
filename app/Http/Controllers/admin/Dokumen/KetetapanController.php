@@ -445,4 +445,24 @@ class KetetapanController extends Controller
             'total' => $ketetapans->count()
         ]);
     }
+
+        public function toggleVisibility(Request $request, $id)
+    {
+        $ketetapan = Ketetapan::findOrFail($id);
+
+        if ($ketetapan->status === 'published') {
+            $ketetapan->status = 'draft';
+            $message = 'Ketetapan disembunyikan';
+        } else {
+            $ketetapan->status = 'published';
+            $message = 'Ketetapan ditampilkan';
+        }
+
+        $ketetapan->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => $message
+        ]);
+    }
 }

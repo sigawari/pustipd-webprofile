@@ -236,6 +236,7 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
             Route::get('/ketetapan/{ketetapan}/download', 'download')->name('ketetapan.download');
             Route::post('/ketetapan/bulk', 'bulk')->name('ketetapan.bulk');
             Route::post('/ketetapan/bulk-download', [PublicsController::class, 'bulkDownload'])->name('public.ketetapan.bulk-download');
+            Route::post('/ketetapan/{id}/toggle-visibility', [KetetapanController::class, 'toggleVisibility'])->name('ketetapan.toggle-visibility');
         });
 
         // Panduan
@@ -248,6 +249,7 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
             Route::get('/panduan/{panduan}/download', 'download')->name('panduan.download');
             Route::post('/panduan/bulk',  'bulk')->name('panduan.bulk');
             Route::post('/panduan/bulk-download', [PublicsController::class, 'bulkDownload'])->name('public.panduan.bulk-download');
+            Route::post('/panduan/{id}/toggle-visibility', [PanduanController::class, 'toggleVisibility'])->name('panduan.toggle-visibility');
         });
 
         // Regulasi

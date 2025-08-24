@@ -443,4 +443,24 @@ class PanduanController extends Controller
             'total' => $panduans->count()
         ]);
     }
+
+    public function toggleVisibility(Request $request, $id)
+    {
+        $panduan = Panduan::findOrFail($id);
+
+        if ($panduan->status === 'published') {
+            $panduan->status = 'draft';
+            $message = 'Panduan disembunyikan';
+        } else {
+            $panduan->status = 'published';
+            $message = 'Regulasi ditampilkan';
+        }
+
+        $panduan->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => $message
+        ]);
+    }
 }
