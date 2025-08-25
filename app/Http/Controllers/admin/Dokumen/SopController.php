@@ -263,94 +263,79 @@ class SopController extends Controller
 
     /**
      * Download file
-     */
+     */    
     public function download(Sop $sop)
     {
-        // Cek akses: jika user tidak login (public access), pastikan status published
-        if (!Auth::check()) {
-            if ($sop->status !== 'published') {
-                abort(404, 'Dokumen tidak tersedia untuk publik');
-            }
+        // Pastikan akses publik hanya untuk SOP published
+        if (!Auth::check() && $sop->status !== 'published') {
+            abort(404, 'Dokumen tidak tersedia untuk publik');
         }
 
-        // Cek file exists
         if (!$sop->file_path || !Storage::disk('public')->exists($sop->file_path)) {
             abort(404, 'File tidak ditemukan');
         }
 
         $filePath = Storage::disk('public')->path($sop->file_path);
         $downloadName = $sop->original_filename ?? ($sop->title . '.' . ($sop->file_type ?? 'pdf'));
-        
-        // Log download activity
+
         Log::info('File downloaded', [
-            'Sop_id' => $sop->id,
+            'sop_id' => $sop->id,
             'title' => $sop->title,
             'user_ip' => request()->ip(),
             'user_agent' => request()->userAgent(),
-            'user_type' => Auth::check() ? 'admin' : 'public'
+            'user_type' => Auth::check() ? 'admin' : 'user_public'
         ]);
-        
+
         return response()->download($filePath, $downloadName);
     }
 
-    /**
-     * Bulk download files
-     */
     public function bulkDownload(Request $request)
     {
         $request->validate([
             'ids' => 'required|array',
-            'ids.*' => 'exists:Sops,id'
+            'ids.*' => 'exists:sops,id'
         ]);
 
         $ids = $request->input('ids');
-        
-        // Ambil Sop yang published dan ada filenya
+
         $query = Sop::whereIn('id', $ids)->whereNotNull('file_path');
-        
-        // Jika akses public, hanya yang published
+
         if (!Auth::check()) {
             $query->where('status', 'published');
         }
-        
+
         $sops = $query->get();
 
         if ($sops->isEmpty()) {
             return redirect()->back()->with('error', 'Tidak ada file yang dapat didownload');
         }
 
-        // Jika hanya 1 file, download langsung
         if ($sops->count() === 1) {
             return $this->download($sops->first());
         }
 
-        // Jika lebih dari 1 file, buat ZIP
         return $this->createZipDownload($sops);
     }
 
-    /**
-     * Create ZIP download
-     */
     private function createZipDownload($sops)
     {
         $zip = new \ZipArchive();
-        $zipFileName = 'Sop_' . date('Y-m-d_H-i-s') . '.zip';
+        $zipFileName = 'sop_' . date('Y-m-d_H-i-s') . '.zip';
         $zipPath = storage_path('app/temp/' . $zipFileName);
-        
-        // Buat folder temp jika belum ada
+
         if (!File::exists(storage_path('app/temp'))) {
             File::makeDirectory(storage_path('app/temp'), 0755, true);
         }
 
         if ($zip->open($zipPath, \ZipArchive::CREATE) === TRUE) {
             $fileCount = 0;
-            
+
             foreach ($sops as $sop) {
                 if (Storage::disk('public')->exists($sop->file_path)) {
                     $filePath = Storage::disk('public')->path($sop->file_path);
                     $fileName = $sop->original_filename ?? ($sop->title . '.pdf');
-                    
-                    // Pastikan nama file unik dalam ZIP
+
+                    // Pastikan nama unik dalam ZIP
                     $counter = 1;
                     $originalFileName = $fileName;
                     while ($zip->locateName($fileName) !== false) {
@@ -359,26 +344,24 @@ class SopController extends Controller
                         $fileName = $pathInfo['filename'] . '_' . $counter . $extension;
                         $counter++;
                     }
-                    
+
                     $zip->addFile($filePath, $fileName);
                     $fileCount++;
                 }
             }
-            
+
             $zip->close();
-            
+
             if ($fileCount === 0) {
-                // Hapus ZIP kosong
                 if (File::exists($zipPath)) {
                     File::delete($zipPath);
                 }
                 return redirect()->back()->with('error', 'Tidak ada file yang dapat didownload');
             }
 
-            // Log bulk download activity
             Log::info('Bulk download', [
                 'file_count' => $fileCount,
-                'Sop_ids' => $sops->pluck('id')->toArray(),
+                'sop_ids' => $sops->pluck('id')->toArray(),
                 'user_ip' => request()->ip(),
                 'user_agent' => request()->userAgent(),
                 'user_type' => Auth::check() ? 'admin' : 'public'

@@ -271,96 +271,78 @@ class RegulasiController extends Controller
         }
     }
 
-    /**
-     * Download file
-     */
     public function download(Regulasi $regulasi)
     {
-        // Cek akses: jika user tidak login (public access), pastikan status published
-        if (!Auth::check()) {
-            if ($regulasi->status !== 'published') {
-                abort(404, 'Dokumen tidak tersedia untuk publik');
-            }
+        // Pastikan akses publik hanya untuk Regulasi published
+        if (!Auth::check() && $regulasi->status !== 'published') {
+            abort(404, 'Dokumen tidak tersedia untuk publik');
         }
 
-        // Cek file exists
         if (!$regulasi->file_path || !Storage::disk('public')->exists($regulasi->file_path)) {
             abort(404, 'File tidak ditemukan');
         }
 
         $filePath = Storage::disk('public')->path($regulasi->file_path);
         $downloadName = $regulasi->original_filename ?? ($regulasi->title . '.' . ($regulasi->file_type ?? 'pdf'));
-        
-        // Log download activity
+
         Log::info('File downloaded', [
-            'Regulasi_id' => $regulasi->id,
+            'regulasi_id' => $regulasi->id,
             'title' => $regulasi->title,
             'user_ip' => request()->ip(),
             'user_agent' => request()->userAgent(),
-            'user_type' => Auth::check() ? 'admin' : 'public'
+            'user_type' => Auth::check() ? 'admin' : 'user_public'
         ]);
-        
+
         return response()->download($filePath, $downloadName);
     }
 
-    /**
-     * Bulk download files
-     */
     public function bulkDownload(Request $request)
     {
         $request->validate([
             'ids' => 'required|array',
-            'ids.*' => 'exists:Regulasis,id'
+            'ids.*' => 'exists:regulasis,id'
         ]);
 
         $ids = $request->input('ids');
-        
-        // Ambil Regulasi yang published dan ada filenya
+
         $query = Regulasi::whereIn('id', $ids)->whereNotNull('file_path');
-        
-        // Jika akses public, hanya yang published
+
         if (!Auth::check()) {
             $query->where('status', 'published');
         }
-        
+
         $regulasis = $query->get();
 
         if ($regulasis->isEmpty()) {
             return redirect()->back()->with('error', 'Tidak ada file yang dapat didownload');
         }
 
-        // Jika hanya 1 file, download langsung
         if ($regulasis->count() === 1) {
             return $this->download($regulasis->first());
         }
 
-        // Jika lebih dari 1 file, buat ZIP
         return $this->createZipDownload($regulasis);
     }
 
-    /**
-     * Create ZIP download
-     */
     private function createZipDownload($regulasis)
     {
         $zip = new \ZipArchive();
-        $zipFileName = 'Regulasi_' . date('Y-m-d_H-i-s') . '.zip';
+        $zipFileName = 'regulasi_' . date('Y-m-d_H-i-s') . '.zip';
         $zipPath = storage_path('app/temp/' . $zipFileName);
-        
-        // Buat folder temp jika belum ada
+
         if (!File::exists(storage_path('app/temp'))) {
             File::makeDirectory(storage_path('app/temp'), 0755, true);
         }
 
         if ($zip->open($zipPath, \ZipArchive::CREATE) === TRUE) {
             $fileCount = 0;
-            
+
             foreach ($regulasis as $regulasi) {
                 if (Storage::disk('public')->exists($regulasi->file_path)) {
                     $filePath = Storage::disk('public')->path($regulasi->file_path);
                     $fileName = $regulasi->original_filename ?? ($regulasi->title . '.pdf');
-                    
-                    // Pastikan nama file unik dalam ZIP
+
+                    // Pastikan nama unik dalam ZIP
                     $counter = 1;
                     $originalFileName = $fileName;
                     while ($zip->locateName($fileName) !== false) {
@@ -369,26 +351,24 @@ class RegulasiController extends Controller
                         $fileName = $pathInfo['filename'] . '_' . $counter . $extension;
                         $counter++;
                     }
-                    
+
                     $zip->addFile($filePath, $fileName);
                     $fileCount++;
                 }
             }
-            
+
             $zip->close();
-            
+
             if ($fileCount === 0) {
-                // Hapus ZIP kosong
                 if (File::exists($zipPath)) {
                     File::delete($zipPath);
                 }
                 return redirect()->back()->with('error', 'Tidak ada file yang dapat didownload');
             }
 
-            // Log bulk download activity
             Log::info('Bulk download', [
                 'file_count' => $fileCount,
-                'Regulasi_ids' => $regulasis->pluck('id')->toArray(),
+                'regulasi_ids' => $regulasis->pluck('id')->toArray(),
                 'user_ip' => request()->ip(),
                 'user_agent' => request()->userAgent(),
                 'user_type' => Auth::check() ? 'admin' : 'public'
