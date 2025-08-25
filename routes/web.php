@@ -237,8 +237,9 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
         });
     });
 
-    // Dokumen
+    // Dokumen & Regulasi
     Route::prefix('dokumen')->as('dokumen.')->group(function () {
+
         // Ketetapan Routes
         Route::controller(KetetapanController::class)->group(function () {
             Route::get('/ketetapan', 'index')->name('ketetapan.index');
@@ -248,11 +249,11 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
             Route::get('/ketetapan/export', 'export')->name('ketetapan.export');
             Route::get('/ketetapan/{ketetapan}/download', 'download')->name('ketetapan.download');
             Route::post('/ketetapan/bulk', 'bulk')->name('ketetapan.bulk');
-            Route::post('/ketetapan/bulk-download', [PublicsController::class, 'bulkDownloadDokumen'])->name('public.ketetapan.bulk-download');
+            Route::post('/ketetapan/bulk-download', [PublicsController::class, 'bulkDownload'])->name('public.ketetapan.bulk-download');
             Route::post('/ketetapan/{id}/toggle-visibility', [KetetapanController::class, 'toggleVisibility'])->name('ketetapan.toggle-visibility');
         });
-    
-        // Panduan Routes
+
+        // Panduan
         Route::controller(PanduanController::class)->group(function () {
             Route::get('/panduan', 'index')->name('panduan.index');
             Route::post('/panduan', 'store')->name('panduan.store');
@@ -260,12 +261,12 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
             Route::delete('/panduan/{panduan}', 'destroy')->name('panduan.destroy');
             Route::get('/panduan/export', 'export')->name('panduan.export');
             Route::get('/panduan/{panduan}/download', 'download')->name('panduan.download');
-            Route::post('/panduan/bulk', 'bulk')->name('panduan.bulk');
-            Route::post('/panduan/bulk-download', [PublicsController::class, 'bulkDownloadDokumen'])->name('public.panduan.bulk-download');
+            Route::post('/panduan/bulk',  'bulk')->name('panduan.bulk');
+            Route::post('/panduan/bulk-download', [PublicsController::class, 'bulkDownload'])->name('public.panduan.bulk-download');
             Route::post('/panduan/{id}/toggle-visibility', [PanduanController::class, 'toggleVisibility'])->name('panduan.toggle-visibility');
         });
-    
-        // Regulasi Routes
+
+        // Regulasi
         Route::controller(RegulasiController::class)->group(function () {
             Route::get('/regulasi', 'index')->name('regulasi.index');
             Route::post('/regulasi', 'store')->name('regulasi.store');
@@ -273,11 +274,11 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
             Route::delete('/regulasi/{regulasi}', 'destroy')->name('regulasi.destroy');
             Route::get('/regulasi/export', 'export')->name('regulasi.export');
             Route::get('/regulasi/{regulasi}/download', 'download')->name('regulasi.download');
-            Route::post('/regulasi/bulk', 'bulk')->name('regulasi.bulk');
-            Route::post('/regulasi/bulk-download', [PublicsController::class, 'bulkDownloadDokumen'])->name('public.regulasi.bulk-download');
+            Route::post('/regulasi/bulk',  'bulk')->name('regulasi.bulk');
+            Route::post('/regulasi/bulk-download', [PublicsController::class, 'bulkDownload'])->name('public.regulasi.bulk-download');
             Route::post('/regulasi/{id}/toggle-visibility', [RegulasiController::class, 'toggleVisibility'])->name('regulasi.toggle-visibility');
         });
-    
+
         // SOP Routes
         Route::controller(SopController::class)->group(function () {
             Route::get('/sop', 'index')->name('sop.index');
@@ -287,14 +288,11 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
             Route::get('/sop/export', 'export')->name('sop.export');
             Route::get('/sop/{sop}/download', 'download')->name('sop.download');
             Route::post('/sop/bulk', 'bulk')->name('sop.bulk');
-            Route::post('/sop/bulk-download', [PublicsController::class, 'bulkDownloadDokumen'])->name('public.sop.bulk-download');
+            Route::post('/sop/bulk-download', [PublicsController::class, 'bulkDownload'])->name('public.sop.bulk-download');
             Route::post('/sop/{id}/toggle-visibility', [SopController::class, 'toggleVisibility'])->name('sop.toggle-visibility');
         });
-    
-        // PublicsController Download Dokumen route dengan tipe opsional sebagai parameter query (GET)
-        Route::get('/download/{dokumenId}/{tipe?}', [PublicsController::class, 'downloadDokumen'])->name('public.downloadDokumen');
+
     });
-    
     
     // FAQ
     Route::prefix('faq')->as('faq.')->controller(FaqController::class)->group(function () {
