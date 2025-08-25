@@ -314,7 +314,7 @@ class PublicsController extends Controller
                           ->withQueryString();
     
         return view('public.news', compact('title', 'description', 'keywords', 'newsList', 'search', 'shareText', 'url'));
-    }
+}
     
 
     public function newsDetail($slug)
@@ -343,7 +343,6 @@ class PublicsController extends Controller
 
         $query = KelolaPengumuman::where('status', 'published');
 
-        // Search by title or content
         if ($search) {
             $query->where(function($q) use ($search){
                 $q->where('title', 'like', "%{$search}%")
@@ -352,7 +351,6 @@ class PublicsController extends Controller
             });
         }
 
-        // Urutkan berdasarkan prioritas urgency dulu, kemudian tanggal terbaru
         $announcementsList = $query->orderByRaw("
                                 CASE 
                                     WHEN urgency = 'penting' THEN 1
@@ -459,9 +457,27 @@ class PublicsController extends Controller
         ));
     }
 
-    public function downloadDokumen($dokumenId, string $tipe = 'default')
+    public function downloadDokumen($dokumenId, string $tipe = 'ketetapan')
     {
-        $dokumen = Ketetapan::find($dokumenId);
+        switch ($tipe) {
+            case 'regulasi':
+                $model = Regulasi::class;
+                break;
+            case 'panduan':
+                $model = Panduan::class;
+                break;
+            case 'sop':
+                $model = Sop::class;
+                break;
+            case 'ketetapan':
+                $model = Ketetapan::class;
+                break;
+            default:
+                abort(404, 'Tipe dokumen tidak valid');
+        }
+
+        $dokumen = $model::find($dokumenId);
+
         if (!$dokumen || $dokumen->status !== 'published') {
             abort(404, 'Dokumen tidak tersedia untuk publik');
         }
@@ -477,11 +493,12 @@ class PublicsController extends Controller
             "{$tipe}_id" => $dokumen->id,
             'title' => $dokumen->title,
             'user_ip' => request()->ip(),
-            'user_agent' => request()->userAgent()
+            'user_agent' => request()->userAgent(),
         ]);
 
         return response()->download($filePath, $downloadName);
     }
+
     
     public function bulkDownloadDokumen(Request $request)
     {
