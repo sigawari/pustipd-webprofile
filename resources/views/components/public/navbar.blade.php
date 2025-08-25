@@ -302,7 +302,6 @@
 </div>
 
 <script>
-    // Script Hide Upper Navbar on Scroll
     const topbar = document.getElementById('topbar');
 
     window.addEventListener('scroll', function() {
