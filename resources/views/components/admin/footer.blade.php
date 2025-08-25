@@ -35,12 +35,12 @@
                         <span class="w-1.5 h-1.5 bg-green-400 rounded-full mr-1.5"></span>
                         Online
                     </span>
-                    <span class="text-xs text-gray-500">v1.1.0</span>
+                    <span class="text-xs text-gray-500">v1.0.0</span>
                 </div>
             </div>
         </div>
 
-        <!-- Additional Footer Info (Optional) -->
+        <!-- Additional Footer Info -->
         <div class="mt-3 pt-3 border-t border-gray-100">
             <div class="flex flex-col sm:flex-row justify-between items-center gap-2 text-xs text-gray-500">
                 <!-- Last Updated -->
