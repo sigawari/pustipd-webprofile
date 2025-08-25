@@ -51,12 +51,6 @@
                     menonaktifkan atau menghapus akun sesuai kebijakan.
                 </x-helpAccordion>
 
-                <x-helpAccordion title="Penutup dan Harapan">
-                    CMS dibuat agar mudah dioperasikan dan konten selalu update. Disarankan update konten rutin,
-                    manajemen pengguna disiplin,
-                    serta prosedur input dan publikasi konten diikuti dengan baik.
-                </x-helpAccordion>
-
             </div>
         </div>
     </div>
