@@ -457,7 +457,7 @@ class PublicsController extends Controller
         ));
     }
 
-    public function downloadDokumen($dokumenId, string $tipe = 'default')
+    public function downloadDokumen($dokumenId, string $tipe = 'ketetapan')
     {
         switch ($tipe) {
             case 'regulasi':

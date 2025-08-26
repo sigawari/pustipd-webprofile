@@ -185,15 +185,6 @@
                             </div>
                         </div>
 
-                        {{-- Di komen dulu kita fokus sama yang sudah ada --}}
-                        {{-- <div>
-                            <a href="/pendaftaran">
-                                <button class="text-white  transition focus:outline-none">
-                                    <h3 class="navbar-menu hover:text-custom-blue">Pendaftaran</h3>
-                                </button>
-                            </a>
-                        </div> --}}
-
                         <div>
                             <a href="/faq">
                                 <button class="text-white  transition focus:outline-none">
@@ -285,13 +276,6 @@
                 <a href="/sop" class="block text-secondary hover:text-custom-blue">SOP</a>
             </div>
         </div>
-
-        {{-- <div class="relative">
-            <a href="/pendaftaran"
-                class="block px-0 py-2 text-left focus:outline-none hover:text-custom-blue transition">
-                <span>Pendaftaran</span>
-            </a>
-        </div> --}}
 
         <div class="relative">
             <a href="/faq" class="block px-0 py-2 text-left focus:outline-none hover:text-custom-blue transition">
