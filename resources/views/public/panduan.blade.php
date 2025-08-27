@@ -312,7 +312,7 @@
                             <!-- Download Button -->
                             <td class="px-3 py-3 text-center">
                                 @if ($panduan->file_path && file_exists(storage_path('app/public/' . $panduan->file_path)))
-                                    <a href="{{ route('panduan.download', $panduan->id) }}"
+                                    <a href="{{ route('public.document.download', ['tipe' => 'panduan', 'id' => $panduan->id]) }}"
                                         class="inline-flex items-center justify-center w-8 h-8 bg-blue-600 text-white rounded-lg 
                                                hover:bg-blue-700 transition-colors shadow-sm touch-target"
                                         title="Download {{ $panduan->title }}" target="_blank">
