@@ -64,23 +64,14 @@ Route::prefix('auth')->group(function () {
 });
 
 // Public Routes for downloading documents
-Route::get('/ketetapan/{ketetapan}/download', [PublicsController::class, 'downloadDokumen'])
-    ->name('ketetapan.download');
+Route::get('/{tipe}/{id}/download', [PublicsController::class, 'downloadDokumen'])
+    ->name('public.document.download');
 Route::post('/ketetapan/bulk-download', [PublicsController::class, 'bulkDownloadDokumen'])
     ->name('public.ketetapan.bulk-download');
-
-Route::get('/panduan/{panduan}/download', [PublicsController::class, 'downloadDokumen'])
-    ->name('panduan.download');
 Route::post('/panduan/bulk-download', [PublicsController::class, 'bulkDownloadDokumen'])
     ->name('public.panduan.bulk-download');
-
-Route::get('/regulasi/{regulasi}/download', [PublicsController::class, 'downloadDokumen'])
-    ->name('regulasi.download');
 Route::post('/regulasi/bulk-download', [PublicsController::class, 'bulkDownloadDokumen'])
     ->name('public.regulasi.bulk-download');
-
-Route::get('/sop/{sop}/download', [PublicsController::class, 'downloadDokumen'])
-    ->name('sop.download');
 Route::post('/sop/bulk-download', [PublicsController::class, 'bulkDownloadDokumen'])
     ->name('public.sop.bulk-download');
 
