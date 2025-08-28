@@ -25,8 +25,9 @@
             </span>
 
             <!-- Search Form -->
-            <form action="#" method="GET" class="relative w-full max-w-md mx-auto mb-6">
-                <input type="text" name="search" placeholder="Cari informasi di sini"
+            <form action="{{ route('news') }}" method="GET" class="relative w-full max-w-md mx-auto mb-8">
+                <input type="text" name="search" value="{{ request('search') }}"
+                    placeholder="Cari informasi di sini...."
                     class="w-full rounded-xl pl-12 pr-4 py-2 sm:py-3 text-white placeholder-white bg-transparent border border-white focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent" />
                 <button type="submit" class="absolute top-1/2 left-3 transform -translate-y-1/2 text-white">
                     <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" stroke-width="2"

@@ -37,13 +37,26 @@ class PublicsController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $title = 'UIN Raden Fatah Palembang';
         $description = 'Pusat Sistem dan Teknologi Informasi dan Pangkalan Data UIN Raden Fatah Palembang';
         $keywords = 'pustipd, uin raden fatah, teknologi informasi';
 
         $profils = Profil::with(['applications', 'institutions', 'universities'])->latest()->first() ?? new Profil();
+
+        $search = $request->query('search', '');
+
+    
+        $query = KelolaBerita::where('status', 'published');
+    
+        // Search by title or content
+        if ($search) {
+            $query->where(function($q) use ($search){
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('content', 'like', "%{$search}%");
+            });
+        }
         
         $achievements = Pencapaian::published()
                                 ->orderBy('created_at', 'desc')
@@ -129,7 +142,7 @@ class PublicsController extends Controller
 
         return view('public.homepage', compact(
             'title', 'description', 'keywords', 'profils', 'newsList', 
-            'announcementsList', 'urgentAnnouncements', 'achievements', 'services', 'partners', 'teams'
+            'announcementsList', 'urgentAnnouncements', 'achievements', 'services', 'partners', 'teams', 'search'
         ));
     }
 
