@@ -218,14 +218,21 @@
 
             <!-- Button Save and Delete -->
              <div class="flex items-center gap-3 mt-6 pt-6 border-t border-gray-200">
-                <!-- Form Update -->
-                @if (isset($profilData))
+                <!-- Save and Update -->
+                 @if (isset($profilData))
+                    <!-- Tombol Update -->
                     <button type="submit"
                         class="px-4 py-2 bg-secondary text-white rounded-lg hover:bg-custom-blue transition-colors duration-200 flex items-center justify-center text-sm sm:text-base">
                         Simpan Perubahan
                     </button>
+                @else
+                    <!-- Tombol Create -->
+                    <button type="submit"
+                        class="px-4 py-2 bg-secondary text-white rounded-lg hover:bg-custom-blue transition-colors duration-200 flex items-center justify-center text-sm sm:text-base">
+                        Simpan Data {{ $title }}
+                    </button>
                 @endif
-                <!-- Form Delete -->
+                <!-- Delete -->
                 @if (isset($profilData))
                     <button type="button" onclick="openDeleteModal('{{ $profilData->id }}')"
                         class="px-4 py-2 border border-red-300 rounded-lg text-red-700 hover:bg-red-50 transition-colors duration-200 text-sm sm:text-base">
