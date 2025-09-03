@@ -104,6 +104,7 @@ class ProfilController extends Controller
 
     public function update(Request $request, Profil $profil)
     {
+        // dd($request->all());
         $request->validate([
             'organization_name' => 'nullable|string|max:255',
             'description'       => 'nullable|string',
