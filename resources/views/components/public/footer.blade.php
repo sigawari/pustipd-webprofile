@@ -17,7 +17,7 @@
                 </div>
                 <div class="space-y-2">
                     <h3 class="text-md font-semibold text-white">Alamat</h3>
-                    <p class="text-sm text-blue-100 leading-relaxed">
+                    <p class="text-sm justify-between text-blue-100 leading-relaxed">
                         {{ $footerData['address'] ?? 'Gedung Perpustakaan Lt. 4, Jl. Pangeran Ratu (Jakabaring), Kelurahan 5 Ulu, Kecamatan Seberang Ulu I, Kota Palembang, Sumatera Selatan 30267, Indonesia.' }}
                     </p>
                 </div>

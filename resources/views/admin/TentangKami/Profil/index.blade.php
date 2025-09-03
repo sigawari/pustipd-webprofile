@@ -216,29 +216,35 @@
                 </div>
             </div>
 
-            <div
-                class="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-6 pt-6 border-t border-gray-200 gap-4">
-                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:space-x-3">
+            <!-- Button Save and Delete -->
+             <div class="flex items-center gap-3 mt-6 pt-6 border-t border-gray-200">
+                <!-- Form Update -->
+                <form
+                    action="{{ isset($profilData) ? route('admin.tentang-kami.profil.update', $profilData) : route('admin.tentang-kami.profil.store') }}"
+                    method="POST" enctype="multipart/form-data">
+                    @csrf
                     @if (isset($profilData))
-                        <form action="{{ route('admin.tentang-kami.profil.destroy', $profilData) }}" method="POST"
-                            onsubmit="return confirm('Yakin hapus semua data profil? Tindakan ini tidak dapat dibatalkan.');">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit"
-                                class="w-full sm:w-auto px-4 py-2 border border-red-300 rounded-lg text-red-700 hover:bg-red-50 transition-colors duration-200 text-sm sm:text-base">
-                                Hapus Semua
-                            </button>
-                        </form>
+                        @method('PUT')
                     @endif
+
                     <button type="submit"
-                        class="w-full sm:w-auto px-4 py-2 bg-secondary text-white rounded-lg hover:bg-custom-blue transition-colors duration-200 flex items-center justify-center text-sm sm:text-base">
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
-                            </path>
-                        </svg>
+                        class="px-4 py-2 bg-secondary text-white rounded-lg hover:bg-custom-blue transition-colors duration-200 flex items-center justify-center text-sm sm:text-base">
                         Simpan Perubahan
                     </button>
-                </div>
+                </form>
+
+                @if (isset($profilData))
+                    <!-- Form Delete -->
+                    <form action="{{ route('admin.tentang-kami.profil.destroy', $profilData) }}" method="POST"
+                        onsubmit="return confirm('Yakin hapus semua data profil? Tindakan ini tidak dapat dibatalkan.');">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit"
+                            class="px-4 py-2 border border-red-300 rounded-lg text-red-700 hover:bg-red-50 transition-colors duration-200 text-sm sm:text-base">
+                            Hapus Semua
+                        </button>
+                    </form>
+                @endif
             </div>
         </form>
     </div>
