@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\admin\Sistem;
 
 use App\Models\Sistem\User;
-use App\Http\Controllers\Controller;
+use App\Exports\UsersExport;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -141,14 +142,6 @@ class ManageUserController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(User $user)
-    {
-        // dd($request->all()); // uncomment untuk debug
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
@@ -217,5 +210,11 @@ class ManageUserController extends Controller
         $user->delete();
         // Redirect kembali dengan pesan sukses
         return redirect()->route('admin.sistem.manage-users.index')->with('success', 'Data berhasil dihapus.');
+    }
+
+    public function export(Request $request)
+    {
+        $role = $request->query('filter'); // ambil dari query string
+        return (new UsersExport($role))->export();
     }
 }
