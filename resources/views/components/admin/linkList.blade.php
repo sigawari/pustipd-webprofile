@@ -18,6 +18,7 @@
                 <div class="flex flex-wrap items-center gap-2 p-3 bg-gray-50 rounded-lg">
                     <input type="hidden" name="{{ $type }}[{{ $index }}][id]"
                         value="{{ is_object($item) ? $item->id : $item['id'] ?? '' }}">
+                    <input type="hidden" name="{{ $type }}[{{ $index }}][sort_order]" value="{{ $index }}">
 
                     <input type="text" name="{{ $type }}[{{ $index }}][name]"
                         value="{{ old($type . '.' . $index . '.name', is_object($item) ? $item->name : $item['name'] ?? '') }}"
@@ -29,14 +30,10 @@
                         placeholder="{{ $placeholderUrl }}"
                         class="flex-1 min-w-[200px] px-3 py-2 border border-gray-200 rounded-lg bg-white">
 
-                    <div class="flex gap-2">
-                        <button type="button" onclick="editListItem(this)"
-                            class="text-sm text-blue-600 hover:text-blue-800 px-3 py-1 rounded">Edit</button>
-                        <button type="button" onclick="saveListItem(this)"
-                            class="text-sm text-green-600 hover:text-green-800 px-3 py-1 rounded hidden">Save</button>
-                        <button type="button" onclick="removeListItem(this)"
-                            class="text-sm text-red-600 hover:text-red-800 px-3 py-1 rounded">Delete</button>
-                    </div>
+                    <button type="button" onclick="removeListItem(this)"
+                        class="text-sm text-red-600 hover:text-red-800 px-3 py-1 rounded">
+                        Delete
+                    </button>
                 </div>
             @endforeach
         @else
@@ -50,45 +47,40 @@
 <script>
     function addListItem(type, placeholderName, placeholderUrl) {
         const container = document.getElementById(type + '-list');
-        const index = container.children.length;
+        const index = container.querySelectorAll('input[name*="[id]"]').length;
 
         const div = document.createElement('div');
         div.className = "flex flex-wrap items-center gap-2 p-3 bg-gray-50 rounded-lg";
 
         div.innerHTML = `
             <input type="hidden" name="${type}[${index}][id]" value="">
-            <input type="text" name="${type}[${index}][name]" placeholder="${placeholderName}" class="flex-1 min-w-[200px] px-3 py-2 border border-gray-200 rounded-lg bg-white">
-            <input type="url" name="${type}[${index}][url]" placeholder="${placeholderUrl}" class="flex-1 min-w-[200px] px-3 py-2 border border-gray-200 rounded-lg bg-white">
-            <div class="flex gap-2">
-                <button type="button" onclick="editListItem(this)" class="text-sm text-blue-600 hover:text-blue-800 px-3 py-1 rounded">Edit</button>
-                <button type="button" onclick="saveListItem(this)" class="text-sm text-green-600 hover:text-green-800 px-3 py-1 rounded hidden">Save</button>
-                <button type="button" onclick="removeListItem(this)" class="text-sm text-red-600 hover:text-red-800 px-3 py-1 rounded">Delete</button>
-            </div>
+            <input type="hidden" name="${type}[${index}][sort_order]" value="${index}">
+            <input type="text" name="${type}[${index}][name]" placeholder="${placeholderName}" 
+                   class="flex-1 min-w-[200px] px-3 py-2 border border-gray-200 rounded-lg bg-white">
+            <input type="url" name="${type}[${index}][url]" placeholder="${placeholderUrl}" 
+                   class="flex-1 min-w-[200px] px-3 py-2 border border-gray-200 rounded-lg bg-white">
+            <button type="button" onclick="removeListItem(this)" 
+                    class="text-sm text-red-600 hover:text-red-800 px-3 py-1 rounded">
+                Delete
+            </button>
         `;
         container.appendChild(div);
     }
 
-    function editListItem(button) {
-        const container = button.closest('div.flex');
-        container.querySelectorAll('input[type="text"], input[type="url"]').forEach(input => {
-            input.removeAttribute('readonly');
-            input.focus();
-        });
-        button.classList.add('hidden'); // hide Edit
-        button.nextElementSibling.classList.remove('hidden'); // show Save
-    }
-
-    function saveListItem(button) {
-        const container = button.closest('div.flex');
-        container.querySelectorAll('input[type="text"], input[type="url"]').forEach(input => {
-            input.setAttribute('readonly', 'readonly');
-        });
-        button.classList.add('hidden'); // hide Save
-        button.previousElementSibling.classList.remove('hidden'); // show Edit
-    }
-
     function removeListItem(button) {
-        const container = button.closest('div.flex');
+        const container = button.closest('div.flex.flex-wrap');
+        if (!container) return;
+
+        // kalau item dari DB (punya ID) → tandai untuk dihapus
+        const idInput = container.querySelector('input[name*="[id]"]');
+        if (idInput && idInput.value) {
+            const deletedInput = document.createElement('input');
+            deletedInput.type = 'hidden';
+            deletedInput.name = "deleted_ids[]";
+            deletedInput.value = idInput.value;
+            container.parentNode.appendChild(deletedInput);
+        }
+
         container.remove();
     }
 </script>
