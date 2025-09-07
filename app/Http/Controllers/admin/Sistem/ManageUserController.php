@@ -214,7 +214,15 @@ class ManageUserController extends Controller
 
     public function export(Request $request)
     {
-        $role = $request->query('filter'); // ambil dari query string
-        return (new UsersExport($role))->export();
+        $role = $request->query('filter'); // admin / user_public / all
+        $search = $request->query('search'); // kalau mau dipakai buat filter nama/email
+
+        if ($role === 'all' || empty($role)) {
+            $role = null;
+        }
+
+        return (new UsersExport($role, $search))->export();
     }
+
+
 }
