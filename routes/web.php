@@ -1,14 +1,18 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\admin\FaqController;
-use App\Http\Controllers\Auth\LoginController;
 
 // ==========================
 // Auths
 // ==========================
-use App\Http\Controllers\public\PublicsController;
+use App\Http\Controllers\Auth\LoginController;
+// ==============================================================================
 
+
+// ==========================
+// Public
+// ==========================
+use App\Http\Controllers\public\PublicsController;
 // ==============================================================================
 
 // ==========================
@@ -16,39 +20,43 @@ use App\Http\Controllers\public\PublicsController;
 // ==========================
 // Dashboard
 use App\Http\Controllers\admin\DashboardController;
-// Beranda
-use App\Http\Controllers\admin\AppLayananController;
-use App\Http\Controllers\admin\Dokumen\SopController;
-use App\Http\Controllers\admin\Sistem\HelpController;
 
-// Tentang Kami
+// Beranda
+use App\Http\Controllers\admin\Beranda\PencapaianController;
 use App\Http\Controllers\admin\Beranda\MitraController;
-use App\Http\Controllers\admin\Sistem\ProfileController;
-use App\Http\Controllers\admin\Sistem\ReportsController;
 use App\Http\Controllers\admin\Beranda\LayananController;
 
-// Aplikasi & Layanan
-use App\Http\Controllers\admin\Dokumen\PanduanController;
-
-// Informasi Terkini
-use App\Http\Controllers\admin\Dokumen\RegulasiController;
-use App\Http\Controllers\admin\Dokumen\KetetapanController;
-use App\Http\Controllers\admin\Sistem\ManageUserController;
-
-// Dokumen & Regulasi
-use App\Http\Controllers\admin\Beranda\PencapaianController;
+// Tentang Kami
 use App\Http\Controllers\admin\TentangKami\ProfilController;
 use App\Http\Controllers\admin\TentangKami\GalleryController;
 use App\Http\Controllers\admin\TentangKami\VisiMisiController;
+use App\Http\Controllers\admin\TentangKami\StrukturOrganisasiController;
+
+// Aplikasi & Layanan
+use App\Http\Controllers\admin\AppLayananController;
+
+// Informasi Terkini
+use App\Http\Controllers\admin\InformasiTerkini\KelolaBeritaController;
+use App\Http\Controllers\admin\InformasiTerkini\KelolaPengumumanController;
+use App\Http\Controllers\admin\InformasiTerkini\KelolaTutorialController;
+
+// Dokumen & Regulasi
+use App\Http\Controllers\admin\Dokumen\KetetapanController;
+use App\Http\Controllers\admin\Dokumen\PanduanController;
+use App\Http\Controllers\admin\Dokumen\RegulasiController;
+use App\Http\Controllers\admin\Dokumen\SopController;
 
 // FAQ
-use App\Http\Controllers\admin\InformasiTerkini\KelolaBeritaController;
+use App\Http\Controllers\admin\FaqController;
 
 // Sistem
-use App\Http\Controllers\admin\TentangKami\StrukturOrganisasiController;
-use App\Http\Controllers\admin\InformasiTerkini\KelolaTutorialController;
-use App\Http\Controllers\admin\InformasiTerkini\KelolaPengumumanController;
-use App\Http\Controllers\Admin\AppLayanan\AppLayananController as AppLayananAppLayananController;
+use App\Http\Controllers\admin\Sistem\ManageUserController;
+use App\Http\Controllers\admin\Sistem\ProfileController;
+use App\Http\Controllers\admin\Sistem\HelpController;
+
+// use App\Http\Controllers\admin\Sistem\ReportsController;
+// use App\Http\Controllers\Admin\AppLayanan\AppLayananController as AppLayananAppLayananController;
+// ==============================================================================
 
 /*
 |--------------------------------------------------------------------------
