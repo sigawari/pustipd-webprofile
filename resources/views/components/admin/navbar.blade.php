@@ -9,7 +9,7 @@
         <div class="flex items-center space-x-3 min-w-0 flex-1 lg:flex-none">
             <!-- Mobile Sidebar Toggle -->
             <button @click="$dispatch('toggle-sidebar')"
-                class="flex items-center justify-center w-10 h-10 rounded-lg text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 lg:hidden transition-colors duration-200 flex-shrink-0">
+                class="flex items-center justify-center w-10 h-10 rounded-lg text-gray-800 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 lg:hidden transition-colors duration-200 flex-shrink-0">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16">
                     </path>
@@ -18,7 +18,7 @@
 
             <!-- Desktop Sidebar Toggle -->
             <button @click="$dispatch('toggle-sidebar')"
-                class="hidden lg:flex items-center justify-center w-10 h-10 rounded-lg text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 transition-colors duration-200 flex-shrink-0">
+                class="hidden lg:flex items-center justify-center w-10 h-10 rounded-lg text-gray-800 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 transition-colors duration-200 flex-shrink-0">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16">
                     </path>
@@ -309,7 +309,7 @@
                         </div>
 
                         <div class="py-2">
-                            <a href="{{ route('admin.sistem.profil.index') }}"
+                            <a href="{{ route('admin.sistem.profile.index') }}"
                                 class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-150">
                                 <svg class="w-5 h-5 mr-3 text-gray-400 flex-shrink-0" fill="none"
                                     stroke="currentColor" viewBox="0 0 24 24">

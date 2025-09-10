@@ -14,6 +14,6 @@ class ProfileController extends Controller
         // Ambil data user yang login
         $user = Auth::user();
 
-        return view('admin.profil', compact('title', 'user'));
+        return view('admin.profile', compact('title', 'user'));
     }
 }

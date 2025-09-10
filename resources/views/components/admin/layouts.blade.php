@@ -10,7 +10,7 @@
         <!-- Vite Assets -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-        <link id="favicon" rel="shortcut icon" href="{{ asset('assets/img/logo/logo-uin-rfp.png') }}"
+        <link id="favicon" rel="shortcut icon" href="{{ asset('assets/img/favicon/favicon.ico') }}"
             type="image/x-icon">
 
         <!-- SEO Meta Tags -->

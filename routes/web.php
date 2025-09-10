@@ -87,7 +87,7 @@ Route::post('/sop/bulk-download', [PublicsController::class, 'bulkDownloadDokume
 // Admin Routes - Protected by authentication
 Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
 
-    Route::get('/sistem/profil', [ProfileController::class, 'index'])->name('sistem.profil.index');
+    Route::get('/sistem/profile', [ProfileController::class, 'index'])->name('sistem.profile.index');
 
     Route::get('/sistem/bantuan', [HelpController::class, 'index'])->name('sistem.bantuan.index');
 
