@@ -58,7 +58,7 @@ class LayananExport
 
         // Tulis ke spreadsheet
         $sheet->setCellValue('D25', $totalLayanan); // Total Layanan
-        $sheet->setCellValue('D26', $now->translatedFormat('l, d F Y')); // Tanggal Export
+        $sheet->setCellValue('D26', $now->translatedFormat('d-m-Y H:i:s')); // Tanggal Export
 
         // Mulai dari baris ke-8
         $startRow = 8;
