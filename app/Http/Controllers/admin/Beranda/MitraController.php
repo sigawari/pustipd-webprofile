@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\admin\Beranda;
 
 use Exception;
+use App\Exports\MitraExport;
 use Illuminate\Http\Request;
 use App\Models\Beranda\Mitra;
 use App\Http\Controllers\Controller;
@@ -229,5 +230,19 @@ class MitraController extends Controller
             'success' => true,
             'message' => $message
         ]);
+    }
+
+    public function export(Request $request)
+    {
+        $status = $request->query('filter'); // visible / hidden / all
+        $search = $request->query('search'); // keyword
+
+        // Kalau "all" atau kosong → jadikan null
+        if (empty($status) || $status === 'all') {
+            $status = null;
+        }
+
+        // Panggil MitraExport dengan parameter
+        return (new MitraExport($status, $search))->export();
     }
 }
