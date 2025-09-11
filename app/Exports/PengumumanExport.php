@@ -63,8 +63,8 @@ class PengumumanExport
         $now             = Carbon::now();
 
         // Tuliskan summary
-        $sheet->setCellValue('D25', 'Total Data: ' . $totalPengumuman); // Total Pengumuman
-        $sheet->setCellValue('D26', 'Tanggal Export: ' . $now->format('d-m-Y H:i:s')); // Tanggal Export
+        $sheet->setCellValue('D25', $totalPengumuman); // Total Pengumuman
+        $sheet->setCellValue('D26', $now->format('d-m-Y H:i:s')); // Tanggal Export
 
         // Isi data ke spreadsheet
         $startRow = 8; // Mulai dari baris ke-8

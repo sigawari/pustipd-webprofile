@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\InformasiTerkini;
 
 use Illuminate\Http\Request;
+use App\Exports\TutorialExport;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
@@ -326,6 +327,21 @@ class KelolaTutorialController extends Controller
             'success' => true,
             'message' => $message
         ]);
-    }    
+    }
+    
+    public function export(Request $request)
+    {
+        $status      = $request->query('filter');   // visible / hidden / all
+        $category    = $request->query('category'); // kategori (opsional)
+        $is_featured = $request->query('is_featured'); // opsional (boolean)
+        $search      = $request->query('search');   // keyword
+
+        // Normalisasi status
+        if (empty($status) || $status === 'all') {
+            $status = null;
+        }
+
+        return (new TutorialExport($status, $category, $is_featured, $search))->export();
+    }
 
 }
