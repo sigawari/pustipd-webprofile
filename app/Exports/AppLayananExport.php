@@ -76,6 +76,7 @@ class AppLayananExport
             $sheet->setCellValue("F{$row}", $appLayanan->applink); // App Link
             $sheet->setCellValue("G{$row}", ucfirst($appLayanan->status)); // Status
         }
+        
         // Simpan ke file sementara
         $exportDir = storage_path('app/public/exports');
         if (!File::exists($exportDir)) {

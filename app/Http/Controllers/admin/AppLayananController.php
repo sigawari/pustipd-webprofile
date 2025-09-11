@@ -268,15 +268,17 @@ class AppLayananController extends Controller
 
     public function export(Request $request)
     {
-        $status = $request->query('filter'); // visible / hidden / all
-        $search = $request->query('search'); // keyword
+        $status   = $request->query('filter');   // visible / hidden / all
+        $category = $request->query('category'); // kategori (opsional)
+        $search   = $request->query('search');   // keyword
 
-        // Kalau "all" atau kosong → jadikan null
+        // Normalisasi status
         if (empty($status) || $status === 'all') {
             $status = null;
         }
 
-        // Panggil AppLayananExport dengan parameter
-        return (new AppLayananExport($status, $search))->export();
+        // Panggil AppLayananExport dengan parameter sesuai urutan constructor
+        return (new AppLayananExport($status, $category, $search))->export();
     }
+
 }

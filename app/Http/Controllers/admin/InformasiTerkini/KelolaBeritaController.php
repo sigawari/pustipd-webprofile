@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\InformasiTerkini;
 
 use Illuminate\Http\Request;
+use App\Exports\BeritaExport;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
@@ -266,4 +267,20 @@ class KelolaBeritaController extends Controller
             'message' => $message
         ]);
     }
+
+    public function export(Request $request)
+    {
+        $status   = $request->query('filter');   // visible / hidden / all
+        $category = $request->query('category'); // kategori (opsional)
+        $search   = $request->query('search');   // keyword
+
+        // Normalisasi status
+        if (empty($status) || $status === 'all') {
+            $status = null;
+        }
+
+        // Panggil BeritaExport dengan parameter sesuai urutan constructor
+        return (new BeritaExport($status, $category, $search))->export();
+    }
+
 }
