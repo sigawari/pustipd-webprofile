@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Faq;
-use App\Http\Controllers\Controller;
+use App\Exports\FaqExport;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class FaqController extends Controller
@@ -247,4 +248,19 @@ class FaqController extends Controller
             'message' => $message
         ]);
     }
+
+    public function export(Request $request)
+    {
+        $status = $request->query('filter'); // visible / hidden / all
+        $search = $request->query('search'); // keyword
+
+        // Kalau "all" atau kosong → jadikan null
+        if (empty($status) || $status === 'all') {
+            $status = null;
+        }
+
+        // Panggil FaqExport dengan parameter
+        return (new FaqExport($status, $search))->export();
+    }
+
 }

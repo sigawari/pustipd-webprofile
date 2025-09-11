@@ -7,7 +7,7 @@
                 value="{{ $faq->id }}" onchange="updateBulkActionsBar()">
         </td>
         <!-- No -->
-        <td class="px-6 py-4 whitespace-nowrap">
+        <td class="px-6 py-4 text-left whitespace-nowrap">
             {{ $faqs->firstItem() + $key }}
         </td>
         <!-- Pertanyaan -->

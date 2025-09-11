@@ -303,6 +303,7 @@ Route::prefix('admin')->as('admin.')->middleware(['auth'])->group(function () {
         Route::delete('/{faq}', 'destroy')->name('destroy');
         Route::post('/bulk', 'bulk')->name('bulk');
         Route::post('/faq/{id}/toggle-visibility', [FaqController::class, 'toggleVisibility'])->name('toggle-visibility');
+        Route::get('/export', 'export')->name('export');
     });
 
 
