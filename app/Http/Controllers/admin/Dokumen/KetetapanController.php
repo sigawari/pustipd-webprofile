@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Admin\Dokumen;
 
-use App\Models\Dokumen\Ketetapan;
-use App\Http\Controllers\Controller;
-
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+
+use App\Exports\KetetapanExport;
+use App\Models\Dokumen\Ketetapan;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -403,22 +404,6 @@ class KetetapanController extends Controller
         ];
     }
 
-    /**
-     * Export ketetapan data
-     */
-    public function export(Request $request)
-    {
-        $ketetapans = Ketetapan::when($request->status, function($query) use ($request) {
-            $query->where('status', $request->status);
-        })->get();
-
-        return response()->json([
-            'data' => $ketetapans,
-            'exported_at' => now(),
-            'total' => $ketetapans->count()
-        ]);
-    }
-
     public function toggleVisibility(Request $request, $id)
     {
         $ketetapan = Ketetapan::findOrFail($id);
@@ -437,5 +422,19 @@ class KetetapanController extends Controller
             'success' => true,
             'message' => $message
         ]);
+    }
+
+    public function export(Request $request)
+    {
+        $status = $request->query('filter'); // visible / hidden / all
+        $search = $request->query('search'); // keyword
+
+        // Kalau "all" atau kosong → jadikan null
+        if (empty($status) || $status === 'all') {
+            $status = null;
+        }
+
+        // Panggil KetetapanExport dengan parameter
+        return (new KetetapanExport($status, $search))->export();
     }
 }
