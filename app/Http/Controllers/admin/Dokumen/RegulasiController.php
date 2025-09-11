@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Admin\Dokumen;
 
-use App\Models\Dokumen\Regulasi;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Exports\RegulasiExport;
+use App\Models\Dokumen\Regulasi;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -406,21 +407,6 @@ class RegulasiController extends Controller
         ];
     }
 
-    /**
-     * Export Regulasi data
-     */
-    public function export(Request $request)
-    {
-        $regulasis = Regulasi::when($request->status, function($query) use ($request) {
-            $query->where('status', $request->status);
-        })->get();
-
-        return response()->json([
-            'data' => $regulasis,
-            'exported_at' => now(),
-            'total' => $regulasis->count()
-        ]);
-    }
 
     public function toggleVisibility(Request $request, $id)
     {
@@ -440,5 +426,19 @@ class RegulasiController extends Controller
             'success' => true,
             'message' => $message
         ]);
+    }
+
+    public function export(Request $request)
+    {
+        $status = $request->query('filter'); // visible / hidden / all
+        $search = $request->query('search'); // keyword
+
+        // Kalau "all" atau kosong → jadikan null
+        if (empty($status) || $status === 'all') {
+            $status = null;
+        }
+
+        // Panggil RegulasiExport dengan parameter
+        return (new RegulasiExport($status, $search))->export();
     }
 }
