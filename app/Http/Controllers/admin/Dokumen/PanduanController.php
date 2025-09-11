@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Admin\Dokumen;
 
-use App\Models\Dokumen\Panduan;
-use App\Http\Controllers\Controller;
-
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+
+use App\Exports\PanduanExport;
+use App\Models\Dokumen\Panduan;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -411,22 +412,6 @@ class PanduanController extends Controller
         ];
     }
 
-    /**
-     * Export Panduan data
-     */
-    public function export(Request $request)
-    {
-        $panduans = Panduan::when($request->status, function($query) use ($request) {
-            $query->where('status', $request->status);
-        })->get();
-
-        return response()->json([
-            'data' => $panduans,
-            'exported_at' => now(),
-            'total' => $panduans->count()
-        ]);
-    }
-
     public function toggleVisibility(Request $request, $id)
     {
         $panduan = Panduan::findOrFail($id);
@@ -445,5 +430,19 @@ class PanduanController extends Controller
             'success' => true,
             'message' => $message
         ]);
+    }
+
+    public function export(Request $request)
+    {
+        $status = $request->query('filter'); // visible / hidden / all
+        $search = $request->query('search'); // keyword
+
+        // Kalau "all" atau kosong → jadikan null
+        if (empty($status) || $status === 'all') {
+            $status = null;
+        }
+
+        // Panggil PanduanExport dengan parameter
+        return (new PanduanExport($status, $search))->export();
     }
 }
