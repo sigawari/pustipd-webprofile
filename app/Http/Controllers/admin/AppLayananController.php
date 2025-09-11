@@ -4,10 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\AppLayanan;
 use Illuminate\Http\Request;
+use App\Exports\AppLayananExport;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreAppLayananRequest;
-use App\Http\Requests\UpdateAppLayananRequest;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class AppLayananController extends Controller
@@ -265,5 +264,19 @@ class AppLayananController extends Controller
             'success' => true,
             'message' => $message
         ]);
+    }
+
+    public function export(Request $request)
+    {
+        $status = $request->query('filter'); // visible / hidden / all
+        $search = $request->query('search'); // keyword
+
+        // Kalau "all" atau kosong → jadikan null
+        if (empty($status) || $status === 'all') {
+            $status = null;
+        }
+
+        // Panggil AppLayananExport dengan parameter
+        return (new AppLayananExport($status, $search))->export();
     }
 }

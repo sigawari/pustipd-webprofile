@@ -34,14 +34,29 @@
                 <p class="text-gray-600 mt-1 text-sm">Kelola {{ $title }} yang akan ditampilkan di halaman
                     layanan</p>
             </div>
-            <button onclick="openAddModal()"
-                class="w-full sm:w-auto bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200 flex items-center justify-center">
-                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                </svg>
-                Tambah {{ $title }}
-            </button>
+            <div class="flex flex-col sm:flex-row gap-2">
+                <button onclick="openAddModal()"
+                    class="w-full sm:w-auto bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200 flex items-center justify-center">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                    Tambah {{ $title }}
+                </button>
+                <!-- Button Export -->
+                <a href="{{ route('admin.app-layanan.export', [
+                    'filter' => request()->get('filter', 'all'),
+                    'search' => request()->get('search')
+                ]) }}"
+                class="w-full sm:w-auto bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors duration-200 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="size-4 mr-2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15M9 12l3 3m0 0 3-3m-3 3V2.25" />
+                    </svg>
+                    Export Excel
+                </a>
+            </div>
         </div>
 
         <!-- CSRF Token dan Bulk Route -->

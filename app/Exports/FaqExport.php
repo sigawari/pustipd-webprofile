@@ -72,7 +72,7 @@ class FaqExport
         }
 
         // Pastikan folder temp ada
-        $tempDir = storage_path('app/public/temp-exports');
+        $tempDir = storage_path('app/public/exports');
         if (!File::exists($tempDir)) {
             File::makeDirectory($tempDir, 0755, true);
         }
