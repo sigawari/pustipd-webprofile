@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin\Beranda;
 
 use Exception;
 use Illuminate\Http\Request;
+use App\Exports\PencapaianExport;
 use App\Models\Beranda\Pencapaian;
 use App\Http\Controllers\Controller;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -210,5 +211,19 @@ class PencapaianController extends Controller
             'success' => true,
             'message' => $message
         ]);
+    }
+
+    public function export(Request $request)
+    {
+        $status = $request->query('filter'); // visible / hidden / all
+        $search = $request->query('search'); // keyword
+
+        // Kalau "all" atau kosong → jadikan null
+        if (empty($status) || $status === 'all') {
+            $status = null;
+        }
+
+        // Panggil PencapaianExport dengan parameter
+        return (new PencapaianExport($status, $search))->export();
     }
 }
