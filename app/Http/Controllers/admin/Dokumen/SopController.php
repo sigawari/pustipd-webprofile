@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Admin\Dokumen;
 
+use App\Exports\SopExport;
 use App\Models\Dokumen\Sop;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -399,22 +400,6 @@ class SopController extends Controller
         ];
     }
 
-    /**
-     * Export Sop data
-     */
-    public function export(Request $request)
-    {
-        $sops = Sop::when($request->status, function($query) use ($request) {
-            $query->where('status', $request->status);
-        })->get();
-
-        return response()->json([
-            'data' => $sops,
-            'exported_at' => now(),
-            'total' => $sops->count()
-        ]);
-    }
-
     public function toggleVisibility(Request $request, $id)
     {
         $sop = Sop::findOrFail($id);
@@ -433,5 +418,19 @@ class SopController extends Controller
             'success' => true,
             'message' => $message
         ]);
+    }
+
+    public function export(Request $request)
+    {
+        $status = $request->query('filter'); // visible / hidden / all
+        $search = $request->query('search'); // keyword
+
+        // Kalau "all" atau kosong → jadikan null
+        if (empty($status) || $status === 'all') {
+            $status = null;
+        }
+
+        // Panggil SopExport dengan parameter
+        return (new SopExport($status, $search))->export();
     }
 }
