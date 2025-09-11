@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin\Beranda;
 
 use Exception;
 use Illuminate\Http\Request;
+use App\Exports\LayananExport;
 use App\Models\Beranda\Layanan;
 use App\Http\Controllers\Controller;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -230,5 +231,19 @@ class LayananController extends Controller
             'success' => true,
             'message' => $message
         ]);
+    }
+
+    public function export(Request $request)
+    {
+        $status = $request->query('filter'); // visible / hidden / all
+        $search = $request->query('search'); // keyword
+
+        // Kalau "all" atau kosong → jadikan null
+        if (empty($status) || $status === 'all') {
+            $status = null;
+        }
+
+        // Panggil LayananExport dengan parameter
+        return (new LayananExport($status, $search))->export();
     }
 }
